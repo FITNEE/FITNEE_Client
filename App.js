@@ -1,4 +1,4 @@
-import CreateRoutineNav from "./navigators/CreateRoutineNav";
+import CreateRoutineNav from "./navigation/CreateRoutineNav";
 import OnBoarding_1 from "./OnBoarding_1";
 import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
 import OnBoardingNav from "./navigation/OnBoardingNav";
@@ -15,7 +15,7 @@ const MyTheme = {
 export default function App() {
   return (
     <NavigationContainer theme={MyTheme}>
-      <LoggedInNav />
+      <CreateRoutineNav />
     </NavigationContainer>
   );
 }
