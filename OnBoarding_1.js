@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 import styled from 'styled-components/native';
+import { colors } from './colors';
+import { Button } from './Shared';
+import { StyleSheet, Text } from 'react-native';
 
 const ScreenLayout = styled.SafeAreaView`
   flex-direction: column;
@@ -10,34 +13,25 @@ const ScreenLayout = styled.SafeAreaView`
   flex: 1;
 `;
 const TextContainer = styled.View`
+  margin-top: 124px;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   width: 100%;
   justify-content: center;
-  margin-bottom: 160px;
 `;
 const Title = styled.Text`
-  font-size: 17px;
-  font-weight: 800;
-  color: #262626;
-`;
-const BottomContainer = styled.View`
-  margin-top: 6px;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-`;
-const ImageSize = 320;
-
-const MyImage = styled.View`
-  margin-top: 160px;
-  width: ${ImageSize}px;
-  aspect-ratio: 1/1;
-  border-radius: ${ImageSize / 2}px;
-  background-color: #ffffff;
+  font-size: 24px;
+  font-weight: bold;
+  color: ${colors.black};
 `;
 
-export const Input = styled.TextInput`
+const SubText = styled.Text`
+  font-size: 13px;
+  margin-top: 8px;
+  font-weight: 400;
+  color: ${colors.black};
+`;
+const Input = styled.TextInput`
   padding: 15px 7px;
   border-radius: 4px;
   background-color: white;
@@ -45,21 +39,38 @@ export const Input = styled.TextInput`
   width: 100%;
 `;
 
-export const ButtonText = styled.Text`
-  font-size: 16px;
-  font-weight: 400;
-  color: white;
-  font-weight: 800;
-`;
-export const Button = styled.TouchableOpacity`
-  background-color: #0351ea;
-  flex-direction: row;
-  justify-content: center;
+const BottomContainer = styled.View`
   align-items: center;
-  height: 46px;
-  border-radius: 22px;
-  width: 46%;
-  margin-bottom: 120px;
+  width: 100%;
+`;
+const ORContainer = styled.View`
+  width: 120px;
+  height: 13px;
+`;
+const Line = styled.View`
+  width: 100%;
+  border: ${StyleSheet.hairlineWidth}px solid ${colors.grey_2};
+  margin-top: 6px;
+`;
+const ORText = styled.Text`
+  color: ${colors.grey_4};
+  font-size: 13px;
+  position: absolute;
+  background-color: #f3f3f3;
+  width: 40px;
+  text-align: center;
+  left: 40px;
+`;
+const SNSContainer = styled.View`
+  justify-content: space-between;
+  flex-direction: row;
+  width: 70%;
+  margin-top: 28px;
+`;
+const SNSButton = styled.TouchableOpacity`
+  width: 64px;
+  background-color: white;
+  height: 64px;
 `;
 
 const OnBoarding_1 = ({ navigation }) => {
@@ -72,19 +83,41 @@ const OnBoarding_1 = ({ navigation }) => {
   };
   return (
     <ScreenLayout>
+      <TextContainer>
+        <Title>이메일을 입력해주세요.</Title>
+        <SubText>로그인 또는 회원가입에 필요합니다.</SubText>
+      </TextContainer>
       <Input
-        placeholderTextColor='#84ADFF'
+        placeholderTextColor={colors.grey_3}
         autoFocus
         onSubmitEditing={() => navigateTo2()}
-        placeholder='제목 입력'
+        placeholder='이메일 입력'
         returnKeyType='next'
         blurOnSubmit={false}
-        style={{ marginTop: 16 }}
         onChangeText={(text) => setEmail(text)}
       />
-      <Button onPress={() => navigateTo2()}>
-        <ButtonText style={{ color: 'white' }}>다음</ButtonText>
-      </Button>
+      <BottomContainer>
+        <ORContainer>
+          <Line />
+          <ORText>또는</ORText>
+        </ORContainer>
+
+        <SNSContainer>
+          <SNSButton>
+            <Text>Google</Text>
+          </SNSButton>
+          <SNSButton>
+            <Text>Kakao</Text>
+          </SNSButton>
+          <SNSButton>
+            <Text>Naver</Text>
+          </SNSButton>
+        </SNSContainer>
+      </BottomContainer>
+      <Button
+        enabled={email.indexOf('@') != -1}
+        onPress={() => navigateTo2()}
+      ></Button>
     </ScreenLayout>
   );
 };
