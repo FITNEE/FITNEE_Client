@@ -1,20 +1,34 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import AppLoading from 'expo-app-loading';
+import React, {useState} from "react";
+import {Ionicons} from "@expo/vector-icons";
+import {Asset} from "expo-asset";
+import * as Font from "expo-font";
+import { NavigationContainer, ThemeProvider } from '@react-navigation/native';
+import ExerciseCourseNav from './navigators/ExerciseCourseNav';
 
 export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+  const [loading, setloading] = useState(true);
+  const onFinish = () => setloading(false);
+  const preload = () => {
+    const fontToLoad = [Ionicons.font];
+    const fontPromise = fontToLoad.map(font => FontFace.loadAsync(font));
+    const imagesToLoad = [
+      require("./assets/icon.png"),
+    ];
+    const imagePromises = imagesToLoad.map((image) => Asset.loadAsync(image));
+    return Promise.all([...fontPromise, ...imagePromises]);
+  };
+  if(loading) {
+    return <
+      AppLoading startAsync={preload} 
+      onError={console.warn} 
+      onFinish={onFinish} 
+      />;
+  } 
+  
+  return( 
+        <NavigationContainer>
+          <ExerciseCourseNav/>
+        </NavigationContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
