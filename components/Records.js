@@ -79,15 +79,19 @@ export default function Records() {
     const kilogram = useState(3300);
     const calorie = useState(400);
     
-    const now = new Date();
+    const [now,setNow] = useState(new Date());
     const month = now.getMonth()+1;
     const date = now.getDate();
 
     const percentage = (minute / 60) * 100;
 
+    const dayLoad = (text) =>{
+        setNow(new Date(text.dateString));
+    };
+
     return (
     <Container>
-    <CalendarView />
+    <CalendarView dayFunction={dayLoad}/>
     <Bar />
     <Exercise>
         <Title>{month}월 {date}일 완료한 운동</Title>
