@@ -72,7 +72,6 @@ const SpaceItem = styled.TouchableOpacity`
   background-color: gray;
   border-radius: 10px;
   align-items: center;
-
   justify-content: center;
 `;
 const SpaceImage = styled.Image`

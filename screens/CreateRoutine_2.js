@@ -51,10 +51,10 @@ export default function CreateRoutine_2({ navigation }) {
           console.log(value);
         }}
       />
-      <DontKnowButton>
+      <DontKnowButton onPress={() => navigation.push("CreateRoutine_3")}>
         <DontKnowText>잘 모르겠어요</DontKnowText>
       </DontKnowButton>
-      <NextButton>
+      <NextButton onPress={() => navigation.push("CreateRoutine_3")}>
         <ButtonText>다음</ButtonText>
       </NextButton>
     </Container>
@@ -138,7 +138,7 @@ const NextButton = styled.TouchableOpacity`
   height: 52px;
   align-items: center;
   justify-content: center;
-  background-color: #dddddd;
+  background-color: #bfbfbf;
   border-radius: 10px;
   margin-bottom: 50px;
 `;
