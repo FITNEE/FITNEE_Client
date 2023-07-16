@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components/native';
 import { colors } from './colors';
-import { Button, Input, Title } from './Shared';
+import { Button, Input, StatusText, Title } from './Shared';
 
 const ScreenLayout = styled.SafeAreaView`
   flex-direction: column;
@@ -22,23 +22,11 @@ const InputContainer = styled.View`
   width: 100%;
   margin-bottom: 232px;
 `;
-
 const SubText = styled.Text`
   font-size: 13px;
   margin-top: 8px;
   font-weight: 400;
   color: ${colors.black};
-`;
-
-const StatusText = styled.Text`
-  position: absolute;
-  right: 0;
-  top: -50%;
-  font-size: 12px;
-  margin-bottom: 12px;
-  margin-right: 8px;
-  font-weight: 300;
-  color: ${colors.grey_4};
 `;
 
 const OnBoarding_2 = ({ route, navigation }) => {

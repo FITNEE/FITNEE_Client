@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components/native';
 import { colors } from './colors';
-import { Input, Title } from './Shared';
+import { Button, Input, Title } from './Shared';
 
 const ScreenLayout = styled.SafeAreaView`
   flex-direction: column;
@@ -28,7 +28,7 @@ const SubText = styled.Text`
   color: ${colors.black};
 `;
 const BottomContainer = styled.View`
-  margin-bottom: 334px;
+  margin-bottom: 258px;
   width: 100%;
 `;
 const GenderContainer = styled.View`
@@ -38,7 +38,7 @@ const GenderContainer = styled.View`
 const GenderView = styled.View`
   background-color: white;
   border-radius: 12px;
-  height: 64px;
+  height: 56px;
   padding: 16px;
   justify-content: center;
   width: 48%;
@@ -47,6 +47,16 @@ const GenderText = styled.Text``;
 
 const OnBoarding_3 = ({ route, navigation }) => {
   const [birthYear, setBirthYear] = useState('');
+
+  const email = route.params.email;
+  const PW = route.params.PW;
+  const handlePress = () => {
+    navigation.navigate('OnBoarding_4', {
+      email,
+      PW,
+      birthYear,
+    });
+  };
   return (
     <ScreenLayout>
       <TextContainer>
@@ -71,13 +81,14 @@ const OnBoarding_3 = ({ route, navigation }) => {
           style={{ marginTop: 16 }}
           placeholderTextColor={colors.grey_3}
           autoFocus
-          onSubmitEditing={() => console.log('submitted')}
+          onSubmitEditing={() => handlePress()}
           placeholder='태어난 년도'
           returnKeyType='done'
           blurOnSubmit={false}
           onChangeText={(text) => setBirthYear(text)}
         ></Input>
       </BottomContainer>
+      <Button enabled={birthYear} onPress={() => handlePress()}></Button>
     </ScreenLayout>
   );
 };

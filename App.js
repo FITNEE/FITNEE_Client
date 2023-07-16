@@ -4,6 +4,7 @@ import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
 import OnBoardingNav from './navigation/OnBoardingNav';
 import LoggedInNav from './navigation/LoggedInNav';
 import { useState } from 'react';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 const MyTheme = {
   ...DefaultTheme,
@@ -17,7 +18,9 @@ export default function App() {
   let [loggedIn, setLoggedIn] = useState(false);
   return (
     <NavigationContainer theme={MyTheme}>
-      {loggedIn ? <LoggedInNav /> : <OnBoardingNav />}
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        {loggedIn ? <LoggedInNav /> : <OnBoardingNav />}
+      </GestureHandlerRootView>
     </NavigationContainer>
   );
 }

@@ -4,6 +4,7 @@ import OnBoarding_1 from '../OnBoarding_1';
 import OnBoarding_2 from '../OnBoarding_2';
 import OnBoarding_3 from '../OnBoarding_3';
 import OnBoarding_4 from '../OnBoarding_4';
+// import Test from '../Test';
 
 const Stack = createStackNavigator();
 
