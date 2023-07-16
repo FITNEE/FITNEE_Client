@@ -1,22 +1,11 @@
 import React, { useState } from "react";
-import { Text, View, SafeAreaView } from "react-native";
+import { SafeAreaView } from "react-native";
 import { styled } from "styled-components/native";
 
 
     const Container = styled.View`
         background-color: #fff;
         height: 100%;
-    `;
-    const SettingBtn = styled.TouchableOpacity`
-    `;
-    const Header = styled.View`
-        display: flex;
-        width: 375px;
-        height: 56px;
-        padding: 16px 24px 16px 327px;
-        justify-content: flex-end;
-        align-items: center;
-    
     `;
     const Profile = styled.View`
         align-items: center;
@@ -78,11 +67,6 @@ export default function UserInfo({ navigation }) {
     return (
     <SafeAreaView>
     <Container>
-        <Header>
-            <SettingBtn onPress={() => navigation.navigate("EditUserInfo")}><Text style={{
-                textAlign: "right"
-            }}>수정</Text></SettingBtn>
-        </Header>
         <Profile><ProfileImage></ProfileImage></Profile>
         <Block>
             <BlockTitle>닉네임</BlockTitle>

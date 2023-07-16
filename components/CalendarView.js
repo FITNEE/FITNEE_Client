@@ -13,6 +13,7 @@ export default function CalendarView() {
     }
 
     return ( <Calendar
+        monthFormat='yyyy.MM'
         markedDates={exerciseDay}
         theme={{
             selectedDayBackgroundColor: "#757575",
@@ -22,6 +23,9 @@ export default function CalendarView() {
             textDayFontSize: 13,
             textDayFontWeight: 400,
             textDayStyle: {color: '#bfbfbf'}
+        }}
+        onDayPress={day => {
+            console.log('selected day', day);
         }}
     /> );
 };

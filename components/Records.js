@@ -72,10 +72,10 @@ import CalendarView from "./CalendarView";
         padding-top: 4px;
         line-height: 32px;
     `;
-    
+
 export default function Records() {
 
-    const minute = useState(31);
+    const [minute,setMinute] = useState(31);
     const kilogram = useState(3300);
     const calorie = useState(400);
     
@@ -83,16 +83,18 @@ export default function Records() {
     const month = now.getMonth()+1;
     const date = now.getDate();
 
+    const percentage = (minute / 60) * 100;
+
     return (
     <Container>
-    <CalendarView/>
+    <CalendarView />
     <Bar />
     <Exercise>
         <Title>{month}월 {date}일 완료한 운동</Title>
         <Circles>
             <CircleContent>
                 <PercentageCircle
-                percent={31/60*100} radius={40} borderWidth={2} color="#9747FF" shadowColor="#F3F3F3" bgColor="#FFF">
+                percent={percentage} radius={40} borderWidth={2} color="#9747FF" shadowColor="#F3F3F3" bgColor="#FFF">
                     <View style={{flexDirection: "row", alignItems: "center"}}><CircleText>{minute}</CircleText><MiniText>분</MiniText></View>
                 </PercentageCircle>
                 <CircleTitle>소요시간</CircleTitle>

@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import * as Font from "expo-font";
 import { Asset } from "expo-asset";
-import LoggedOutNav from "./navigators/LoggedOutNav";
+import MyPageNav from "./navigators/MyPageNav";
 import { NavigationContainer } from "@react-navigation/native";
 
 export default function App() {
@@ -30,7 +30,7 @@ export default function App() {
   }
   return (
     <NavigationContainer>
-      <LoggedOutNav />
+      <MyPageNav />
     </NavigationContainer>
   );
 }

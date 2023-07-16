@@ -1,27 +1,18 @@
 import React, { useState } from "react";
-import { Text, View, SafeAreaView } from "react-native";
+import { SafeAreaView } from "react-native";
 import { styled } from "styled-components/native";
 import Records from "../components/Records";
 import Analysis from "../components/Analysis";
 
 
-export default function MyPage({navigation}) {
+export default function MyPage() {
     const [showRecords,SetShowRecords] = useState(true);
 
     const Container = styled.ScrollView`
         background-color: #fff;
     `;
-    const SettingBtn = styled.TouchableOpacity`
-    `;
-    const Header = styled.View`
-        display: flex;
-        width: 375px;
-        height: 56px;
-        padding: 16px 24px 16px 327px;
-        justify-content: flex-end;
-        align-items: center;
-    `;
     const Choice = styled.View`
+        margin-top: 10px;
         margin-left: 24px;
         flex-direction: row;
         align-items: center;
@@ -50,11 +41,6 @@ export default function MyPage({navigation}) {
     return (
     <SafeAreaView>
     <Container>
-        <Header>
-            <SettingBtn onPress={() => navigation.navigate("Setting")}><Text style={{
-                textAlign: "right"
-            }}>설정</Text></SettingBtn>
-        </Header>
         <Choice>
             <ChoiceButton onPress={() => {SetShowRecords(true);}} style={showRecords&& SelectedBoxStyle}>
                 <ChoiceText

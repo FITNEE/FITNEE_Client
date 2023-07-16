@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Text, View, SafeAreaView } from "react-native";
+import { Text, SafeAreaView } from "react-native";
 import { styled } from "styled-components/native";
 import Mode from "../components/Mode";
 
@@ -8,23 +8,6 @@ import Mode from "../components/Mode";
         background-color: #fff;
         height: 100%;
     `;
-    /*
-    const Header = styled.View`
-        display: flex;
-        width: 375px;
-        height: 56px;
-        padding: 0px 14px;
-        justify-content: center;
-        align-items: center;
-        flex-direction: row;
-    `;
-    const HeaderText = styled.Text`
-        font-size: 17px;
-        font-style: normal;
-        font-weight: 600;
-        line-height: 25.5px;
-    `;
-    */
     const Profile = styled.View`
         flex-direction: row;
         align-items: center;

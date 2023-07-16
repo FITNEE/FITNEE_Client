@@ -1,22 +1,10 @@
 import React, { useState } from "react";
-import { Keyboard, Text, TouchableWithoutFeedback, View, SafeAreaView } from "react-native";
+import { Keyboard, Text, TouchableWithoutFeedback, SafeAreaView } from "react-native";
 import { styled } from "styled-components/native";
-import EditInfo from "../components/EditInfo";
 
     const Container = styled.View`
         background-color: #fff;
         height: 100%;
-    `;
-    const SettingBtn = styled.TouchableOpacity`
-    `;
-    const Header = styled.View`
-        display: flex;
-        width: 375px;
-        height: 56px;
-        padding: 16px 24px 16px 327px;
-        justify-content: flex-end;
-        align-items: center;
-    
     `;
     const Profile = styled.View`
         align-items: center;
@@ -29,6 +17,17 @@ import EditInfo from "../components/EditInfo";
         background-color: #dddddd;
         border-radius: 88px;
     `;
+    const InputBlock = styled.TextInput`
+        background-color: #f3f3f3;
+        padding: 0px 16px;
+        width: 327px;
+        height: 48px;
+        border-radius: 8px;
+        margin: 0px 24px 10px 24px;
+        font-size: 16px;
+        font-style: normal;
+        font-weight: 400;
+    `;
     const Block = styled.View`
         background-color: #f3f3f3;
         padding: 0px 16px;
@@ -40,20 +39,18 @@ import EditInfo from "../components/EditInfo";
     `;
 
 export default function EditUserInfo({ navigation }) {
-    
+
+    const [name, onChangeName] = useState('초코맛 프로틴');
+    const [age, onChangeAge] = useState('1998');
     const email = useState(['protein012@gmail.com']);
 
     return (
     <SafeAreaView>
     <TouchableWithoutFeedback onPress={() => {Keyboard.dismiss()}}>
         <Container>
-            <Header>
-                <SettingBtn onPress={() => navigation.navigate("UserInfo")}><Text style={{
-                    textAlign: "right"
-                }}>완료</Text></SettingBtn>
-            </Header>
             <Profile><ProfileImage></ProfileImage></Profile>
-            <EditInfo/>
+            <InputBlock editable onChangeText={text => onChangeName(text)} value={name}/>
+            <InputBlock editable onChangeText={text => onChangeAge(text)} value={age} keyboardType="numeric"/>
             <Block><Text style={{
                 fontSize: 16,
                 fontWeight: 400,
