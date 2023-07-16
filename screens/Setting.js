@@ -1,12 +1,30 @@
-import React from "react";
-import { Text, View } from "react-native";
+import React, { useState } from "react";
+import { Text, View, SafeAreaView } from "react-native";
 import { styled } from "styled-components/native";
 import Mode from "../components/Mode";
 
-export default function Setting({ navigation }) {
+
     const Container = styled.View`
         background-color: #fff;
+        height: 100%;
     `;
+    /*
+    const Header = styled.View`
+        display: flex;
+        width: 375px;
+        height: 56px;
+        padding: 0px 14px;
+        justify-content: center;
+        align-items: center;
+        flex-direction: row;
+    `;
+    const HeaderText = styled.Text`
+        font-size: 17px;
+        font-style: normal;
+        font-weight: 600;
+        line-height: 25.5px;
+    `;
+    */
     const Profile = styled.View`
         flex-direction: row;
         align-items: center;
@@ -39,6 +57,11 @@ export default function Setting({ navigation }) {
         height: 16px;
         background-color: #f3f3f3;
     `;
+    const ModeView = styled.View`
+        padding: 15px 24px;
+        flex-direction: row;
+        align-items: center;
+    `;
     const Block = styled.TouchableOpacity`
         padding: 15px 24px;
         flex-direction: row;
@@ -55,19 +78,26 @@ export default function Setting({ navigation }) {
         margin-right: 0;
     `;
 
+
+export default function Setting({ navigation }) {
+    
+    const username = useState('초코맛 프로틴')
+
     return (
+    <SafeAreaView>
     <Container>
+        {/*<Header><HeaderText>앱 설정</HeaderText></Header>*/}
         <Profile>
             <ProfileImage/>
             <ProfileContents>
-                <Name>{'초코맛 프로틴'}</Name>
+                <Name>{username}</Name>
                 <Edit onPress={() => { navigation.navigate("UserInfo")}}><Text>계정 정보 수정하기</Text></Edit>
             </ProfileContents>
         </Profile>
-        <Block>
+        <ModeView>
             <BlockText>다크화면 모드</BlockText>
             <BlockContent><Mode/></BlockContent>
-        </Block>
+        </ModeView>
         <Bar/>
         <Block>
             <BlockText>일반 설정</BlockText>
@@ -91,5 +121,6 @@ export default function Setting({ navigation }) {
             <BlockText>로그아웃</BlockText>
         </Block>
     </Container>
+    </SafeAreaView>
   );
 }

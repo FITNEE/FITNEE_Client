@@ -1,10 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import { Text, View } from "react-native";
 import PercentageCircle from "react-native-progress-circle";
 import { styled } from "styled-components/native";
 
-
-export default function Analysis() {
 
     const Container = styled.View`
         width: 100%;
@@ -51,12 +49,19 @@ export default function Analysis() {
         font-size: 13px;
         font-weight: 400;
         line-height: 19.5px;
+        padding-top: 8px;
     `;
     const CircleTitle = styled.Text`
         font-size: 13px;
         font-weight: 400;
         line-height: 19.5px;
     `;
+
+export default function Analysis() {
+
+    const calorie = useState('1280');
+    const kilometer = useState('244');
+    const hour = useState('43')
 
     return (
     <Container>
@@ -66,21 +71,21 @@ export default function Analysis() {
         <Block>
             <Circle/>
             <BlockContent>
-                <Data><CircleText>{'1280'} </CircleText><CircleMiniText>kcal</CircleMiniText></Data>
+                <Data><CircleText>{calorie} </CircleText><CircleMiniText>kcal</CircleMiniText></Data>
                 <CircleTitle>최근 일주일 간 소모한 칼로리</CircleTitle>
             </BlockContent>
         </Block>
         <Block>
             <Circle/>
             <BlockContent>
-                <Data><CircleText>{'244'} </CircleText><CircleMiniText>km</CircleMiniText></Data>
+                <Data><CircleText>{kilometer} </CircleText><CircleMiniText>km</CircleMiniText></Data>
                 <CircleTitle>최근 일주일 간 뛴 거리</CircleTitle>
             </BlockContent>
         </Block>
         <Block>
             <Circle/>
             <BlockContent>
-                <Data><CircleText>{'43'} </CircleText><CircleMiniText>Hour</CircleMiniText></Data>
+                <Data><CircleText>{hour} </CircleText><CircleMiniText>Hour</CircleMiniText></Data>
                 <CircleTitle>총 누적 운동 시간</CircleTitle>
             </BlockContent>
         </Block>

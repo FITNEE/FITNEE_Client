@@ -1,9 +1,8 @@
-import React from "react";
-import { Text, View } from "react-native";
+import React, { useState } from "react";
+import { Text, View, SafeAreaView } from "react-native";
 import { styled } from "styled-components/native";
 
-export default function UserInfo({ navigation }) {
-    
+
     const Container = styled.View`
         background-color: #fff;
         height: 100%;
@@ -70,7 +69,14 @@ export default function UserInfo({ navigation }) {
         text-decoration-line: underline;
     `;
 
+export default function UserInfo({ navigation }) {
+    
+    const username = useState('초코맛 프로틴');
+    const age = useState('1998');
+    const email = useState('protein012@gmail.com');
+
     return (
+    <SafeAreaView>
     <Container>
         <Header>
             <SettingBtn onPress={() => navigation.navigate("EditUserInfo")}><Text style={{
@@ -80,15 +86,15 @@ export default function UserInfo({ navigation }) {
         <Profile><ProfileImage></ProfileImage></Profile>
         <Block>
             <BlockTitle>닉네임</BlockTitle>
-            <BlockContent>{'초코맛 프로틴'}</BlockContent>
+            <BlockContent>{username}</BlockContent>
         </Block>
         <Block>
             <BlockTitle>출생년도</BlockTitle>
-            <BlockContent>{'1998'}</BlockContent>
+            <BlockContent>{age}</BlockContent>
         </Block>
         <Block>
             <BlockTitle>이메일 주소</BlockTitle>
-            <BlockContent>{'protein012@gmail.com'}</BlockContent>
+            <BlockContent>{email}</BlockContent>
         </Block>
         <Bar/>
         <MiniBlock>
@@ -98,5 +104,6 @@ export default function UserInfo({ navigation }) {
             <Click><ClickText>회원 탈퇴하기</ClickText></Click>
         </MiniBlock>
     </Container>
+    </SafeAreaView>
   );
 }

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Text, View } from "react-native";
+import { Text, View, SafeAreaView } from "react-native";
 import { styled } from "styled-components/native";
 import Records from "../components/Records";
 import Analysis from "../components/Analysis";
@@ -20,7 +20,6 @@ export default function MyPage({navigation}) {
         padding: 16px 24px 16px 327px;
         justify-content: flex-end;
         align-items: center;
-    
     `;
     const Choice = styled.View`
         margin-left: 24px;
@@ -49,6 +48,7 @@ export default function MyPage({navigation}) {
     };
 
     return (
+    <SafeAreaView>
     <Container>
         <Header>
             <SettingBtn onPress={() => navigation.navigate("Setting")}><Text style={{
@@ -66,5 +66,6 @@ export default function MyPage({navigation}) {
         {showRecords && <Records/>}
         {!showRecords && <Analysis/>}
     </Container>
+    </SafeAreaView>
   );
 }

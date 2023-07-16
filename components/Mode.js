@@ -1,17 +1,17 @@
 import React, { useState } from "react";
-import { Switch } from "react-native";
+import CustomSwitch from "../components/CustomSwitch";
 
 export default function Mode(){
-    const [isEnabled, setIsEnabled] = useState(false);
-    const toggleSwitch = () => setIsEnabled(previousState => !previousState);
+  const onSelectSwitch = mode => {
+    //다크모드 변경
+  };
 
     return(
-        <Switch
-        trackColor={{false: '#f3f3f3', true: '9747ff'}}
-        thumbColor={"#fff"}
-        ios_backgroundColor="#fff"
-        onValueChange={toggleSwitch}
-        value={isEnabled}
-      />
+      <CustomSwitch
+      selectionMode={1}
+      option1={'OFF'}
+      option2={'ON'}
+      onSelectSwitch={onSelectSwitch}
+    />
     );
 }

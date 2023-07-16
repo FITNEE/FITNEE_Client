@@ -1,11 +1,7 @@
 import React, { useState } from "react";
-import { Keyboard, Text, TouchableWithoutFeedback, View } from "react-native";
+import { Keyboard, Text, TouchableWithoutFeedback, View, SafeAreaView } from "react-native";
 import { styled } from "styled-components/native";
 import EditInfo from "../components/EditInfo";
-
-export default function EditUserInfo({ navigation }) {
-    const [name, onChangeName] = useState('초코맛 프로틴');
-    const [age, onChangeAge] = useState('1998');
 
     const Container = styled.View`
         background-color: #fff;
@@ -33,24 +29,22 @@ export default function EditUserInfo({ navigation }) {
         background-color: #dddddd;
         border-radius: 88px;
     `;
-    const InputBlock = styled.TextInput`
-        background-color: #f3f3f3;
-        padding: 15px 24px;
-        width: 327px;
-        height: 48px;
-        border-radius: 8px;
-        margin: 0px 24px 10px 24px;
-    `;
     const Block = styled.View`
         background-color: #f3f3f3;
-        padding: 15px 24px;
+        padding: 0px 16px;
+        justify-content: center;
         width: 327px;
         height: 48px;
         border-radius: 8px;
         margin: 0px 24px;
     `;
 
+export default function EditUserInfo({ navigation }) {
+    
+    const email = useState(['protein012@gmail.com']);
+
     return (
+    <SafeAreaView>
     <TouchableWithoutFeedback onPress={() => {Keyboard.dismiss()}}>
         <Container>
             <Header>
@@ -65,8 +59,9 @@ export default function EditUserInfo({ navigation }) {
                 fontWeight: 400,
                 lineHeight: 24,
                 color: '#bfbfbf'
-            }}>{'protein012@gmail.com'}</Text></Block>
+            }}>{email}</Text></Block>
         </Container>
     </TouchableWithoutFeedback>
+    </SafeAreaView>
     );
 }

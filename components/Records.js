@@ -1,11 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import { Text, View } from "react-native";
 import PercentageCircle from "react-native-progress-circle";
 import { styled } from "styled-components/native";
 import CalendarView from "./CalendarView";
-
-
-export default function Records() {
 
     const Container = styled.View`
         width: 100%;
@@ -37,6 +34,7 @@ export default function Records() {
         background-color: #f3f3f3;
         align-items: center;
         justify-content: center;
+        flex-direction: row;
     `;
     const CircleText = styled.Text`
         text-align: center;
@@ -67,27 +65,44 @@ export default function Records() {
         font-weight: 400;
         line-height: 19.5px;
     `;
+    const MiniText = styled.Text`
+        font-size: 10px;
+        font-style: normal;
+        font-weight: 600;
+        padding-top: 4px;
+        line-height: 32px;
+    `;
+    
+export default function Records() {
+
+    const minute = useState(31);
+    const kilogram = useState(3300);
+    const calorie = useState(400);
+    
+    const now = new Date();
+    const month = now.getMonth()+1;
+    const date = now.getDate();
 
     return (
     <Container>
     <CalendarView/>
     <Bar />
     <Exercise>
-        <Title>7월 4일 완료한 운동</Title>
+        <Title>{month}월 {date}일 완료한 운동</Title>
         <Circles>
             <CircleContent>
                 <PercentageCircle
                 percent={31/60*100} radius={40} borderWidth={2} color="#9747FF" shadowColor="#F3F3F3" bgColor="#FFF">
-                    <CircleText>{'31'}</CircleText><Text>분</Text>
+                    <View style={{flexDirection: "row", alignItems: "center"}}><CircleText>{minute}</CircleText><MiniText>분</MiniText></View>
                 </PercentageCircle>
                 <CircleTitle>소요시간</CircleTitle>
             </CircleContent>
             <CircleContent>
-                <Circle><CircleText>{'3300'}</CircleText><Text>kg</Text></Circle>
+                <Circle><CircleText>{kilogram}</CircleText><MiniText>kg</MiniText></Circle>
                 <CircleTitle>들어올린 무게</CircleTitle>
             </CircleContent>
             <CircleContent>
-                <Circle><CircleText>{'400'}</CircleText><Text>Kcal</Text></Circle>
+                <Circle><CircleText>{calorie}</CircleText><MiniText>Kcal</MiniText></Circle>
                 <CircleTitle>소모 칼로리</CircleTitle>
             </CircleContent>
         </Circles>

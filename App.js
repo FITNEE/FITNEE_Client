@@ -18,6 +18,7 @@ export default function App() {
     const imagePromises = imagesToLoad.map((image) => Asset.loadAsync(image));
     return Promise.all([...fontPromises, ...imagePromises]);
   };
+  
   if (loading) {
     return (
       <AppLoading
