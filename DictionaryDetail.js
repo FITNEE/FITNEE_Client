@@ -13,7 +13,6 @@ const TopBtnContainer = styled.View`
     flex-direction: row;
     justify-content: space-between;
     padding: 16px 24px;
-    margin-top: 60px;
     height: 56px;
 `
 const TopBtn = styled.Image`
@@ -214,81 +213,81 @@ export default function DictionaryDetail(){
     const onTabPress = (target) => target===leftTab? setLeftTabActivate(true) : setLeftTabActivate(false)
 
     return (
-        // <SafeAreaView>
-            
-        // </SafeAreaView>
-        <Container>
-            <TopBtnContainer>
-                <TopBtn/>
-                <TopBtn/>
-            </TopBtnContainer>
-            <ImageContainer>
-                <ExerciseImage resizeMode='contain'/>
-            </ImageContainer>
-            <DictionaryContainer>
-                <TitleContainer>
-                    <NameContainer>
-                        <AreaText>{area}</AreaText>
-                        <TitleText>{exerciseName}</TitleText>
-                    </NameContainer>
-                    <AddtoRoutineBtn/>
-                </TitleContainer>
-                
-                <TabContainer>
-                    <LeftTab 
-                        ref={leftTab} 
-                        style={leftTabActivate? activateTabStyle: null} 
-                        onPressIn={()=>onTabPress(leftTab)}>
-                            <TabText>운동 방법</TabText>
-                    </LeftTab>         
-                    <RightTab 
-                        ref={rightTab} 
-                        style={leftTabActivate? null: activateTabStyle} 
-                        onPressIn={()=>onTabPress(rightTab)}>
-                            <TabText>채팅 42개</TabText>
-                            { isAllRead? null : <NotReadDot/> }
-                    </RightTab>
-                </TabContainer>
+        <SafeAreaView style={{flex: 1, backgroundColor: `${colors.grey1}`}}>
+            <Container>
+                <TopBtnContainer>
+                    <TopBtn/>
+                    <TopBtn/>
+                </TopBtnContainer>
+                <ImageContainer>
+                    <ExerciseImage resizeMode='contain'/>
+                </ImageContainer>
+                <DictionaryContainer>
+                    <TitleContainer>
+                        <NameContainer>
+                            <AreaText>{area}</AreaText>
+                            <TitleText>{exerciseName}</TitleText>
+                        </NameContainer>
+                        <AddtoRoutineBtn/>
+                    </TitleContainer>
+                    
+                    <TabContainer>
+                        <LeftTab 
+                            ref={leftTab} 
+                            style={leftTabActivate? activateTabStyle: null} 
+                            onPressIn={()=>onTabPress(leftTab)}>
+                                <TabText>운동 방법</TabText>
+                        </LeftTab>         
+                        <RightTab 
+                            ref={rightTab} 
+                            style={leftTabActivate? null: activateTabStyle} 
+                            onPressIn={()=>onTabPress(rightTab)}>
+                                <TabText>채팅 42개</TabText>
+                                { isAllRead? null : <NotReadDot/> }
+                        </RightTab>
+                    </TabContainer>
 
-                {
-                leftTabActivate?
-                    <ContentContainer>
-                        <ProcessContainer>
-                        {                            
-                            processName.map((processName, i) => (
-                                <Process>
-                                    <ProcessNum>{'0'+ (i+1)}</ProcessNum>
-                                    <ProcessContent>
-                                        <ProcessName>{processName}</ProcessName>
-                                        <ProcessDetail><WrappedText>
-                                            안장의 높이를 삼두 중앙보다 약간 위쪽과 같도록 맞춘 후 손잡이를 잡아주세요.
-                                        </WrappedText></ProcessDetail>
-                                    </ProcessContent>
-                                </Process>
-                            ))
-                        }
-                        </ProcessContainer>
-
-                        <CautionContainer>
-                            <CautionTitleContainer>
-                                <CautionImage/>
-                                <CautionTitle>이 부분은 특히 주의해주세요!</CautionTitle>
-                            </CautionTitleContainer>
-                            <CautionContentContainer>
-                            {
-                                caution.map((caution) => (
-                                    <CautionDetailContainer>
-                                        <CautionDot/>
-                                        <CautionDetail>{ caution }</CautionDetail>
-                                    </CautionDetailContainer>
+                    {
+                    leftTabActivate?
+                        <ContentContainer>
+                            <ProcessContainer>
+                            {                            
+                                processName.map((processName, i) => (
+                                    <Process>
+                                        <ProcessNum>{'0'+ (i+1)}</ProcessNum>
+                                        <ProcessContent>
+                                            <ProcessName>{processName}</ProcessName>
+                                            <ProcessDetail><WrappedText>
+                                                안장의 높이를 삼두 중앙보다 약간 위쪽과 같도록 맞춘 후 손잡이를 잡아주세요.
+                                            </WrappedText></ProcessDetail>
+                                        </ProcessContent>
+                                    </Process>
                                 ))
                             }
-                            </CautionContentContainer>
-                        </CautionContainer>
-                    </ContentContainer>
-                    : null
-                }
-            </DictionaryContainer> 
-        </Container>
+                            </ProcessContainer>
+
+                            <CautionContainer>
+                                <CautionTitleContainer>
+                                    <CautionImage/>
+                                    <CautionTitle>이 부분은 특히 주의해주세요!</CautionTitle>
+                                </CautionTitleContainer>
+                                <CautionContentContainer>
+                                {
+                                    caution.map((caution) => (
+                                        <CautionDetailContainer>
+                                            <CautionDot/>
+                                            <CautionDetail>{ caution }</CautionDetail>
+                                        </CautionDetailContainer>
+                                    ))
+                                }
+                                </CautionContentContainer>
+                            </CautionContainer>
+                        </ContentContainer>
+                        : null
+                    }
+                </DictionaryContainer> 
+            </Container>    
+        </SafeAreaView>
+        
     )
 }

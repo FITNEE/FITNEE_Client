@@ -6,7 +6,8 @@ import {
     TouchableWithoutFeedback, 
     Keyboard, 
     ScrollView,
-    TouchableOpacity
+    TouchableOpacity,
+    SafeAreaView
     } from 'react-native';
 import { colors } from './colors'
 
@@ -14,12 +15,14 @@ const Container = styled.View`
     flex: 1;
     width: 100%;
     background-color: white;
-    padding-top: 68px;
+    padding-top: 24px;
 `
 
 const TopContainer = styled.View`
-    width: 100%;
-    height: 56px;
+    /* width: 100%;
+    height: 56px; */
+
+    padding: 8px 24px;
 
     justify-content: center;
     align-items: center; 
@@ -30,16 +33,15 @@ const TopContainer = styled.View`
 
 const SearchContainer = styled.View`
     background-color: ${colors.grey1};
-    width: 327px;
-    height: 40px;
+    /* width: 327px;
+    height: 40px; */
 
     border-radius: 12px;
 
     flex-direction: row;
     align-items: center;
 
-    padding-left: 12px;
-    padding-right: 12px;
+    padding: 8px 12px;
 `
 const Logo = styled.Image`
     width: 24px;
@@ -54,7 +56,6 @@ const SearchInput = styled.TextInput`
     color: ${colors.black};
 
     width: 268px;
-    height: 40px;
 `
 
 
@@ -156,70 +157,73 @@ export default function Dictionary(){
             setIsSearching(false)
             : setIsSearching(true)
     })
-
+         
     return(
-        <TouchableWithoutFeedback style={{flex:1}} onPress={Keyboard.dismiss}>
-            <Container>
-                <TopContainer>
-                    <SearchContainer>
-                        <Logo/>
-                        <SearchInput
-                            placeholder='운동명, 부위 검색'
-                            placeholderTextColor={colors.grey4}
-                            returnKeyType='search'
-                            onChangeText={onChangeText}
-                            value={search}
-                            onSubmitEditing={onSubmitEditing}
-                            >
-                        </SearchInput>
-                    </SearchContainer>
-                </TopContainer>
-                { !isSearching && <BottomContainer>
-                    <RecentContainer style={{marginBottom: 56}}>
-                        <RecentTitle>최근 검색 키워드</RecentTitle>
-                        <RecentKeywordContainer>
-                        {
-                            recentKeyword.length === 0?
-                                null:
-                                recentKeyword.map((keyword) => (
+
+        <SafeAreaView style={{backgroundColor: 'white', flex: 1}}>
+            <TouchableWithoutFeedback style={{flex:1}} onPress={Keyboard.dismiss}>
+                <Container>
+                    <TopContainer>
+                        <SearchContainer>
+                            <Logo/>
+                            <SearchInput
+                                placeholder='운동명, 부위 검색'
+                                placeholderTextColor={colors.grey4}
+                                returnKeyType='search'
+                                onChangeText={onChangeText}
+                                value={search}
+                                onSubmitEditing={onSubmitEditing}
+                                >
+                            </SearchInput>
+                        </SearchContainer>
+                    </TopContainer>
+                    { !isSearching && <BottomContainer>
+                        <RecentContainer style={{marginBottom: 56}}>
+                            <RecentTitle>최근 검색 키워드</RecentTitle>
+                            <RecentKeywordContainer>
+                            {
+                                recentKeyword.length === 0?
+                                    null:
+                                    recentKeyword.map((keyword) => (
+                                        <KeywordContainer>
+                                            <Keyword>{keyword}</Keyword>
+                                        </KeywordContainer>
+                                    ))
+                            }    
+                            </RecentKeywordContainer>                
+                        </RecentContainer>
+                        <HotContainer>
+                            <HotTitle>인기 키워드</HotTitle>
+                            <HotKeywordContainer>
+                            {
+                                hotKeyword.map((keyword) => (
                                     <KeywordContainer>
                                         <Keyword>{keyword}</Keyword>
                                     </KeywordContainer>
                                 ))
-                        }    
-                        </RecentKeywordContainer>                
-                    </RecentContainer>
-                    <HotContainer>
-                        <HotTitle>인기 키워드</HotTitle>
-                        <HotKeywordContainer>
-                        {
-                            hotKeyword.map((keyword) => (
-                                <KeywordContainer>
-                                    <Keyword>{keyword}</Keyword>
-                                </KeywordContainer>
-                            ))
-                        }
-                        </HotKeywordContainer>
-                    </HotContainer>
-                </BottomContainer>}
-                { isSearching && <AutoSearchContainer>
-                    <AutoSearch>
-                        <AutoSearchText style={{color: '#9747FF'}}>사
-                            <AutoSearchText>이드 레터럴 라이즈</AutoSearchText>
-                        </AutoSearchText>
-                    </AutoSearch>
-                    <AutoSearch>
-                        <AutoSearchText >사이드 
-                            <AutoSearchText style={{color: '#9747FF'}}> 레터럴 </AutoSearchText>
-                            라이즈
-                        </AutoSearchText>
-                    </AutoSearch>
+                            }
+                            </HotKeywordContainer>
+                        </HotContainer>
+                    </BottomContainer>}
+                    { isSearching && <AutoSearchContainer>
+                        <AutoSearch>
+                            <AutoSearchText style={{color: '#9747FF'}}>사
+                                <AutoSearchText>이드 레터럴 라이즈</AutoSearchText>
+                            </AutoSearchText>
+                        </AutoSearch>
+                        <AutoSearch>
+                            <AutoSearchText >사이드 
+                                <AutoSearchText style={{color: '#9747FF'}}> 레터럴 </AutoSearchText>
+                                라이즈
+                            </AutoSearchText>
+                        </AutoSearch>
+                        <AutoSearch>
+                            <AutoSearchText>사이드 레터럴 라이즈</AutoSearchText>
+                        </AutoSearch>
+                    </AutoSearchContainer>}
+                </Container>
+            </TouchableWithoutFeedback>
+        </SafeAreaView>
 
-                    <AutoSearch>
-                        <AutoSearchText>사이드 레터럴 라이즈</AutoSearchText>
-                    </AutoSearch>
-                </AutoSearchContainer>}
-            </Container>
-        </TouchableWithoutFeedback>
     )
-}
+} 
