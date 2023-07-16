@@ -116,7 +116,6 @@ const Keyword = styled.Text`
 `
 
 const AutoSearchContainer = styled.ScrollView`
-    /* background-color: '#ebebeb'; */
     width: 100%;
     height: 100%;
 `
@@ -134,7 +133,7 @@ const AutoSearchText = styled.Text`
     display: inline;
 `
 
-export default function Dictionary(){
+export default function DictionarySearch( {navigation} ){
 
     const [recentKeyword, setRecentKeyword] = useState([])
     const [hotKeyword, setHotKeyword] = useState(['바벨', '머신', '프리웨이트', '덤벨', '데드리프트', '사이드 레터럴 레이즈', '크런치'])
@@ -150,6 +149,8 @@ export default function Dictionary(){
         recentKeyword.length === 3? temp = temp.slice(0, 2) : null
         temp = [search, ...temp],
         setRecentKeyword(temp)
+
+        navigation.navigate('List')
     }
 
     const convertPage = useEffect(()=>{
@@ -206,7 +207,7 @@ export default function Dictionary(){
                         </HotContainer>
                     </BottomContainer>}
                     { isSearching && <AutoSearchContainer>
-                        <AutoSearch>
+                        <AutoSearch onPress={()=>navigation.navigate('Detail')}>
                             <AutoSearchText style={{color: '#9747FF'}}>사
                                 <AutoSearchText>이드 레터럴 라이즈</AutoSearchText>
                             </AutoSearchText>

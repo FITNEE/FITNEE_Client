@@ -3,6 +3,9 @@ import styled from 'styled-components/native';
 import { colors } from './colors'
 import { ScrollView, TouchableOpacity, SafeAreaView } from 'react-native';
 import WrappedText from 'react-native-wrapped-text';
+import {Dimensions} from 'react-native';
+
+const SCREEN_WIDTH = Dimensions.get('screen').width;
 
 const Container = styled.View`
     flex: 1;
@@ -75,7 +78,7 @@ const TabContainer = styled.View`
 
     flex-direction: row;
     justify-content: space-between;
-    align-items: flex-end;
+    align-items: flex-end; 
 `
 const LeftTab = styled.TouchableOpacity`
     flex: 1;
@@ -90,7 +93,6 @@ const RightTab = styled.TouchableOpacity`
     flex: 1;
     flex-direction: row;
     justify-content: center;
-    /* align-items: center; */
     border-bottom-width: 1px;
     border-bottom-color: ${colors.grey1};
 
@@ -142,11 +144,6 @@ const ProcessName = styled.Text`
 
     margin-bottom: 8px;
 `
-const ProcessDetail = styled.Text`
-    color: ${colors.black};
-    font-weight: 400;
-    font-size: 13px;
-`
 
 const CautionContainer = styled.View`
     margin: 36px 24px;
@@ -191,6 +188,47 @@ const CautionDetail = styled.Text`
     color: ${colors.black};
 `
 
+const ChatContainer = styled.View`
+    margin-left: 24px;
+    margin-bottom: 16px;
+`
+const UserName = styled.Text`
+    color: ${colors.purple};
+    font-size: 11px;
+    font-weight: 400;
+    margin-left: 8px;
+    margin-bottom: 5px;
+`
+const MessageContainer = styled.View`
+    background-color: ${colors.grey1};
+    border-radius: 12px 12px 12px 0px;
+    padding: 8px 16px;
+    margin-right: 151px;
+`
+
+const JoinBtnContainer = styled.View`
+    background-color: ${colors.grey2};
+    border-radius:  100px;
+    padding: 10px 14px;
+    width: 123px;
+
+    flex-direction: row;
+    align-items: center;
+
+    position: absolute;
+    left: ${SCREEN_WIDTH/2};
+`
+const JoinImage = styled.Image`
+    background-color: red;
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+`
+const JoinText = styled.Text`
+    font-weight: 600;
+    font-size: 13;
+    color: ${colors.grey7};
+`
 
 export default function DictionaryDetail(){
 
@@ -209,6 +247,8 @@ export default function DictionaryDetail(){
     const [isAllRead, setIsAllRead] = useState(true)
     const [processName, setProcessName] = useState(['안장 높낮이 조절', '시작 자세', '마무리 자세'])
     const [caution, setCaution] = useState(['허리를 과도하게 안으로 넣지 마세요.', '적절한 무게로 승모근에 무리가 가지 않도록 하세요.', '안장과 바의 위치점을 올바르게 맞춰주세요.'])
+    const [userName, setUserName] = useState(['근손실', '삼대오백'])
+    const [msg, setMsg] = useState(['사레레 무게 얼마나 들 수 있어야 어깨 부자 되나요?', '무게보다는 정확한 자세가 중요합니다. 특히 처음 할 때는 큰 근육에 자극 주기가 힘드니 꾸준히 하셔야해요!'])
 
     const onTabPress = (target) => target===leftTab? setLeftTabActivate(true) : setLeftTabActivate(false)
 
@@ -257,9 +297,9 @@ export default function DictionaryDetail(){
                                         <ProcessNum>{'0'+ (i+1)}</ProcessNum>
                                         <ProcessContent>
                                             <ProcessName>{processName}</ProcessName>
-                                            <ProcessDetail><WrappedText>
+                                            <WrappedText textStyle={{fontWeight: 400, fontSize: '13px', color: `${colors.black}`}}>
                                                 안장의 높이를 삼두 중앙보다 약간 위쪽과 같도록 맞춘 후 손잡이를 잡아주세요.
-                                            </WrappedText></ProcessDetail>
+                                            </WrappedText>
                                         </ProcessContent>
                                     </Process>
                                 ))
@@ -283,11 +323,28 @@ export default function DictionaryDetail(){
                                 </CautionContentContainer>
                             </CautionContainer>
                         </ContentContainer>
-                        : null
+                        : 
+                        <ContentContainer style={{paddingTop: 28}}>
+                        {
+                            userName.map((userName, i) => (
+                                <ChatContainer>
+                                    <UserName>{userName}</UserName>
+                                    <MessageContainer>
+                                        <WrappedText textStyle={{fontWeight: 400, fontSize: 13, color: `${colors.black}`, lineHeight: 17}}>{msg[i]}</WrappedText>
+                                    </MessageContainer>
+                                </ChatContainer>
+                            ))
+                        }
+
+                            <JoinBtnContainer>
+                                <JoinImage></JoinImage>
+                                <JoinText>채팅 참여하기</JoinText>
+                            </JoinBtnContainer>
+                        </ContentContainer>
                     }
                 </DictionaryContainer> 
             </Container>    
         </SafeAreaView>
         
     )
-}
+} 
