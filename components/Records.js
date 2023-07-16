@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Text, View } from "react-native";
 import PercentageCircle from "react-native-progress-circle";
 import { styled } from "styled-components/native";
@@ -89,6 +89,12 @@ export default function Records() {
         setNow(new Date(text.dateString));
     };
 
+    const exercise = ["데드리프트", "덤벨프레스", "바벨 로우", "사이드 레터럴 레이즈", "레그프레스", "크런치"]
+
+    const exerciseList = exercise.map((name) => 
+             <ListText>{name}</ListText>
+    );
+
     return (
     <Container>
     <CalendarView dayFunction={dayLoad}/>
@@ -113,12 +119,7 @@ export default function Records() {
             </CircleContent>
         </Circles>
         <List>
-            <ListText>{'데드리프트'}</ListText>
-            <ListText>{'덤벨프레스'}</ListText>
-            <ListText>{'바벨 로우'}</ListText>
-            <ListText>{'사이드 레터럴 레이즈'}</ListText>
-            <ListText>{'레그프레스'}</ListText>
-            <ListText>{'크런치'}</ListText>
+            {exerciseList}
         </List>
     </Exercise>
     </Container>
