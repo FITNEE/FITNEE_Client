@@ -1,5 +1,9 @@
 import styled from 'styled-components/native';
 import { colors } from './colors';
+import { Dimensions } from 'react-native';
+
+export const ScreenWidth = Dimensions.get('screen').width;
+export const ScreenHeight = Dimensions.get('screen').height;
 
 const MyButton = styled.TouchableOpacity`
   flex-direction: row;
@@ -29,8 +33,18 @@ export const Input = styled.TextInput`
   width: 100%;
   height: 48px;
 `;
+export const StatusText = styled.Text`
+  position: absolute;
+  right: 0;
+  top: -50%;
+  font-size: 12px;
+  margin-bottom: 12px;
+  margin-right: 8px;
+  font-weight: 300;
+  color: ${colors.grey_4};
+`;
+
 export const Button = ({ enabled, onPress }) => {
-  console.log(enabled);
   return (
     <MyButton
       disabled={!enabled}
