@@ -17,6 +17,7 @@ export default function exerciseCourse({ navigation }) {
         <CurrentSet set="1" kg="20" num="15"/>
 
         <CurrentExplain expl="허리를 과도하게 안으로 넣지 마세요. " />
+
         
         <ExerciseButton 
             text="운동 시작"

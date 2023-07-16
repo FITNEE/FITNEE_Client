@@ -10,6 +10,7 @@ const Container = styled.View`
     flexDirection: row;
     align-items: center;
     justify-content: center;
+    margin-bottom: 8px;
 `;
 
 
@@ -26,10 +27,11 @@ const CurrentUnit = styled.Text`
     font-size: 15px;
     font-style: normal;
     font-weight: 600;
-    line-height: 32px;
 `;
 
-
+const TextSet = styled.Text`
+    justify-content: flex-end;
+`;
 
 
 export default function CurrentSet({ set, kg, num }) {
