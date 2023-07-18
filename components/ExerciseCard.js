@@ -4,7 +4,7 @@ import styled from "styled-components/native";
 const Container = styled.View`
   flex: 1;
   align-items: center;
-  padding: 0px 40px;
+  padding: 0px 24px;
   background: #DDD;
 `;
 
@@ -17,10 +17,8 @@ const ExerciseName = styled.Text`
     font-weight: 600;
     line-height: 32px;
     width: 327px;
-    padding: 60px;
+    padding: 60px 24px 32px 24px;
 `;
-
-
 
 
 export default function ExerciseCard({ exerciseName, children }) {

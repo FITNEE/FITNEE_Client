@@ -29,20 +29,44 @@ const CurrentUnit = styled.Text`
     font-weight: 600;
 `;
 
-const TextSet = styled.Text`
-    justify-content: flex-end;
+const TextLine = styled.View`
+    flexDirection: row;
+    heignt: 20px;
+    align-items: flex-end;
+    padding-top:4px;
 `;
 
+const Box1 = styled.View`
+    width: 94px;
+`;
+
+const Box2 = styled.View`
+    width: 42px;
+`;
 
 export default function CurrentSet({ set, kg, num }) {
   return (
     <Container>
+        
         <CurrentText>{set}</CurrentText>
-        <CurrentUnit>세트</CurrentUnit>
+        <TextLine>
+            <CurrentUnit>세트</CurrentUnit>
+        </TextLine>
+
+        <Box1/>
+         
         <CurrentText>{kg}</CurrentText>
-        <CurrentUnit>kg</CurrentUnit>
+        <TextLine>
+            <CurrentUnit>kg</CurrentUnit>
+        </TextLine>
+    
+        <Box2/>
+
         <CurrentText>{num}</CurrentText>
-        <CurrentUnit>회</CurrentUnit>
+        <TextLine>
+            <CurrentUnit>회</CurrentUnit>
+        </TextLine>
+        
     </Container>
 );
    
