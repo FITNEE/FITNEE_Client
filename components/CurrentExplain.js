@@ -6,6 +6,8 @@ const CurrentExplain = styled.View`
     height: 108px;
     border-radius: 12px;
     background: #F3F3F3;
+    padding: 24px;
+    justify-content: center;
 `;
 
 const CurrentExplainCircle = styled.View`
@@ -36,13 +38,30 @@ const CurrentExplainText = styled.Text`
 
 
 
-export default function currentExplain({ expl }) {
+export default function currentExplain({ expl1, expl2, expl3 }) {
   return (
     <CurrentExplain>
         <CurrentExplainLine>
             <CurrentExplainCircle/>
-            <CurrentExplainText>{expl}</CurrentExplainText>
+            <CurrentExplainText>{expl1}</CurrentExplainText>
+        </CurrentExplainLine>
+
+        <CurrentExplainLine>
+            <CurrentExplainCircle/>
+            <CurrentExplainText>{expl2}</CurrentExplainText>
+        </CurrentExplainLine>
+
+        <CurrentExplainLine>
+            <CurrentExplainCircle/>
+            <CurrentExplainText>{expl3}</CurrentExplainText>
         </CurrentExplainLine>
     </CurrentExplain>
+
+    //     list.map((item)=>{
+    //    <CurrentExplainLine>
+    //    <CurrentExplainCircle/>
+    //    <CurrentExplainText>{item.explain}</CurrentExplainText>
+    //     </CurrentExplainLine>
+    //     })
   );
 }
