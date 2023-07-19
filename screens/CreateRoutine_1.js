@@ -44,7 +44,7 @@ export default function CreateRoutine_1({ navigation }) {
         onPress={() => navigation.push("CreateRoutine_2")}
         disabled={!select}
       >
-        <ButtonText>다음</ButtonText>
+        <ButtonText isActive={select}>다음</ButtonText>
       </NextButton>
     </Container>
   );
@@ -114,4 +114,6 @@ const NextButton = styled.TouchableOpacity`
   border-radius: 10px;
   margin-bottom: 45px;
 `;
-const ButtonText = styled.Text``;
+const ButtonText = styled.Text`
+  color: ${(props) => (props.isActive ? "black" : "#757575")};
+`;

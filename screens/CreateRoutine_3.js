@@ -1,7 +1,22 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components/native";
 
 export default function CreateRoutine_3({ navigation }) {
+  const [parts, setParts] = useState([
+    { id: 1, name: "가슴", selected: false },
+    { id: 2, name: "등", selected: false },
+    { id: 3, name: "어깨", selected: false },
+    { id: 4, name: "팔", selected: false },
+    { id: 5, name: "코어", selected: false },
+    { id: 6, name: "하체", selected: false },
+  ]);
+  const onPartPress = (id) => {
+    setParts((prevParts) =>
+      prevParts.map((part) =>
+        part.id === id ? { ...part, selected: !part.selected } : part
+      )
+    );
+  };
   return (
     <Container>
       <StackBar>
@@ -12,30 +27,16 @@ export default function CreateRoutine_3({ navigation }) {
 모두 선택하세요`}</Title>
       </TitleContainer>
       <PartContainer>
-        <PartItem>
-          <PartImage />
-          <PartName>가슴</PartName>
-        </PartItem>
-        <PartItem>
-          <PartImage />
-          <PartName>등</PartName>
-        </PartItem>
-        <PartItem>
-          <PartImage />
-          <PartName>어깨</PartName>
-        </PartItem>
-        <PartItem>
-          <PartImage />
-          <PartName>팔</PartName>
-        </PartItem>
-        <PartItem>
-          <PartImage />
-          <PartName>코어</PartName>
-        </PartItem>
-        <PartItem>
-          <PartImage />
-          <PartName>하체</PartName>
-        </PartItem>
+        {parts.map((part) => (
+          <PartItem
+            key={part.id}
+            onPress={() => onPartPress(part.id)}
+            style={{ backgroundColor: part.selected ? "#DDDDDD" : "white" }}
+          >
+            <PartImage />
+            <PartName>{part.name}</PartName>
+          </PartItem>
+        ))}
       </PartContainer>
       <AllButton>
         <AllText>모든 부위를 운동할래요</AllText>
