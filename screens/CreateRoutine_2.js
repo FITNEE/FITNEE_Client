@@ -4,6 +4,10 @@ import { Picker, DatePicker } from "react-native-wheel-pick";
 
 export default function CreateRoutine_2({ navigation }) {
   const [shouldRender, setShouldRender] = useState(true);
+  const [dontKnow, setDontKnow] = useState(false);
+  const handleDontKnow = () => {
+    setDontKnow(!dontKnow);
+  };
   useEffect(() => {
     // 일정 시간(예: 5초) 후에 렌더링 여부를 false로 변경
     const timer = setTimeout(() => {
@@ -51,7 +55,7 @@ export default function CreateRoutine_2({ navigation }) {
           console.log(value);
         }}
       />
-      <DontKnowButton>
+      <DontKnowButton isActive={dontKnow} onPress={handleDontKnow}>
         <DontKnowText>잘 모르겠어요</DontKnowText>
       </DontKnowButton>
       <NextButton onPress={() => navigation.push("CreateRoutine_3")}>
@@ -124,7 +128,7 @@ const SubTitle = styled.Text`
 const DontKnowButton = styled.TouchableOpacity`
   width: 99px;
   height: 40px;
-  background-color: #dddddd;
+  background-color: ${(props) => (props.isActive ? "#757575" : "#DDDDDD")};
   margin-bottom: 120px;
   border-radius: 100px;
   align-items: center;
