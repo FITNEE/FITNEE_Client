@@ -1,11 +1,11 @@
-import React, { useState, useRef } from 'react'
-import styled from 'styled-components/native';
+import React, { useState, useRef, useEffect, Fragment } from 'react'
+import styled from 'styled-components/native'
 import { colors } from './colors'
-import { ScrollView, TouchableOpacity, SafeAreaView } from 'react-native';
-import WrappedText from 'react-native-wrapped-text';
-import {Dimensions} from 'react-native';
+import { Platform, ScrollView, TouchableOpacity, SafeAreaView, Dimensions, Touchable } from 'react-native'
+import WrappedText from 'react-native-wrapped-text'
 
 const SCREEN_WIDTH = Dimensions.get('screen').width;
+
 
 const Container = styled.View`
     flex: 1;
@@ -18,12 +18,13 @@ const TopBtnContainer = styled.View`
     padding: 16px 24px;
     height: 56px;
 `
-const TopBtn = styled.Image`
+const TopBtn = styled.TouchableOpacity`
     width: 24px;
     height: 24px;
     background-color: red;
 `
-
+const TotalContainer = styled.ScrollView`
+`
 const ImageContainer = styled.View`
     height: 326px;  
     
@@ -68,6 +69,37 @@ const AddtoRoutineBtn = styled.TouchableOpacity`
     width: 40px;
     border-radius: 20px;
 `
+const Bubble = styled.View`
+    position: absolute;
+    width: 154px;
+    height: 50px;
+    background: #363636;
+    border-radius: 12px;
+    align-items: center;
+    justify-content: center;
+    top: 280px;
+    right: 24px;
+    z-index: 1;
+`;
+
+const BubbleArrow = styled.View`
+    position: absolute;
+    display: block;
+    width: 0;
+    z-index: 1;
+    top: 50px;
+    right: 13px;
+    height: 0;
+    border: 8px solid transparent;
+    border-top-color: #363636;
+	border-bottom: 0;
+`;
+const BubbleText = styled.Text`
+    font-size: 11px;
+    color: white;
+    font-weight: 400;
+    line-height: 18px;
+`;
 
 const TabContainer = styled.View`
     margin-top: 8px;
@@ -113,7 +145,7 @@ const NotReadDot = styled.View`
     margin-left: 3px;
 `
 
-const ContentContainer = styled.ScrollView`
+const ContentContainer = styled.View`
     
 `
 const ProcessContainer = styled.View`
@@ -160,9 +192,9 @@ const CautionImage = styled.Image`
     margin-right: 4px;
 `
 const CautionTitle = styled.Text`
+    color: ${colors.black};
     font-weight: 600;
     font-size: 15px;
-    color: ${colors.black};
 `
 const CautionContentContainer = styled.View`
     padding: 24px;
@@ -183,9 +215,9 @@ const CautionDot = styled.View`
     margin-bottom: 4px;
 `
 const CautionDetail = styled.Text`
+    color: ${colors.black};
     font-weight: 400;
     font-size: 13px;
-    color: ${colors.black};
 `
 
 const ChatContainer = styled.View`
@@ -206,7 +238,7 @@ const MessageContainer = styled.View`
     margin-right: 151px;
 `
 
-const JoinBtnContainer = styled.View`
+const JoinBtnContainer = styled.TouchableOpacity`
     background-color: ${colors.grey2};
     border-radius:  100px;
     padding: 10px 14px;
@@ -216,7 +248,8 @@ const JoinBtnContainer = styled.View`
     align-items: center;
 
     position: absolute;
-    left: ${SCREEN_WIDTH/2};
+    left: ${`${SCREEN_WIDTH/2-123/2}px`};
+    bottom: 0;
 `
 const JoinImage = styled.Image`
     background-color: red;
@@ -239,7 +272,7 @@ export default function DictionaryDetail(){
 
     const leftTab = useRef()
     const rightTab = useRef()
-    
+
     const [area, setArea] = useState('어깨 | 측면 삼각근 | 머신')
     const [exerciseName, setExerciseName] = useState('사이드 레터럴 레이즈 머신')
     const [leftTabActivate, setLeftTabActivate ] = useState(true)
@@ -250,18 +283,29 @@ export default function DictionaryDetail(){
     const [userName, setUserName] = useState(['근손실', '삼대오백'])
     const [msg, setMsg] = useState(['사레레 무게 얼마나 들 수 있어야 어깨 부자 되나요?', '무게보다는 정확한 자세가 중요합니다. 특히 처음 할 때는 큰 근육에 자극 주기가 힘드니 꾸준히 하셔야해요!'])
 
-    const onTabPress = (target) => target===leftTab? setLeftTabActivate(true) : setLeftTabActivate(false)
+    const onTabPress = (target) => {
+        target===leftTab? 
+            setLeftTabActivate(true)
+        : 
+            setLeftTabActivate(false)
+    }
+
 
     return (
         <SafeAreaView style={{flex: 1, backgroundColor: `${colors.grey1}`}}>
-            <Container>
-                <TopBtnContainer>
-                    <TopBtn/>
-                    <TopBtn/>
-                </TopBtnContainer>
+        <Container>
+            <TopBtnContainer>
+                <TopBtn/>
+                <TopBtn/>
+            </TopBtnContainer>
+            <TotalContainer showsVerticalScrollIndicator='false'>
                 <ImageContainer>
                     <ExerciseImage resizeMode='contain'/>
                 </ImageContainer>
+                <Bubble>
+                    <BubbleText>{`+ 버튼을 눌러 마이루틴에 해당\n운동을 추가해보세요!`}</BubbleText>
+                    <BubbleArrow/>
+                </Bubble>
                 <DictionaryContainer>
                     <TitleContainer>
                         <NameContainer>
@@ -270,7 +314,6 @@ export default function DictionaryDetail(){
                         </NameContainer>
                         <AddtoRoutineBtn/>
                     </TitleContainer>
-                    
                     <TabContainer>
                         <LeftTab 
                             ref={leftTab} 
@@ -286,7 +329,6 @@ export default function DictionaryDetail(){
                                 { isAllRead? null : <NotReadDot/> }
                         </RightTab>
                     </TabContainer>
-
                     {
                     leftTabActivate?
                         <ContentContainer>
@@ -341,10 +383,10 @@ export default function DictionaryDetail(){
                                 <JoinText>채팅 참여하기</JoinText>
                             </JoinBtnContainer>
                         </ContentContainer>
-                    }
-                </DictionaryContainer> 
-            </Container>    
+                    } 
+                </DictionaryContainer>
+            </TotalContainer>
+            </Container>
         </SafeAreaView>
-        
     )
 } 
