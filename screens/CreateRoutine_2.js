@@ -45,7 +45,7 @@ export default function CreateRoutine_2({ navigation }) {
           height: 200,
           borderRadius: 20,
         }}
-        selectedValue="50"
+        selectedValue="40"
         pickerData={data}
         onValueChange={(value) => {
           console.log(value);
