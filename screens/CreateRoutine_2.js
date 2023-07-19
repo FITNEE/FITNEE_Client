@@ -51,7 +51,7 @@ export default function CreateRoutine_2({ navigation }) {
           console.log(value);
         }}
       />
-      <DontKnowButton onPress={() => navigation.push("CreateRoutine_3")}>
+      <DontKnowButton>
         <DontKnowText>잘 모르겠어요</DontKnowText>
       </DontKnowButton>
       <NextButton onPress={() => navigation.push("CreateRoutine_3")}>

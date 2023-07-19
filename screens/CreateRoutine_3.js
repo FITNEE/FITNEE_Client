@@ -40,7 +40,7 @@ export default function CreateRoutine_3({ navigation }) {
       <AllButton>
         <AllText>모든 부위를 운동할래요</AllText>
       </AllButton>
-      <NextButton>
+      <NextButton onPress={() => navigation.push("CreateRoutine_4")}>
         <ButtonText>다음</ButtonText>
       </NextButton>
     </Container>
