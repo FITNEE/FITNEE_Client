@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, Fragment } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import styled from 'styled-components/native'
 import { colors } from './colors'
 import { Platform, ScrollView, TouchableOpacity, SafeAreaView, Dimensions, Touchable } from 'react-native'
@@ -25,8 +25,6 @@ const TopBtn = styled.TouchableOpacity`
     width: 24px;
     height: 24px;
     background-color: red;
-`
-const TotalContainer = styled.ScrollView`
 `
 const ImageContainer = styled.View`
     height: 326px;  
@@ -148,8 +146,7 @@ const NotReadDot = styled.View`
     margin-left: 3px;
 `
 
-const ContentContainer = styled.View`
-    
+const ContentContainer = styled.ScrollView`
 `
 const ProcessContainer = styled.View`
     margin: 16px 24px;
@@ -272,9 +269,14 @@ export default function DictionaryDetail(){
         borderBottomColor: `${colors.purple}`,
         fontWeight: 600, // 이거 적용 안 된다
     }
+    const smallTabStyle = {
+        height: '50%',
+    }
 
     const leftTab = useRef()
     const rightTab = useRef()
+    const bottomModal = useRef()
+    const JoinBtnRef = useRef()
 
     const [area, setArea] = useState('어깨 | 측면 삼각근 | 머신')
     const [exerciseName, setExerciseName] = useState('사이드 레터럴 레이즈 머신')
@@ -285,116 +287,125 @@ export default function DictionaryDetail(){
     const [caution, setCaution] = useState(['허리를 과도하게 안으로 넣지 마세요.', '적절한 무게로 승모근에 무리가 가지 않도록 하세요.', '안장과 바의 위치점을 올바르게 맞춰주세요.'])
     const [userName, setUserName] = useState(['근손실', '삼대오백'])
     const [msg, setMsg] = useState(['사레레 무게 얼마나 들 수 있어야 어깨 부자 되나요?', '무게보다는 정확한 자세가 중요합니다. 특히 처음 할 때는 큰 근육에 자극 주기가 힘드니 꾸준히 하셔야해요!'])
-    const [snapPoints, setSnapPoints] = useState(['48%', '72%'])
-
+    const [snapPoints, setSnapPoints] = useState(['48%', '93%'])
 
     const onTabPress = (target) => {
+        setSnapPoints(['48%', '93%'])
         target===leftTab? 
             setLeftTabActivate(true)
         : 
             setLeftTabActivate(false)
     }
+    const onPressBottomModal = () => {
+        bottomModal.current?.present()
+    }
+    const onPressJoinBtn = () => {
+        setSnapPoints(['93%'])
+    }
 
+    return (
+        <BottomSheetModalProvider><SafeAreaView style={{flex: 1, backgroundColor: `${colors.grey1}`}}><Container>
+            <TopBtnContainer>
+                <TopBtn onPress={onPressBottomModal}/>
+                <TopBtn/>
+            </TopBtnContainer>
+            <ImageContainer>
+                <ExerciseImage resizeMode='contain'/>
+            </ImageContainer>
+            <Bubble>
+                <BubbleText>{`+ 버튼을 눌러 마이루틴에 해당\n운동을 추가해보세요!`}</BubbleText>
+                <BubbleArrow/>
+            </Bubble>
+            <BottomSheetModal
+                ref={bottomModal}
+                index={0}
+                snapPoints={snapPoints}
+                enablePanDownToClose={false}
+            ><DictionaryContainer>
+                <TitleContainer>
+                    <NameContainer>
+                        <AreaText>{area}</AreaText>
+                        <TitleText>{exerciseName}</TitleText>
+                    </NameContainer>
+                    <AddtoRoutineBtn/>
+                </TitleContainer>
+                <TabContainer>
+                    <LeftTab 
+                        ref={leftTab} 
+                        style={leftTabActivate? activateTabStyle: null} 
+                        onPressIn={()=>onTabPress(leftTab)}>
+                            <TabText>운동 방법</TabText>
+                    </LeftTab>         
+                    <RightTab 
+                        ref={rightTab} 
+                        style={leftTabActivate? null: activateTabStyle} 
+                        onPressIn={()=>onTabPress(rightTab)}>
+                            <TabText>채팅 42개</TabText>
+                            { isAllRead? null : <NotReadDot/> }
+                    </RightTab>
+                </TabContainer>
+                {
+                leftTabActivate?
+                    <ContentContainer style={smallTabStyle}>
+                        <ProcessContainer>
+                        {                            
+                            processName.map((processName, i) => (
+                                <Process>
+                                    <ProcessNum>{'0'+ (i+1)}</ProcessNum>
+                                    <ProcessContent>
+                                        <ProcessName>{processName}</ProcessName>
+                                        <WrappedText textStyle={{fontWeight: 400, fontSize: '13px', color: `${colors.black}`}}>
+                                            안장의 높이를 삼두 중앙보다 약간 위쪽과 같도록 맞춘 후 손잡이를 잡아주세요.
+                                        </WrappedText>
+                                    </ProcessContent>
+                                </Process>
+                            ))
+                        }
+                        </ProcessContainer>
 
-    if(Platform.OS === 'ios')
-        return (
-            <Fragment><BottomSheetModalProvider><SafeAreaView style={{flex: 1, backgroundColor: `${colors.grey1}`}}><Container>
-                <TopBtnContainer>
-                    <TopBtn/>
-                    <TopBtn/>
-                </TopBtnContainer>
-                <TotalContainer showsVerticalScrollIndicator='false'>
-                    <ImageContainer>
-                        <ExerciseImage resizeMode='contain'/>
-                    </ImageContainer>
-                    <Bubble>
-                        <BubbleText>{`+ 버튼을 눌러 마이루틴에 해당\n운동을 추가해보세요!`}</BubbleText>
-                        <BubbleArrow/>
-                    </Bubble>
-                    <DictionaryContainer>
-                        <TitleContainer>
-                            <NameContainer>
-                                <AreaText>{area}</AreaText>
-                                <TitleText>{exerciseName}</TitleText>
-                            </NameContainer>
-                            <AddtoRoutineBtn/>
-                        </TitleContainer>
-                        <TabContainer>
-                            <LeftTab 
-                                ref={leftTab} 
-                                style={leftTabActivate? activateTabStyle: null} 
-                                onPressIn={()=>onTabPress(leftTab)}>
-                                    <TabText>운동 방법</TabText>
-                            </LeftTab>         
-                            <RightTab 
-                                ref={rightTab} 
-                                style={leftTabActivate? null: activateTabStyle} 
-                                onPressIn={()=>onTabPress(rightTab)}>
-                                    <TabText>채팅 42개</TabText>
-                                    { isAllRead? null : <NotReadDot/> }
-                            </RightTab>
-                        </TabContainer>
-                        {
-                        leftTabActivate?
-                            <ContentContainer>
-                                <ProcessContainer>
-                                {                            
-                                    processName.map((processName, i) => (
-                                        <Process>
-                                            <ProcessNum>{'0'+ (i+1)}</ProcessNum>
-                                            <ProcessContent>
-                                                <ProcessName>{processName}</ProcessName>
-                                                <WrappedText textStyle={{fontWeight: 400, fontSize: '13px', color: `${colors.black}`}}>
-                                                    안장의 높이를 삼두 중앙보다 약간 위쪽과 같도록 맞춘 후 손잡이를 잡아주세요.
-                                                </WrappedText>
-                                            </ProcessContent>
-                                        </Process>
-                                    ))
-                                }
-                                </ProcessContainer>
-
-                                <CautionContainer>
-                                    <CautionTitleContainer>
-                                        <CautionImage/>
-                                        <CautionTitle>이 부분은 특히 주의해주세요!</CautionTitle>
-                                    </CautionTitleContainer>
-                                    <CautionContentContainer>
-                                    {
-                                        caution.map((caution) => (
-                                            <CautionDetailContainer>
-                                                <CautionDot/>
-                                                <CautionDetail>{ caution }</CautionDetail>
-                                            </CautionDetailContainer>
-                                        ))
-                                    }
-                                    </CautionContentContainer>
-                                </CautionContainer>
-                            </ContentContainer>
-                            : 
-                            <ContentContainer style={{paddingTop: 28}}>
+                        <CautionContainer>
+                            <CautionTitleContainer>
+                                <CautionImage/>
+                                <CautionTitle>이 부분은 특히 주의해주세요!</CautionTitle>
+                            </CautionTitleContainer>
+                            <CautionContentContainer>
                             {
-                                userName.map((userName, i) => (
-                                    <ChatContainer>
-                                        <UserName>{userName}</UserName>
-                                        <MessageContainer>
-                                            <WrappedText textStyle={{fontWeight: 400, fontSize: 13, color: `${colors.black}`, lineHeight: 17}}>{msg[i]}</WrappedText>
-                                        </MessageContainer>
-                                    </ChatContainer>
+                                caution.map((caution) => (
+                                    <CautionDetailContainer>
+                                        <CautionDot/>
+                                        <CautionDetail>{ caution }</CautionDetail>
+                                    </CautionDetailContainer>
                                 ))
                             }
+                            </CautionContentContainer>
+                        </CautionContainer>
+                    </ContentContainer>
+                    : 
+                    <ContentContainer style={{paddingTop: 28}}>
+                    {
+                        userName.map((userName, i) => (
+                            <ChatContainer>
+                                <UserName>{userName}</UserName>
+                                <MessageContainer>
+                                    <WrappedText textStyle={{fontWeight: 400, fontSize: 13, color: `${colors.black}`, lineHeight: 17}}>{msg[i]}</WrappedText>
+                                </MessageContainer>
+                            </ChatContainer>
+                        ))
+                    }
+                    {
+                        snapPoints[0] == '90%'?
+                            null
+                            :
+                            <JoinBtnContainer onPress={onPressJoinBtn} ref={JoinBtnRef}>
+                                <JoinImage></JoinImage>
+                                <JoinText>채팅 참여하기</JoinText>
+                            </JoinBtnContainer>
+                    }
 
-                                <JoinBtnContainer>
-                                    <JoinImage></JoinImage>
-                                    <JoinText>채팅 참여하기</JoinText>
-                                </JoinBtnContainer>
-                            </ContentContainer>
-                        } 
-                    </DictionaryContainer>
-                </TotalContainer>
-            </Container></SafeAreaView></BottomSheetModalProvider></Fragment>
-        )
-    else
-        return(
-            <Container/>
-        )
+                    </ContentContainer>
+                } 
+            </DictionaryContainer></BottomSheetModal>
+        </Container></SafeAreaView></BottomSheetModalProvider>
+    )
+
 } 
