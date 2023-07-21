@@ -3,6 +3,7 @@ import { Text, View } from "react-native";
 import PercentageCircle from "react-native-progress-circle";
 import { styled } from "styled-components/native";
 import CalendarView from "./CalendarView";
+import { colors } from "../colors";
 
     const Container = styled.View`
         width: 100%;
@@ -10,7 +11,7 @@ import CalendarView from "./CalendarView";
     `;
     const Bar = styled.View`
         height: 16px;
-        background-color: #f3f3f3;
+        background-color: ${colors.grey_1};
     `;
     const Exercise = styled.View`
         padding-top: 24px;
@@ -31,7 +32,7 @@ import CalendarView from "./CalendarView";
         width: 80px;
         height: 80px;
         border-radius: 40px;
-        background-color: #f3f3f3;
+        background-color: ${colors.grey_1};
         align-items: center;
         justify-content: center;
         flex-direction: row;
@@ -54,7 +55,7 @@ import CalendarView from "./CalendarView";
     `;
     const List = styled.View`
         border-radius: 12px;
-        background-color: #f3f3f3;
+        background-color: ${colors.grey_1};
         margin: 0px 32px 49px 32px;
         padding: 16px;
         gap: 14px;
@@ -104,7 +105,7 @@ export default function Records() {
         <Circles>
             <CircleContent>
                 <PercentageCircle
-                percent={percentage} radius={40} borderWidth={2} color="#9747FF" shadowColor="#F3F3F3" bgColor="#FFF">
+                percent={percentage} radius={40} borderWidth={2} color="#9747FF" shadowColor={colors.grey_1} bgColor={colors.white}>
                     <View style={{flexDirection: "row", alignItems: "center"}}><CircleText>{minute}</CircleText><MiniText>분</MiniText></View>
                 </PercentageCircle>
                 <CircleTitle>소요시간</CircleTitle>

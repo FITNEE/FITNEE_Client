@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 
 import {Text, View, TouchableOpacity} from 'react-native';
+import { colors } from '../colors';
 
 const CustomSwitch = ({
   selectionMode,
@@ -19,7 +20,7 @@ const CustomSwitch = ({
         style={{
           height: 36,
           width: 64,
-          backgroundColor: getSelectionMode == 1 ? '#f3f3f3' : '#757575',
+          backgroundColor: getSelectionMode == 1 ? colors.white : colors.grey_4,
           borderRadius: 1000,
           flexDirection: 'row',
           justifyContent: 'center',
@@ -30,14 +31,14 @@ const CustomSwitch = ({
           onPress={() => updatedSwitchData(1)}
           style={{
             flex: 1,
-            backgroundColor: getSelectionMode == 1 ? 'white':'#757575',
+            backgroundColor: getSelectionMode == 1 ? colors.white : colors.grey_4,
             borderRadius: 25,
             justifyContent: 'center',
             alignItems: 'center',
           }}>
           <Text
             style={{
-              color: getSelectionMode == 1 ? '#bfbfbf' : '#757575',
+              color: getSelectionMode == 1 ? colors.grey_3 : colors.grey_4,
             }}>
             {option1}
           </Text>
@@ -48,14 +49,14 @@ const CustomSwitch = ({
           onPress={() => updatedSwitchData(2)}
           style={{
             flex: 1,
-            backgroundColor: getSelectionMode == 2 ? 'white':'#f3f3f3',
+            backgroundColor: getSelectionMode == 2 ? colors.white : colors.grey_1,
             borderRadius: 25,
             justifyContent: 'center',
             alignItems: 'center',
           }}>
           <Text
             style={{
-              color: getSelectionMode == 2 ? '#757575' : "#f3f3f3",
+              color: getSelectionMode == 2 ? colors.grey_4 : colors.grey_1,
             }}>
             {option2}
           </Text>

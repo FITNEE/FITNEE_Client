@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Text, SafeAreaView } from "react-native";
 import { styled } from "styled-components/native";
 import Mode from "../components/Mode";
-
+import { colors } from "../colors";
 
     const Container = styled.View`
         background-color: #fff;

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Keyboard, Text, TouchableWithoutFeedback, SafeAreaView } from "react-native";
 import { styled } from "styled-components/native";
+import { colors } from "../colors";
 
     const Container = styled.View`
         background-color: #fff;
@@ -14,7 +15,7 @@ import { styled } from "styled-components/native";
     const ProfileImage = styled.TouchableOpacity`
         width: 88px;
         height: 88px;
-        background-color: #dddddd;
+        background-color: ${colors.grey_2};
         border-radius: 88px;
     `;
     const InputBlock = styled.TextInput`
@@ -55,7 +56,7 @@ export default function EditUserInfo({ navigation }) {
                 fontSize: 16,
                 fontWeight: 400,
                 lineHeight: 24,
-                color: '#bfbfbf'
+                color: colors.grey_3
             }}>{email}</Text></Block>
         </Container>
     </TouchableWithoutFeedback>

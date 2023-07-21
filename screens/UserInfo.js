@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { SafeAreaView } from "react-native";
 import { styled } from "styled-components/native";
+import { colors } from "../colors";
 
 
     const Container = styled.View`
@@ -15,7 +16,7 @@ import { styled } from "styled-components/native";
     const ProfileImage = styled.TouchableOpacity`
         width: 88px;
         height: 88px;
-        background-color: #dddddd;
+        background-color: ${colors.grey_2};
         border-radius: 88px;
     `;
     const Block = styled.View`
@@ -36,7 +37,7 @@ import { styled } from "styled-components/native";
         font-style: normal;
         font-weight: 400;
         line-height: 25.5px;
-        color: #676767;
+        color: ${colors.grey_5};
     `;
     const Bar = styled.View`
         height: 16px;

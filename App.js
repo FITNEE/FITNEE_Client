@@ -1,8 +1,8 @@
 import AppLoading from 'expo-app-loading';
 import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
-import OnBoardingNav from './navigation/OnBoardingNav';
+// import OnBoardingNav from './navigation/OnBoardingNav';
 import MyPageNav from './navigators/MyPageNav';
-import LoggedInNav from './navigation/LoggedInNav';
+// import LoggedInNav from './navigation/LoggedInNav';
 import { Context, ContextProvider } from './components/ContextProvider';
 import { useState } from 'react';
 
@@ -22,23 +22,17 @@ export default function App() {
     // const { loggedIn, setLoggedIn } = useContext(Context);
     // return loggedIn;
   };
-  const MyTheme = {
-    ...DefaultTheme,
-    colors: {
-      ...DefaultTheme.colors,
-      background: '#f3f3f3',
-    },
-  };
 
-  if (loading) {
-    return (
-      <AppLoading
-        startAsync={preload}
-        onError={console.warn}
-        onFinish={onFinish}
-      />
-    );
-  }
+  // if (loading) {
+  //   return (
+  //     <AppLoading
+  //       startAsync={preload}
+  //       onError={console.warn}
+  //       onFinish={onFinish}
+  //     />
+  //   );
+  // }
+  
   return (
     <ContextProvider>
       <NavigationContainer theme={MyTheme}>

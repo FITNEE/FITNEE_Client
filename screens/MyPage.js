@@ -5,6 +5,7 @@ import Records from "../components/Records";
 import Analysis from "../components/Analysis";
 import theme from "../theme/theme";
 import themeContext from "../theme/themeContext";
+import { colors } from "../colors";
 
 
 export default function MyPage() {
@@ -25,7 +26,7 @@ export default function MyPage() {
         font-style: normal;
         font-weight: 600;
         line-height: 25.5px;
-        color: #bfbfbf;
+        color: ${colors.grey_3};
     `;
     const ChoiceButton = styled.TouchableOpacity`
         height: 26px;
@@ -33,15 +34,15 @@ export default function MyPage() {
         margin-bottom: 20px;
     `;
     const SelectedTextStyle = {
-        color: "black"
+        color: colors.black
     };
     const SelectedBoxStyle = {
         borderBottomWidth: 2,
-        border: "#757575"
+        border: colors.grey_4
     };
 
     return (
-    <themeContext.Provider value={darkMo}>
+    <themeContext.Provider>
         <SafeAreaView>
             <Container>
                 <Choice>
