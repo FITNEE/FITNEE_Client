@@ -4,6 +4,7 @@ import styled from "styled-components/native";
 export default function CreateRoutine_4({ navigation }) {
   const [select, SetSelect] = useState(false);
   const [allDay, SetAllDay] = useState(false);
+  const [loading, SetLoading] = useState(false);
   const [days, setDays] = useState([
     { id: 1, name: "일", selected: false },
     { id: 2, name: "월", selected: false },
@@ -43,32 +44,48 @@ export default function CreateRoutine_4({ navigation }) {
   }, [allDay]);
   return (
     <Container>
-      <StackBar>
-        <StackBarPin />
-      </StackBar>
-      <TitleContainer>
-        <Title>운동할 요일을 선택해주세요.</Title>
-        <SubTitle>마이루틴에서 언제든지 변경할 수 있어요.</SubTitle>
-      </TitleContainer>
-      <DayContainer>
-        {days.map((day) => (
-          <DayItem
-            key={day.id}
-            onPress={() => onDayPress(day.id)}
-            style={{ backgroundColor: day.selected ? "#757575" : "white" }}
+      {loading ? (
+        (navigation.setOptions({ headerShown: false }),
+        (
+          <LoadingContainer>
+            <Loading />
+            <LoadingText>트레이닝 루틴을 생성 중입니다</LoadingText>
+          </LoadingContainer>
+        ))
+      ) : (
+        <Container>
+          <StackBar>
+            <StackBarPin />
+          </StackBar>
+          <TitleContainer>
+            <Title>운동할 요일을 선택해주세요.</Title>
+            <SubTitle>마이루틴에서 언제든지 변경할 수 있어요.</SubTitle>
+          </TitleContainer>
+          <DayContainer>
+            {days.map((day) => (
+              <DayItem
+                key={day.id}
+                onPress={() => onDayPress(day.id)}
+                style={{ backgroundColor: day.selected ? "#757575" : "white" }}
+              >
+                <DayName style={{ color: day.selected ? "white" : "#757575" }}>
+                  {day.name}
+                </DayName>
+              </DayItem>
+            ))}
+          </DayContainer>
+          <AllDayButton isActive={allDay} onPress={AllDayPress}>
+            <AllDayText>매일 운동할래요</AllDayText>
+          </AllDayButton>
+          <NextButton
+            isActive={select}
+            disabled={!select}
+            onPress={() => navigation.push("CreateRoutine_5")}
           >
-            <DayName style={{ color: day.selected ? "white" : "#757575" }}>
-              {day.name}
-            </DayName>
-          </DayItem>
-        ))}
-      </DayContainer>
-      <AllDayButton isActive={allDay} onPress={AllDayPress}>
-        <AllDayText>매일 운동할래요</AllDayText>
-      </AllDayButton>
-      <NextButton isActive={select} disabled={!select}>
-        <ButtonText isActive={select}>선택 완료</ButtonText>
-      </NextButton>
+            <ButtonText isActive={select}>선택 완료</ButtonText>
+          </NextButton>
+        </Container>
+      )}
     </Container>
   );
 }
@@ -146,4 +163,19 @@ const NextButton = styled.TouchableOpacity`
 `;
 const ButtonText = styled.Text`
   color: ${(props) => (props.isActive ? "black" : "#757575")};
+`;
+const LoadingContainer = styled.View`
+  flex: 1;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+`;
+const Loading = styled.View`
+  width: 291px;
+  height: 291px;
+  background-color: white;
+  border-radius: 291px;
+`;
+const LoadingText = styled.Text`
+  margin-top: 30px;
 `;
