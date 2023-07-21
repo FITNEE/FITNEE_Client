@@ -3,9 +3,12 @@ import styled from 'styled-components/native'
 import { colors } from './colors'
 import { Platform, ScrollView, TouchableOpacity, SafeAreaView, Dimensions, Touchable } from 'react-native'
 import WrappedText from 'react-native-wrapped-text'
+import {
+    BottomSheetModal,
+    BottomSheetModalProvider
+  } from '@gorhom/bottom-sheet';
 
 const SCREEN_WIDTH = Dimensions.get('screen').width;
-
 
 const Container = styled.View`
     flex: 1;
@@ -282,6 +285,8 @@ export default function DictionaryDetail(){
     const [caution, setCaution] = useState(['허리를 과도하게 안으로 넣지 마세요.', '적절한 무게로 승모근에 무리가 가지 않도록 하세요.', '안장과 바의 위치점을 올바르게 맞춰주세요.'])
     const [userName, setUserName] = useState(['근손실', '삼대오백'])
     const [msg, setMsg] = useState(['사레레 무게 얼마나 들 수 있어야 어깨 부자 되나요?', '무게보다는 정확한 자세가 중요합니다. 특히 처음 할 때는 큰 근육에 자극 주기가 힘드니 꾸준히 하셔야해요!'])
+    const [snapPoints, setSnapPoints] = useState(['48%', '72%'])
+
 
     const onTabPress = (target) => {
         target===leftTab? 
@@ -291,102 +296,105 @@ export default function DictionaryDetail(){
     }
 
 
-    return (
-        <SafeAreaView style={{flex: 1, backgroundColor: `${colors.grey1}`}}>
-        <Container>
-            <TopBtnContainer>
-                <TopBtn/>
-                <TopBtn/>
-            </TopBtnContainer>
-            <TotalContainer showsVerticalScrollIndicator='false'>
-                <ImageContainer>
-                    <ExerciseImage resizeMode='contain'/>
-                </ImageContainer>
-                <Bubble>
-                    <BubbleText>{`+ 버튼을 눌러 마이루틴에 해당\n운동을 추가해보세요!`}</BubbleText>
-                    <BubbleArrow/>
-                </Bubble>
-                <DictionaryContainer>
-                    <TitleContainer>
-                        <NameContainer>
-                            <AreaText>{area}</AreaText>
-                            <TitleText>{exerciseName}</TitleText>
-                        </NameContainer>
-                        <AddtoRoutineBtn/>
-                    </TitleContainer>
-                    <TabContainer>
-                        <LeftTab 
-                            ref={leftTab} 
-                            style={leftTabActivate? activateTabStyle: null} 
-                            onPressIn={()=>onTabPress(leftTab)}>
-                                <TabText>운동 방법</TabText>
-                        </LeftTab>         
-                        <RightTab 
-                            ref={rightTab} 
-                            style={leftTabActivate? null: activateTabStyle} 
-                            onPressIn={()=>onTabPress(rightTab)}>
-                                <TabText>채팅 42개</TabText>
-                                { isAllRead? null : <NotReadDot/> }
-                        </RightTab>
-                    </TabContainer>
-                    {
-                    leftTabActivate?
-                        <ContentContainer>
-                            <ProcessContainer>
-                            {                            
-                                processName.map((processName, i) => (
-                                    <Process>
-                                        <ProcessNum>{'0'+ (i+1)}</ProcessNum>
-                                        <ProcessContent>
-                                            <ProcessName>{processName}</ProcessName>
-                                            <WrappedText textStyle={{fontWeight: 400, fontSize: '13px', color: `${colors.black}`}}>
-                                                안장의 높이를 삼두 중앙보다 약간 위쪽과 같도록 맞춘 후 손잡이를 잡아주세요.
-                                            </WrappedText>
-                                        </ProcessContent>
-                                    </Process>
-                                ))
-                            }
-                            </ProcessContainer>
-
-                            <CautionContainer>
-                                <CautionTitleContainer>
-                                    <CautionImage/>
-                                    <CautionTitle>이 부분은 특히 주의해주세요!</CautionTitle>
-                                </CautionTitleContainer>
-                                <CautionContentContainer>
-                                {
-                                    caution.map((caution) => (
-                                        <CautionDetailContainer>
-                                            <CautionDot/>
-                                            <CautionDetail>{ caution }</CautionDetail>
-                                        </CautionDetailContainer>
+    if(Platform.OS === 'ios')
+        return (
+            <Fragment><BottomSheetModalProvider><SafeAreaView style={{flex: 1, backgroundColor: `${colors.grey1}`}}><Container>
+                <TopBtnContainer>
+                    <TopBtn/>
+                    <TopBtn/>
+                </TopBtnContainer>
+                <TotalContainer showsVerticalScrollIndicator='false'>
+                    <ImageContainer>
+                        <ExerciseImage resizeMode='contain'/>
+                    </ImageContainer>
+                    <Bubble>
+                        <BubbleText>{`+ 버튼을 눌러 마이루틴에 해당\n운동을 추가해보세요!`}</BubbleText>
+                        <BubbleArrow/>
+                    </Bubble>
+                    <DictionaryContainer>
+                        <TitleContainer>
+                            <NameContainer>
+                                <AreaText>{area}</AreaText>
+                                <TitleText>{exerciseName}</TitleText>
+                            </NameContainer>
+                            <AddtoRoutineBtn/>
+                        </TitleContainer>
+                        <TabContainer>
+                            <LeftTab 
+                                ref={leftTab} 
+                                style={leftTabActivate? activateTabStyle: null} 
+                                onPressIn={()=>onTabPress(leftTab)}>
+                                    <TabText>운동 방법</TabText>
+                            </LeftTab>         
+                            <RightTab 
+                                ref={rightTab} 
+                                style={leftTabActivate? null: activateTabStyle} 
+                                onPressIn={()=>onTabPress(rightTab)}>
+                                    <TabText>채팅 42개</TabText>
+                                    { isAllRead? null : <NotReadDot/> }
+                            </RightTab>
+                        </TabContainer>
+                        {
+                        leftTabActivate?
+                            <ContentContainer>
+                                <ProcessContainer>
+                                {                            
+                                    processName.map((processName, i) => (
+                                        <Process>
+                                            <ProcessNum>{'0'+ (i+1)}</ProcessNum>
+                                            <ProcessContent>
+                                                <ProcessName>{processName}</ProcessName>
+                                                <WrappedText textStyle={{fontWeight: 400, fontSize: '13px', color: `${colors.black}`}}>
+                                                    안장의 높이를 삼두 중앙보다 약간 위쪽과 같도록 맞춘 후 손잡이를 잡아주세요.
+                                                </WrappedText>
+                                            </ProcessContent>
+                                        </Process>
                                     ))
                                 }
-                                </CautionContentContainer>
-                            </CautionContainer>
-                        </ContentContainer>
-                        : 
-                        <ContentContainer style={{paddingTop: 28}}>
-                        {
-                            userName.map((userName, i) => (
-                                <ChatContainer>
-                                    <UserName>{userName}</UserName>
-                                    <MessageContainer>
-                                        <WrappedText textStyle={{fontWeight: 400, fontSize: 13, color: `${colors.black}`, lineHeight: 17}}>{msg[i]}</WrappedText>
-                                    </MessageContainer>
-                                </ChatContainer>
-                            ))
-                        }
+                                </ProcessContainer>
 
-                            <JoinBtnContainer>
-                                <JoinImage></JoinImage>
-                                <JoinText>채팅 참여하기</JoinText>
-                            </JoinBtnContainer>
-                        </ContentContainer>
-                    } 
-                </DictionaryContainer>
-            </TotalContainer>
-            </Container>
-        </SafeAreaView>
-    )
+                                <CautionContainer>
+                                    <CautionTitleContainer>
+                                        <CautionImage/>
+                                        <CautionTitle>이 부분은 특히 주의해주세요!</CautionTitle>
+                                    </CautionTitleContainer>
+                                    <CautionContentContainer>
+                                    {
+                                        caution.map((caution) => (
+                                            <CautionDetailContainer>
+                                                <CautionDot/>
+                                                <CautionDetail>{ caution }</CautionDetail>
+                                            </CautionDetailContainer>
+                                        ))
+                                    }
+                                    </CautionContentContainer>
+                                </CautionContainer>
+                            </ContentContainer>
+                            : 
+                            <ContentContainer style={{paddingTop: 28}}>
+                            {
+                                userName.map((userName, i) => (
+                                    <ChatContainer>
+                                        <UserName>{userName}</UserName>
+                                        <MessageContainer>
+                                            <WrappedText textStyle={{fontWeight: 400, fontSize: 13, color: `${colors.black}`, lineHeight: 17}}>{msg[i]}</WrappedText>
+                                        </MessageContainer>
+                                    </ChatContainer>
+                                ))
+                            }
+
+                                <JoinBtnContainer>
+                                    <JoinImage></JoinImage>
+                                    <JoinText>채팅 참여하기</JoinText>
+                                </JoinBtnContainer>
+                            </ContentContainer>
+                        } 
+                    </DictionaryContainer>
+                </TotalContainer>
+            </Container></SafeAreaView></BottomSheetModalProvider></Fragment>
+        )
+    else
+        return(
+            <Container/>
+        )
 } 
