@@ -1,10 +1,9 @@
-import CreateRoutineNav from './navigators/CreateRoutineNav';
-import OnBoarding_1 from './OnBoarding_1';
+import AppLoading from 'expo-app-loading';
 import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
 import OnBoardingNav from './navigation/OnBoardingNav';
 import LoggedInNav from './navigation/LoggedInNav';
+import { Context, ContextProvider } from './components/ContextProvider';
 import { useState } from 'react';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 const MyTheme = {
   ...DefaultTheme,
@@ -15,12 +14,28 @@ const MyTheme = {
 };
 
 export default function App() {
-  let [loggedIn, setLoggedIn] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [loggedIn, setLoggedIn] = useState(false);
+  const onFinish = () => setLoading(false);
+  const preload = async () => {
+    // const { loggedIn, setLoggedIn } = useContext(Context);
+    // return loggedIn;
+  };
+
+  if (loading) {
+    return (
+      <AppLoading
+        startAsync={preload}
+        onError={console.warn}
+        onFinish={onFinish}
+      />
+    );
+  }
   return (
-    <NavigationContainer theme={MyTheme}>
-      <GestureHandlerRootView style={{ flex: 1 }}>
+    <ContextProvider>
+      <NavigationContainer theme={MyTheme}>
         {loggedIn ? <LoggedInNav /> : <OnBoardingNav />}
-      </GestureHandlerRootView>
-    </NavigationContainer>
+      </NavigationContainer>
+    </ContextProvider>
   );
 }

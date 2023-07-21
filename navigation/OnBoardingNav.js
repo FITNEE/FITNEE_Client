@@ -4,7 +4,7 @@ import OnBoarding_1 from '../OnBoarding_1';
 import OnBoarding_2 from '../OnBoarding_2';
 import OnBoarding_3 from '../OnBoarding_3';
 import OnBoarding_4 from '../OnBoarding_4';
-// import Test from '../Test';
+import OnBoarding_5 from '../OnBoarding_5';
 
 const Stack = createStackNavigator();
 
@@ -20,6 +20,7 @@ export default function OnBoardingNav() {
       <Stack.Screen name='OnBoarding_2' component={OnBoarding_2} />
       <Stack.Screen name='OnBoarding_3' component={OnBoarding_3} />
       <Stack.Screen name='OnBoarding_4' component={OnBoarding_4} />
+      <Stack.Screen name='OnBoarding_5' component={OnBoarding_5} />
     </Stack.Navigator>
   );
 }
