@@ -69,7 +69,6 @@ export default function Setting({ navigation }) {
     return (
     <SafeAreaView>
     <Container>
-        {/*<Header><HeaderText>앱 설정</HeaderText></Header>*/}
         <Profile>
             <ProfileImage/>
             <ProfileContents>

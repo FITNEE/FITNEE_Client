@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import CustomSwitch from "../components/CustomSwitch";
+import { useColorScheme } from "react-native";
 
 export default function Mode(){
-  const onSelectSwitch = mode => {
-    //다크모드 변경
+  
+  const onSelectSwitch = () => {
   };
 
     return(

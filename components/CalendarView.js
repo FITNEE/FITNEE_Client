@@ -9,7 +9,8 @@ export default function CalendarView(props) {
     const exerciseDay = {
         '2023-07-04': { selected: true },
         '2023-07-06': { selected: true },
-        '2023-07-08': { selected: true }
+        '2023-07-08': { selected: true },
+        '2023-07-10': {}
     }
     
     return ( <Calendar
