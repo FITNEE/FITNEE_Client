@@ -1,39 +1,27 @@
-import AppLoading from "expo-app-loading";
-import React, { useEffect, useState } from "react";
-import { Ionicons } from "@expo/vector-icons";
-import * as Font from "expo-font";
-import { Asset } from "expo-asset";
-import MyPageNav from "./navigators/MyPageNav";
-import { NavigationContainer } from "@react-navigation/native";
-import { Appearance } from "react-native";
-import { EventRegister } from "react-native-event-listeners";
+import AppLoading from 'expo-app-loading';
+import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
+import OnBoardingNav from './navigation/OnBoardingNav';
+import LoggedInNav from './navigation/LoggedInNav';
+import { Context, ContextProvider } from './components/ContextProvider';
+import { useState } from 'react';
+
+const MyTheme = {
+  ...DefaultTheme,
+  colors: {
+    ...DefaultTheme.colors,
+    background: '#f3f3f3',
+  },
+};
 
 export default function App() {
-
-  const [darkMode, setDarkMode] = useState(false);
-
-  // useEffect(() => {
-  //  const listener = EventRegister.addEventListener('Change Theme', (data) => {
-  //    setDarkMode(data)
-  //    console.log(data)
-  //  })
-  //  return () => {
-  //    EventRegister.removeAllListeners(listener)
-  //  }
-  // }, [darkMode])
-  
   const [loading, setLoading] = useState(true);
+  const [loggedIn, setLoggedIn] = useState(false);
   const onFinish = () => setLoading(false);
-  const preload = () => {
-    const fontsToLoad = [Ionicons.font];
-    const fontPromises = fontsToLoad.map((font) => Font.loadAsync(font));
-    const imagesToLoad = [
-      require("./assets/icon.png"),
-    ];
-    const imagePromises = imagesToLoad.map((image) => Asset.loadAsync(image));
-    return Promise.all([...fontPromises, ...imagePromises]);
+  const preload = async () => {
+    // const { loggedIn, setLoggedIn } = useContext(Context);
+    // return loggedIn;
   };
-  
+
   if (loading) {
     return (
       <AppLoading
