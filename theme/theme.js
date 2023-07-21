@@ -4,6 +4,7 @@ const theme = {
         color: 'black',
         background: 'white'
     },
+    
     dark: {
         theme: 'dark',
         color: 'white',
