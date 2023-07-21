@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components/native";
 
 export default function CreateRoutine_3({ navigation }) {
+  const [select, SetSelect] = useState(false);
+  const [allPart, SetAllPart] = useState(false);
   const [parts, setParts] = useState([
     { id: 1, name: "가슴", selected: false },
     { id: 2, name: "등", selected: false },
@@ -17,6 +19,26 @@ export default function CreateRoutine_3({ navigation }) {
       )
     );
   };
+  useEffect(() => {
+    SetSelect(
+      parts[0].selected ||
+        parts[1].selected ||
+        parts[2].selected ||
+        parts[3].selected ||
+        parts[4].selected ||
+        parts[5].selected
+    );
+  }, [parts]);
+  const AllPartPress = () => {
+    SetAllPart(!allPart);
+  };
+  useEffect(() => {
+    setParts((prevParts) =>
+      prevParts.map((part) =>
+        allPart ? { ...part, selected: true } : { ...part, selected: false }
+      )
+    );
+  }, [allPart]);
   return (
     <Container>
       <StackBar>
@@ -38,11 +60,15 @@ export default function CreateRoutine_3({ navigation }) {
           </PartItem>
         ))}
       </PartContainer>
-      <AllButton>
+      <AllButton isActive={allPart} onPress={AllPartPress}>
         <AllText>모든 부위를 운동할래요</AllText>
       </AllButton>
-      <NextButton onPress={() => navigation.push("CreateRoutine_4")}>
-        <ButtonText>다음</ButtonText>
+      <NextButton
+        isActive={select}
+        disabled={!select}
+        onPress={() => navigation.push("CreateRoutine_4")}
+      >
+        <ButtonText isActive={select}>다음</ButtonText>
       </NextButton>
     </Container>
   );
@@ -103,7 +129,7 @@ const PartName = styled.Text`
 const AllButton = styled.TouchableOpacity`
   width: 147px;
   height: 40px;
-  background-color: #dddddd;
+  background-color: ${(props) => (props.isActive ? "#BFBFBF" : "#DDDDDD")};
   margin-bottom: 120px;
   border-radius: 100px;
   align-items: center;
@@ -117,8 +143,10 @@ const NextButton = styled.TouchableOpacity`
   height: 52px;
   align-items: center;
   justify-content: center;
-  background-color: #bfbfbf;
+  background-color: ${(props) => (props.isActive ? "#BFBFBF" : "#DDDDDD")};
   border-radius: 10px;
   margin-bottom: 45px;
 `;
-const ButtonText = styled.Text``;
+const ButtonText = styled.Text`
+  color: ${(props) => (props.isActive ? "black" : "#757575")};
+`;

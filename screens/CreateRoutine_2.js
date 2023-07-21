@@ -128,7 +128,7 @@ const SubTitle = styled.Text`
 const DontKnowButton = styled.TouchableOpacity`
   width: 99px;
   height: 40px;
-  background-color: ${(props) => (props.isActive ? "#757575" : "#DDDDDD")};
+  background-color: ${(props) => (props.isActive ? "#BFBFBF" : "#DDDDDD")};
   margin-bottom: 120px;
   border-radius: 100px;
   align-items: center;
