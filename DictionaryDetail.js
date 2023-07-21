@@ -12,7 +12,7 @@ const SCREEN_WIDTH = Dimensions.get('screen').width;
 
 const Container = styled.View`
     flex: 1;
-    background-color: ${colors.grey1};
+    background-color: ${colors.grey_1};
 `
 
 const TopBtnContainer = styled.View`
@@ -24,7 +24,7 @@ const TopBtnContainer = styled.View`
 const TopBtn = styled.TouchableOpacity`
     width: 24px;
     height: 24px;
-    background-color: red;
+    background-color: ${colors.red};
 `
 const ImageContainer = styled.View`
     height: 326px;  
@@ -33,7 +33,7 @@ const ImageContainer = styled.View`
     align-items: center;
 `
 const ExerciseImage = styled.Image`
-    background-color: ${colors.grey4}; 
+    background-color: ${colors.grey_4}; 
     width: 200px; 
     height: 200px;
 `
@@ -55,7 +55,7 @@ const NameContainer = styled.View`
     margin-right: 40px;
 `
 const AreaText = styled.Text`
-    color: ${colors.purple};
+    color: ${colors.l_main};
     font-weight: 400;
     font-size: 13px;
 `
@@ -65,7 +65,7 @@ const TitleText = styled.Text`
     font-size: 24px;
 `
 const AddtoRoutineBtn = styled.TouchableOpacity`
-    background-color: red;
+    background-color: ${colors.red};
     height: 40px;
     width: 40px;
     border-radius: 20px;
@@ -78,8 +78,8 @@ const Bubble = styled.View`
     border-radius: 12px;
     align-items: center;
     justify-content: center;
-    top: 280px;
-    right: 24px;
+    bottom: 0px;
+    right: 28px;
     z-index: 1;
 `;
 
@@ -107,7 +107,7 @@ const TabContainer = styled.View`
     height: 45px;
 
     border-bottom-width: 1px;
-    border-bottom-color: ${colors.grey1};
+    border-bottom-color: ${colors.grey_1};
 
     flex-direction: row;
     justify-content: space-between;
@@ -117,7 +117,7 @@ const LeftTab = styled.TouchableOpacity`
     flex: 1;
     align-items: center;
     border-bottom-width: 1px;
-    border-bottom-color: ${colors.grey1};
+    border-bottom-color: ${colors.grey_1};
     
     margin-left: 24px;
     margin-right: 16px;
@@ -127,7 +127,7 @@ const RightTab = styled.TouchableOpacity`
     flex-direction: row;
     justify-content: center;
     border-bottom-width: 1px;
-    border-bottom-color: ${colors.grey1};
+    border-bottom-color: ${colors.grey_1};
 
     margin-right: 24px;
 `
@@ -152,7 +152,7 @@ const ProcessContainer = styled.View`
     margin: 16px 24px;
 `
 const Process = styled.View`
-    background-color: ${colors.grey1};
+    background-color: ${colors.grey_1};
     border-radius: 12px;
     padding: 20px 24px;
     margin-bottom: 8px;
@@ -160,7 +160,7 @@ const Process = styled.View`
     flex-direction: row;
 `
 const ProcessNum = styled.Text`
-    color: ${colors.purple};
+    color: ${colors.l_main};
     font-weight: 600;
     font-size: 15px;
 `
@@ -186,7 +186,7 @@ const CautionTitleContainer = styled.View`
     margin-bottom: 16px;
 `
 const CautionImage = styled.Image`
-    background-color: red;
+    background-color: ${colors.red};
     width: 20px;
     height: 20px;
     margin-right: 4px;
@@ -198,7 +198,7 @@ const CautionTitle = styled.Text`
 `
 const CautionContentContainer = styled.View`
     padding: 24px;
-    background-color: ${colors.grey1};
+    background-color: ${colors.grey_1};
     border-radius: 12px;
 `
 const CautionDetailContainer = styled.View`
@@ -220,26 +220,29 @@ const CautionDetail = styled.Text`
     font-size: 13px;
 `
 
+const ChatGroupContainer = styled.View`
+
+`
 const ChatContainer = styled.View`
     margin-left: 24px;
     margin-bottom: 16px;
 `
 const UserName = styled.Text`
-    color: ${colors.purple};
+    color: ${colors.l_main};
     font-size: 11px;
     font-weight: 400;
     margin-left: 8px;
     margin-bottom: 5px;
 `
 const MessageContainer = styled.View`
-    background-color: ${colors.grey1};
+    background-color: ${colors.grey_1};
     border-radius: 12px 12px 12px 0px;
     padding: 8px 16px;
     margin-right: 151px;
 `
 
 const JoinBtnContainer = styled.TouchableOpacity`
-    background-color: ${colors.grey2};
+    background-color: ${colors.grey_2};
     border-radius:  100px;
     padding: 10px 14px;
     width: 123px;
@@ -252,18 +255,18 @@ const JoinBtnContainer = styled.TouchableOpacity`
     bottom: 0;
 `
 const JoinImage = styled.Image`
-    background-color: red;
+    background-color: ${colors.red};
     width: 20px;
     height: 20px;
     margin-right: 10px;
 `
 const JoinText = styled.Text`
     font-weight: 600;
-    color: ${colors.grey7};
+    color: ${colors.grey_7};
     font-size: 13;
 `
 const TextInputBG = styled.View`
-    background-color: ${colors.grey1};
+    background-color: ${colors.grey_1};
     justify-content: center;
     align-items: center;
     padding: 9px 16px;
@@ -281,7 +284,7 @@ const TextInput = styled.TextInput`
     margin-left: 15px;
 `
 const SendBtn = styled.TouchableOpacity`
-    background-color: ${colors.grey1};
+    background-color: ${colors.grey_1};
     width: 32px;
     height: 32px;
     border-radius: 16px;
@@ -290,7 +293,7 @@ const SendBtn = styled.TouchableOpacity`
 export default function DictionaryDetail(){
 
     const activateTabStyle = { 
-        borderBottomColor: `${colors.purple}`,
+        borderBottomColor: `${colors.l_main}`,
         fontWeight: 600, // 이거 적용 안 된다
     }
     const smallTabStyle = {
@@ -312,7 +315,7 @@ export default function DictionaryDetail(){
     const [userName, setUserName] = useState(['근손실', '삼대오백'])
     const [msg, setMsg] = useState(['사레레 무게 얼마나 들 수 있어야 어깨 부자 되나요?', '무게보다는 정확한 자세가 중요합니다. 특히 처음 할 때는 큰 근육에 자극 주기가 힘드니 꾸준히 하셔야해요!'])
     const [snapPoints, setSnapPoints] = useState(['48%', '93%'])
-    const [chat, setChat] = ('ㅇㅇ')
+    const [chat, setChat] = useState('')
 
     const onTabPress = (target) => {
         setSnapPoints(['48%', '93%'])
@@ -321,28 +324,29 @@ export default function DictionaryDetail(){
         : 
             setLeftTabActivate(false)
     }
-    const onPressBottomModal = () => {
-        bottomModal.current?.present()
+    const onPressBottomModal = () => bottomModal.current?.present()
+    const onPressJoinBtn = () => setSnapPoints(['93%'])
+    const onChangeChat = (payload) => {
+        console.log(payload)
+        setChat(payload)
     }
-    const onPressJoinBtn = () => {
-        setSnapPoints(['93%'])
-    }
-    const onChangeChat = (payload) => setChat(payload)
     const onSubmitChat = () => {
         let temp = []
         chat.length == 0?
             null
         :
-        (
-            temp = [...msg, chat],
-            setMsg(chat)
-        )
+            (temp = [...msg, chat],
+            setMsg(chat),
+            setChat(''))
     }
+    useEffect(()=>{
+        onPressBottomModal();
+    }, [])
 
     return (
-        <BottomSheetModalProvider><SafeAreaView style={{flex: 1, backgroundColor: `${colors.grey1}`}}><Container>
+        <BottomSheetModalProvider><SafeAreaView style={{flex: 1, backgroundColor: `${colors.grey_1}`}}><Container>
             <TopBtnContainer>
-                <TopBtn onPress={onPressBottomModal}/>
+                <TopBtn/>
                 <TopBtn/>
             </TopBtnContainer>
             <ImageContainer>
@@ -352,12 +356,15 @@ export default function DictionaryDetail(){
                 <BubbleText>{`+ 버튼을 눌러 마이루틴에 해당\n운동을 추가해보세요!`}</BubbleText>
                 <BubbleArrow/>
             </Bubble>
+
             <BottomSheetModal
                 ref={bottomModal}
                 index={0}
                 snapPoints={snapPoints}
                 enablePanDownToClose={false}
-            ><DictionaryContainer>
+                handleHeight={50}
+            >
+            <DictionaryContainer>
                 <TitleContainer>
                     <NameContainer>
                         <AreaText>{area}</AreaText>
@@ -417,7 +424,8 @@ export default function DictionaryDetail(){
                         </CautionContainer>
                     </ContentContainer>
                     : 
-                    <TouchableWithoutFeedback onPress={Keyboard.dismiss}><ContentContainer style={{paddingTop: 28}}>
+                    <TouchableWithoutFeedback onPress={Keyboard.dismiss}><ContentContainer style={{paddingTop: 28}} contentContainerStyle={{justifyContent: 'space-between'}}>
+                    <ChatGroupContainer>
                     {
                         userName.map((userName, i) => (
                             <ChatContainer>
@@ -428,13 +436,15 @@ export default function DictionaryDetail(){
                             </ChatContainer>
                         ))
                     }
+                    </ChatGroupContainer>
                     {
                         snapPoints[0] == '93%'?
                             <KeyboardAvoidingView><TextInputBG>
                                 <TextInputContainer>
                                     <TextInput
+                                        type="text"
                                         autoFocus={true}
-                                        onChangeText={text => setChat(text)}
+                                        onChangeText={text => {setChat(text)}}
                                         value={chat}
                                         onSubmitEditing={onSubmitChat}
                                     />

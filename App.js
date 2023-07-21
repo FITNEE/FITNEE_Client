@@ -1,12 +1,10 @@
-import { StatusBar } from 'expo-status-bar';
-import DictionaryNav from './DictionaryNav'
-import { NavigationContainer } from '@react-navigation/native'
 import AppLoading from 'expo-app-loading';
 import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
 import OnBoardingNav from './navigation/OnBoardingNav';
 import LoggedInNav from './navigation/LoggedInNav';
 import { Context, ContextProvider } from './components/ContextProvider';
 import { useState } from 'react';
+import DictionaryNav from './DictionaryNav'
 
 const MyTheme = {
   ...DefaultTheme,
@@ -35,19 +33,14 @@ export default function App() {
     );
   }
   return (
-    <ContextProvider>
-      <NavigationContainer theme={MyTheme}>
-        {loggedIn ? <LoggedInNav /> : <OnBoardingNav />}
-      </NavigationContainer>
-    </ContextProvider>
+    // <ContextProvider>
+    //   <NavigationContainer theme={MyTheme}>
+    //     {loggedIn ? <LoggedInNav /> : <OnBoardingNav />}
+    //   </NavigationContainer>
+    // </ContextProvider>
+      <NavigationContainer>
+        <DictionaryNav/>
+      </NavigationContainer>  
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
