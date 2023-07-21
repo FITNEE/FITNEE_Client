@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components/native';
 import { colors } from './colors';
-import { Button, Input, ScreenWidth, StatusText, Title } from './Shared';
+import { Button, Input, ScreenWidth, Title } from './Shared';
 import { WithLocalSvg } from 'react-native-svg';
 import BMIImg from './assets/SVGs/BMI.svg';
 const ScreenLayout = styled.SafeAreaView`
@@ -99,6 +99,18 @@ const OnBoarding_4 = ({ route, navigation }) => {
   const [weight, setWeight] = useState(0);
   const [BMI, setBMI] = useState(0);
 
+  const email = route.params.email;
+  const PW = route.params.PW;
+  const birthYear = route.params.birthYear;
+  const handleSubmit = () => {
+    navigation.navigate('OnBoarding_5', {
+      email,
+      PW,
+      birthYear,
+      height,
+      weight,
+    });
+  };
   useEffect(() => {
     const heightInM = height / 100;
     setBMI(weight / (heightInM ^ 2));
@@ -115,7 +127,7 @@ const OnBoarding_4 = ({ route, navigation }) => {
         <SubText>키(cm)</SubText>
         <Input
           style={{ marginTop: 4 }}
-          placeholderTextColor={colors.grey_3}
+          placeholderTextColor={colors.grey_5}
           autoFocus
           placeholder='키'
           returnKeyType='next'
@@ -125,7 +137,7 @@ const OnBoarding_4 = ({ route, navigation }) => {
         <SubText>몸무게(kg)</SubText>
         <Input
           style={{ marginTop: 4 }}
-          placeholderTextColor={colors.grey_3}
+          placeholderTextColor={colors.grey_5}
           onSubmitEditing={() => handleSubmit()}
           placeholder='몸무게'
           returnKeyType='done'
@@ -134,7 +146,6 @@ const OnBoarding_4 = ({ route, navigation }) => {
         />
       </BottomContainer>
       <BMIContainer>
-        ㄹ
         <BMIIndicator>
           <BMIView style={{ left: `${(BMI - 15) * 4}%` }}>
             <BMITitle>BMI {BMI.toFixed(1)}</BMITitle>
@@ -147,10 +158,7 @@ const OnBoarding_4 = ({ route, navigation }) => {
         </BMIIndicator>
         <WithLocalSvg width={ScreenWidth * 0.9} height={40} asset={BMIImg} />
       </BMIContainer>
-      <Button
-        enabled={height && weight}
-        onPress={() => handleSubmit()}
-      ></Button>
+      <Button enabled={height && weight} onPress={() => handleSubmit()} />
     </ScreenLayout>
   );
 };

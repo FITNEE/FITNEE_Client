@@ -88,7 +88,7 @@ const OnBoarding_1 = ({ navigation }) => {
         <SubText>로그인 또는 회원가입에 필요합니다.</SubText>
       </TextContainer>
       <Input
-        placeholderTextColor={colors.grey_3}
+        placeholderTextColor={colors.grey_5}
         autoFocus
         onSubmitEditing={() => navigateTo2()}
         placeholder='이메일 입력'
@@ -101,7 +101,6 @@ const OnBoarding_1 = ({ navigation }) => {
           <Line />
           <ORText>또는</ORText>
         </ORContainer>
-
         <SNSContainer>
           <SNSButton>
             <Text>Google</Text>

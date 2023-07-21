@@ -65,7 +65,9 @@ const OnBoarding_2 = ({ route, navigation }) => {
             placeholderTextColor={colors.grey_3}
             autoFocus
             value={rewrittenPW}
-            onSubmitEditing={() => handlePress()}
+            onSubmitEditing={() => {
+              rewrittenPW == PW && handlePress();
+            }}
             placeholder='password'
             secureTextEntry={true}
             returnKeyType='done'
@@ -76,7 +78,7 @@ const OnBoarding_2 = ({ route, navigation }) => {
       ) : (
         <InputContainer>
           <Input
-            placeholderTextColor={colors.grey_3}
+            placeholderTextColor={colors.grey_5}
             autoFocus
             onSubmitEditing={() => rewritePW()}
             placeholder='password'

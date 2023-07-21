@@ -1,6 +1,6 @@
 import styled from 'styled-components/native';
 import { colors } from './colors';
-import { Dimensions } from 'react-native';
+import { ActivityIndicator, Dimensions } from 'react-native';
 
 export const ScreenWidth = Dimensions.get('screen').width;
 export const ScreenHeight = Dimensions.get('screen').height;
@@ -45,7 +45,12 @@ export const StatusText = styled.Text`
   color: ${colors.grey_4};
 `;
 
-export const Button = ({ enabled, onPress }) => {
+export const Button = ({
+  enabled,
+  onPress,
+  text = '확인',
+  loading = false,
+}) => {
   return (
     <MyButton
       disabled={!enabled}
@@ -58,11 +63,15 @@ export const Button = ({ enabled, onPress }) => {
           : { backgroundColor: colors.grey_3 }
       }
     >
-      <ButtonText
-        style={enabled ? { color: colors.white } : { color: colors.grey_7 }}
-      >
-        확인
-      </ButtonText>
+      {loading ? (
+        <ActivityIndicator color={colors.grey_7} />
+      ) : (
+        <ButtonText
+          style={enabled ? { color: colors.white } : { color: colors.grey_7 }}
+        >
+          {text}
+        </ButtonText>
+      )}
     </MyButton>
   );
 };
