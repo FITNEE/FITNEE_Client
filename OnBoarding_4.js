@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components/native';
-import { View } from 'react-native';
 import { colors } from './colors';
 import { Button, Input, ScreenWidth, StatusText, Title } from './Shared';
 import { WithLocalSvg } from 'react-native-svg';
@@ -47,6 +46,7 @@ const BMIContainer = styled.View`
   justify-content: center;
   width: 100%;
 `;
+
 const BMIIndicator = styled.View`
   width: 100%;
   z-index: 99;
@@ -57,6 +57,7 @@ const BMILine = styled.View`
   margin-left: 9px;
   border: 1px dashed black;
 `;
+
 const PointRadius = 10;
 const TextBoxHeight = 56;
 const lineHeight = 19;
@@ -133,6 +134,7 @@ const OnBoarding_4 = ({ route, navigation }) => {
         />
       </BottomContainer>
       <BMIContainer>
+        ㄹ
         <BMIIndicator>
           <BMIView style={{ left: `${(BMI - 15) * 4}%` }}>
             <BMITitle>BMI {BMI.toFixed(1)}</BMITitle>
@@ -143,12 +145,7 @@ const OnBoarding_4 = ({ route, navigation }) => {
             <BMIPointer />
           </BMIMarkerContainer>
         </BMIIndicator>
-        <WithLocalSvg
-          // style={focused ? { color: '#0351ea' } : { color: '#747474' }}
-          width={ScreenWidth * 0.9}
-          height={40}
-          asset={BMIImg}
-        />
+        <WithLocalSvg width={ScreenWidth * 0.9} height={40} asset={BMIImg} />
       </BMIContainer>
       <Button
         enabled={height && weight}

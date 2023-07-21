@@ -33,6 +33,7 @@ export const Input = styled.TextInput`
   width: 100%;
   height: 48px;
 `;
+
 export const StatusText = styled.Text`
   position: absolute;
   right: 0;
@@ -52,12 +53,14 @@ export const Button = ({ enabled, onPress }) => {
       style={
         enabled
           ? {
-              backgroundColor: '#0351ea',
+              backgroundColor: colors.l_main,
             }
-          : { backgroundColor: '#d3d3d3' }
+          : { backgroundColor: colors.grey_3 }
       }
     >
-      <ButtonText style={enabled ? { color: 'white' } : { color: '#747474' }}>
+      <ButtonText
+        style={enabled ? { color: colors.white } : { color: colors.grey_7 }}
+      >
         확인
       </ButtonText>
     </MyButton>
