@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react'
 import styled from 'styled-components/native'
 import { colors } from './colors'
-import { Platform, ScrollView, TouchableOpacity, SafeAreaView, Dimensions, Touchable } from 'react-native'
+import { KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, Platform, ScrollView, TouchableOpacity, SafeAreaView, Dimensions, Touchable } from 'react-native'
 import WrappedText from 'react-native-wrapped-text'
 import {
     BottomSheetModal,
@@ -259,8 +259,32 @@ const JoinImage = styled.Image`
 `
 const JoinText = styled.Text`
     font-weight: 600;
-    font-size: 13;
     color: ${colors.grey7};
+    font-size: 13;
+`
+const TextInputBG = styled.View`
+    background-color: ${colors.grey1};
+    justify-content: center;
+    align-items: center;
+    padding: 9px 16px;
+`
+const TextInputContainer = styled.View`
+    background-color: white;
+    border-radius: 50px;
+    width: 100%;
+    flex-direction: row;
+    padding: 6px;
+`
+const TextInput = styled.TextInput`
+    color: ${colors.black};
+    width: 300px;
+    margin-left: 15px;
+`
+const SendBtn = styled.TouchableOpacity`
+    background-color: ${colors.grey1};
+    width: 32px;
+    height: 32px;
+    border-radius: 16px;
 `
 
 export default function DictionaryDetail(){
@@ -288,6 +312,7 @@ export default function DictionaryDetail(){
     const [userName, setUserName] = useState(['근손실', '삼대오백'])
     const [msg, setMsg] = useState(['사레레 무게 얼마나 들 수 있어야 어깨 부자 되나요?', '무게보다는 정확한 자세가 중요합니다. 특히 처음 할 때는 큰 근육에 자극 주기가 힘드니 꾸준히 하셔야해요!'])
     const [snapPoints, setSnapPoints] = useState(['48%', '93%'])
+    const [chat, setChat] = ('ㅇㅇ')
 
     const onTabPress = (target) => {
         setSnapPoints(['48%', '93%'])
@@ -301,6 +326,17 @@ export default function DictionaryDetail(){
     }
     const onPressJoinBtn = () => {
         setSnapPoints(['93%'])
+    }
+    const onChangeChat = (payload) => setChat(payload)
+    const onSubmitChat = () => {
+        let temp = []
+        chat.length == 0?
+            null
+        :
+        (
+            temp = [...msg, chat],
+            setMsg(chat)
+        )
     }
 
     return (
@@ -381,7 +417,7 @@ export default function DictionaryDetail(){
                         </CautionContainer>
                     </ContentContainer>
                     : 
-                    <ContentContainer style={{paddingTop: 28}}>
+                    <TouchableWithoutFeedback onPress={Keyboard.dismiss}><ContentContainer style={{paddingTop: 28}}>
                     {
                         userName.map((userName, i) => (
                             <ChatContainer>
@@ -393,16 +429,25 @@ export default function DictionaryDetail(){
                         ))
                     }
                     {
-                        snapPoints[0] == '90%'?
-                            null
+                        snapPoints[0] == '93%'?
+                            <KeyboardAvoidingView><TextInputBG>
+                                <TextInputContainer>
+                                    <TextInput
+                                        autoFocus={true}
+                                        onChangeText={text => setChat(text)}
+                                        value={chat}
+                                        onSubmitEditing={onSubmitChat}
+                                    />
+                                    <SendBtn/>
+                                </TextInputContainer>
+                            </TextInputBG></KeyboardAvoidingView>
                             :
                             <JoinBtnContainer onPress={onPressJoinBtn} ref={JoinBtnRef}>
                                 <JoinImage></JoinImage>
                                 <JoinText>채팅 참여하기</JoinText>
                             </JoinBtnContainer>
                     }
-
-                    </ContentContainer>
+                    </ContentContainer></TouchableWithoutFeedback>
                 } 
             </DictionaryContainer></BottomSheetModal>
         </Container></SafeAreaView></BottomSheetModalProvider>
