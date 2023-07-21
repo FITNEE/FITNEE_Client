@@ -3,6 +3,8 @@ import { SafeAreaView, TouchableOpacity } from "react-native";
 import styled from "styled-components/native";
 import ProgressCircle from "../components/ProgressCircle1";
 import GrayCircle from "../components/GrayCircle";
+import COMMENTDATA from "./commentData";
+import { ScrollView } from "react-native-gesture-handler";
 
 
 const Container = styled.View`
@@ -16,7 +18,6 @@ const Container = styled.View`
 const ExerciseText = styled.Text`
   font-weight: 600;
   font-size: 24px;
-  font-height: 140%;
   text-align: center;
   line-height: 33.6px;
 `;
@@ -58,16 +59,9 @@ const ButtonText = styled.Text`
     font-weight: 600;
 `;
 
-const ExerciseRec = styled.View`
-    width: 311px;
-    height: 175px;
-    border-radius: 12px;
-    background: #F3F3F3;
-    margin-bottom: 68px;
-`;
 
-CirclesLine = styled.View`
-  flexDirection: row;
+const CirclesLine = styled.View`
+  flex-Direction: row;
   width: 256px;
   justify-content: space-around;
 `;
@@ -103,6 +97,33 @@ const BubbleText = styled.Text`
     font-weight: 400;
 `;
 
+const ExerciseRec = styled.View`
+  width: 311px;
+  height: 175px;
+  border-radius: 12px;
+  background: #F3F3F3;
+  margin-bottom: 68px;
+  justify-content: center;
+  align-items: center;
+  padding: 16px;
+`;
+
+const RecText1 = styled.Text`
+  color: #262626;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 19.5px;
+  width: 188px;
+`;
+
+
+const RecTextLine = styled.View`
+  flex-Direction: row;
+  width: 279px;
+  margin-bottom: 4px;
+`;
+
+
 
 
 export default function completeExercise({ navigation }) {
@@ -115,18 +136,27 @@ export default function completeExercise({ navigation }) {
         // 일정 시간(예: 5초) 후에 렌더링 여부를 false로 변경
         const timer = setTimeout(() => {
             setShouldRender(false);
-        }, 3000); // 5초
+        }, 3000); // 3초
 
         // 컴포넌트가 언마운트되면 타이머 클리어
         return () => clearTimeout(timer);
     }, []); // 빈 배열을 전달하여 컴포넌트가 마운트될 때만 실행
 
+    const exerciseList = COMMENTDATA.map((comment) => 
+    <RecTextLine>
+      <RecText1>{comment.name}</RecText1>
+    </RecTextLine>  
+);
 
   return (
     <SafeAreaView style={{flex:1, backgroundColor:"#FFF"}}>
       <Container>
         <ExerciseText>운동을 완료했어요!</ExerciseText>
-        <ExerciseExplainText>중량 정보를 업데이트 했어요</ExerciseExplainText>
+        
+        {shouldRender ? (
+            <ExerciseExplainText>중량 정보를 업데이트 했어요</ExerciseExplainText>
+        ):  <ExerciseExplainText>루틴을 연속 13회 완료했어요</ExerciseExplainText>}
+        
 
         {shouldRender ? (
          <Bubble>
@@ -142,7 +172,11 @@ export default function completeExercise({ navigation }) {
           <GrayCircle num = "400" unit="kcal" title="소모 칼로리" />
         </CirclesLine>
 
-        <ExerciseRec/>
+        <ExerciseRec>
+          <ScrollView>
+            {exerciseList}
+          </ScrollView>
+        </ExerciseRec>
 
         <ResultButton onPress={goToResult}>
               <ButtonText>결과 자세히 보기</ButtonText>

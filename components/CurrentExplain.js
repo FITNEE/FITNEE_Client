@@ -22,7 +22,7 @@ const CurrentExplainLine = styled.View`
     width: 279px;
     align-items: center;
     gap: 4px;
-    flexDirection: row;
+    flex-Direction: row;
 `;
 
 const CurrentExplainText = styled.Text`
@@ -58,10 +58,10 @@ export default function currentExplain({ expl1, expl2, expl3 }) {
     </CurrentExplain>
 
     //     list.map((item)=>{
-    //    <CurrentExplainLine>
-    //    <CurrentExplainCircle/>
-    //    <CurrentExplainText>{item.explain}</CurrentExplainText>
-    //     </CurrentExplainLine>
+    //          <CurrentExplainLine>
+    //              <CurrentExplainCircle/>
+    //              <CurrentExplainText>{item.explain}</CurrentExplainText>
+    //          </CurrentExplainLine>
     //     })
   );
 }

@@ -3,6 +3,9 @@ import { SafeAreaView, TouchableOpacity } from "react-native";
 import styled from "styled-components/native";
 import ProgressCircle from "../components/ProgressCircle1";
 import GrayCircle from "../components/GrayCircle";
+import { ScrollView } from "react-native-gesture-handler";
+import COMMENTDATA from "./commentData";
+
 
 
 
@@ -17,7 +20,6 @@ const Container = styled.View`
 const ExerciseText = styled.Text`
   font-weight: 600;
   font-size: 24px;
-  font-height: 140%;
   text-align: center;
   line-height: 33.6px;
 `;
@@ -60,17 +62,43 @@ const ExerciseRec = styled.View`
   border-radius: 12px;
   background: #F3F3F3;
   margin-bottom: 12px;
+  justify-content: center;
+  align-items: center;
+  padding: 16px;
 `;
 
-const RecText = styled.Text`
+const RecText1 = styled.Text`
   color: #262626;
   font-size: 13px;
   font-weight: 400;
   line-height: 19.5px;
+  width: 188px;
 `;
 
-CirclesLine = styled.View`
-  flexDirection: row;
+const RecText2 = styled.Text`
+  color: #262626;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 19.5px;
+  width: 55px;
+`;
+
+const RecText3 = styled.Text`
+  color: #262626;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 19.5px;
+  width: 36px;
+`;
+
+const RecTextLine = styled.View`
+  flex-Direction: row;
+  width: 279px;
+  margin-bottom: 4px;
+`;
+
+const CirclesLine = styled.View`
+  flex-Direction: row;
   width: 256px;
   justify-content: space-around;
 `;
@@ -83,6 +111,15 @@ export default function startExercise({ navigation }) {
     const [min, setMin] = useState(0);
     const [sec, setSet] = useState(0);
     const [kcal, setKcal] = useState(0);
+
+
+    const exerciseList = COMMENTDATA.map((comment) => 
+        <RecTextLine>
+          <RecText1>{comment.name}</RecText1>
+          <RecText2>{comment.kg}</RecText2>
+          <RecText3>{comment.set}</RecText3>
+        </RecTextLine>  
+    );
 
   return (
     <SafeAreaView style={{flex:1, backgroundColor:"#FFF"}}>
@@ -97,10 +134,12 @@ export default function startExercise({ navigation }) {
         </CirclesLine>
 
         <ExerciseRec>
-          <ExerciseText></ExerciseText>
+          <ScrollView>
+            {exerciseList}
+          </ScrollView>
         </ExerciseRec>
 
-
+       
         <ExerciseButton onPress={goToExerciseCourse}>
                 <ExerciseButtonText>시작</ExerciseButtonText>
         </ExerciseButton>

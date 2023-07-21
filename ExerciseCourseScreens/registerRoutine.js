@@ -55,12 +55,12 @@ const CreateRoutineText = styled.Text`
 `;
 
 const CircleBox1 = styled.View`
-  jusitfy-content: space-between;
-  flexDirection: row;
+  justify-content: space-between;
+  flex-Direction: row;
 `;
 
 const CircleBox2 = styled.View`
-  jusitfy-content: center;
+  justify-content: center;
   align-items: center;
   margin-right: 8px;
 `;
@@ -69,7 +69,7 @@ const RoutineCircle = styled.View`
   width: 80px;
   height: 80px;
   background: #DDD;
-  border-radius: 50%;
+  border-radius: 100%;
   margin-bottom: 8px;
 `;
 
