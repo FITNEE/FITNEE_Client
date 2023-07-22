@@ -74,7 +74,7 @@ const SNSButton = styled.TouchableOpacity`
 `;
 const OnBoarding = ({ navigation }) => {
   const [email, setEmail] = useState('');
-  const [hasAccount, setHasAccount] = useState(false);
+  const [hasAccount, setHasAccount] = useState(true);
 
   const handleSubmit = () => {
     //Email값 받고, 이에 대한 login, CreateAccount여부 나타내는 boolean값 반환받기

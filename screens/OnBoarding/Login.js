@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import styled from 'styled-components/native';
 import { colors } from '../../colors';
 import { Button } from '../../Shared';
@@ -7,6 +7,7 @@ import {
   StatusText,
   Title,
 } from '../../components/Shared/OnBoarding_Shared';
+import { AppContext } from '../../components/ContextProvider';
 const ScreenLayout = styled.SafeAreaView`
   flex-direction: column;
   align-items: center;
@@ -35,68 +36,43 @@ const SubText = styled.Text`
 
 const Login = ({ route, navigation }) => {
   const [PW, setPW] = useState('');
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const { toggleLogin } = useContext(AppContext);
   const email = route.params.email;
 
   const handlePress = () => {
     console.log('HandlePress');
     //login (email, PW);
+    // setIsLoading(false)
     //login mutation 실행 후 boolean값 대조하기
-    //if(true){toggleLogin()}
+    // if(true){toggleLogin()}
+    toggleLogin();
   };
   return (
     <ScreenLayout>
       {/* <BackButton onPress={() => goBack()} /> */}
       <TextContainer>
-        <Title>환영해요! 계정을 생성할게요.</Title>
-        <SubText>
-          {rewrite
-            ? '비밀번호를 다시 입력해주세요.'
-            : '비밀번호를 입력해주세요.'}
-        </SubText>
+        <Title>다시 만나 반가워요!</Title>
+        <SubText>비밀번호를 입력해주세요.</SubText>
       </TextContainer>
-      {rewrite ? (
-        <InputContainer>
-          <StatusText>
-            {rewrittenPW == PW
-              ? '비밀번호가 일치합니다'
-              : rewrittenPW.length < 2
-              ? '비밀번호가 일치하지 않습니다'
-              : ''}
-          </StatusText>
-          <Input
-            placeholderTextColor={colors.grey_3}
-            autoFocus
-            value={rewrittenPW}
-            onSubmitEditing={() => {
-              rewrittenPW == PW && handlePress();
-            }}
-            placeholder='password'
-            secureTextEntry={true}
-            returnKeyType='done'
-            blurOnSubmit={false}
-            onChangeText={(text) => setRewrittenPW(text)}
-          />
-        </InputContainer>
-      ) : (
-        <InputContainer>
-          <Input
-            placeholderTextColor={colors.grey_5}
-            autoFocus
-            onSubmitEditing={() => rewritePW()}
-            placeholder='password'
-            secureTextEntry={true}
-            returnKeyType='done'
-            blurOnSubmit={false}
-            onChangeText={(text) => setPW(text)}
-          />
-        </InputContainer>
-      )}
-
+      <InputContainer>
+        <StatusText>비밀번호가 일치하지 않습니다</StatusText>
+        <Input
+          placeholderTextColor={colors.grey_3}
+          autoFocus
+          onSubmitEditing={() => {
+            console.log('HI');
+          }}
+          placeholder='password'
+          secureTextEntry={true}
+          returnKeyType='done'
+          blurOnSubmit={false}
+          onChangeText={(text) => setPW(text)}
+        />
+      </InputContainer>
       <Button
         loading={isLoading}
-        enabled={PW.length > 8}
+        enabled={PW.length > 7}
         text='로그인'
         onPress={() => handlePress()}
       ></Button>

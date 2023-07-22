@@ -15,7 +15,7 @@ const MyTheme = {
 
 export default function App() {
   const [loading, setLoading] = useState(true);
-  const [loggedIn, setLoggedIn] = useState(true);
+  const [loggedIn, setLoggedIn] = useState(false);
   const [colorMode, setColorMode] = useState(false);
   const onFinish = () => setLoading(false);
   const toggleLogin = () => {
