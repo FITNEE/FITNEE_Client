@@ -1,7 +1,8 @@
 import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components/native';
 import { colors } from '../../colors';
-import { Button, Title } from '../../Shared';
+import { Title } from '../../components/Shared/OnBoarding_Shared';
+import { Button } from '../../Shared';
 import LottieView from 'lottie-react-native';
 import { AppContext } from '../../components/ContextProvider';
 

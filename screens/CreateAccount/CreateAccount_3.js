@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components/native';
 import { colors } from '../../colors';
-import { Button, Input, ScreenWidth, Title } from '../../Shared';
+import { Button, ScreenWidth } from '../../Shared';
+import { Input, Title } from '../../components/Shared/OnBoarding_Shared';
 import { WithLocalSvg } from 'react-native-svg';
 import BMIImg from '../../assets/SVGs/BMI.svg';
 

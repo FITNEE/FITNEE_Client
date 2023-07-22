@@ -1,7 +1,12 @@
 import React, { useState } from 'react';
 import styled from 'styled-components/native';
 import { colors } from '../../colors';
-import { BackButton, Button, Input, StatusText, Title } from '../../Shared';
+import { Button } from '../../Shared';
+import {
+  Input,
+  StatusText,
+  Title,
+} from '../../components/Shared/OnBoarding_Shared';
 
 const ScreenLayout = styled.SafeAreaView`
   flex-direction: column;
