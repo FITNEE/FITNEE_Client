@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { SafeAreaView, TouchableOpacity } from "react-native";
 import styled from "styled-components/native";
-import ProgressCircle from "../components/ProgressCircle1";
-import GrayCircle from "../components/GrayCircle";
+import ProgressCircle from "../../components/ProgressCircle1";
+import GrayCircle from "../../components/GrayCircle";
 import { ScrollView } from "react-native-gesture-handler";
 import COMMENTDATA from "./commentData";
+import { BackButton } from '../../Shared';
 
 
 
@@ -120,10 +121,12 @@ export default function startExercise({ navigation }) {
           <RecText3>{comment.set}</RecText3>
         </RecTextLine>  
     );
-
+    
+    
   return (
     <SafeAreaView style={{flex:1, backgroundColor:"#FFF"}}>
       <Container>
+        <BackButton onPress={() => goBack()} />
         <ExerciseText>운동을 시작해 볼까요?</ExerciseText>
         <ExerciseExplainText>헬린이를 위한 무분할 루틴</ExerciseExplainText>
 

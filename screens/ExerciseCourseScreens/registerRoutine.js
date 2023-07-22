@@ -14,7 +14,6 @@ const Container = styled.View`
 const RoutineText = styled.Text`
   font-weight: 600;
   font-size: 24px;
-  font-height: 140%;
   text-align: center;
   line-height: 33.6px;
 `;

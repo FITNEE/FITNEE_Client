@@ -1,6 +1,7 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import HomeNav from './HomeNav';
+import ExerciseCourseNav from './ExerciseCourseNav';
 
 const Stack = createNativeStackNavigator();
 const Tabs = createBottomTabNavigator();
@@ -26,7 +27,7 @@ export default function LoggedInNav() {
     >
       <Tabs.Screen name='HomeNav'>{() => <HomeNav />}</Tabs.Screen>
       <Tabs.Screen name='MyRoutineNav'>{() => <MyRoutineNav />}</Tabs.Screen>
-      <Tabs.Screen name='ExerciseNav'>{() => <ExerciseNav />}</Tabs.Screen>
+      <Tabs.Screen name='ExerciseCourseNav'>{() => <ExerciseCourseNav />}</Tabs.Screen>
       <Tabs.Screen name='ExerciseDictNav'>
         {() => <ExerciseDictNav />}
       </Tabs.Screen>

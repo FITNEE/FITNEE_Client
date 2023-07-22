@@ -1,10 +1,10 @@
 import AppLoading from 'expo-app-loading';
 import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
-import OnBoardingNav from './navigation/OnBoardingNav';
-import LoggedInNav from './navigation/LoggedInNav';
-import { Context, ContextProvider } from './components/ContextProvider';
+import OnBoardingNav from './navigators/OnBoardingNav';
+import LoggedInNav from './navigators/LoggedInNav';
+import { AppContext } from './components/ContextProvider';
 import { useState } from 'react';
-import ExerciseCourseNav from './navigation/ExerciseCourseNav';
+import ExerciseCourseNav from './navigators/ExerciseCourseNav';
 
 const MyTheme = {
   ...DefaultTheme,
@@ -16,11 +16,29 @@ const MyTheme = {
 
 export default function App() {
   const [loading, setLoading] = useState(true);
-  const [loggedIn, setLoggedIn] = useState(false);
+  const [loggedIn, setLoggedIn] = useState(true);
+  const [colorMode, setColorMode] = useState(false);
   const onFinish = () => setLoading(false);
+  const toggleLogin = () => {
+    setLoggedIn(!loggedIn);
+    console.log(loggedIn);
+  };
+  const toggleColorMode = () => {
+    setColorMode(!colorMode);
+  };
+  const userSettings = {
+    toggleLogin,
+    toggleColorMode,
+    loggedIn,
+    colorMode,
+  };
+
   const preload = async () => {
-    // const { loggedIn, setLoggedIn } = useContext(Context);
-    // return loggedIn;
+    // const token = await AsyncStorage.getItem("token");
+    // if (token) {
+    //   isLoggedInVar(true);
+    //   tokenVar(token);
+    // }
   };
 
   if (loading) {
@@ -33,11 +51,11 @@ export default function App() {
     );
   }
   return (
-    <ContextProvider>
+    <AppContext.Provider value={userSettings}>
       <NavigationContainer theme={MyTheme}>
         {/* {loggedIn ? <LoggedInNav /> : <OnBoardingNav />} */}
-        {loggedIn ? <LoggedInNav /> : <ExerciseCourseNav />}
+        {loggedIn ? <ExerciseCourseNav /> : <ExerciseCourseNav />}
       </NavigationContainer>
-    </ContextProvider>
+    </AppContext.Provider>
   );
 }

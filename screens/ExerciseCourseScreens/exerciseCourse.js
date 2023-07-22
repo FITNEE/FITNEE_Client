@@ -8,10 +8,10 @@ import {
 } from 'react-native';
 const { width, height } = Dimensions.get('window');
 import styled from "styled-components/native";
-import ExerciseCard from "../components/ExerciseCard";
-import ExerciseButton from "../components/ExerciseButton";
-import CurrentExplain from "../components/CurrentExplain";
-import CurrentSet from "../components/CurrentSet";
+import ExerciseCard from "../../components/ExerciseCard";
+import ExerciseButton from "../../components/ExerciseButton";
+import CurrentExplain from "../../components/CurrentExplain";
+import CurrentSet from "../../components/CurrentSet";
 import COMMENTDATA from "./commentData";
 
 
@@ -48,10 +48,11 @@ const ReplaceButtonText = styled.Text`
 
 export default function exerciseCourse({ navigation }) {
 
-  const goToCompleteExercise = () => navigation.navigate("completeExercise");
+  const goToCompleteExercise = () => navigation.navigate("exerciseCourse_1");
   const inputRef = React.useRef();
-  const duration = "3";
+  //opacity를 위해
   const timerAnimation = React.useRef(new Animated.Value(0)).current;
+  //타이머 숫자를 위해
   const textInputAnimation = React.useRef(new Animated.Value(3)).current;
   
   React.useEffect(()=> {
@@ -71,21 +72,26 @@ export default function exerciseCourse({ navigation }) {
       Animated.sequence([
 
         Animated.parallel([
+          //숫자가 duration동안 3에서 1로
            Animated.timing(textInputAnimation, {
             toValue: 1,
-            duration: 3100,
+            duration: 2000,
             useNativeDriver: true,
           }),
 
+          //배경이 3초동안 불투명. 불투명해지는데 걸리는 시간이 duration
           Animated.timing(timerAnimation, {
-            toValue: duration,
-            duration: 100,
+            toValue: 1,
+            duration: 150,
             useNativeDriver: true,
           }),
-
         
       ]),
 
+        //1이 더 오래 보이게
+        Animated.delay("300"),
+
+        //배경이 사라진다. 투명해지는데 걸리는 시간이 duration
         Animated.timing(timerAnimation, {
           toValue: 0,
           duration: 150,
@@ -93,13 +99,14 @@ export default function exerciseCourse({ navigation }) {
         }),
 
         
-      ]).start()}, [])
+      ]).start(goToCompleteExercise)}, [])
 
 
-  const textOpacity = textInputAnimation.interpolate({
-    inputRange: [0, 1],
-    outputRange: [0, 1],
-  })
+      //text 
+  // const textOpacity = textInputAnimation.interpolate({
+  //   inputRange: [0, 1],
+  //   outputRange: [0, 1],
+  // })
 
   const styles = StyleSheet.create({
     text: {
@@ -161,8 +168,8 @@ export default function exerciseCourse({ navigation }) {
           >
               <TextInput ref={inputRef}
                   style={styles.text}
-                  defaultValue={duration.toString()}
-                  Opacity={textOpacity}
+                  defaultValue={"3"}
+                  Opacity={"1"}
                   editable={false}
               />
           </Animated.View>
@@ -171,7 +178,7 @@ export default function exerciseCourse({ navigation }) {
           <ExerciseButton //운동 시작 버튼
               text="운동 시작"
               disabled={false}
-              onPress={animation}
+              onPress={goToCompleteExercise}
           />
       
         </ExerciseCard>

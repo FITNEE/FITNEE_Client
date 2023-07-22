@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { SafeAreaView, TouchableOpacity } from "react-native";
 import styled from "styled-components/native";
-import ProgressCircle from "../components/ProgressCircle1";
-import GrayCircle from "../components/GrayCircle";
+import ProgressCircle from "../../components/ProgressCircle1";
+import GrayCircle from "../../components/GrayCircle";
 import COMMENTDATA from "./commentData";
 import { ScrollView } from "react-native-gesture-handler";
 
@@ -136,7 +136,7 @@ export default function completeExercise({ navigation }) {
         // 일정 시간(예: 5초) 후에 렌더링 여부를 false로 변경
         const timer = setTimeout(() => {
             setShouldRender(false);
-        }, 3000); // 3초
+        }, 2500); 
 
         // 컴포넌트가 언마운트되면 타이머 클리어
         return () => clearTimeout(timer);
