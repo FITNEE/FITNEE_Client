@@ -10,11 +10,11 @@ const Home = () => {
       style={{
         width: '100%',
         flex: 1,
-        justifyContent: 'center',
+        justifyContent: 'space-between',
         alignItems: 'center',
       }}
     >
-      <Text>Hello</Text>
+      <Text>Home</Text>
       <Button enabled={true} text='logOut' onPress={() => toggleLogin()} />
     </SafeAreaView>
   );

@@ -107,7 +107,7 @@ const CreateAccount_3 = ({ route, navigation }) => {
   const PW = route.params.PW;
   const birthYear = route.params.birthYear;
   const handleSubmit = () => {
-    navigation.navigate('OnBoarding_5', {
+    navigation.navigate('CreateAccount_4', {
       email,
       PW,
       birthYear,
