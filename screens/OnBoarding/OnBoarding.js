@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components/native';
-import { colors } from './colors';
-import { BackButton, Button } from './Shared';
+import { colors } from '../../colors';
+import { BackButton, Button } from '../../Shared';
 import { StyleSheet, Text } from 'react-native';
 
 const ScreenLayout = styled.SafeAreaView`
@@ -72,13 +72,21 @@ const SNSButton = styled.TouchableOpacity`
   background-color: white;
   height: 64px;
 `;
-const OnBoarding_1 = ({ navigation }) => {
+const OnBoarding = ({ navigation }) => {
   const [email, setEmail] = useState('');
+  const [hasAccount, setHasAccount] = useState(false);
 
-  const navigateTo2 = () => {
-    navigation.navigate('OnBoarding_2', {
-      email,
-    });
+  const handleSubmit = () => {
+    //Email값 받고, 이에 대한 login, CreateAccount여부 나타내는 boolean값 반환받기
+    if (hasAccount) {
+      navigation.navigate('Login', {
+        email,
+      });
+    } else {
+      navigation.navigate('CreateAccount_1', {
+        email,
+      });
+    }
   };
   return (
     <ScreenLayout>
@@ -89,7 +97,7 @@ const OnBoarding_1 = ({ navigation }) => {
       <Input
         placeholderTextColor={colors.grey_5}
         autoFocus
-        onSubmitEditing={() => navigateTo2()}
+        onSubmitEditing={() => handleSubmit()}
         placeholder='이메일 입력'
         returnKeyType='next'
         blurOnSubmit={false}
@@ -114,10 +122,10 @@ const OnBoarding_1 = ({ navigation }) => {
       </BottomContainer>
       <Button
         enabled={email.indexOf('@') != -1}
-        onPress={() => navigateTo2()}
+        onPress={() => handleSubmit()}
       ></Button>
     </ScreenLayout>
   );
 };
 
-export default OnBoarding_1;
+export default OnBoarding;

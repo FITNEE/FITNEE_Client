@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components/native';
-import { colors } from './colors';
-import { Button, Input, ScreenWidth, Title } from './Shared';
+import { colors } from '../../colors';
+import { Button, Input, ScreenWidth, Title } from '../../Shared';
 import { WithLocalSvg } from 'react-native-svg';
-import BMIImg from './assets/SVGs/BMI.svg';
+import BMIImg from '../../assets/SVGs/BMI.svg';
 
 const ScreenLayout = styled.SafeAreaView`
   flex-direction: column;
@@ -98,7 +98,7 @@ const BMIText = styled.Text`
   color: white;
 `;
 
-const OnBoarding_4 = ({ route, navigation }) => {
+const CreateAccount_3 = ({ route, navigation }) => {
   const [height, setHeight] = useState(0);
   const [weight, setWeight] = useState(0);
   const [BMI, setBMI] = useState(0);
@@ -167,4 +167,4 @@ const OnBoarding_4 = ({ route, navigation }) => {
   );
 };
 
-export default OnBoarding_4;
+export default CreateAccount_3;

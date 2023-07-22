@@ -1,7 +1,7 @@
 import AppLoading from 'expo-app-loading';
 import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
-import OnBoardingNav from './navigation/OnBoardingNav';
-import LoggedInNav from './navigation/LoggedInNav';
+import OnBoardingNav from './navigators/OnBoardingNav';
+import LoggedInNav from './navigators/LoggedInNav';
 import { AppContext } from './components/ContextProvider';
 import { useState } from 'react';
 

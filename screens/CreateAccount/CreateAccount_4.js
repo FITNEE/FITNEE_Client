@@ -1,9 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components/native';
-import { colors } from './colors';
-import { Button, Title } from './Shared';
+import { colors } from '../../colors';
+import { Button, Title } from '../../Shared';
 import LottieView from 'lottie-react-native';
-import { AppContext, Context } from './components/ContextProvider';
+import { AppContext } from '../../components/ContextProvider';
 
 const ScreenLayout = styled.SafeAreaView`
   flex-direction: column;
@@ -45,7 +45,7 @@ const AnimationContainer = styled.View`
   aspect-ratio: 1/1;
 `;
 
-const OnBoarding_5 = ({ route, navigation }) => {
+const CreateAccount_4 = ({ route, navigation }) => {
   const [isLoading, setIsLoading] = useState(true);
   const { toggleLogin } = useContext(AppContext);
   setTimeout(() => {
@@ -82,4 +82,4 @@ const OnBoarding_5 = ({ route, navigation }) => {
   );
 };
 
-export default OnBoarding_5;
+export default CreateAccount_4;
