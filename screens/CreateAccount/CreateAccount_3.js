@@ -1,20 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components/native';
 import { colors } from '../../colors';
-import { Button, ScreenWidth } from '../../Shared';
-import { Input, Title } from '../../components/Shared/OnBoarding_Shared';
+import { Button, ScreenWidth, BackButton } from '../../Shared';
+import {
+  Input,
+  Title,
+  SubText,
+  ScreenLayout,
+} from '../../components/Shared/OnBoarding_Shared';
 import { WithLocalSvg } from 'react-native-svg';
 import BMIImg from '../../assets/SVGs/BMI.svg';
 
-const ScreenLayout = styled.SafeAreaView`
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-  width: 90%;
-  margin-left: 5%;
-  flex: 1;
-  background-color: #f3f3f3;
-`;
 const SubTitle = styled.Text`
   margin-top: 8px;
   font-size: 13px;
@@ -31,20 +27,15 @@ const TextContainer = styled.View`
   justify-content: center;
 `;
 
-const SubText = styled.Text`
-  font-size: 12px;
-  margin-left: 8px;
-  font-weight: 300;
-  margin-top: 24px;
-  color: ${colors.grey_4};
-`;
-
 const BottomContainer = styled.View`
-  margin-bottom: 80px;
+  flex: 1;
+  margin-top: 22px;
   width: 100%;
 `;
 
 const BMIContainer = styled.View`
+  position: absolute;
+  bottom: 16%;
   flex-direction: column;
   align-items: center;
   justify-content: center;
@@ -123,14 +114,18 @@ const CreateAccount_3 = ({ route, navigation }) => {
 
   return (
     <ScreenLayout>
+      {/* <BackButton onPress={() => navigation.goBack()} /> */}
       <TextContainer>
         <Title>마지막 단계에요!</Title>
         <SubTitle>{`회원님의 신체 정보를 입력해주세요.
 딱 맞는 루틴 생성을 위해 꼭 필요한 정보에요.`}</SubTitle>
       </TextContainer>
       <BottomContainer>
-        <SubText>키(cm)</SubText>
+        <SubText style={{ marginLeft: 8, color: colors.grey_5 }}>
+          키(cm)
+        </SubText>
         <Input
+          keyboardType='numeric'
           style={{ marginTop: 4 }}
           placeholderTextColor={colors.grey_5}
           autoFocus
@@ -139,8 +134,11 @@ const CreateAccount_3 = ({ route, navigation }) => {
           blurOnSubmit={false}
           onChangeText={(text) => setHeight(text)}
         />
-        <SubText>몸무게(kg)</SubText>
+        <SubText style={{ marginLeft: 8, color: colors.grey_5 }}>
+          몸무게(kg)
+        </SubText>
         <Input
+          keyboardType='numeric'
           style={{ marginTop: 4 }}
           placeholderTextColor={colors.grey_5}
           onSubmitEditing={() => handleSubmit()}

@@ -1,16 +1,13 @@
 import React, { useState } from 'react';
 import styled from 'styled-components/native';
 import { colors } from '../../colors';
-import { Button } from '../../Shared';
-import { Input, Title } from '../../components/Shared/OnBoarding_Shared';
-const ScreenLayout = styled.SafeAreaView`
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-  width: 90%;
-  margin-left: 5%;
-  flex: 1;
-`;
+import { Button, BackButton } from '../../Shared';
+import {
+  Input,
+  Title,
+  ScreenLayout,
+  SubText,
+} from '../../components/Shared/OnBoarding_Shared';
 
 const TextContainer = styled.View`
   margin-top: 124px;
@@ -20,18 +17,10 @@ const TextContainer = styled.View`
   justify-content: center;
 `;
 
-const SubText = styled.Text`
-  margin-top: 8px;
-  font-size: 13px;
-  width: 260px;
-  line-height: 18px;
-  font-weight: 400;
-  color: ${colors.black};
-`;
-
 const BottomContainer = styled.View`
-  margin-bottom: 258px;
+  margin-top: 24px;
   width: 100%;
+  flex: 1;
 `;
 
 const GenderContainer = styled.View`
@@ -65,13 +54,15 @@ const CreateAccount_2 = ({ route, navigation }) => {
   };
   return (
     <ScreenLayout>
+      <BackButton onPress={() => navigation.goBack()} />
       <TextContainer>
-        <Title style={{ width: 220 }} numberOfLines={2}>
-          맞춤 루틴 생성을 위해 10초만 내어주세요.
+        <Title>
+          {`맞춤 루틴 생성을 위해 
+10초만 내어주세요.`}
         </Title>
         <SubText numberOfLines={2}>
-          출생년도와 성별, 간단한 신체정보를 입력하시면, 회원님께 딱 맞는 루틴을
-          만나보실 수 있어요.
+          {`출생년도와 성별, 간단한 신체정보를 입력하시면, 
+회원님께 딱 맞는 루틴을 만나보실 수 있어요.`}
         </SubText>
       </TextContainer>
       <BottomContainer>
@@ -94,6 +85,7 @@ const CreateAccount_2 = ({ route, navigation }) => {
           </GenderButton>
         </GenderContainer>
         <Input
+          keyboardType='numeric'
           style={{ marginTop: 16 }}
           placeholderTextColor={colors.grey_5}
           autoFocus
@@ -107,7 +99,7 @@ const CreateAccount_2 = ({ route, navigation }) => {
       <Button
         enabled={birthYear.length == 4 && gender != null}
         onPress={() => handlePress()}
-      ></Button>
+      />
     </ScreenLayout>
   );
 };

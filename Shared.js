@@ -8,7 +8,7 @@ export const ScreenHeight = Dimensions.get('screen').height;
 //****************** 뒤로가기  *******************************************************/
 const BackButtonContainer = styled.TouchableOpacity`
   position: absolute;
-  top: 64px;
+  top: 24px;
   left: 0px;
   width: 32px;
   height: 32px;
@@ -19,7 +19,7 @@ const BackImg = styled.Image`
   height: 100%;
 `;
 
-export const BackButton = (onPress) => {
+export const BackButton = ({ onPress }) => {
   return (
     <BackButtonContainer onPress={onPress}>
       <BackImg source={Back}></BackImg>

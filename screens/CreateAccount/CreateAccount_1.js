@@ -1,21 +1,15 @@
 import React, { useState } from 'react';
 import styled from 'styled-components/native';
 import { colors } from '../../colors';
-import { Button } from '../../Shared';
+import { Button, BackButton } from '../../Shared';
 import {
   Input,
   StatusText,
   Title,
+  SubText,
+  ScreenLayout,
 } from '../../components/Shared/OnBoarding_Shared';
 
-const ScreenLayout = styled.SafeAreaView`
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-  width: 90%;
-  margin-left: 5%;
-  flex: 1;
-`;
 const TextContainer = styled.View`
   margin-top: 124px;
   flex-direction: column;
@@ -25,13 +19,8 @@ const TextContainer = styled.View`
 `;
 const InputContainer = styled.View`
   width: 100%;
-  margin-bottom: 232px;
-`;
-const SubText = styled.Text`
-  font-size: 13px;
-  margin-top: 8px;
-  font-weight: 400;
-  color: ${colors.black};
+  flex: 1;
+  margin-top: 76px;
 `;
 
 const CreateAccount_1 = ({ route, navigation }) => {
@@ -49,12 +38,9 @@ const CreateAccount_1 = ({ route, navigation }) => {
       PW,
     });
   };
-  const goBack = () => {
-    navigation.goBack();
-  };
   return (
     <ScreenLayout>
-      {/* <BackButton onPress={() => goBack()} /> */}
+      {/* <BackButton onPress={() => navigation.goBack()} /> */}
       <TextContainer>
         <Title>환영해요! 계정을 생성할게요.</Title>
         <SubText>

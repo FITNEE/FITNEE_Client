@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import styled from 'styled-components/native';
 import { colors } from '../../colors';
-import { Button } from '../../Shared';
+import { Button, BackButton } from '../../Shared';
 import {
   Input,
   StatusText,
@@ -48,9 +48,10 @@ const Login = ({ route, navigation }) => {
     // if(true){toggleLogin()}
     toggleLogin();
   };
+
   return (
     <ScreenLayout>
-      {/* <BackButton onPress={() => goBack()} /> */}
+      <BackButton onPress={() => navigation.goBack()} />
       <TextContainer>
         <Title>다시 만나 반가워요!</Title>
         <SubText>비밀번호를 입력해주세요.</SubText>

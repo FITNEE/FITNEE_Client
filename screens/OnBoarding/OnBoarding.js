@@ -1,36 +1,21 @@
 import React, { useState } from 'react';
 import styled from 'styled-components/native';
 import { colors } from '../../colors';
-import { BackButton, Button } from '../../Shared';
+import { Button } from '../../Shared';
 import { StyleSheet, Text } from 'react-native';
+import {
+  ScreenLayout,
+  Title,
+  SubText,
+} from '../../components/Shared/OnBoarding_Shared';
 
-const ScreenLayout = styled.SafeAreaView`
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-  width: 90%;
-  margin-left: 5%;
-  flex: 1;
-`;
 const TextContainer = styled.View`
   margin-top: 124px;
   flex-direction: column;
-  align-items: flex-start;
   width: 100%;
   justify-content: center;
 `;
-const Title = styled.Text`
-  font-size: 24px;
-  font-weight: bold;
-  color: ${colors.black};
-`;
 
-const SubText = styled.Text`
-  font-size: 13px;
-  margin-top: 8px;
-  font-weight: 400;
-  color: ${colors.black};
-`;
 const Input = styled.TextInput`
   padding: 15px 7px;
   border-radius: 4px;
@@ -49,11 +34,11 @@ const ORContainer = styled.View`
 `;
 const Line = styled.View`
   width: 100%;
-  border: ${StyleSheet.hairlineWidth}px solid ${colors.grey_2};
+  border: ${StyleSheet.hairlineWidth}px solid ${colors.grey_5};
   margin-top: 6px;
 `;
 const ORText = styled.Text`
-  color: ${colors.grey_4};
+  color: ${colors.grey_5};
   font-size: 13px;
   position: absolute;
   background-color: #f3f3f3;
@@ -74,7 +59,7 @@ const SNSButton = styled.TouchableOpacity`
 `;
 const OnBoarding = ({ navigation }) => {
   const [email, setEmail] = useState('');
-  const [hasAccount, setHasAccount] = useState(true);
+  const [hasAccount, setHasAccount] = useState(false);
 
   const handleSubmit = () => {
     //Email값 받고, 이에 대한 login, CreateAccount여부 나타내는 boolean값 반환받기
@@ -95,6 +80,7 @@ const OnBoarding = ({ navigation }) => {
         <SubText>로그인 또는 회원가입에 필요합니다.</SubText>
       </TextContainer>
       <Input
+        keyboardType='url'
         placeholderTextColor={colors.grey_5}
         autoFocus
         onSubmitEditing={() => handleSubmit()}
