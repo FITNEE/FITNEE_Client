@@ -3,7 +3,7 @@ import styled from 'styled-components/native';
 import { colors } from './colors';
 import { Button, Title } from './Shared';
 import LottieView from 'lottie-react-native';
-import { Context } from './components/ContextProvider';
+import { AppContext, Context } from './components/ContextProvider';
 
 const ScreenLayout = styled.SafeAreaView`
   flex-direction: column;
@@ -15,6 +15,7 @@ const ScreenLayout = styled.SafeAreaView`
   background-color: #f3f3f3;
 `;
 const SubTitle = styled.Text`
+  text-align: center;
   margin-top: 8px;
   font-size: 13px;
   line-height: 18px;
@@ -45,11 +46,13 @@ const AnimationContainer = styled.View`
 `;
 
 const OnBoarding_5 = ({ route, navigation }) => {
-  const [isLoading, setIsLoading] = useState(false);
-  const { setLoggedIn } = useContext(Context);
+  const [isLoading, setIsLoading] = useState(true);
+  const { toggleLogin } = useContext(AppContext);
+  setTimeout(() => {
+    setIsLoading(false);
+  }, 2000);
   const goBackHome = () => {
-    setLoggedIn(true);
-    // navigation.reset({ routes: [{ name: 'HomeNav' }] });
+    toggleLogin();
   };
 
   return (

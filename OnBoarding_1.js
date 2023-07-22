@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components/native';
 import { colors } from './colors';
-import { Button } from './Shared';
+import { BackButton, Button } from './Shared';
 import { StyleSheet, Text } from 'react-native';
 
 const ScreenLayout = styled.SafeAreaView`
@@ -72,7 +72,6 @@ const SNSButton = styled.TouchableOpacity`
   background-color: white;
   height: 64px;
 `;
-
 const OnBoarding_1 = ({ navigation }) => {
   const [email, setEmail] = useState('');
 

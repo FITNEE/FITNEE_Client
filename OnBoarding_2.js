@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components/native';
 import { colors } from './colors';
-import { Button, Input, StatusText, Title } from './Shared';
+import { BackButton, Button, Input, StatusText, Title } from './Shared';
 
 const ScreenLayout = styled.SafeAreaView`
   flex-direction: column;
@@ -44,8 +44,12 @@ const OnBoarding_2 = ({ route, navigation }) => {
       PW,
     });
   };
+  const goBack = () => {
+    navigation.goBack();
+  };
   return (
     <ScreenLayout>
+      {/* <BackButton onPress={() => goBack()} /> */}
       <TextContainer>
         <Title>환영해요! 계정을 생성할게요.</Title>
         <SubText>

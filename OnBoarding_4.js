@@ -4,6 +4,7 @@ import { colors } from './colors';
 import { Button, Input, ScreenWidth, Title } from './Shared';
 import { WithLocalSvg } from 'react-native-svg';
 import BMIImg from './assets/SVGs/BMI.svg';
+
 const ScreenLayout = styled.SafeAreaView`
   flex-direction: column;
   align-items: center;
@@ -36,10 +37,12 @@ const SubText = styled.Text`
   margin-top: 24px;
   color: ${colors.grey_4};
 `;
+
 const BottomContainer = styled.View`
   margin-bottom: 80px;
   width: 100%;
 `;
+
 const BMIContainer = styled.View`
   flex-direction: column;
   align-items: center;
@@ -73,6 +76,7 @@ const BMIPointer = styled.View`
   height: ${PointRadius * 2}px;
   width: ${PointRadius * 2}px;
 `;
+
 const BMIView = styled.View`
   position: absolute;
   border-radius: 14px;
