@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import styled from 'styled-components/native';
-import { colors } from './colors';
-import { Button, Input, Title } from './Shared';
-
+import { colors } from '../../colors';
+import { Button } from '../../Shared';
+import { Input, Title } from '../../components/Shared/OnBoarding_Shared';
 const ScreenLayout = styled.SafeAreaView`
   flex-direction: column;
   align-items: center;
@@ -11,6 +11,7 @@ const ScreenLayout = styled.SafeAreaView`
   margin-left: 5%;
   flex: 1;
 `;
+
 const TextContainer = styled.View`
   margin-top: 124px;
   flex-direction: column;
@@ -18,6 +19,7 @@ const TextContainer = styled.View`
   width: 100%;
   justify-content: center;
 `;
+
 const SubText = styled.Text`
   margin-top: 8px;
   font-size: 13px;
@@ -26,14 +28,17 @@ const SubText = styled.Text`
   font-weight: 400;
   color: ${colors.black};
 `;
+
 const BottomContainer = styled.View`
   margin-bottom: 258px;
   width: 100%;
 `;
+
 const GenderContainer = styled.View`
   flex-direction: row;
   justify-content: space-between;
 `;
+
 const GenderButton = styled.TouchableOpacity`
   background-color: ${colors.white};
   border-radius: 12px;
@@ -42,16 +47,17 @@ const GenderButton = styled.TouchableOpacity`
   justify-content: center;
   width: 48%;
 `;
+
 const GenderText = styled.Text``;
 
-const OnBoarding_3 = ({ route, navigation }) => {
+const CreateAccount_2 = ({ route, navigation }) => {
   const [birthYear, setBirthYear] = useState('');
   const [gender, setGender] = useState(null);
 
   const email = route.params.email;
   const PW = route.params.PW;
   const handlePress = () => {
-    navigation.navigate('OnBoarding_4', {
+    navigation.navigate('CreateAccount_3', {
       email,
       PW,
       birthYear,
@@ -106,4 +112,4 @@ const OnBoarding_3 = ({ route, navigation }) => {
   );
 };
 
-export default OnBoarding_3;
+export default CreateAccount_2;

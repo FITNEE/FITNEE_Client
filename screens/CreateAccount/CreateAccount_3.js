@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components/native';
-import { colors } from './colors';
-import { Button, Input, ScreenWidth, Title } from './Shared';
+import { colors } from '../../colors';
+import { Button, ScreenWidth } from '../../Shared';
+import { Input, Title } from '../../components/Shared/OnBoarding_Shared';
 import { WithLocalSvg } from 'react-native-svg';
-import BMIImg from './assets/SVGs/BMI.svg';
+import BMIImg from '../../assets/SVGs/BMI.svg';
+
 const ScreenLayout = styled.SafeAreaView`
   flex-direction: column;
   align-items: center;
@@ -36,10 +38,12 @@ const SubText = styled.Text`
   margin-top: 24px;
   color: ${colors.grey_4};
 `;
+
 const BottomContainer = styled.View`
   margin-bottom: 80px;
   width: 100%;
 `;
+
 const BMIContainer = styled.View`
   flex-direction: column;
   align-items: center;
@@ -73,6 +77,7 @@ const BMIPointer = styled.View`
   height: ${PointRadius * 2}px;
   width: ${PointRadius * 2}px;
 `;
+
 const BMIView = styled.View`
   position: absolute;
   border-radius: 14px;
@@ -94,7 +99,7 @@ const BMIText = styled.Text`
   color: white;
 `;
 
-const OnBoarding_4 = ({ route, navigation }) => {
+const CreateAccount_3 = ({ route, navigation }) => {
   const [height, setHeight] = useState(0);
   const [weight, setWeight] = useState(0);
   const [BMI, setBMI] = useState(0);
@@ -103,7 +108,7 @@ const OnBoarding_4 = ({ route, navigation }) => {
   const PW = route.params.PW;
   const birthYear = route.params.birthYear;
   const handleSubmit = () => {
-    navigation.navigate('OnBoarding_5', {
+    navigation.navigate('CreateAccount_4', {
       email,
       PW,
       birthYear,
@@ -163,4 +168,4 @@ const OnBoarding_4 = ({ route, navigation }) => {
   );
 };
 
-export default OnBoarding_4;
+export default CreateAccount_3;

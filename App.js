@@ -4,6 +4,9 @@ import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
 import MyPageNav from './navigators/MyPageNav';
 // import LoggedInNav from './navigation/LoggedInNav';
 import { Context, ContextProvider } from './components/ContextProvider';
+import OnBoardingNav from './navigators/OnBoardingNav';
+import LoggedInNav from './navigators/LoggedInNav';
+import { AppContext } from './components/ContextProvider';
 import { useState } from 'react';
 
 const MyTheme = {
@@ -16,11 +19,29 @@ const MyTheme = {
 
 export default function App() {
   const [loading, setLoading] = useState(true);
-  const [loggedIn, setLoggedIn] = useState(false);
+  const [loggedIn, setLoggedIn] = useState(true);
+  const [colorMode, setColorMode] = useState(false);
   const onFinish = () => setLoading(false);
+  const toggleLogin = () => {
+    setLoggedIn(!loggedIn);
+    console.log(loggedIn);
+  };
+  const toggleColorMode = () => {
+    setColorMode(!colorMode);
+  };
+  const userSettings = {
+    toggleLogin,
+    toggleColorMode,
+    loggedIn,
+    colorMode,
+  };
+
   const preload = async () => {
-    // const { loggedIn, setLoggedIn } = useContext(Context);
-    // return loggedIn;
+    // const token = await AsyncStorage.getItem("token");
+    // if (token) {
+    //   isLoggedInVar(true);
+    //   tokenVar(token);
+    // }
   };
 
   // if (loading) {
@@ -34,10 +55,10 @@ export default function App() {
   // }
   
   return (
-    <ContextProvider>
+    <AppContext.Provider value={userSettings}>
       <NavigationContainer theme={MyTheme}>
         <MyPageNav />
       </NavigationContainer>
-    </ContextProvider>
+    </AppContext.Provider>
   );
 }

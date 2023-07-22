@@ -1,8 +1,12 @@
 import React, { useState } from 'react';
 import styled from 'styled-components/native';
-import { colors } from './colors';
-import { Button, Input, StatusText, Title } from './Shared';
-
+import { colors } from '../../colors';
+import { Button } from '../../Shared';
+import {
+  Input,
+  StatusText,
+  Title,
+} from '../../components/Shared/OnBoarding_Shared';
 const ScreenLayout = styled.SafeAreaView`
   flex-direction: column;
   align-items: center;
@@ -29,23 +33,21 @@ const SubText = styled.Text`
   color: ${colors.black};
 `;
 
-const OnBoarding_2 = ({ route, navigation }) => {
+const Login = ({ route, navigation }) => {
   const [PW, setPW] = useState('');
-  const [rewrittenPW, setRewrittenPW] = useState('');
-  const [rewrite, setRewrite] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const { toggleLogin } = useContext(AppContext);
   const email = route.params.email;
-  const rewritePW = () => {
-    console.log('rewritePW');
-    setRewrite(true);
-  };
+
   const handlePress = () => {
-    navigation.navigate('OnBoarding_3', {
-      email,
-      PW,
-    });
+    console.log('HandlePress');
+    //login (email, PW);
+    //login mutation 실행 후 boolean값 대조하기
+    //if(true){toggleLogin()}
   };
   return (
     <ScreenLayout>
+      {/* <BackButton onPress={() => goBack()} /> */}
       <TextContainer>
         <Title>환영해요! 계정을 생성할게요.</Title>
         <SubText>
@@ -59,7 +61,9 @@ const OnBoarding_2 = ({ route, navigation }) => {
           <StatusText>
             {rewrittenPW == PW
               ? '비밀번호가 일치합니다'
-              : '비밀번호가 일치하지 않습니다'}
+              : rewrittenPW.length < 2
+              ? '비밀번호가 일치하지 않습니다'
+              : ''}
           </StatusText>
           <Input
             placeholderTextColor={colors.grey_3}
@@ -91,11 +95,13 @@ const OnBoarding_2 = ({ route, navigation }) => {
       )}
 
       <Button
-        enabled={rewrite ? rewrittenPW == PW : PW}
-        onPress={rewrite ? () => handlePress() : () => rewritePW()}
+        loading={isLoading}
+        enabled={PW.length > 8}
+        text='로그인'
+        onPress={() => handlePress()}
       ></Button>
     </ScreenLayout>
   );
 };
 
-export default OnBoarding_2;
+export default Login;
