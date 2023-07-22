@@ -13,7 +13,7 @@ const CustomSwitch = ({
   const updatedSwitchData = val => {
     setSelectionMode(val);
   };
-
+  //72px
   return (
     <View>
       <View
@@ -49,7 +49,7 @@ const CustomSwitch = ({
           onPress={() => updatedSwitchData(2)}
           style={{
             flex: 1,
-            backgroundColor: getSelectionMode == 2 ? colors.white : colors.grey_1,
+            backgroundColor: getSelectionMode == 2 ? colors.grey_1 : colors.white,
             borderRadius: 25,
             justifyContent: 'center',
             alignItems: 'center',

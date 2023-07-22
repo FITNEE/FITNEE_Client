@@ -100,6 +100,7 @@ export default function Records() {
     <Container>
     <CalendarView dayFunction={dayLoad}/>
     <Bar />
+    
     <Exercise>
         <Title>{month}월 {date}일 완료한 운동</Title>
         <Circles>
@@ -122,8 +123,8 @@ export default function Records() {
         <List>
             {exerciseList}
         </List>
+        <List><Text>해당 날짜에 완료한 운동이 없습니다.</Text></List>
     </Exercise>
     </Container>
-
   );
 }

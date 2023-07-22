@@ -15,6 +15,7 @@ export default function CalendarView(props) {
     
     return ( <Calendar
         monthFormat='yyyy.MM'
+        
         markedDates={exerciseDay}
         theme={{
             selectedDayBackgroundColor: colors.grey_4,
@@ -23,10 +24,14 @@ export default function CalendarView(props) {
             locale: 'ko',
             textDayFontSize: 13,
             textDayFontWeight: 400,
-            textDayStyle: {color: colors.grey_3}
+            textDayStyle: {color: colors.grey_3},
+            textSectionTitleColor: colors.black,
         }}
         onDayPress={day => {
             props.dayFunction(day);
+            //누르면 색상 변경 추가
         }}
+        hideArrows={true}
+        hideExtraDays={true}
     /> );
 };
