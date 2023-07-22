@@ -1,14 +1,9 @@
 import React from "react";
 import { SafeAreaView, Text, TouchableOpacity } from "react-native";
 import {
-  Vibration,
-  StatusBar,
-  Easing,
   TextInput,
   Dimensions,
   Animated,
-  FlatList,
-  View,
   StyleSheet,
 } from 'react-native';
 const { width, height } = Dimensions.get('window');
@@ -18,8 +13,7 @@ import ExerciseButton from "../components/ExerciseButton";
 import CurrentExplain from "../components/CurrentExplain";
 import CurrentSet from "../components/CurrentSet";
 import COMMENTDATA from "./commentData";
-import { Colors } from "react-native/Libraries/NewAppScreen";
-import { duration } from "moment";
+
 
 
 const ExerciseCircle = styled.View`
@@ -51,34 +45,45 @@ const ReplaceButtonText = styled.Text`
   line-height: 19.5px;
 `;
 
-const timers = [...Array(13).keys()].map((i) => (i === 0 ? 1 : i * 5));
 
 export default function exerciseCourse({ navigation }) {
 
   const goToCompleteExercise = () => navigation.navigate("completeExercise");
-  const [duration, setDuration] = React.useState(timers[0]);
   const inputRef = React.useRef();
+  const duration = "3";
   const timerAnimation = React.useRef(new Animated.Value(0)).current;
-  const textInputAnimation = React.useRef(new Animated.Value(0)).current;
+  const textInputAnimation = React.useRef(new Animated.Value(3)).current;
   
+  React.useEffect(()=> {
+    const listener = textInputAnimation.addListener(({value}) => {
+      inputRef?.current?.setNativeProps({
+        text: Math.ceil(value).toString()
+      })
+    })
+
+    return () => {
+      textInputAnimation.removeListener(listener)
+      textInputAnimation.removeAllListeners();
+    } 
+  })
   const animation = React.useCallback(() => {
 
       Animated.sequence([
 
         Animated.parallel([
-          //  Animated.timing(textInputAnimation, {
-          //   toValue: 0.5,
-          //   duration: 300,
-          //   useNativeDriver: true,
-          // }),
-
-          Animated.timing(timerAnimation, {
+           Animated.timing(textInputAnimation, {
             toValue: 1,
-            duration: 150,
+            duration: 3100,
             useNativeDriver: true,
           }),
 
-        Animated.delay(3000),
+          Animated.timing(timerAnimation, {
+            toValue: duration,
+            duration: 100,
+            useNativeDriver: true,
+          }),
+
+        
       ]),
 
         Animated.timing(timerAnimation, {
@@ -87,38 +92,9 @@ export default function exerciseCourse({ navigation }) {
           useNativeDriver: true,
         }),
 
-        Animated.delay(3000),
+        
+      ]).start()}, [])
 
-      //   Animated.parallel([
-      //     Animated.timing(textInputAnimation, {
-      //    toValue: 0.5,
-      //    duration: 300,
-      //    useNativeDriver: true,
-      //  }),
-
-      //  Animated.timing(timerAnimation, {
-      //    toValue: 1,
-      //    duration: 150,
-      //    useNativeDriver: true,
-      //  }),
-      // ]),
-
-      ]).start(
-      //   () => {
-      //   buttonAnimation.setValue(0);
-      // }
-      )
-  }, [])
-
-  // const opacity = buttonAnimation.interpolate({
-  //   inputRange: [0, 1],
-  //   outputRange: [1, 0],
-  // })
-
-  // const translateY = buttonAnimation.interpolate({
-  //   inputRange: [0, 1],
-  //   outputRange: [0, 200],
-  // })
 
   const textOpacity = textInputAnimation.interpolate({
     inputRange: [0, 1],
@@ -127,11 +103,18 @@ export default function exerciseCourse({ navigation }) {
 
   const styles = StyleSheet.create({
     text: {
-      fontSize: 20,
-      fontWeight: '900',
-      color: '#FFF',
+      color: "#FFF",
+      textAlign: "center",
+      fontSize: "80px",
+      fontWeight: "600",
     }
   })
+
+  const exerciseCardList = COMMENTDATA.map((comment) => 
+    <ExerciseCard exerciseName={comment.name}>
+      
+    </ExerciseCard>  
+  );
 
   return (
     <SafeAreaView style={{flex:1, backgroundColor:"#DDD"}}>
@@ -153,7 +136,7 @@ export default function exerciseCourse({ navigation }) {
             expl1="허리를 과도하게 안으로 넣지 마세요." 
             expl2="적절한 무게로 승모근에 무리가 가지 않도록 하세요."
             expl3="안장과 바의 위치점을 올바르게 맞춰주세요."
-            />
+          />
           
                 
         <Animated.View
@@ -168,24 +151,26 @@ export default function exerciseCourse({ navigation }) {
                 },
           ]}/>
     
-            <Animated.View style={{
-              position: 'absolute',
-              width: '51px',
+          <Animated.View style={{
+              position: 'absolute',  
               justifyContent: 'center',
               alignItems: 'center',
-              alignItems: 'center'
-            }}>
-                  <TextInput ref={inputRef}
+              height: '92%',
+              opacity: timerAnimation,
+            }}
+          >
+              <TextInput ref={inputRef}
                   style={styles.text}
                   defaultValue={duration.toString()}
-                  />
-            </Animated.View>
+                  Opacity={textOpacity}
+                  editable={false}
+              />
+          </Animated.View>
 
 
           <ExerciseButton //운동 시작 버튼
               text="운동 시작"
               disabled={false}
-              //onPress={goToCompleteExercise}
               onPress={animation}
           />
       

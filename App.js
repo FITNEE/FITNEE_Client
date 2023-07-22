@@ -4,6 +4,7 @@ import OnBoardingNav from './navigation/OnBoardingNav';
 import LoggedInNav from './navigation/LoggedInNav';
 import { Context, ContextProvider } from './components/ContextProvider';
 import { useState } from 'react';
+import ExerciseCourseNav from './navigation/ExerciseCourseNav';
 
 const MyTheme = {
   ...DefaultTheme,
@@ -34,7 +35,8 @@ export default function App() {
   return (
     <ContextProvider>
       <NavigationContainer theme={MyTheme}>
-        {loggedIn ? <LoggedInNav /> : <OnBoardingNav />}
+        {/* {loggedIn ? <LoggedInNav /> : <OnBoardingNav />} */}
+        {loggedIn ? <LoggedInNav /> : <ExerciseCourseNav />}
       </NavigationContainer>
     </ContextProvider>
   );

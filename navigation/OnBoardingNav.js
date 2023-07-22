@@ -21,6 +21,7 @@ export default function OnBoardingNav() {
       <Stack.Screen name='OnBoarding_3' component={OnBoarding_3} />
       <Stack.Screen name='OnBoarding_4' component={OnBoarding_4} />
       <Stack.Screen name='OnBoarding_5' component={OnBoarding_5} />
+      
     </Stack.Navigator>
   );
 }
