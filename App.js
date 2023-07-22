@@ -9,13 +9,13 @@ const MyTheme = {
   ...DefaultTheme,
   colors: {
     ...DefaultTheme.colors,
-    background: '#f3f3f3',
+    background: 'white',
   },
 };
 
 export default function App() {
   const [loading, setLoading] = useState(true);
-  const [loggedIn, setLoggedIn] = useState(false);
+  const [loggedIn, setLoggedIn] = useState(true);
   const [colorMode, setColorMode] = useState(false);
   const onFinish = () => setLoading(false);
   const toggleLogin = () => {

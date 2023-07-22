@@ -17,6 +17,7 @@ const TextContainer = styled.View`
 `;
 
 const Input = styled.TextInput`
+  margin-top: 76px;
   padding: 15px 7px;
   border-radius: 4px;
   background-color: white;
@@ -27,8 +28,10 @@ const Input = styled.TextInput`
 const BottomContainer = styled.View`
   align-items: center;
   width: 100%;
+  flex: 1;
 `;
 const ORContainer = styled.View`
+  margin-top: 158px;
   width: 120px;
   height: 13px;
 `;
@@ -79,17 +82,16 @@ const OnBoarding = ({ navigation }) => {
         <Title>이메일을 입력해주세요.</Title>
         <SubText>로그인 또는 회원가입에 필요합니다.</SubText>
       </TextContainer>
-      <Input
-        keyboardType='url'
-        placeholderTextColor={colors.grey_5}
-        autoFocus
-        onSubmitEditing={() => handleSubmit()}
-        placeholder='이메일 입력'
-        returnKeyType='next'
-        blurOnSubmit={false}
-        onChangeText={(text) => setEmail(text)}
-      />
       <BottomContainer>
+        <Input
+          keyboardType='url'
+          placeholderTextColor={colors.grey_5}
+          onSubmitEditing={() => handleSubmit()}
+          placeholder='이메일 입력'
+          returnKeyType='next'
+          blurOnSubmit={false}
+          onChangeText={(text) => setEmail(text)}
+        />
         <ORContainer>
           <Line />
           <ORText>또는</ORText>
