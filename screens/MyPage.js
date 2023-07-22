@@ -31,7 +31,6 @@ export default function MyPage() {
     const ChoiceButton = styled.TouchableOpacity`
         height: 26px;
         display: block;
-        margin-bottom: 20px;
     `;
     const SelectedTextStyle = {
         color: colors.black
@@ -42,7 +41,6 @@ export default function MyPage() {
     };
 
     return (
-    <themeContext.Provider>
         <SafeAreaView>
             <Container>
                 <Choice>
@@ -57,6 +55,5 @@ export default function MyPage() {
                 {!showRecords && <Analysis/>}
             </Container>
         </SafeAreaView>
-    </themeContext.Provider>
   );
 }

@@ -4,6 +4,10 @@ import PercentageCircle from "react-native-progress-circle";
 import { styled } from "styled-components/native";
 import CalendarView from "./CalendarView";
 import { colors } from "../colors";
+import COMMENTDATA from "../screens/commentData";
+import DATEDATA from "../screens/dateData";
+import { Image } from "react-native";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
     const Container = styled.View`
         width: 100%;
@@ -73,27 +77,35 @@ import { colors } from "../colors";
         padding-top: 4px;
         line-height: 32px;
     `;
+    const RecTextLine = styled.TouchableOpacity`
+        flex-Direction: row;
+        width: 100%;
+        align-items: center;
+        justify-content: space-between;
+  `;
 
 export default function Records() {
 
-    const [minute,setMinute] = useState(31);
-    const kilogram = useState(3300);
-    const calorie = useState(400);
-    
     const [now,setNow] = useState(new Date());
     const month = now.getMonth()+1;
     const date = now.getDate();
 
+    // now date에 해당하는 값 가져오기
+    const [minute,setMinute] = useState(31);
+    const kilogram = useState(3300);
+    const calorie = useState(400);
+    
     const percentage = (minute / 60) * 100;
 
     const dayLoad = (text) =>{
         setNow(new Date(text.dateString));
     };
 
-    const exercise = ["데드리프트", "덤벨프레스", "바벨 로우", "사이드 레터럴 레이즈", "레그프레스", "크런치"]
-
-    const exerciseList = exercise.map((name) => 
-             <ListText>{name}</ListText>
+    const exercise = COMMENTDATA.map((comment) =>
+        <RecTextLine>
+            <ListText>{comment.name}</ListText>
+            <Image style={{ width: 20, height: 20, backgroundColor: "pink"}}></Image>
+        </RecTextLine>
     );
 
     return (
@@ -120,10 +132,9 @@ export default function Records() {
                 <CircleTitle>소모 칼로리</CircleTitle>
             </CircleContent>
         </Circles>
-        <List>
-            {exerciseList}
+        <List>            
+            {1 ? exercise : <Text>해당 날짜에 완료한 운동이 없습니다.</Text>}
         </List>
-        <List><Text>해당 날짜에 완료한 운동이 없습니다.</Text></List>
     </Exercise>
     </Container>
   );

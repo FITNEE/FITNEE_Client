@@ -57,7 +57,7 @@ export default function App() {
   return (
     <AppContext.Provider value={userSettings}>
       <NavigationContainer theme={MyTheme}>
-        <MyPageNav />
+        <LoggedInNav />
       </NavigationContainer>
     </AppContext.Provider>
   );
