@@ -2,8 +2,109 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components/native";
 import { colors } from "../colors";
 import RoutineItem from "../components/RoutineItem";
+import Scroll from "../components/Scroll";
 
 export default function CreateRoutine_5({ navigation }) {
+  const [routine, SetRoutine] = useState("");
+  const ROUTINE_DATA = [
+    {
+      id: 1,
+      title: "전신 근력 및 기초 체력",
+      item: [
+        {
+          id: 1,
+          day: "Day 1",
+          parts: "등, 어깨, 가슴",
+          exercises: [
+            { id: 1, name: "데드리프트", set: 3 },
+            { id: 2, name: "덤벨프레스", set: 3 },
+            { id: 3, name: "바벨 로우", set: 3 },
+            { id: 4, name: "사이드 레터럴 라이즈", set: 3 },
+            { id: 5, name: "레그프레스", set: 3 },
+            { id: 6, name: "크런치", set: 3 },
+          ],
+        },
+        {
+          id: 2,
+          day: "Day 2",
+          parts: "등, 어깨, 가슴",
+          exercises: [
+            { id: 1, name: "데드리프트", set: 3 },
+            { id: 2, name: "덤벨프레스", set: 3 },
+            { id: 3, name: "바벨 로우", set: 3 },
+            { id: 4, name: "사이드 레터럴 라이즈", set: 3 },
+            { id: 5, name: "레그프레스", set: 3 },
+            { id: 6, name: "크런치", set: 3 },
+          ],
+        },
+      ],
+    },
+    {
+      id: 2,
+      title: "전신 근력 및 기초 체력",
+      item: [
+        {
+          id: 1,
+          day: "Day 1",
+          parts: "등, 어깨, 가슴",
+          exercises: [
+            { id: 1, name: "데드리프트", set: 3 },
+            { id: 2, name: "덤벨프레스", set: 3 },
+            { id: 3, name: "바벨 로우", set: 3 },
+            { id: 4, name: "사이드 레터럴 라이즈", set: 3 },
+            { id: 5, name: "레그프레스", set: 3 },
+            { id: 6, name: "크런치", set: 3 },
+          ],
+        },
+        {
+          id: 2,
+          day: "Day 2",
+          parts: "등, 어깨, 가슴",
+          exercises: [
+            { id: 1, name: "데드리프트", set: 3 },
+            { id: 2, name: "덤벨프레스", set: 3 },
+            { id: 3, name: "바벨 로우", set: 3 },
+            { id: 4, name: "사이드 레터럴 라이즈", set: 3 },
+            { id: 5, name: "레그프레스", set: 3 },
+            { id: 6, name: "크런치", set: 3 },
+          ],
+        },
+      ],
+    },
+    {
+      id: 3,
+      title: "전신 근력 및 기초 체력",
+      item: [
+        {
+          id: 1,
+          day: "Day 1",
+          parts: "등, 어깨, 가슴",
+          exercises: [
+            { id: 1, name: "데드리프트", set: 3 },
+            { id: 2, name: "덤벨프레스", set: 3 },
+            { id: 3, name: "바벨 로우", set: 3 },
+            { id: 4, name: "사이드 레터럴 라이즈", set: 3 },
+            { id: 5, name: "레그프레스", set: 3 },
+            { id: 6, name: "크런치", set: 3 },
+          ],
+        },
+        {
+          id: 2,
+          day: "Day 2",
+          parts: "등, 어깨, 가슴",
+          exercises: [
+            { id: 1, name: "데드리프트", set: 3 },
+            { id: 2, name: "덤벨프레스", set: 3 },
+            { id: 3, name: "바벨 로우", set: 3 },
+            { id: 4, name: "사이드 레터럴 라이즈", set: 3 },
+            { id: 5, name: "레그프레스", set: 3 },
+            { id: 6, name: "크런치", set: 3 },
+          ],
+        },
+      ],
+    },
+    // Add more routine data as needed
+  ];
   return (
     <Container>
       <TitleContainer>
@@ -13,14 +114,9 @@ export default function CreateRoutine_5({ navigation }) {
          가장 마음에 드는 플랜을 선택해주세요.`}
         </SubTitle>
       </TitleContainer>
-      <RoutineContainer>
-        <RoutineTitleContainer>
-          <RoutineTitle>전신 근력 및 기초 체력</RoutineTitle>
-        </RoutineTitleContainer>
-        <ItemConteiner>
-          <RoutineItem />
-        </ItemConteiner>
-      </RoutineContainer>
+      <ScrollContainer>
+        <Scroll data={ROUTINE_DATA} />
+      </ScrollContainer>
       <NextButton>
         <ButtonText>이 루틴으로 결정</ButtonText>
       </NextButton>
@@ -36,7 +132,7 @@ const Container = styled.View`
 `;
 const TitleContainer = styled.View`
   width: 90%;
-  margin-bottom: 60px;
+
   align-items: center;
 `;
 const Title = styled.Text`
@@ -47,32 +143,10 @@ const SubTitle = styled.Text`
   font-size: 15px;
   margin-top: 10px;
 `;
-const RoutineContainer = styled.View`
-  width: 90%;
-  align-items: center;
-  justify-content: center;
+const ScrollContainer = styled.View`
+  height: 520px;
 `;
-const RoutineTitleContainer = styled.View`
-  position: absolute;
-  width: 157px;
-  height: 30px;
-  align-items: center;
-  justify-content: center;
-  background-color: #dddddd;
-  border-radius: 100px;
-  top: -15px;
-  left: 98px;
-  z-index: 1;
-`;
-const RoutineTitle = styled.Text``;
-const ItemConteiner = styled.View`
-  width: 100%;
-  border: 1px;
-  border-color: #dddddd;
-  border-radius: 20px;
-  background-color: white;
-  padding: 20px;
-`;
+
 const NextButton = styled.TouchableOpacity`
   width: 327px;
   height: 52px;

@@ -1,41 +1,26 @@
 import { useState } from "react";
 import styled from "styled-components/native";
 
-export default function RoutineItem() {
-  const [select, SetSelect] = useState(true);
+export default function RoutineItem({ day, parts, exercises }) {
+  const [select, SetSelect] = useState(false);
+  const itemPress = () => {
+    SetSelect(!select);
+  };
   return (
     <Container>
-      <Item>
-        <ItemTitle>Day 1</ItemTitle>
-        <ItemSubTitle>등, 어깨, 가슴</ItemSubTitle>
+      <Item onPress={itemPress}>
+        <ItemTitle>{day}</ItemTitle>
+        <ItemSubTitle>{parts}</ItemSubTitle>
       </Item>
       {select ? (
-        <PartContainer>
-          <PartItem>
-            <PartName>데드리프트</PartName>
-            <PartSet>3세트</PartSet>
-          </PartItem>
-          <PartItem>
-            <PartName>데드리프트</PartName>
-            <PartSet>3세트</PartSet>
-          </PartItem>
-          <PartItem>
-            <PartName>데드리프트</PartName>
-            <PartSet>3세트</PartSet>
-          </PartItem>
-          <PartItem>
-            <PartName>데드리프트</PartName>
-            <PartSet>3세트</PartSet>
-          </PartItem>
-          <PartItem>
-            <PartName>데드리프트</PartName>
-            <PartSet>3세트</PartSet>
-          </PartItem>
-          <PartItem>
-            <PartName>데드리프트</PartName>
-            <PartSet>3세트</PartSet>
-          </PartItem>
-        </PartContainer>
+        <ExerciseContainer>
+          {exercises.map((exercise) => (
+            <ExerciseItem key={exercise.id}>
+              <ExerciseName>{exercise.name}</ExerciseName>
+              <ExerciseSet>{exercise.set}</ExerciseSet>
+            </ExerciseItem>
+          ))}
+        </ExerciseContainer>
       ) : null}
     </Container>
   );
@@ -49,6 +34,7 @@ const Item = styled.TouchableOpacity`
   border-radius: 12px;
   align-items: center;
   justify-content: space-between;
+  margin-top: 10px;
 `;
 const ItemTitle = styled.Text`
   font-size: 20px;
@@ -58,18 +44,18 @@ const ItemSubTitle = styled.Text`
   margin-right: 15px;
   color: #757575;
 `;
-const PartContainer = styled.View`
+const ExerciseContainer = styled.View`
   margin: 20px;
 `;
-const PartItem = styled.View`
+const ExerciseItem = styled.View`
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
   margin: 5px;
 `;
-const PartName = styled.Text`
+const ExerciseName = styled.Text`
   color: #757575;
 `;
-const PartSet = styled.Text`
+const ExerciseSet = styled.Text`
   color: #757575;
 `;
