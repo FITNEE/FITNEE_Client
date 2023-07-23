@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { SafeAreaView, Text, TouchableOpacity } from "react-native";
 import {
   TextInput,
@@ -10,20 +10,23 @@ const { width, height } = Dimensions.get('window');
 import styled from "styled-components/native";
 import ExerciseCard from "../../components/ExerciseCard";
 import ExerciseButton from "../../components/ExerciseButton";
-import CurrentExplain from "../../components/CurrentExplain";
+import CurrentExplainLine from "../../components/CurrentExplainLine";
 import CurrentSet from "../../components/CurrentSet";
 import COMMENTDATA from "./commentData";
 import { colors } from "../../colors";
 import { CountdownCircleTimer } from 'react-native-countdown-circle-timer'
+import NextSet from "../../components/NextSet";
 
 
 
 const ExerciseCircle = styled.View`
-  width: 291px;
-  height: 291px;
+  width: 307px;
+  height: 307px;
   border-radius: 291px;
   background: #F3F3F3;
   margin-bottom: 24px;
+  justify-content: center;
+  align-items: center;
 `;
 
 const ReplaceButton = styled.TouchableOpacity`
@@ -63,28 +66,62 @@ const UnderLine = styled.View`
 export default function exerciseCourse_2({ navigation }) {
     //휴식페이지. 나중에 운동 과정 페이지 하나에 다 넣을 예정
 
-    const goToCompleteExercise = () => navigation.navigate("completeExercise");
+    const data = [{id:0,exercise: 0,time: 30, setsNum: 15},
+        {id:1,exercise: 0,time: 30, setsNum: 15},
+        {id:2,exercise: 0,time: 30, setsNum: 15}, 30]
+
+    const goToCompleteExercise = () => {
+        setIsPlaying(false);
+        navigation.navigate("completeExercise")
+    };
+    
+    const [isPlaying, setIsPlaying] = React.useState(true);
+
+    const children = ({ remainingTime }) => {
+        const minutes = Math.floor(remainingTime / 60);
+        min = minutes < 10 ? "0" + minutes : minutes;
+        const seconds = remainingTime % 60;
+        sec = seconds < 10 ? "0" + seconds : seconds;
+          
+        return `${min}:${sec}`;
+    }
 
     return (
         <SafeAreaView style={{flex:1, backgroundColor:"#DDD"}}>
     
-          <ExerciseCard exerciseName="사이드 레터럴 레이즈">  
-
+          <ExerciseCard exerciseName="휴식 시간">  
+          
+          <ExerciseCircle>
+            <CountdownCircleTimer
+                    isPlaying={isPlaying}
+                    duration={30}
+                    colors={"#757575"}
+                    size={315}
+                    strokeWidth={8}
+                    trailColor={"#BFBFBF"}
+                    onComplete={() => ({ shouldRepeat: false, delay: 1 })}
+                    updateInterval={0.001}
+                    
+            >
+                    {({ remainingTime }) => (
+                        <Text style={{ color: colors.black, fontSize: 56 }}>
+                        {children({remainingTime})}
+                        </Text>
+                    )}
+            </CountdownCircleTimer>
+          </ExerciseCircle>
 
           <ReplaceButton>
+          
             <ReplaceButtonText>운동 대체하기</ReplaceButtonText>
           </ReplaceButton>
 
-          <CurrentSet set="1" kg="20" num="15"/>
-
-          <UnderLine>
-
+          <NextSet set="1" kg="20" num="15"/>
 
             <ReplaceButton onPress={goToCompleteExercise}>
                 <ReplaceButtonText>바로 시작하기</ReplaceButtonText>
             </ReplaceButton>
 
-          </UnderLine>
 
             </ExerciseCard>
         </SafeAreaView>

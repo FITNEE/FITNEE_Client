@@ -17,7 +17,7 @@ const ExerciseName = styled.Text`
     font-weight: 600;
     line-height: 32px;
     width: 327px;
-    padding: 60px 24px 32px 24px;
+    margin: 16px 24px 32px 24px;
 `;
 
 

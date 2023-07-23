@@ -6,7 +6,7 @@ const Container = styled.View`
     width: 327px;
     height: 56px;
     border-radius: 12px;
-    background: #F3F3F3;
+    background: rgba(243, 243, 243, 0.50);
     flex-Direction: row;
     align-items: center;
     justify-content: center;
@@ -15,7 +15,7 @@ const Container = styled.View`
 
 
 const CurrentText= styled.Text`
-    color: #000;
+    color: rgba(0, 0, 0, 0.50);
     font-size: 20px;
     font-style: normal;
     font-weight: 600;
@@ -23,7 +23,7 @@ const CurrentText= styled.Text`
 `;
 
 const CurrentUnit = styled.Text`
-    color: #000;
+    color: rgba(0, 0, 0, 0.50);
     font-size: 15px;
     font-style: normal;
     font-weight: 600;
@@ -44,7 +44,7 @@ const Box2 = styled.View`
     width: 42px;
 `;
 
-export default function CurrentSet({ set, kg, num }) {
+export default function NextSet({ set, kg, num }) {
   return (
     <Container>
         

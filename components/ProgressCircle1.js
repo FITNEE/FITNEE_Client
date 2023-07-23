@@ -35,7 +35,7 @@ const CircleUnit = styled.Text`
 `;
 
 const CircleLine = styled.View`
-    flexDirection: row;
+    flex-Direction: row;
     height: 20px;
     align-items: flex-end;
 `;

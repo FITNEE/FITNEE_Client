@@ -1,14 +1,7 @@
 import React from "react";
 import styled from "styled-components/native";
 
-const CurrentExplain = styled.View`
-    width: 327px;
-    height: 108px;
-    border-radius: 12px;
-    background: #F3F3F3;
-    padding: 24px;
-    justify-content: center;
-`;
+
 
 const CurrentExplainCircle = styled.View`
     width: 12px;
@@ -17,7 +10,7 @@ const CurrentExplainCircle = styled.View`
     background: #D9D9D9;
 `;
 
-const CurrentExplainLine = styled.View`
+const CurrentExplain = styled.View`
     display: flex;
     width: 279px;
     align-items: center;
@@ -38,24 +31,13 @@ const CurrentExplainText = styled.Text`
 
 
 
-export default function currentExplain({ expl1, expl2, expl3 }) {
+export default function CurrentExplainLine({ expl }) {
   return (
-    <CurrentExplain>
-        <CurrentExplainLine>
-            <CurrentExplainCircle/>
-            <CurrentExplainText>{expl1}</CurrentExplainText>
-        </CurrentExplainLine>
 
-        <CurrentExplainLine>
+        <CurrentExplain>
             <CurrentExplainCircle/>
-            <CurrentExplainText>{expl2}</CurrentExplainText>
-        </CurrentExplainLine>
-
-        <CurrentExplainLine>
-            <CurrentExplainCircle/>
-            <CurrentExplainText>{expl3}</CurrentExplainText>
-        </CurrentExplainLine>
-    </CurrentExplain>
+            <CurrentExplainText>{expl}</CurrentExplainText>
+        </CurrentExplain>
 
     //     list.map((item)=>{
     //          <CurrentExplainLine>

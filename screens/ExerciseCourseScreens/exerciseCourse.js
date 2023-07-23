@@ -10,15 +10,15 @@ const { width, height } = Dimensions.get('window');
 import styled from "styled-components/native";
 import ExerciseCard from "../../components/ExerciseCard";
 import ExerciseButton from "../../components/ExerciseButton";
-import CurrentExplain from "../../components/CurrentExplain";
+import CurrentExplainLine from "../../components/CurrentExplainLine";
 import CurrentSet from "../../components/CurrentSet";
 import COMMENTDATA from "./commentData";
 
 
 
 const ExerciseCircle = styled.View`
-  width: 291px;
-  height: 291px;
+  width: 307px;
+  height: 307px;
   border-radius: 291px;
   background: #F3F3F3;
 `;
@@ -43,6 +43,15 @@ const ReplaceButtonText = styled.Text`
   font-style: normal;
   font-weight: 600;
   line-height: 19.5px;
+`;
+
+const CurrentExplain = styled.View`
+    width: 327px;
+    height: 108px;
+    border-radius: 12px;
+    background: #F3F3F3;
+    padding: 24px;
+    justify-content: center;
 `;
 
 
@@ -102,7 +111,7 @@ export default function exerciseCourse({ navigation }) {
       ]).start(goToCompleteExercise)}, [])
 
 
-      //text 
+  //text 
   // const textOpacity = textInputAnimation.interpolate({
   //   inputRange: [0, 1],
   //   outputRange: [0, 1],
@@ -120,8 +129,20 @@ export default function exerciseCourse({ navigation }) {
   const exerciseCardList = COMMENTDATA.map((comment) => 
     <ExerciseCard exerciseName={comment.name}>
       
-    </ExerciseCard>  
+    </ExerciseCard>
   );
+
+  const adviceData = [
+    { id: 1, content: "허리를 과도하게 안으로 넣지 마세요",
+    }, 
+    { id: 2, content: "적절한 무게로 승모근에 무리가 가지 않도록 하세요.",
+    },
+    { id: 3, content: "안장과 바의 위치점을 올바르게 맞춰주세요.",}
+  ]
+
+  const adviceList = adviceData.map((item) => 
+    <CurrentExplainLine expl={item.content}/>
+);
 
   return (
     <SafeAreaView style={{flex:1, backgroundColor:"#DDD"}}>
@@ -139,11 +160,9 @@ export default function exerciseCourse({ navigation }) {
 
           <CurrentSet set="1" kg="20" num="15"/>
         
-          <CurrentExplain //운동 설명
-            expl1="허리를 과도하게 안으로 넣지 마세요." 
-            expl2="적절한 무게로 승모근에 무리가 가지 않도록 하세요."
-            expl3="안장과 바의 위치점을 올바르게 맞춰주세요."
-          />
+          <CurrentExplain>
+            {adviceList}
+          </CurrentExplain>
           
                 
         <Animated.View
