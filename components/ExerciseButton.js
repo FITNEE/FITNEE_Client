@@ -8,7 +8,7 @@ const Button = styled.TouchableOpacity`
     border-radius: 120px;
     background: #BFBFBF;
     justify-content: center;
-    margin-top: 19px;
+    margin-top: 672px;
 `;
 
 const ButtonText = styled.Text`
