@@ -62,7 +62,14 @@ import { AppContext } from "../components/ContextProvider";
 export default function Setting({ navigation }) {
     const {isDark} = useContext(AppContext);
     const { toggleLogin } = useContext(AppContext);
-    const username = useState('초코맛 프로틴')
+    const username = useState('초코맛 프로틴');
+
+    const USER_DATA = [
+        {
+            id: 1,
+            username: '초코맛 프로틴'
+        }
+    ];
 
     const Block = styled.TouchableOpacity`
         padding: 15px 24px;

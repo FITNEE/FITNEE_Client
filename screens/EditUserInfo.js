@@ -41,8 +41,17 @@ import { colors } from "../colors";
 
 export default function EditUserInfo({ navigation }) {
 
+    const USER_DATA = [
+        {
+            id: 1,
+            username: '초코맛 프로틴',
+            birth: 1998,
+            email: 'protein012@gamil.com'
+        }
+    ];
+
     const [name, onChangeName] = useState('초코맛 프로틴');
-    const [age, onChangeAge] = useState('1998');
+    const [birth, onChangeBirth] = useState('1998');
     const email = useState(['protein012@gmail.com']);
 
     return (
@@ -51,7 +60,7 @@ export default function EditUserInfo({ navigation }) {
         <Container>
             <Profile><ProfileImage></ProfileImage></Profile>
             <InputBlock editable onChangeText={text => onChangeName(text)} value={name}/>
-            <InputBlock editable onChangeText={text => onChangeAge(text)} value={age} keyboardType="numeric"/>
+            <InputBlock editable onChangeText={text => onChangeAge(text)} value={birth} keyboardType="numeric"/>
             <Block><Text style={{
                 fontSize: 16,
                 fontWeight: 400,

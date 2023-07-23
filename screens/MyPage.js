@@ -12,6 +12,27 @@ export default function MyPage() {
 
     const [showRecords,SetShowRecords] = useState(true);
 
+    const TOTAL_DATA = [
+        {
+          id: 1,
+          date: '2023-07-04',
+          item: [
+            {
+              exercises: [
+                { id: 1, name: "데드리프트", set: 3, weight: 0, dist: 0 },
+                { id: 2, name: "덤벨프레스", set: 3, weight: 4, dist: 0 },
+                { id: 3, name: "바벨 로우", set: 3, weight: 0, dist: 0 },
+                { id: 4, name: "사이드 레터럴 라이즈", set: 10, weight: 0, dist: 0 },
+                { id: 5, name: "레그프레스", set: 3, weight: 50, dist: 0 },
+                { id: 6, name: "크런치", set: 3, weight: 0, dist: 0 },
+              ],
+            },
+          ],
+          calorie: 400
+        }
+      ];
+
+
     const Container = styled.ScrollView`
         background-color: ${ isDark ? colors.d_background : colors.l_background};
     `;

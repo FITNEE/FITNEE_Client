@@ -61,6 +61,15 @@ import { colors } from "../colors";
 
 export default function UserInfo({ navigation }) {
     
+    const USER_DATA = [
+        {
+            id: 1,
+            username: '초코맛 프로틴',
+            birth: 1998,
+            email: 'protein012@gamil.com'
+        }
+    ];
+
     const username = useState('초코맛 프로틴');
     const age = useState('1998');
     const email = useState('protein012@gmail.com');
