@@ -71,7 +71,7 @@ export default function UserInfo({ navigation }) {
     ];
 
     const username = useState('초코맛 프로틴');
-    const age = useState('1998');
+    const birth = useState('1998');
     const email = useState('protein012@gmail.com');
 
     return (
@@ -84,7 +84,7 @@ export default function UserInfo({ navigation }) {
         </Block>
         <Block>
             <BlockTitle>출생년도</BlockTitle>
-            <BlockContent>{age}</BlockContent>
+            <BlockContent>{birth}</BlockContent>
         </Block>
         <Block>
             <BlockTitle>이메일 주소</BlockTitle>
