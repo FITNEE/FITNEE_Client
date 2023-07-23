@@ -10,7 +10,7 @@ import { styled } from "styled-components/native";
     `;
     const Pictogram = styled.View`
         height: 240px;
-        margin: 0px 24px;
+        margin: 26px 24px 0px 24px;
         border-radius: 20px;
         background-color: #f3f3f3;
     `;

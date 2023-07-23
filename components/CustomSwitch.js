@@ -1,18 +1,20 @@
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 
 import {Text, View, TouchableOpacity} from 'react-native';
 import { colors } from '../colors';
+import { AppContext } from './ContextProvider';
 
 const CustomSwitch = ({
   selectionMode,
   option1,
   option2
 }) => {
-  const [getSelectionMode, setSelectionMode] = useState(selectionMode);
+  const { isDark, setIsDark } = useContext(AppContext);
 
   const updatedSwitchData = val => {
-    setSelectionMode(val);
+    setIsDark(val);
   };
+
   //72px
   return (
     <View>
@@ -20,7 +22,7 @@ const CustomSwitch = ({
         style={{
           height: 36,
           width: 64,
-          backgroundColor: getSelectionMode == 1 ? colors.white : colors.grey_4,
+          backgroundColor: isDark == 0 ? colors.white : colors.grey_4,
           borderRadius: 1000,
           flexDirection: 'row',
           justifyContent: 'center',
@@ -28,35 +30,34 @@ const CustomSwitch = ({
         }}>
         <TouchableOpacity
           activeOpacity={1}
-          onPress={() => updatedSwitchData(1)}
+          onPress={() => updatedSwitchData(0)}
           style={{
             flex: 1,
-            backgroundColor: getSelectionMode == 1 ? colors.white : colors.grey_4,
+            backgroundColor: isDark == 0 ? colors.white : colors.grey_4,
             borderRadius: 25,
             justifyContent: 'center',
             alignItems: 'center',
           }}>
           <Text
             style={{
-              color: getSelectionMode == 1 ? colors.grey_3 : colors.grey_4,
+              color: isDark == 0 ? colors.grey_3 : colors.grey_4,
             }}>
             {option1}
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
-          TouchableOpacity
           activeOpacity={1}
-          onPress={() => updatedSwitchData(2)}
+          onPress={() => updatedSwitchData(1)}
           style={{
             flex: 1,
-            backgroundColor: getSelectionMode == 2 ? colors.grey_1 : colors.white,
+            backgroundColor: isDark == 1 ? colors.grey_1 : colors.white,
             borderRadius: 25,
             justifyContent: 'center',
             alignItems: 'center',
           }}>
           <Text
             style={{
-              color: getSelectionMode == 2 ? colors.grey_4 : colors.grey_1,
+              color: isDark == 1 ? colors.grey_4 : colors.grey_1,
             }}>
             {option2}
           </Text>

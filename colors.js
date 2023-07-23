@@ -1,4 +1,5 @@
 export const colors = {
+
   l_main: '#8457F1',
   l_sub_1: '#DACDFB',
   l_sub_2: '#F3EEFE',
@@ -22,4 +23,9 @@ export const colors = {
   grey_9: '#1A1E27',
 
   black: '#141414',
+
+  l_background: '#FFFFFF',
+  d_background: '#1A1E27',
+  l_font: '#141414',
+  d_font: '#FFFFFF'
 };

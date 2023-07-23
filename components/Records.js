@@ -8,6 +8,7 @@ import COMMENTDATA from "../screens/commentData";
 import DATEDATA from "../screens/dateData";
 import { Image } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import CalendarWeek from "./CalendarWeek";
 
     const Container = styled.View`
         width: 100%;

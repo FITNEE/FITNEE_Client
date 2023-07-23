@@ -1,18 +1,19 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { SafeAreaView } from "react-native";
 import { styled } from "styled-components/native";
 import Records from "../components/Records";
 import Analysis from "../components/Analysis";
-import theme from "../theme/theme";
-import themeContext from "../theme/themeContext";
 import { colors } from "../colors";
+import { AppContext } from "../components/ContextProvider";
 
 
 export default function MyPage() {
+    const { isDark } = useContext(AppContext);
+
     const [showRecords,SetShowRecords] = useState(true);
 
     const Container = styled.ScrollView`
-        background-color: #fff;
+        background-color: ${ isDark ? colors.d_background : colors.l_background};
     `;
     const Choice = styled.View`
         margin-top: 10px;

@@ -53,9 +53,11 @@ export default function App() {
   //     />
   //   );
   // }
-  
+
+  const [isDark, setIsDark] = useState(false);
+
   return (
-    <AppContext.Provider value={userSettings}>
+    <AppContext.Provider value={{isDark, setIsDark}}>
       <NavigationContainer theme={MyTheme}>
         <LoggedInNav />
       </NavigationContainer>

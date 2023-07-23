@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Text, SafeAreaView } from "react-native";
 import { styled } from "styled-components/native";
 import Mode from "../components/Mode";
 import { colors } from "../colors";
+import { AppContext } from "../components/ContextProvider";
 
     const Container = styled.View`
         background-color: #fff;
@@ -45,11 +46,7 @@ import { colors } from "../colors";
         flex-direction: row;
         align-items: center;
     `;
-    const Block = styled.TouchableOpacity`
-        padding: 15px 24px;
-        flex-direction: row;
-        align-items: center;
-    `;
+    
     const BlockText = styled.Text`
         font-size: 17px;
         font-style: normal;
@@ -63,8 +60,15 @@ import { colors } from "../colors";
 
 
 export default function Setting({ navigation }) {
-    
+    const {isDark} = useContext(AppContext);
     const username = useState('초코맛 프로틴')
+
+    const Block = styled.TouchableOpacity`
+        padding: 15px 24px;
+        flex-direction: row;
+        align-items: center;
+        background-color: ${ isDark ? colors.d_background : colors.l_background};
+    `;
 
     return (
     <SafeAreaView>
