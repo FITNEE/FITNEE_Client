@@ -20,20 +20,14 @@ const MyTheme = {
 export default function App() {
   const [loading, setLoading] = useState(true);
   const [loggedIn, setLoggedIn] = useState(true);
-  const [colorMode, setColorMode] = useState(false);
   const onFinish = () => setLoading(false);
   const toggleLogin = () => {
     setLoggedIn(!loggedIn);
     console.log(loggedIn);
   };
-  const toggleColorMode = () => {
-    setColorMode(!colorMode);
-  };
   const userSettings = {
     toggleLogin,
-    toggleColorMode,
     loggedIn,
-    colorMode,
   };
 
   const preload = async () => {
@@ -57,7 +51,7 @@ export default function App() {
   const [isDark, setIsDark] = useState(false);
 
   return (
-    <AppContext.Provider value={{isDark, setIsDark}}>
+    <AppContext.Provider value={{isDark, setIsDark,toggleLogin, loggedIn}}>
       <NavigationContainer theme={MyTheme}>
         <LoggedInNav />
       </NavigationContainer>

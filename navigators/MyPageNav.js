@@ -7,6 +7,7 @@ import EditUserInfo from "../screens/EditUserInfo";
 import { Image, Text, TouchableOpacity } from "react-native";
 import Back from '../assets/left_arrow.png';
 import LoggedInNav from "./LoggedInNav";
+import Login from "../screens/OnBoarding/Login";
 
 const Stack = createStackNavigator();
 
@@ -48,6 +49,7 @@ export default function MyPageNav() {
             <TouchableOpacity onPress={()=> navigation.navigate("UserInfo")} style={{marginRight: 24}}><Text style={{ fontSize: 17, fontWeight: 600, color: "#9747FF"}}>완료</Text></TouchableOpacity>)
         })}
       />
+      <Stack.Screen name='Login' component={Login} />
     </Stack.Navigator>
   );
 }

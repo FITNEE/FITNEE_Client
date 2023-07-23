@@ -61,6 +61,7 @@ import { AppContext } from "../components/ContextProvider";
 
 export default function Setting({ navigation }) {
     const {isDark} = useContext(AppContext);
+    const { toggleLogin } = useContext(AppContext);
     const username = useState('초코맛 프로틴')
 
     const Block = styled.TouchableOpacity`
@@ -104,7 +105,7 @@ export default function Setting({ navigation }) {
             <BlockText>버전 정보</BlockText>
         </Block>
         <Block>
-            <BlockText>로그아웃</BlockText>
+            <BlockText onPress={() => toggleLogin()}>로그아웃</BlockText>
         </Block>
     </Container>
     </SafeAreaView>
