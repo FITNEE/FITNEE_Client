@@ -14,6 +14,12 @@ const Title = styled.Text`
   font-weight: 600;
   color: ${colors.black};
 `;
+
+const ButtonText = styled.Text`
+  font-size: 15px;
+  font-weight: 400;
+  color: ${colors.grey_8};
+`;
 const Button = styled.TouchableOpacity`
   position: absolute;
   justify-content: center;
@@ -28,11 +34,16 @@ const Icon = styled.View`
   height: 24px;
 `;
 
-export const Header = ({ title, mode }) => {
+export const Header = ({ mode, parentFunction }) => {
+  const handleSubmit = () => {
+    parentFunction();
+  };
   return (
     <HeaderContainer>
-      <Title>{title}</Title>
-      <Button>{mode ? <Text></Text> : <Icon></Icon>}</Button>
+      <Title>{mode ? '루틴커스텀' : '마이루틴'}</Title>
+      <Button onPress={handleSubmit}>
+        {mode ? <ButtonText>완료</ButtonText> : <ButtonText>설정</ButtonText>}
+      </Button>
     </HeaderContainer>
   );
 };

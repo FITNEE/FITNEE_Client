@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components/native';
-import { FlatList } from 'react-native';
-import { Calendar, LocaleConfig } from 'react-native-calendars';
+import { FlatList, Text } from 'react-native';
 import { Header } from '../../components/Shared/MyRoutine_Shared';
 import { colors } from '../../colors';
 import { ScreenWidth } from '../../Shared';
@@ -18,7 +17,6 @@ const ContentBase = styled.View`
   flex: 1;
   background-color: #f3f3f3;
 `;
-
 const ScreenLayout = styled.View`
   width: 100%;
 `;
@@ -29,17 +27,19 @@ const ExerciseImg = styled.View`
   background-color: ${colors.grey_3};
   border-radius: 30px;
 `;
-const ExerciseContainer = styled.TouchableOpacity`
+const ExerciseContainer = styled.View`
   padding: 16px;
-  height: 92px;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
   border-radius: 12px;
   width: ${ScreenWidth - 48}px;
   margin-left: 24px;
   margin-top: 8px;
   background-color: ${colors.white};
+`;
+const DefaultContainer = styled.View`
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: row;
 `;
 const FlatListContainer = styled.View`
   width: 100%;
@@ -63,75 +63,114 @@ const DropDown = styled.TouchableOpacity`
   height: 40px;
   background-color: chartreuse;
 `;
+const ExtendedContainer = styled.View`
+  width: 100%;
+  padding: 8px 16px 0px 16px;
+`;
 
-LocaleConfig.locales['ko'] = {
-  monthNames: [
-    '1월',
-    '2월',
-    '3월',
-    '4월',
-    '5월',
-    '6월',
-    '7월',
-    '8월',
-    '9월',
-    '10월',
-    '11월',
-    '12월',
-  ],
-  monthNamesShort: [
-    '1월',
-    '2월',
-    '3월',
-    '4월',
-    '5월',
-    '6월',
-    '7월',
-    '8월',
-    '9월',
-    '10월',
-    '11월',
-    '12월',
-  ],
-  dayNames: [
-    '월요일',
-    '화요일',
-    '수요일',
-    '목요일',
-    '금요일',
-    '토요일',
-    '일요일',
-  ],
-  dayNamesShort: ['월', '화', '수', '목', '금', '토', '일'],
-};
-LocaleConfig.defaultLocale = 'ko';
+const SetContainer = styled.View`
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 12px;
+  width: 100%;
+`;
+const SetsText = styled.Text`
+  font-size: 17px;
+  color: ${colors.grey_8};
+  font-weight: 400;
+`;
 
 const MyRoutine = ({ route, navigation }) => {
   const [selectedId, setSelectedId] = useState(null);
+  const [mode, setMode] = useState(false);
   const test = [
-    { id: 1, title: '데드리프트', subText: '전신 | 3세트 | 빈 봉' },
-    { id: 2, title: '데드리프트', subText: '전신 | 3세트 | 빈 봉' },
-    { id: 3, title: '데드리프트', subText: '전신 | 3세트 | 빈 봉' },
-    { id: 4, title: '데드리프트', subText: '전신 | 3세트 | 빈 봉' },
-    { id: 5, title: '데드리프트', subText: '전신 | 3세트 | 빈 봉' },
-    { id: 6, title: '데드리프트', subText: '전신 | 3세트 | 빈 봉' },
-    { id: 7, title: '데드리프트', subText: '전신 | 3세트 | 빈 봉' },
+    {
+      id: 1,
+      title: '데드리프트',
+      subText: '전신 | 3세트 | 빈 봉',
+      setsNum: [15, 15, 15],
+    },
+    {
+      id: 2,
+      title: '사이드 레터럴레이션',
+      subText: '전신 | 3세트 | 빈 봉',
+      setsNum: [15, 15, 15],
+    },
+    {
+      id: 3,
+      title: '데드리프트',
+      subText: '전신 | 3세트 | 빈 봉',
+      setsNum: [15, 15, 15],
+    },
+    {
+      id: 4,
+      title: '데드리프트',
+      subText: '전신 | 3세트 | 빈 봉',
+      setsNum: [15, 15, 15],
+    },
+    {
+      id: 5,
+      title: '데드리프트',
+      subText: '전신 | 3세트 | 빈 봉',
+      setsNum: [15, 15, 15],
+    },
+    {
+      id: 6,
+      title: '데드리프트',
+      subText: '전신 | 3세트 | 빈 봉',
+      setsNum: [15, 15, 15],
+    },
+    {
+      id: 7,
+      title: '데드리프트',
+      subText: '전신 | 3세트 | 빈 봉',
+      setsNum: [15, 15, 15],
+    },
   ];
-  const renderItem = ({ item, index }) => {
+  const toggleMode = () => {
+    setMode(!mode);
+  };
+  const renderItem = ({ item }) => {
     return (
-      <ExerciseContainer>
-        <ExerciseImg />
-        <ExerciseTextContainer>
-          <ExerciseTitle>{item.title}</ExerciseTitle>
-          <ExerciseSubText>{item.subText}</ExerciseSubText>
-        </ExerciseTextContainer>
-        <DropDown onPress={() => setSelectedId(item.id)}></DropDown>
-      </ExerciseContainer>
+      <>
+        {mode ? (
+          <ExerciseContainer>
+            <DefaultContainer>
+              <ExerciseImg />
+              <ExerciseTextContainer>
+                <ExerciseTitle>{item.title}</ExerciseTitle>
+                <ExerciseSubText>{item.subText}</ExerciseSubText>
+              </ExerciseTextContainer>
+              <DropDown
+                onPress={() => {
+                  selectedId == item.id
+                    ? setSelectedId('')
+                    : setSelectedId(item.id);
+                }}
+              />
+            </DefaultContainer>
+            {selectedId == item.id && (
+              <ExtendedContainer>
+                {item.setsNum.map((item, id) => (
+                  <SetContainer id style={{ fontWeight: 600 }}>
+                    <SetsText>{id + 1}</SetsText>
+                    <SetsText>-</SetsText>
+                    <SetsText>{item}회</SetsText>
+                  </SetContainer>
+                ))}
+              </ExtendedContainer>
+            )}
+          </ExerciseContainer>
+        ) : (
+          <Text></Text>
+        )}
+      </>
     );
   };
   return (
     <ScreenBase>
-      <Header title='마이루틴' mode={false} />
+      <Header mode={mode} parentFunction={toggleMode} />
       <ContentBase>
         <ScreenLayout>
           <FlatListContainer>
