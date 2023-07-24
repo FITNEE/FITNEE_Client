@@ -127,7 +127,8 @@ export default function exerciseCourse({ navigation }) {
   })
 
   const exerciseCardList = COMMENTDATA.map((comment) => 
-    <ExerciseCard exerciseName={comment.name}>
+    <ExerciseCard 
+      exerciseName={comment.name}>
       
     </ExerciseCard>
   );
@@ -137,7 +138,7 @@ export default function exerciseCourse({ navigation }) {
     }, 
     { id: 2, content: "적절한 무게로 승모근에 무리가 가지 않도록 하세요.",
     },
-    { id: 3, content: "안장과 바의 위치점을 올바르게 맞춰주세요.",}
+    { id: 3, content: "안장과 바의 위치점을 올바르게 맞춰주세요.",},
   ]
 
   const adviceList = adviceData.map((item) => 
@@ -177,8 +178,8 @@ export default function exerciseCourse({ navigation }) {
                 },
           ]}/>
     
-          <Animated.View style={{
-              position: 'absolute',  
+          <Animated.View style={{  
+              position: 'absolute',
               justifyContent: 'center',
               alignItems: 'center',
               height: '92%',

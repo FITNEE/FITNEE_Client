@@ -74,8 +74,9 @@ export default function exerciseCourse_2({ navigation }) {
         setIsPlaying(false);
         navigation.navigate("completeExercise")
     };
-    
+
     const [isPlaying, setIsPlaying] = React.useState(true);
+    const [duration, setDuration] = React.useState(10);
 
     const children = ({ remainingTime }) => {
         const minutes = Math.floor(remainingTime / 60);
@@ -94,7 +95,7 @@ export default function exerciseCourse_2({ navigation }) {
           <ExerciseCircle>
             <CountdownCircleTimer
                     isPlaying={isPlaying}
-                    duration={30}
+                    duration={duration}
                     colors={"#757575"}
                     size={315}
                     strokeWidth={8}

@@ -78,6 +78,26 @@ const BlankBox = styled.View`
      margin-top: 132px;
 `;
 
+const TitleText = styled.Text`
+    color: #000;
+    font-size: 17px;
+    font-weight: 500;
+    line-height: 25.5px;
+`;
+
+const ContentText = styled.Text`
+    color: #5A5A5A;
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 19.5px;
+`;
+
+const ResultBox = styled.View`
+    height: 94px;
+    width: 298px;
+    margin-bottom: 32px;
+`;
+
 
 
 export default function exerciseResult({ navigation }) {
@@ -89,6 +109,20 @@ export default function exerciseResult({ navigation }) {
     let formatDate = format(now, 'yyyy. MM. dd')
 
     const goToHome = () => navigation.navigate("registerRoutine");
+
+    const data = [
+        {id: "1", title: "운동 시간이 단축되었어요", content: "페이스가 다른 이용자보다 빠른 편이에요. 운동 시간이 단축되었다면 무게 혹은 횟수 등의 난이도를 높여보세요.",},
+        {id: "2", title: "3일 연속 운동했어요", content: "근력운동은 연속으로 운동하는 것 보다, 격일로 운동했을 때 효과가 좋아요. 매일 운동하고싶다면 유산소 운동과 병행하는 것을 추천드릴게요.",},
+    ]
+
+    const resultList = data.map((item) => {
+        <ResultBox>
+            <TitleText>{item.title}</TitleText>
+            {/* <ContentText>{item.content}</ContentText> */}
+        </ResultBox>
+        
+    })
+
 
   return (
     <SafeAreaView style={{flex:1, backgroundColor:"#FFF"}}>
@@ -106,6 +140,8 @@ export default function exerciseResult({ navigation }) {
                 <TextBox> 
                     <ExerciseText>성장속도가 빠른 {"\n"}야망 헬린이</ExerciseText>
                 </TextBox>
+
+                {resultList}
 
                 <HomeButton onPress={goToHome}>
                     <ButtonText>확인했어요</ButtonText>

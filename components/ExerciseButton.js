@@ -9,6 +9,7 @@ const Button = styled.TouchableOpacity`
     background: #BFBFBF;
     justify-content: center;
     margin-top: 672px;
+    position: absolute;
 `;
 
 const ButtonText = styled.Text`

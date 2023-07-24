@@ -25,7 +25,7 @@ export default function ExerciseCard({ exerciseName, children }) {
   return (
     <Container>
       <ExerciseName>{exerciseName}</ExerciseName>
-      {children}
+        {children}
     </Container>
   );
 }

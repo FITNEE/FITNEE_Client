@@ -16,6 +16,7 @@ import CurrentSet from "../../components/CurrentSet";
 import COMMENTDATA from "./commentData";
 import { colors } from "../../colors";
 import {CountdownCircleTimer} from 'react-native-countdown-circle-timer'
+import { duration } from "moment";
 
 
 const ExerciseCircle = styled.View`
@@ -77,23 +78,61 @@ const JustText = styled.Text`
 export default function exerciseCourse_1({ navigation }) {
         //운동 중 페이지. 나중에 운동 과정 페이지 하나에 다 넣을 예정
 
+
+    const adviceData = [
+          { id: 1, content: "허리를 과도하게 안으로 넣지 마세요",
+          }, 
+          { id: 2, content: "적절한 무게로 승모근에 무리가 가지 않도록 하세요.",
+          },
+          { id: 3, content: "안장과 바의 위치점을 올바르게 맞춰주세요.",},
+    ]
+
+    const timeData = [
+      {id: 1, duration: "5",},
+      {id: 2, duration: "10",},
+      {id: 3, duration: "4",},
+      {id: 4, duration: "3",},
+    ]
+
     const goToCompleteExercise = () => navigation.navigate("exerciseCourse_2");
     const [isPlaying, setIsPlaying] = React.useState(true);
     const [advice, setAdvice] = React.useState("");
     const [currentId, setCurrentId] = useState(1);
-
-    const adviceData = [
-      { id: 1, content: "허리를 과도하게 안으로 넣지 마세요",
-      }, 
-      { id: 2, content: "적절한 무게로 승모근에 무리가 가지 않도록 하세요.",
-      },
-      { id: 3, content: "안장과 바의 위치점을 올바르게 맞춰주세요.",}
-    ]
+    const [oneDuration, setOneDuration] = useState(timeData[0].duration);
+    const [i, setI] = useState(1);
+    const [key, setKey] = useState(0);
+    const [exerciseName, setExerciseName] = useState("사이드 레터럴 레이즈")
 
 
     useEffect(() => {
+      // 타이머가 종료될 때마다 key 값을 변경하여 CountdownCircleTimer 컴포넌트 리셋
+      setKey(prevKey => prevKey + 1);
+    }, [oneDuration]);
+
+
+    const handleComplete = () => {
+      // 타이머가 종료되면 새로운 duration 값을 받아옴
+      const newDuration = timeData[i]?.duration;
+
+      if(timeData.length >= i){
+        setI(i+1);
+        console.log(oneDuration, i);
+      }
+      
+      else
+        setIsPlaying(false);
+      
+        setOneDuration(newDuration);
+    };
+
+    const timeToRest = () => {
+      setExerciseName("휴식 시간");
+      setIsPlaying(false);
+    }
+
+    useEffect(() => {
         const interval = setInterval(() => {
-            // 다음 id를 계산하여 currentId를 업데이트
+            // 다음에 나올 Id를 currentId로 업데이트
             const nextId = currentId + 1 > adviceData.length ? 1 : currentId + 1;
             setCurrentId(nextId);
 
@@ -110,20 +149,28 @@ export default function exerciseCourse_1({ navigation }) {
     return (
         <SafeAreaView style={{flex:1, backgroundColor:"#DDD"}}>
     
-          <ExerciseCard exerciseName="사이드 레터럴 레이즈">
+          <ExerciseCard exerciseName={exerciseName}>
     
           <ExerciseCircle>
+
           <CountdownCircleTimer
-                    isPlaying={isPlaying}
-                    duration={20}
-                    colors={"#757575"}
-                    size={315}
-                    strokeWidth={8}
-                    trailColor={"#BFBFBF"}
-                    onComplete={() => ({ shouldRepeat: false, delay: 1 })}
-                    updateInterval={0.001}   
+                  key={key}
+                  isPlaying={isPlaying}
+                  duration={oneDuration}
+                  colors={"#757575"}
+                  size={315}
+                  strokeWidth={8}
+                  trailColor={"#BFBFBF"}
+                  onComplete={handleComplete}
+                  //onComplete={() => ({ shouldRepeat: false, delay: 1 })}
+                  updateInterval={0.001}   
             >
+               {({ remainingTime }) => (
+                        <Text>{remainingTime}</Text>
+              )}
             </CountdownCircleTimer>
+
+            
           </ExerciseCircle>
 
           <SetBarLine>
@@ -148,6 +195,7 @@ export default function exerciseCourse_1({ navigation }) {
                   text="세트 완료"
                   disabled={false}
                   onPress={goToCompleteExercise}
+                  // onPress={timeToRest}
               />
           
             </ExerciseCard>
