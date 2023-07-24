@@ -1,14 +1,20 @@
 import { useState } from "react";
 import styled from "styled-components/native";
 
-export default function RoutineItem({ day, parts, exercises }) {
-  const [select, SetSelect] = useState(false);
-  const itemPress = () => {
-    SetSelect(!select);
-  };
+export default function RoutineItem({
+  day,
+  parts,
+  exercises,
+  onPress,
+  select,
+}) {
+  //   const [select, SetSelect] = useState(false);
+  //   const itemPress = () => {
+  //     SetSelect(!select);
+  //   };
   return (
     <Container>
-      <Item onPress={itemPress}>
+      <Item onPress={onPress}>
         <ItemTitle>{day}</ItemTitle>
         <ItemSubTitle>{parts}</ItemSubTitle>
       </Item>

@@ -17,6 +17,7 @@ export default Scroll = ({ data }) => {
   const [currentPage, setCurrentPage] = useState(0);
   const flatListRef = React.createRef();
 
+  const [selectedID, setSelectedID] = useState("");
   const handleScroll = (event) => {
     const { contentOffset, layoutMeasurement } = event.nativeEvent;
     const pageIndex = Math.floor(contentOffset.x / layoutMeasurement.width);
@@ -30,8 +31,12 @@ export default Scroll = ({ data }) => {
             <RoutineTitle>{routines.title}</RoutineTitle>
           </RoutineTitleContainer>
           <ItemConteiner>
-            {routines.item.map((routine) => (
+            {routines.item.map((routine, id) => (
               <RoutineItem
+                select={selectedID == id}
+                onPress={() => {
+                  selectedID == id ? setSelectedID(null) : setSelectedID(id);
+                }}
                 day={routine.day}
                 parts={routine.parts}
                 exercises={routine.exercises}
