@@ -1,10 +1,9 @@
 import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react'
 import styled from 'styled-components/native'
 import { colors } from './colors'
-import { KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, Platform, ScrollView, TouchableOpacity, SafeAreaView, Dimensions, Touchable } from 'react-native'
+import { View, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, Platform, ScrollView, TouchableOpacity, SafeAreaView, Dimensions, Touchable } from 'react-native'
 import WrappedText from 'react-native-wrapped-text'
 import BottomSheet, { BottomSheetScrollView, BottomSheetTextInput } from "@gorhom/bottom-sheet";
-import Animated, { FadeIn, FadeOut } from    'react-native-reanimated';
 
 const SCREEN_WIDTH = Dimensions.get('screen').width;
 
@@ -76,7 +75,7 @@ const Bubble = styled.View`
     border-radius: 12px;
     align-items: center;
     justify-content: center;
-    bottom: 330;
+    bottom: 330px;
     right: 25px;
     z-index: 1;
 `;
@@ -248,7 +247,7 @@ const JoinBtnContainer = styled.TouchableOpacity`
 
     position: absolute;
     left: ${`${SCREEN_WIDTH/2-123/2}px`};
-    top: 300px;
+    bottom: 5px;
 `
 const JoinImage = styled.Image`
     background-color: ${colors.red};
@@ -297,6 +296,7 @@ export default function DictionaryDetail(){
     const rightTab = useRef()
     const bottomModal = useRef()
     const bubble = useRef()
+    const chatScrollView = useRef()
 
     const [area, setArea] = useState('어깨 | 측면 삼각근 | 머신')
     const [exerciseName, setExerciseName] = useState('사이드 레터럴 레이즈 머신')
@@ -305,39 +305,67 @@ export default function DictionaryDetail(){
     const [isAllRead, setIsAllRead] = useState(true)
     const [processName, setProcessName] = useState(['안장 높낮이 조절', '시작 자세', '마무리 자세'])
     const [caution, setCaution] = useState(['허리를 과도하게 안으로 넣지 마세요.', '적절한 무게로 승모근에 무리가 가지 않도록 하세요.', '안장과 바의 위치점을 올바르게 맞춰주세요.'])
-    const [userName, setUserName] = useState(['근손실', '삼대오백'])
-    const [msg, setMsg] = useState(['사레레 무게 얼마나 들 수 있어야 어깨 부자 되나요?', '무게보다는 정확한 자세가 중요합니다. 특히 처음 할 때는 큰 근육에 자극 주기가 힘드니 꾸준히 하셔야해요!'])
+    const [userName, setUserName] = useState(['근손실', '삼대오백', '근손실', '삼대오백', '근손실', '삼대오백', '근손실', '삼대오백', '근손실', '삼대오백', '근손실', '삼대오백'])
+    const [msg, setMsg] = useState(['사레레 무게 얼마나 들 수 있어야 어깨 부자 되나요?', '무게보다는 정확한 자세가 중요합니다. 특히 처음 할 때는 큰 근육에 자극 주기가 힘드니 꾸준히 하셔야해요!', '사레레 무게 얼마나 들 수 있어야 어깨 부자 되나요?', '무게보다는 정확한 자세가 중요합니다. 특히 처음 할 때는 큰 근육에 자극 주기가 힘드니 꾸준히 하셔야해요!', '사레레 무게 얼마나 들 수 있어야 어깨 부자 되나요?', '무게보다는 정확한 자세가 중요합니다. 특히 처음 할 때는 큰 근육에 자극 주기가 힘드니 꾸준히 하셔야해요!', '사레레 무게 얼마나 들 수 있어야 어깨 부자 되나요?', '무게보다는 정확한 자세가 중요합니다. 특히 처음 할 때는 큰 근육에 자극 주기가 힘드니 꾸준히 하셔야해요!', '사레레 무게 얼마나 들 수 있어야 어깨 부자 되나요?', '무게보다는 정확한 자세가 중요합니다. 특히 처음 할 때는 큰 근육에 자극 주기가 힘드니 꾸준히 하셔야해요!', '사레레 무게 얼마나 들 수 있어야 어깨 부자 되나요?', '무게보다는 정확한 자세가 중요합니다. 특히 처음 할 때는 큰 근육에 자극 주기가 힘드니 꾸준히 하셔야해요!'])
     const [chat, setChat] = useState('')
     const [changedSPIndex, setChangedSPIndex] = useState()
     const snapPoints = useMemo(()=> ['48%', '86%'], [])
     const [bubbleBool, setBubbleBool] = useState(true)
+    const [joinBtnBool, setJoinBtnBool] = useState(true)
 
+    const onPressJoinBtn = () => setJoinBtnBool(false)
+    const onChangeChat = (payload) => setChat(payload)
+    const handleSnapPress = useCallback((index) => bottomModal.current?.snapToIndex(index))
     const onTabPress = (target) => {
         target===leftTab? 
             setLeftTabActivate(true)
         : 
             setLeftTabActivate(false)
     }
-    const onChangeChat = (payload) => setChat(payload)
     const onSubmitChat = () => {
         let temp = []
         chat.length == 0?
             null
         :
             (temp = [...msg, chat],
-            setMsg(chat),
-            setChat(''))
+            console.log(temp),
+            // setMsg(chat),
+            setChat(''),
+            setJoinBtnBool(true))
     }
-    const handleSnapPress = useCallback((index) => {
-        bottomModal.current?.snapToIndex(index)
-    })
+    const ShowTextInput = () => {
+        console.log(joinBtnBool)
+        if(!joinBtnBool){
+            return(
+                <TextInputBG>
+                    <TextInputContainer>
+                        <BottomSheetTextInput
+                            style={{
+                                color: `${colors.black}`,
+                                width: 300,
+                                marginLeft: 15
+                            }}
+                            type="text"
+                            onChangeText={text => {setChat(text)}}
+                            value={chat}
+                            onSubmitEditing={onSubmitChat}
+                        />
+                        <SendBtn/>
+                    </TextInputContainer>
+                </TextInputBG>
+            )
+        }
+    }
+
     useEffect(()=>{
+        setJoinBtnBool(true)
         const timer = setTimeout(() => {
             setBubbleBool(false)
-        }, 2000)
+        }, 3000)
 
         return ()=>clearTimeout(timer)
     }, [])
+
 
 
     return (
@@ -366,6 +394,7 @@ export default function DictionaryDetail(){
                     snapPoints={snapPoints}
                     enablePanDownToClose={false}
                     onChange={index=> setChangedSPIndex(index)}
+                    keyboardBehavior='extend'
                 >
                     <DictionaryContainer>
                         <TitleContainer>
@@ -429,8 +458,14 @@ export default function DictionaryDetail(){
                                 </CautionContainer>
                             </BottomSheetScrollView>
                             : 
-                            <TouchableWithoutFeedback onPress={Keyboard.dismiss}><>
-                                <ContentContainer style={{paddingTop: 28}}>
+                            <>
+                            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+                                <BottomSheetScrollView 
+                                    ref={chatScrollView} 
+                                    style={{paddingTop: 28}} 
+                                    showsVerticalScrollIndicator={false}
+
+                                >
                                     {
                                         userName.map((userName, i) => (
                                             <ChatContainer>
@@ -441,35 +476,41 @@ export default function DictionaryDetail(){
                                             </ChatContainer>
                                         ))
                                     }
-                                </ContentContainer>
-                                <JoinBtnContainer>
-                                    <JoinImage></JoinImage>
-                                    <JoinText>채팅 참여하기</JoinText>
-                                </JoinBtnContainer>
-
-                            </>
+                                    <View style={{height: 50}}/>
+                                </BottomSheetScrollView>
                             </TouchableWithoutFeedback>
+                            { ShowTextInput() }
+                            </>
                         } 
                     </DictionaryContainer>
                 </BottomSheet>
+                {
+                    !leftTabActivate && joinBtnBool?
+                        <JoinBtnContainer onPress={onPressJoinBtn}>
+                            <JoinImage></JoinImage>
+                            <JoinText>채팅 참여하기</JoinText>
+                        </JoinBtnContainer>
+                        :
+                        null
+                }
+
+
             </Container>
         </SafeAreaView>
     )
 } 
 
-                  {/* {
-                        changedSPIndex == 1 ?
-                            <KeyboardAvoidingView><TextInputBG>
-                                <TextInputContainer>
-                                    <TextInput
-                                        type="text"
-                                        onChangeText={text => {setChat(text)}}
-                                        value={chat}
-                                        onSubmitEditing={onSubmitChat}
-                                    />
-                                    <SendBtn/>
-                                </TextInputContainer>
-                            </TextInputBG></KeyboardAvoidingView>
-                            :
-                            null
-                    } */}
+{/**
+
+                                    <KeyboardAvoidingView><TextInputBG>
+                                        <TextInputContainer>
+                                            <TextInput
+                                                type="text"
+                                                onChangeText={text => {setChat(text)}}
+                                                value={chat}
+                                                onSubmitEditing={onSubmitChat}
+                                            />
+                                            <SendBtn/>
+                                        </TextInputContainer>
+                                    </TextInputBG></KeyboardAvoidingView>
+*/}
