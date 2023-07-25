@@ -58,9 +58,9 @@ export default function exerciseCourse_2({ navigation }) {
 	//휴식페이지. 나중에 운동 과정 페이지 하나에 다 넣을 예정
 
 	const data = [
-		{ id: 0, exercise: 0, time: 30, setsNum: 15 },
-		{ id: 1, exercise: 0, time: 30, setsNum: 15 },
-		{ id: 2, exercise: 0, time: 30, setsNum: 15 },
+		{ id: 0, exercise: 0, time: 30, setNum: 15 },
+		{ id: 1, exercise: 0, time: 30, setNum: 15 },
+		{ id: 2, exercise: 0, time: 30, setNum: 15 },
 		30,
 	];
 
