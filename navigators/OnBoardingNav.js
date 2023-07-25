@@ -10,19 +10,19 @@ import Login from '../screens/OnBoarding/Login';
 const Stack = createStackNavigator();
 
 export default function OnBoardingNav() {
-  return (
-    <Stack.Navigator
-      screenOptions={{
-        headerShown: false,
-        headerBackTitleVisible: false,
-      }}
-    >
-      <Stack.Screen name='OnBoarding' component={OnBoarding} />
-      <Stack.Screen name='CreateAccount_1' component={CreateAccount_1} />
-      <Stack.Screen name='CreateAccount_2' component={CreateAccount_2} />
-      <Stack.Screen name='CreateAccount_3' component={CreateAccount_3} />
-      <Stack.Screen name='CreateAccount_4' component={CreateAccount_4} />
-      <Stack.Screen name='Login' component={Login} />
-    </Stack.Navigator>
-  );
+	return (
+		<Stack.Navigator
+			screenOptions={{
+				headerShown: false,
+				headerBackTitleVisible: false,
+			}}
+		>
+			<Stack.Screen name='OnBoarding' component={OnBoarding} />
+			<Stack.Screen name='CreateAccount_1' component={CreateAccount_1} />
+			<Stack.Screen name='CreateAccount_2' component={CreateAccount_2} />
+			<Stack.Screen name='CreateAccount_3' component={CreateAccount_3} />
+			<Stack.Screen name='CreateAccount_4' component={CreateAccount_4} />
+			<Stack.Screen name='Login' component={Login} />
+		</Stack.Navigator>
+	);
 }

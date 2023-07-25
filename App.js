@@ -7,55 +7,55 @@ import { useState } from 'react';
 import ExerciseCourseNav from './navigators/ExerciseCourseNav';
 
 const MyTheme = {
-  ...DefaultTheme,
-  colors: {
-    ...DefaultTheme.colors,
-    background: '#f3f3f3',
-  },
+	...DefaultTheme,
+	colors: {
+		...DefaultTheme.colors,
+		background: '#f3f3f3',
+	},
 };
 
 export default function App() {
-  const [loading, setLoading] = useState(true);
-  const [loggedIn, setLoggedIn] = useState(true);
-  const [colorMode, setColorMode] = useState(false);
-  const onFinish = () => setLoading(false);
-  const toggleLogin = () => {
-    setLoggedIn(!loggedIn);
-    console.log(loggedIn);
-  };
-  const toggleColorMode = () => {
-    setColorMode(!colorMode);
-  };
-  const userSettings = {
-    toggleLogin,
-    toggleColorMode,
-    loggedIn,
-    colorMode,
-  };
+	const [loading, setLoading] = useState(true);
+	const [loggedIn, setLoggedIn] = useState(true);
+	const [colorMode, setColorMode] = useState(false);
+	const onFinish = () => setLoading(false);
+	const toggleLogin = () => {
+		setLoggedIn(!loggedIn);
+		console.log(loggedIn);
+	};
+	const toggleColorMode = () => {
+		setColorMode(!colorMode);
+	};
+	const userSettings = {
+		toggleLogin,
+		toggleColorMode,
+		loggedIn,
+		colorMode,
+	};
 
-  const preload = async () => {
-    // const token = await AsyncStorage.getItem("token");
-    // if (token) {
-    //   isLoggedInVar(true);
-    //   tokenVar(token);
-    // }
-  };
+	const preload = async () => {
+		// const token = await AsyncStorage.getItem("token");
+		// if (token) {
+		//   isLoggedInVar(true);
+		//   tokenVar(token);
+		// }
+	};
 
-  if (loading) {
-    return (
-      <AppLoading
-        startAsync={preload}
-        onError={console.warn}
-        onFinish={onFinish}
-      />
-    );
-  }
-  return (
-    <AppContext.Provider value={userSettings}>
-      <NavigationContainer theme={MyTheme}>
-        {/* {loggedIn ? <LoggedInNav /> : <OnBoardingNav />} */}
-        {loggedIn ? <ExerciseCourseNav /> : <ExerciseCourseNav />}
-      </NavigationContainer>
-    </AppContext.Provider>
-  );
+	if (loading) {
+		return (
+			<AppLoading
+				startAsync={preload}
+				onError={console.warn}
+				onFinish={onFinish}
+			/>
+		);
+	}
+	return (
+		<AppContext.Provider value={userSettings}>
+			<NavigationContainer theme={MyTheme}>
+				{/* {loggedIn ? <LoggedInNav /> : <OnBoardingNav />} */}
+				{loggedIn ? <ExerciseCourseNav /> : <ExerciseCourseNav />}
+			</NavigationContainer>
+		</AppContext.Provider>
+	);
 }

@@ -5,127 +5,127 @@ import { BackButton, Button } from '../../Shared';
 import { StyleSheet, Text } from 'react-native';
 
 const ScreenLayout = styled.SafeAreaView`
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-  width: 90%;
-  margin-left: 5%;
-  flex: 1;
+	flex-direction: column;
+	align-items: center;
+	justify-content: space-between;
+	width: 90%;
+	margin-left: 5%;
+	flex: 1;
 `;
 const TextContainer = styled.View`
-  margin-top: 124px;
-  flex-direction: column;
-  align-items: flex-start;
-  width: 100%;
-  justify-content: center;
+	margin-top: 124px;
+	flex-direction: column;
+	align-items: flex-start;
+	width: 100%;
+	justify-content: center;
 `;
 const Title = styled.Text`
-  font-size: 24px;
-  font-weight: bold;
-  color: ${colors.black};
+	font-size: 24px;
+	font-weight: bold;
+	color: ${colors.black};
 `;
 
 const SubText = styled.Text`
-  font-size: 13px;
-  margin-top: 8px;
-  font-weight: 400;
-  color: ${colors.black};
+	font-size: 13px;
+	margin-top: 8px;
+	font-weight: 400;
+	color: ${colors.black};
 `;
 const Input = styled.TextInput`
-  padding: 15px 7px;
-  border-radius: 4px;
-  background-color: white;
-  border-radius: 10px;
-  width: 100%;
+	padding: 15px 7px;
+	border-radius: 4px;
+	background-color: white;
+	border-radius: 10px;
+	width: 100%;
 `;
 
 const BottomContainer = styled.View`
-  align-items: center;
-  width: 100%;
+	align-items: center;
+	width: 100%;
 `;
 const ORContainer = styled.View`
-  width: 120px;
-  height: 13px;
+	width: 120px;
+	height: 13px;
 `;
 const Line = styled.View`
-  width: 100%;
-  border: ${StyleSheet.hairlineWidth}px solid ${colors.grey_2};
-  margin-top: 6px;
+	width: 100%;
+	border: ${StyleSheet.hairlineWidth}px solid ${colors.grey_2};
+	margin-top: 6px;
 `;
 const ORText = styled.Text`
-  color: ${colors.grey_4};
-  font-size: 13px;
-  position: absolute;
-  background-color: #f3f3f3;
-  width: 40px;
-  text-align: center;
-  left: 40px;
+	color: ${colors.grey_4};
+	font-size: 13px;
+	position: absolute;
+	background-color: #f3f3f3;
+	width: 40px;
+	text-align: center;
+	left: 40px;
 `;
 const SNSContainer = styled.View`
-  justify-content: space-between;
-  flex-direction: row;
-  width: 70%;
-  margin-top: 28px;
+	justify-content: space-between;
+	flex-direction: row;
+	width: 70%;
+	margin-top: 28px;
 `;
 const SNSButton = styled.TouchableOpacity`
-  width: 64px;
-  background-color: white;
-  height: 64px;
+	width: 64px;
+	background-color: white;
+	height: 64px;
 `;
 const OnBoarding = ({ navigation }) => {
-  const [email, setEmail] = useState('');
-  const [hasAccount, setHasAccount] = useState(false);
+	const [email, setEmail] = useState('');
+	const [hasAccount, setHasAccount] = useState(false);
 
-  const handleSubmit = () => {
-    //Email값 받고, 이에 대한 login, CreateAccount여부 나타내는 boolean값 반환받기
-    if (hasAccount) {
-      navigation.navigate('Login', {
-        email,
-      });
-    } else {
-      navigation.navigate('CreateAccount_1', {
-        email,
-      });
-    }
-  };
-  return (
-    <ScreenLayout>
-      <TextContainer>
-        <Title>이메일을 입력해주세요.</Title>
-        <SubText>로그인 또는 회원가입에 필요합니다.</SubText>
-      </TextContainer>
-      <Input
-        placeholderTextColor={colors.grey_5}
-        autoFocus
-        onSubmitEditing={() => handleSubmit()}
-        placeholder='이메일 입력'
-        returnKeyType='next'
-        blurOnSubmit={false}
-        onChangeText={(text) => setEmail(text)}
-      />
-      <BottomContainer>
-        <ORContainer>
-          <Line />
-          <ORText>또는</ORText>
-        </ORContainer>
-        <SNSContainer>
-          <SNSButton>
-            <Text>Google</Text>
-          </SNSButton>
-          <SNSButton>
-            <Text>Kakao</Text>
-          </SNSButton>
-          <SNSButton>
-            <Text>Naver</Text>
-          </SNSButton>
-        </SNSContainer>
-      </BottomContainer>
-      <Button
-        enabled={email.indexOf('@') != -1}
-        onPress={() => handleSubmit()}
-      ></Button>
-    </ScreenLayout>
-  );
+	const handleSubmit = () => {
+		//Email값 받고, 이에 대한 login, CreateAccount여부 나타내는 boolean값 반환받기
+		if (hasAccount) {
+			navigation.navigate('Login', {
+				email,
+			});
+		} else {
+			navigation.navigate('CreateAccount_1', {
+				email,
+			});
+		}
+	};
+	return (
+		<ScreenLayout>
+			<TextContainer>
+				<Title>이메일을 입력해주세요.</Title>
+				<SubText>로그인 또는 회원가입에 필요합니다.</SubText>
+			</TextContainer>
+			<Input
+				placeholderTextColor={colors.grey_5}
+				autoFocus
+				onSubmitEditing={() => handleSubmit()}
+				placeholder='이메일 입력'
+				returnKeyType='next'
+				blurOnSubmit={false}
+				onChangeText={(text) => setEmail(text)}
+			/>
+			<BottomContainer>
+				<ORContainer>
+					<Line />
+					<ORText>또는</ORText>
+				</ORContainer>
+				<SNSContainer>
+					<SNSButton>
+						<Text>Google</Text>
+					</SNSButton>
+					<SNSButton>
+						<Text>Kakao</Text>
+					</SNSButton>
+					<SNSButton>
+						<Text>Naver</Text>
+					</SNSButton>
+				</SNSContainer>
+			</BottomContainer>
+			<Button
+				enabled={email.indexOf('@') != -1}
+				onPress={() => handleSubmit()}
+			></Button>
+		</ScreenLayout>
+	);
 };
 
 export default OnBoarding;
