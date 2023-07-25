@@ -1,15 +1,15 @@
-import React, { useEffect, useState } from 'react';
-import styled from 'styled-components/native';
-import { colors } from '../../colors';
-import { Button, ScreenWidth, BackButton } from '../../Shared';
-import {
-  Input,
-  Title,
-  SubText,
-  ScreenLayout,
-} from '../../components/Shared/OnBoarding_Shared';
-import { WithLocalSvg } from 'react-native-svg';
-import BMIImg from '../../assets/SVGs/BMI.svg';
+import React, { useEffect, useRef, useState } from "react";
+import styled from "styled-components/native";
+import { colors } from "../../colors";
+import { Button, ScreenWidth, BackButton } from "../../Shared";
+//prettier-ignore
+import {Input,Title,ScreenLayout,SubText,NumberInput,MyBottomSheet} from "../../components/Shared/OnBoarding_Shared";
+
+import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
+import { Pressable } from "react-native";
+
+import { WithLocalSvg } from "react-native-svg";
+import BMIImg from "../../assets/SVGs/BMI.svg";
 
 const SubTitle = styled.Text`
   margin-top: 8px;
@@ -92,14 +92,21 @@ const BMIText = styled.Text`
 
 const CreateAccount_3 = ({ route, navigation }) => {
   const [height, setHeight] = useState(0);
+  const [heights, setHeights] = useState([]);
   const [weight, setWeight] = useState(0);
+  const [snapPoints, setSnapPoints] = useState(["1%"]);
   const [BMI, setBMI] = useState(0);
+
+  const bottomModal = useRef();
+
   const email = route.params.email;
   const PW = route.params.PW;
   const nickname = route.params.nickname;
   const birthYear = route.params.birthYear;
+
+  console.log(route.params);
   const handleSubmit = () => {
-    navigation.navigate('CreateAccount_4', {
+    navigation.navigate("CreateAccount_4", {
       email,
       PW,
       nickname,
@@ -108,62 +115,89 @@ const CreateAccount_3 = ({ route, navigation }) => {
       weight,
     });
   };
+  const onPressBottomModal = () => bottomModal.current?.present();
+
+  useEffect(() => {
+    let data = [];
+    data.push("150 이하");
+    for (var i = 151; i < 190; i++) {
+      data.push(i.toString());
+    }
+    data.push("190 이상");
+    setHeights(data);
+    data = [];
+    data.push("40 이하");
+    for (var i = 41; i < 90; i++) {
+      data.push(i.toString());
+    }
+    data.push("90 이상");
+    onPressBottomModal();
+  }, []);
   useEffect(() => {
     const heightInM = height / 100;
     setBMI(weight / (heightInM ^ 2));
   }, [height, weight]);
 
   return (
-    <ScreenLayout>
-      <BackButton onPress={() => navigation.goBack()} />
-      <TextContainer>
-        <Title>마지막 단계에요!</Title>
-        <SubTitle>{`회원님의 신체 정보를 입력해주세요.
+    <BottomSheetModalProvider>
+      <Pressable
+        style={{ width: "100%", height: "100%" }}
+        onPress={() => setSnapPoints(["1%"])}
+      >
+        <ScreenLayout>
+          <BackButton onPress={() => navigation.goBack()} />
+          <TextContainer>
+            <Title>마지막 단계에요!</Title>
+            <SubTitle>{`회원님의 신체 정보를 입력해주세요.
 딱 맞는 루틴 생성을 위해 꼭 필요한 정보에요.`}</SubTitle>
-      </TextContainer>
-      <BottomContainer>
-        <SubText style={{ marginLeft: 8, color: colors.grey_5 }}>
-          키(cm)
-        </SubText>
-        <Input
-          keyboardType='numeric'
-          style={{ marginTop: 4 }}
-          placeholderTextColor={colors.grey_5}
-          autoFocus
-          placeholder='키'
-          returnKeyType='next'
-          blurOnSubmit={false}
-          onChangeText={(text) => setHeight(text)}
-        />
-        <SubText style={{ marginLeft: 8, color: colors.grey_5 }}>
-          몸무게(kg)
-        </SubText>
-        <Input
-          keyboardType='numeric'
-          style={{ marginTop: 4 }}
-          placeholderTextColor={colors.grey_5}
-          onSubmitEditing={() => handleSubmit()}
-          placeholder='몸무게'
-          returnKeyType='done'
-          blurOnSubmit={false}
-          onChangeText={(text) => setWeight(text)}
-        />
-      </BottomContainer>
-      <BMIContainer>
-        <BMIIndicator>
-          <BMIView style={{ left: `${(BMI - 15) * 4}%` }}>
-            <BMITitle>BMI {BMI.toFixed(1)}</BMITitle>
-            <BMIText>정상 체중이에요</BMIText>
-          </BMIView>
-          <BMIMarkerContainer style={{ left: `${(BMI - 15) * 4}%` }}>
-            <BMILine />
-            <BMIPointer />
-          </BMIMarkerContainer>
-        </BMIIndicator>
-        <WithLocalSvg width={ScreenWidth * 0.9} height={40} asset={BMIImg} />
-      </BMIContainer>
-      <Button enabled={height && weight} onPress={() => handleSubmit()} />
-    </ScreenLayout>
+          </TextContainer>
+          <BottomContainer>
+            <SubText style={{ marginLeft: 8, color: colors.grey_5 }}>
+              키(cm)
+            </SubText>
+            <NumberInput
+              value={height}
+              onPress={() => setSnapPoints(["34%"])}
+              placeholder="키"
+            />
+            <SubText style={{ marginLeft: 8, color: colors.grey_5 }}>
+              몸무게(kg)
+            </SubText>
+            <NumberInput
+              value={weight}
+              onPress={() => setSnapPoints(["34%"])}
+              placeholder="몸무게"
+            />
+          </BottomContainer>
+          <BMIContainer>
+            <BMIIndicator>
+              <BMIView style={{ left: `${(BMI - 15) * 4}%` }}>
+                <BMITitle>BMI {BMI.toFixed(1)}</BMITitle>
+                <BMIText>정상 체중이에요</BMIText>
+              </BMIView>
+              <BMIMarkerContainer style={{ left: `${(BMI - 15) * 4}%` }}>
+                <BMILine />
+                <BMIPointer />
+              </BMIMarkerContainer>
+            </BMIIndicator>
+            <WithLocalSvg
+              width={ScreenWidth * 0.9}
+              height={40}
+              asset={BMIImg}
+            />
+          </BMIContainer>
+          <Button enabled={height && weight} onPress={() => handleSubmit()} />
+          <MyBottomSheet
+            setValue={setHeight}
+            selectableDatas={heights}
+            modalRef={bottomModal}
+            snapPoints={snapPoints}
+            defaultVal="170"
+            hideFunc={() => setSnapPoints(["1%"])}
+          />
+        </ScreenLayout>
+      </Pressable>
+    </BottomSheetModalProvider>
   );
 };
 

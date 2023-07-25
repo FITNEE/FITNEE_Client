@@ -1,21 +1,20 @@
-import React, { useState } from 'react';
-import styled from 'styled-components/native';
-import { colors } from '../../colors';
-import { Button } from '../../Shared';
-import { StyleSheet, Text } from 'react-native';
+import React, { useState } from "react";
+import styled from "styled-components/native";
+import { colors } from "../../colors";
+import { Button } from "../../Shared";
+import { StyleSheet, Text } from "react-native";
 import {
   ScreenLayout,
   Title,
   SubText,
-} from '../../components/Shared/OnBoarding_Shared';
-import axios from 'axios';
+} from "../../components/Shared/OnBoarding_Shared";
+import axios from "axios";
 
 const TextContainer = styled.View`
   margin-top: 124px;
   flex-direction: column;
   width: 100%;
   justify-content: center;
-  
 `;
 
 const Input = styled.TextInput`
@@ -63,33 +62,38 @@ const SNSButton = styled.TouchableOpacity`
   height: 64px;
 `;
 const OnBoarding = ({ navigation }) => {
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState("");
   const [hasAccount, setHasAccount] = useState(false);
 
   const fetchResult = async (email) => {
     try {
-      let url = 'https://gpthealth.shop/';
-      let detailAPI = 'app/users';
+      let url = "https://gpthealth.shop/";
+      let detailAPI = "app/users";
       const queryStr = `?email=${email}`;
       const response = await axios.get(url + detailAPI + queryStr);
       const data = response.data;
       return data;
     } catch (error) {
-      console.error('Failed to fetch myLocation data:', error);
+      console.error("Failed to fetch data:", error);
     }
   };
   const handleSubmit = () => {
-    fetchResult(email).then((data) => {
-      if (data.code == 3003) {
-        navigation.navigate('CreateAccount_1', {
-          email,
-        });
-      } else {
-        navigation.navigate('Login', {
-          email,
-        });
-      }
+    console.log("submitted");
+    navigation.navigate("CreateAccount_1", {
+      email,
     });
+    // fetchResult(email).then((data) => {
+    //   console.log(data);
+    //   if (data.code == 3003) {
+    //     navigation.navigate("CreateAccount_1", {
+    //       email,
+    //     });
+    //   } else {
+    //     navigation.navigate("Login", {
+    //       email,
+    //     });
+    //   }
+    // });
   };
   return (
     <ScreenLayout>
@@ -99,11 +103,11 @@ const OnBoarding = ({ navigation }) => {
       </TextContainer>
       <BottomContainer>
         <Input
-          keyboardType='url'
+          keyboardType="url"
           placeholderTextColor={colors.grey_5}
           onSubmitEditing={() => handleSubmit()}
-          placeholder='이메일 입력'
-          returnKeyType='next'
+          placeholder="이메일 입력"
+          returnKeyType="next"
           blurOnSubmit={false}
           onChangeText={(text) => setEmail(text)}
         />
@@ -124,7 +128,7 @@ const OnBoarding = ({ navigation }) => {
         </SNSContainer>
       </BottomContainer>
       <Button
-        enabled={email.indexOf('@') != -1}
+        enabled={email.indexOf("@") != -1}
         onPress={() => handleSubmit()}
       ></Button>
     </ScreenLayout>
