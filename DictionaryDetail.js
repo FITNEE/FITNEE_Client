@@ -1,7 +1,7 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react'
 import styled from 'styled-components/native'
 import { colors } from './colors'
-import { KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, Platform, ScrollView, TouchableOpacity, SafeAreaView, Dimensions, Touchable } from 'react-native'
+import { View, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, Platform, ScrollView, TouchableOpacity, SafeAreaView, Dimensions, Touchable } from 'react-native'
 import WrappedText from 'react-native-wrapped-text'
 import {
     BottomSheetModal,
@@ -173,7 +173,6 @@ const ProcessName = styled.Text`
     color: ${colors.black};
     font-weight: 600;
     font-size: 15px;
-
     margin-bottom: 8px;
 `
 
@@ -221,7 +220,6 @@ const CautionDetail = styled.Text`
 `
 
 const ChatGroupContainer = styled.View`
-
 `
 const ChatContainer = styled.View`
     margin-left: 24px;
@@ -252,7 +250,7 @@ const JoinBtnContainer = styled.TouchableOpacity`
 
     position: absolute;
     left: ${`${SCREEN_WIDTH/2-123/2}px`};
-    bottom: 0;
+    top: 300px;
 `
 const JoinImage = styled.Image`
     background-color: ${colors.red};
@@ -296,14 +294,10 @@ export default function DictionaryDetail(){
         borderBottomColor: `${colors.l_main}`,
         fontWeight: 600, // 이거 적용 안 된다
     }
-    const smallTabStyle = {
-        height: '50%',
-    }
 
     const leftTab = useRef()
     const rightTab = useRef()
     const bottomModal = useRef()
-    const JoinBtnRef = useRef()
 
     const [area, setArea] = useState('어깨 | 측면 삼각근 | 머신')
     const [exerciseName, setExerciseName] = useState('사이드 레터럴 레이즈 머신')
@@ -314,22 +308,20 @@ export default function DictionaryDetail(){
     const [caution, setCaution] = useState(['허리를 과도하게 안으로 넣지 마세요.', '적절한 무게로 승모근에 무리가 가지 않도록 하세요.', '안장과 바의 위치점을 올바르게 맞춰주세요.'])
     const [userName, setUserName] = useState(['근손실', '삼대오백'])
     const [msg, setMsg] = useState(['사레레 무게 얼마나 들 수 있어야 어깨 부자 되나요?', '무게보다는 정확한 자세가 중요합니다. 특히 처음 할 때는 큰 근육에 자극 주기가 힘드니 꾸준히 하셔야해요!'])
-    const [snapPoints, setSnapPoints] = useState(['48%', '93%'])
     const [chat, setChat] = useState('')
+    const [changedSPIndex, setChangedSPIndex] = useState()
+    const snapPoints = useMemo(()=> ['48%', '86%'], [])
 
     const onTabPress = (target) => {
-        setSnapPoints(['48%', '93%'])
+        bottomModal.current?.snapToIndex(0)
         target===leftTab? 
-            setLeftTabActivate(true)
+            (setLeftTabActivate(true),
+            bottomModal.current?.snapToIndex(0))
         : 
             setLeftTabActivate(false)
     }
-    const onPressBottomModal = () => bottomModal.current?.present()
-    const onPressJoinBtn = () => setSnapPoints(['93%'])
-    const onChangeChat = (payload) => {
-        console.log(payload)
-        setChat(payload)
-    }
+    const onPressJoinBtn = () => bottomModal.current?.snapToIndex(1)
+    const onChangeChat = (payload) => setChat(payload)
     const onSubmitChat = () => {
         let temp = []
         chat.length == 0?
@@ -339,15 +331,19 @@ export default function DictionaryDetail(){
             setMsg(chat),
             setChat(''))
     }
-    useEffect(()=>{
-        onPressBottomModal();
-    }, [])
+
+    useEffect(()=> bottomModal.current?.present(), [])
+    useEffect(()=>
+        console.log(`changed snap point : ${changedSPIndex}`),
+        console.log(`animated index : ${bottomModal.current?.animatedIndex}`)
+    , [changedSPIndex])
+
 
     return (
         <BottomSheetModalProvider><SafeAreaView style={{flex: 1, backgroundColor: `${colors.grey_1}`}}><Container>
             <TopBtnContainer>
-                <TopBtn/>
-                <TopBtn/>
+                <TopBtn onPress={()=>bottomModal.current?.snapToIndex(0)}/>
+                <TopBtn onPress={()=>bottomModal.current?.snapToIndex(1)}/>
             </TopBtnContainer>
             <ImageContainer>
                 <ExerciseImage resizeMode='contain'/>
@@ -362,7 +358,7 @@ export default function DictionaryDetail(){
                 index={0}
                 snapPoints={snapPoints}
                 enablePanDownToClose={false}
-                handleHeight={50}
+                onAnimate={(_, to)=> setChangedSPIndex(to)}
             >
             <DictionaryContainer>
                 <TitleContainer>
@@ -389,7 +385,14 @@ export default function DictionaryDetail(){
                 </TabContainer>
                 {
                 leftTabActivate?
-                    <ContentContainer style={smallTabStyle}>
+                    <ContentContainer 
+                        showsVerticalScrollIndicator={false}
+                        style={
+                            changedSPIndex == 0 || changedSPIndex == undefined?
+                                {marginBottom: 380}
+                                : null
+                        }
+                    >            
                         <ProcessContainer>
                         {                            
                             processName.map((processName, i) => (
@@ -397,7 +400,7 @@ export default function DictionaryDetail(){
                                     <ProcessNum>{'0'+ (i+1)}</ProcessNum>
                                     <ProcessContent>
                                         <ProcessName>{processName}</ProcessName>
-                                        <WrappedText textStyle={{fontWeight: 400, fontSize: '13px', color: `${colors.black}`}}>
+                                        <WrappedText textStyle={{fontWeight: 400, fontSize: `${13}px`, color: `${colors.black}`}}>
                                             안장의 높이를 삼두 중앙보다 약간 위쪽과 같도록 맞춘 후 손잡이를 잡아주세요.
                                         </WrappedText>
                                     </ProcessContent>
@@ -424,26 +427,24 @@ export default function DictionaryDetail(){
                         </CautionContainer>
                     </ContentContainer>
                     : 
-                    <TouchableWithoutFeedback onPress={Keyboard.dismiss}><ContentContainer style={{paddingTop: 28}} contentContainerStyle={{justifyContent: 'space-between'}}>
-                    <ChatGroupContainer>
+                    <TouchableWithoutFeedback onPress={Keyboard.dismiss}><>
+                        <ContentContainer style={{paddingTop: 28}}>
+                            {
+                                userName.map((userName, i) => (
+                                    <ChatContainer>
+                                        <UserName>{userName}</UserName>
+                                        <MessageContainer>
+                                            <WrappedText textStyle={{fontWeight: 400, fontSize: 13, color: `${colors.black}`, lineHeight: 17}}>{msg[i]}</WrappedText>
+                                        </MessageContainer>
+                                    </ChatContainer>
+                                ))
+                            }
                     {
-                        userName.map((userName, i) => (
-                            <ChatContainer>
-                                <UserName>{userName}</UserName>
-                                <MessageContainer>
-                                    <WrappedText textStyle={{fontWeight: 400, fontSize: 13, color: `${colors.black}`, lineHeight: 17}}>{msg[i]}</WrappedText>
-                                </MessageContainer>
-                            </ChatContainer>
-                        ))
-                    }
-                    </ChatGroupContainer>
-                    {
-                        snapPoints[0] == '93%'?
+                        changedSPIndex == 1 ?
                             <KeyboardAvoidingView><TextInputBG>
                                 <TextInputContainer>
                                     <TextInput
                                         type="text"
-                                        autoFocus={true}
                                         onChangeText={text => {setChat(text)}}
                                         value={chat}
                                         onSubmitEditing={onSubmitChat}
@@ -452,12 +453,16 @@ export default function DictionaryDetail(){
                                 </TextInputContainer>
                             </TextInputBG></KeyboardAvoidingView>
                             :
-                            <JoinBtnContainer onPress={onPressJoinBtn} ref={JoinBtnRef}>
-                                <JoinImage></JoinImage>
-                                <JoinText>채팅 참여하기</JoinText>
-                            </JoinBtnContainer>
+                            null
                     }
-                    </ContentContainer></TouchableWithoutFeedback>
+                        </ContentContainer>
+                        <JoinBtnContainer onPress={() => bottomModal.current?.snapToIndex(1)}>
+                            <JoinImage></JoinImage>
+                            <JoinText>채팅 참여하기</JoinText>
+                        </JoinBtnContainer>
+
+                    </>
+                    </TouchableWithoutFeedback>
                 } 
             </DictionaryContainer></BottomSheetModal>
         </Container></SafeAreaView></BottomSheetModalProvider>
