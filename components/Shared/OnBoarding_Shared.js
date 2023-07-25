@@ -74,9 +74,13 @@ const NumberContainer = styled.TouchableOpacity`
 
 const NumberText = styled.Text``;
 
-export const NumberInput = ({ onPress, value, placeholder }) => {
+export const NumberInput = ({ onPress, value, placeholder, active }) => {
+  console.log(active);
   return (
-    <NumberContainer onPress={onPress}>
+    <NumberContainer
+      style={active && { borderColor: colors.l_main, borderWidth: 1 }}
+      onPress={onPress}
+    >
       <NumberText
         style={
           value
@@ -119,6 +123,7 @@ export const MyBottomSheet = ({
   modalRef,
   snapPoints,
   hideFunc,
+  nextFunc = hideFunc,
   defaultVal,
 }) => {
   return (
@@ -126,14 +131,14 @@ export const MyBottomSheet = ({
       ref={modalRef}
       index={0}
       snapPoints={snapPoints}
-      enablePanDownToClose={true}
+      enablePanDownToClose={false}
       handleHeight={80}
     >
       <BottomSheetHeader>
         <BottomButton onPress={hideFunc}>
           <BottomSheetText>숨기기</BottomSheetText>
         </BottomButton>
-        <BottomButton onPress={hideFunc}>
+        <BottomButton onPress={nextFunc}>
           <BottomSheetText>다음</BottomSheetText>
         </BottomButton>
       </BottomSheetHeader>

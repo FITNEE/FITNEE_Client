@@ -43,6 +43,7 @@ const CreateAccount_2 = ({ route, navigation }) => {
   const [gender, setGender] = useState(null);
   const [timerData, setTimerData] = useState([]);
   const bottomModal = useRef();
+  const [modalShown, setModalShown] = useState(false);
   const [snapPoints, setSnapPoints] = useState(["1%"]);
   const email = route.params.email;
   const PW = route.params.PW;
@@ -56,6 +57,14 @@ const CreateAccount_2 = ({ route, navigation }) => {
     });
   };
 
+  const hideModal = () => {
+    setSnapPoints(["1%"]);
+    setModalShown(false);
+  };
+  const popModal = () => {
+    setSnapPoints(["34%"]);
+    setModalShown(true);
+  };
   const onPressBottomModal = () => bottomModal.current?.present();
 
   useEffect(() => {
@@ -71,7 +80,7 @@ const CreateAccount_2 = ({ route, navigation }) => {
     <BottomSheetModalProvider>
       <Pressable
         style={{ width: "100%", height: "100%" }}
-        onPress={() => setSnapPoints(["1%"])}
+        onPress={() => hideModal()}
       >
         <ScreenLayout>
           <BackButton onPress={() => navigation.goBack()} />
@@ -92,7 +101,7 @@ const CreateAccount_2 = ({ route, navigation }) => {
             <Input
               placeholderTextColor={colors.grey_5}
               autoFocus
-              onSubmitEditing={() => Keyboard.dismiss()}
+              onSubmitEditing={() => popModal()}
               placeholder="닉네임"
               returnKeyType="next"
               blurOnSubmit={false}
@@ -118,8 +127,9 @@ const CreateAccount_2 = ({ route, navigation }) => {
             </GenderContainer>
             <NumberInput
               value={birthYear}
-              onPress={() => setSnapPoints(["34%"])}
+              onPress={() => popModal()}
               placeholder="태어난 년도"
+              active={modalShown}
             />
           </BottomContainer>
           <Button
@@ -132,7 +142,7 @@ const CreateAccount_2 = ({ route, navigation }) => {
             modalRef={bottomModal}
             snapPoints={snapPoints}
             defaultVal="2000"
-            hideFunc={() => setSnapPoints(["1%"])}
+            hideFunc={() => hideModal()}
           />
         </ScreenLayout>
       </Pressable>

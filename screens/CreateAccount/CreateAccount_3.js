@@ -6,7 +6,7 @@ import { Button, ScreenWidth, BackButton } from "../../Shared";
 import {Input,Title,ScreenLayout,SubText,NumberInput,MyBottomSheet} from "../../components/Shared/OnBoarding_Shared";
 
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
-import { Pressable } from "react-native";
+import { Keyboard, Pressable } from "react-native";
 
 import { WithLocalSvg } from "react-native-svg";
 import BMIImg from "../../assets/SVGs/BMI.svg";
@@ -94,11 +94,21 @@ const CreateAccount_3 = ({ route, navigation }) => {
   const [height, setHeight] = useState(0);
   const [heights, setHeights] = useState([]);
   const [weight, setWeight] = useState(0);
+  const [weights, setWeights] = useState([]);
+  const [mode, setMode] = useState(null);
   const [snapPoints, setSnapPoints] = useState(["1%"]);
   const [BMI, setBMI] = useState(0);
-
+  console.log(mode);
   const bottomModal = useRef();
 
+  const hideModal = () => {
+    setSnapPoints(["1%"]);
+    setMode(null);
+  };
+  const popModal = (id) => {
+    setSnapPoints(["34%"]);
+    setMode(id);
+  };
   const email = route.params.email;
   const PW = route.params.PW;
   const nickname = route.params.nickname;
@@ -114,6 +124,20 @@ const CreateAccount_3 = ({ route, navigation }) => {
       height,
       weight,
     });
+  };
+
+  const BMIStatusText = (bmi) => {
+    if (bmi > 45) {
+      return "과체중이에요";
+    } else if (bmi >= 25) {
+      return "비만이에요";
+    } else if (bmi >= 23) {
+      return "조금 비만이에요";
+    } else if (bmi >= 18.5) {
+      return "정상 체중이에요";
+    } else {
+      return "체중이 낮아요";
+    }
   };
   const onPressBottomModal = () => bottomModal.current?.present();
 
@@ -131,6 +155,7 @@ const CreateAccount_3 = ({ route, navigation }) => {
       data.push(i.toString());
     }
     data.push("90 이상");
+    setWeights(data);
     onPressBottomModal();
   }, []);
   useEffect(() => {
@@ -142,7 +167,7 @@ const CreateAccount_3 = ({ route, navigation }) => {
     <BottomSheetModalProvider>
       <Pressable
         style={{ width: "100%", height: "100%" }}
-        onPress={() => setSnapPoints(["1%"])}
+        onPress={() => hideModal()}
       >
         <ScreenLayout>
           <BackButton onPress={() => navigation.goBack()} />
@@ -157,23 +182,25 @@ const CreateAccount_3 = ({ route, navigation }) => {
             </SubText>
             <NumberInput
               value={height}
-              onPress={() => setSnapPoints(["34%"])}
+              onPress={() => popModal(0)}
               placeholder="키"
+              active={mode == 0}
             />
             <SubText style={{ marginLeft: 8, color: colors.grey_5 }}>
               몸무게(kg)
             </SubText>
             <NumberInput
               value={weight}
-              onPress={() => setSnapPoints(["34%"])}
+              onPress={() => popModal(1)}
               placeholder="몸무게"
+              active={mode == 1}
             />
           </BottomContainer>
           <BMIContainer>
             <BMIIndicator>
               <BMIView style={{ left: `${(BMI - 15) * 4}%` }}>
                 <BMITitle>BMI {BMI.toFixed(1)}</BMITitle>
-                <BMIText>정상 체중이에요</BMIText>
+                <BMIText>{BMIStatusText(BMI.toFixed(1))}</BMIText>
               </BMIView>
               <BMIMarkerContainer style={{ left: `${(BMI - 15) * 4}%` }}>
                 <BMILine />
@@ -188,12 +215,13 @@ const CreateAccount_3 = ({ route, navigation }) => {
           </BMIContainer>
           <Button enabled={height && weight} onPress={() => handleSubmit()} />
           <MyBottomSheet
-            setValue={setHeight}
-            selectableDatas={heights}
+            setValue={mode == 0 ? setHeight : setWeight}
+            selectableDatas={mode == 0 ? heights : weights}
             modalRef={bottomModal}
             snapPoints={snapPoints}
-            defaultVal="170"
-            hideFunc={() => setSnapPoints(["1%"])}
+            defaultVal={mode == 0 ? 170 : 60}
+            hideFunc={() => hideModal()}
+            nextFunc={mode == 0 ? () => setMode(1) : () => hideModal()}
           />
         </ScreenLayout>
       </Pressable>

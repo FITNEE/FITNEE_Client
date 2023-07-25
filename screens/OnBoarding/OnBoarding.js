@@ -68,8 +68,8 @@ const OnBoarding = ({ navigation }) => {
   const fetchResult = async (email) => {
     try {
       let url = "https://gpthealth.shop/";
-      let detailAPI = "app/users";
-      const queryStr = `?email=${email}`;
+      let detailAPI = "app/users/";
+      const queryStr = `?userId=${email}`;
       const response = await axios.get(url + detailAPI + queryStr);
       const data = response.data;
       return data;
@@ -79,21 +79,18 @@ const OnBoarding = ({ navigation }) => {
   };
   const handleSubmit = () => {
     console.log("submitted");
-    navigation.navigate("CreateAccount_1", {
-      email,
+    fetchResult(email).then((data) => {
+      console.log(data);
+      if (data.code == 3003) {
+        navigation.navigate("CreateAccount_1", {
+          email,
+        });
+      } else {
+        navigation.navigate("Login", {
+          email,
+        });
+      }
     });
-    // fetchResult(email).then((data) => {
-    //   console.log(data);
-    //   if (data.code == 3003) {
-    //     navigation.navigate("CreateAccount_1", {
-    //       email,
-    //     });
-    //   } else {
-    //     navigation.navigate("Login", {
-    //       email,
-    //     });
-    //   }
-    // });
   };
   return (
     <ScreenLayout>
