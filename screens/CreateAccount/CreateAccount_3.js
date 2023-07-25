@@ -94,14 +94,15 @@ const CreateAccount_3 = ({ route, navigation }) => {
   const [height, setHeight] = useState(0);
   const [weight, setWeight] = useState(0);
   const [BMI, setBMI] = useState(0);
-
   const email = route.params.email;
   const PW = route.params.PW;
+  const nickname = route.params.nickname;
   const birthYear = route.params.birthYear;
   const handleSubmit = () => {
     navigation.navigate('CreateAccount_4', {
       email,
       PW,
+      nickname,
       birthYear,
       height,
       weight,
@@ -114,7 +115,7 @@ const CreateAccount_3 = ({ route, navigation }) => {
 
   return (
     <ScreenLayout>
-      {/* <BackButton onPress={() => navigation.goBack()} /> */}
+      <BackButton onPress={() => navigation.goBack()} />
       <TextContainer>
         <Title>마지막 단계에요!</Title>
         <SubTitle>{`회원님의 신체 정보를 입력해주세요.

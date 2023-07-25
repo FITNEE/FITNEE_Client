@@ -1,9 +1,23 @@
 import React, { useState } from 'react';
 import styled from 'styled-components/native';
-import { FlatList, Text } from 'react-native';
+import { FlatList, SafeAreaView, Text, View } from 'react-native';
+import Animated, {
+  useAnimatedGestureHandler,
+  withSpring,
+  runOnJS,
+  useSharedValue,
+  useAnimatedStyle,
+  withTiming,
+} from 'react-native-reanimated';
+import { PanGestureHandler } from 'react-native-gesture-handler';
 import { Header } from '../../components/Shared/MyRoutine_Shared';
 import { colors } from '../../colors';
 import { ScreenWidth } from '../../Shared';
+import {
+  CalendarProvider,
+  LocaleConfig,
+  WeekCalendar,
+} from 'react-native-calendars';
 
 const ScreenBase = styled.SafeAreaView`
   width: 100%;
@@ -84,6 +98,55 @@ const SetsText = styled.Text`
 const MyRoutine = ({ route, navigation }) => {
   const [selectedId, setSelectedId] = useState(null);
   const [mode, setMode] = useState(false);
+
+  LocaleConfig.locales['ko'] = {
+    monthNames: [
+      '1월',
+      '2월',
+      '3월',
+      '4월',
+      '5월',
+      '6월',
+      '7월',
+      '8월',
+      '9월',
+      '10월',
+      '11월',
+      '12월',
+    ],
+    monthNamesShort: [
+      '1월',
+      '2월',
+      '3월',
+      '4월',
+      '5월',
+      '6월',
+      '7월',
+      '8월',
+      '9월',
+      '10월',
+      '11월',
+      '12월',
+    ],
+    dayNames: [
+      '일요일',
+      '월요일',
+      '화요일',
+      '수요일',
+      '목요일',
+      '금요일',
+      '토요일',
+    ],
+    dayNamesShort: ['일', '월', '화', '수', '목', '금', '토'],
+  };
+  LocaleConfig.defaultLocale = 'ko';
+
+  const exerciseDay = {
+    '2023-07-23': { marked: true },
+    '2023-07-25': { marked: true },
+    '2023-07-26': { marked: true },
+  };
+
   const test = [
     {
       id: 1,
@@ -134,7 +197,7 @@ const MyRoutine = ({ route, navigation }) => {
   const renderItem = ({ item }) => {
     return (
       <>
-        {mode ? (
+        {!mode ? (
           <ExerciseContainer>
             <DefaultContainer>
               <ExerciseImg />
@@ -169,21 +232,57 @@ const MyRoutine = ({ route, navigation }) => {
     );
   };
   return (
-    <ScreenBase>
-      <Header mode={mode} parentFunction={toggleMode} />
-      <ContentBase>
-        <ScreenLayout>
-          <FlatListContainer>
-            <FlatList
-              showsVerticalScrollIndicator
-              data={test}
-              keyExtractor={(test) => test.id}
-              renderItem={renderItem}
-            />
-          </FlatListContainer>
-        </ScreenLayout>
-      </ContentBase>
-    </ScreenBase>
+    <CalendarProvider date={new Date().toISOString()}>
+      <ScreenBase>
+        <Header mode={mode} parentFunction={toggleMode} />
+        {mode ? (
+          <Animated.View>
+            <PanGestureHandler onGestureEvent={gestureHandler}>
+              <Animated.View
+                style={{
+                  backgroundColor: 'chartreuse',
+                  width: 64,
+                  height: 64,
+                }}
+              ></Animated.View>
+            </PanGestureHandler>
+          </Animated.View>
+        ) : (
+          <WeekCalendar
+            calendarHeight={80}
+            markedDates={exerciseDay}
+            style={{ height: 350 }}
+            theme={{
+              dotColor: colors.grey_6,
+              selectedDayBackgroundColor: colors.grey_6,
+              todayTextColor: '#9747ff',
+              textDayHeaderFontSize: 12,
+              locale: 'ko',
+              textDayFontSize: 14,
+              textDayFontWeight: 400,
+              textDayStyle: { color: colors.black },
+              textSectionTitleColor: colors.grey_7,
+            }}
+            onDayPress={(day) => {
+              //props.dayFunction(day);
+              console.log(day);
+            }}
+          />
+        )}
+        <ContentBase>
+          <ScreenLayout>
+            <FlatListContainer>
+              <FlatList
+                showsVerticalScrollIndicator
+                data={test}
+                keyExtractor={(test) => test.id}
+                renderItem={renderItem}
+              />
+            </FlatListContainer>
+          </ScreenLayout>
+        </ContentBase>
+      </ScreenBase>
+    </CalendarProvider>
   );
 };
 

@@ -8,12 +8,14 @@ import {
   Title,
   SubText,
 } from '../../components/Shared/OnBoarding_Shared';
+import axios from 'axios';
 
 const TextContainer = styled.View`
   margin-top: 124px;
   flex-direction: column;
   width: 100%;
   justify-content: center;
+  
 `;
 
 const Input = styled.TextInput`
@@ -64,17 +66,30 @@ const OnBoarding = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [hasAccount, setHasAccount] = useState(false);
 
-  const handleSubmit = () => {
-    //Email값 받고, 이에 대한 login, CreateAccount여부 나타내는 boolean값 반환받기
-    if (hasAccount) {
-      navigation.navigate('Login', {
-        email,
-      });
-    } else {
-      navigation.navigate('CreateAccount_1', {
-        email,
-      });
+  const fetchResult = async (email) => {
+    try {
+      let url = 'https://gpthealth.shop/';
+      let detailAPI = 'app/users';
+      const queryStr = `?email=${email}`;
+      const response = await axios.get(url + detailAPI + queryStr);
+      const data = response.data;
+      return data;
+    } catch (error) {
+      console.error('Failed to fetch myLocation data:', error);
     }
+  };
+  const handleSubmit = () => {
+    fetchResult(email).then((data) => {
+      if (data.code == 3003) {
+        navigation.navigate('CreateAccount_1', {
+          email,
+        });
+      } else {
+        navigation.navigate('Login', {
+          email,
+        });
+      }
+    });
   };
   return (
     <ScreenLayout>

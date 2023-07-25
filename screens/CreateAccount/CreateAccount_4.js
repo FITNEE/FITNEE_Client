@@ -48,6 +48,8 @@ const AnimationContainer = styled.View`
 
 const CreateAccount_4 = ({ route, navigation }) => {
   const [isLoading, setIsLoading] = useState(true);
+
+console.log(route.params)
   const { toggleLogin } = useContext(AppContext);
   setTimeout(() => {
     setIsLoading(false);

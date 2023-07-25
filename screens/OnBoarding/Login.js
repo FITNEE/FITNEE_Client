@@ -4,18 +4,11 @@ import { colors } from '../../colors';
 import { Button, BackButton } from '../../Shared';
 import {
   Input,
+  ScreenLayout,
   StatusText,
   Title,
 } from '../../components/Shared/OnBoarding_Shared';
 import { AppContext } from '../../components/ContextProvider';
-const ScreenLayout = styled.SafeAreaView`
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-  width: 90%;
-  margin-left: 5%;
-  flex: 1;
-`;
 const TextContainer = styled.View`
   margin-top: 124px;
   flex-direction: column;

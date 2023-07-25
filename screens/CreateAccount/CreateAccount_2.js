@@ -8,6 +8,7 @@ import {
   ScreenLayout,
   SubText,
 } from '../../components/Shared/OnBoarding_Shared';
+import { Keyboard } from 'react-native';
 
 const TextContainer = styled.View`
   margin-top: 124px;
@@ -24,6 +25,7 @@ const BottomContainer = styled.View`
 `;
 
 const GenderContainer = styled.View`
+  margin-top: 16px;
   flex-direction: row;
   justify-content: space-between;
 `;
@@ -40,6 +42,7 @@ const GenderButton = styled.TouchableOpacity`
 const GenderText = styled.Text``;
 
 const CreateAccount_2 = ({ route, navigation }) => {
+  const [nickname, setNickname] = useState('');
   const [birthYear, setBirthYear] = useState('');
   const [gender, setGender] = useState(null);
 
@@ -49,9 +52,11 @@ const CreateAccount_2 = ({ route, navigation }) => {
     navigation.navigate('CreateAccount_3', {
       email,
       PW,
-      birthYear,
+      nickname,
+      birthYear
     });
   };
+  
   return (
     <ScreenLayout>
       <BackButton onPress={() => navigation.goBack()} />
@@ -66,6 +71,20 @@ const CreateAccount_2 = ({ route, navigation }) => {
         </SubText>
       </TextContainer>
       <BottomContainer>
+      <SubText style={{ margin: 8, color: colors.grey_7 }}>
+          닉네임
+        </SubText>
+      <Input
+          // keyboardType='numeric'
+          // style={{ marginTop: 16 }}
+          placeholderTextColor={colors.grey_5}
+          autoFocus
+          onSubmitEditing={() => Keyboard.dismiss()}
+          placeholder='닉네임'
+          returnKeyType='next'
+          blurOnSubmit={false}
+          onChangeText={(text) => setNickname(text)}
+        ></Input>
         <GenderContainer>
           <GenderButton
             style={gender == 1 && { backgroundColor: colors.l_sub_1 }}
@@ -88,7 +107,6 @@ const CreateAccount_2 = ({ route, navigation }) => {
           keyboardType='numeric'
           style={{ marginTop: 16 }}
           placeholderTextColor={colors.grey_5}
-          autoFocus
           onSubmitEditing={() => handlePress()}
           placeholder='태어난 년도'
           returnKeyType='done'
