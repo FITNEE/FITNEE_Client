@@ -4,6 +4,7 @@ import OnBoardingNav from './navigators/OnBoardingNav';
 import LoggedInNav from './navigators/LoggedInNav';
 import { AppContext } from './components/ContextProvider';
 import { useState } from 'react';
+import HomeNav from './navigators/HomeNav';
 
 const MyTheme = {
   ...DefaultTheme,
@@ -52,7 +53,7 @@ export default function App() {
   return (
     <AppContext.Provider value={userSettings}>
       <NavigationContainer theme={MyTheme}>
-        {loggedIn ? <LoggedInNav /> : <OnBoardingNav />}
+        <HomeNav />
       </NavigationContainer>
     </AppContext.Provider>
   );
