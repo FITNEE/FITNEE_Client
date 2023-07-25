@@ -1,12 +1,10 @@
 import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react'
 import styled from 'styled-components/native'
 import { colors } from './colors'
-import { View, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, Platform, ScrollView, TouchableOpacity, SafeAreaView, Dimensions, Touchable } from 'react-native'
+import { KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, Platform, ScrollView, TouchableOpacity, SafeAreaView, Dimensions, Touchable } from 'react-native'
 import WrappedText from 'react-native-wrapped-text'
-import {
-    BottomSheetModal,
-    BottomSheetModalProvider
-  } from '@gorhom/bottom-sheet';
+import BottomSheet, { BottomSheetScrollView, BottomSheetTextInput } from "@gorhom/bottom-sheet";
+import Animated, { FadeIn, FadeOut } from    'react-native-reanimated';
 
 const SCREEN_WIDTH = Dimensions.get('screen').width;
 
@@ -78,8 +76,8 @@ const Bubble = styled.View`
     border-radius: 12px;
     align-items: center;
     justify-content: center;
-    bottom: 0px;
-    right: 28px;
+    bottom: 330;
+    right: 25px;
     z-index: 1;
 `;
 
@@ -89,7 +87,7 @@ const BubbleArrow = styled.View`
     width: 0;
     z-index: 1;
     top: 50px;
-    right: 13px;
+    right: 11px;
     height: 0;
     border: 8px solid transparent;
     border-top-color: #363636;
@@ -298,6 +296,7 @@ export default function DictionaryDetail(){
     const leftTab = useRef()
     const rightTab = useRef()
     const bottomModal = useRef()
+    const bubble = useRef()
 
     const [area, setArea] = useState('어깨 | 측면 삼각근 | 머신')
     const [exerciseName, setExerciseName] = useState('사이드 레터럴 레이즈 머신')
@@ -311,16 +310,14 @@ export default function DictionaryDetail(){
     const [chat, setChat] = useState('')
     const [changedSPIndex, setChangedSPIndex] = useState()
     const snapPoints = useMemo(()=> ['48%', '86%'], [])
+    const [bubbleBool, setBubbleBool] = useState(true)
 
     const onTabPress = (target) => {
-        bottomModal.current?.snapToIndex(0)
         target===leftTab? 
-            (setLeftTabActivate(true),
-            bottomModal.current?.snapToIndex(0))
+            setLeftTabActivate(true)
         : 
             setLeftTabActivate(false)
     }
-    const onPressJoinBtn = () => bottomModal.current?.snapToIndex(1)
     const onChangeChat = (payload) => setChat(payload)
     const onSubmitChat = () => {
         let temp = []
@@ -331,115 +328,136 @@ export default function DictionaryDetail(){
             setMsg(chat),
             setChat(''))
     }
+    const handleSnapPress = useCallback((index) => {
+        bottomModal.current?.snapToIndex(index)
+    })
+    useEffect(()=>{
+        const timer = setTimeout(() => {
+            setBubbleBool(false)
+        }, 2000)
 
-    useEffect(()=> bottomModal.current?.present(), [])
-    useEffect(()=>
-        console.log(`changed snap point : ${changedSPIndex}`),
-        console.log(`animated index : ${bottomModal.current?.animatedIndex}`)
-    , [changedSPIndex])
+        return ()=>clearTimeout(timer)
+    }, [])
 
 
     return (
-        <BottomSheetModalProvider><SafeAreaView style={{flex: 1, backgroundColor: `${colors.grey_1}`}}><Container>
-            <TopBtnContainer>
-                <TopBtn onPress={()=>bottomModal.current?.snapToIndex(0)}/>
-                <TopBtn onPress={()=>bottomModal.current?.snapToIndex(1)}/>
-            </TopBtnContainer>
-            <ImageContainer>
-                <ExerciseImage resizeMode='contain'/>
-            </ImageContainer>
-            <Bubble>
-                <BubbleText>{`+ 버튼을 눌러 마이루틴에 해당\n운동을 추가해보세요!`}</BubbleText>
-                <BubbleArrow/>
-            </Bubble>
-
-            <BottomSheetModal
-                ref={bottomModal}
-                index={0}
-                snapPoints={snapPoints}
-                enablePanDownToClose={false}
-                onAnimate={(_, to)=> setChangedSPIndex(to)}
-            >
-            <DictionaryContainer>
-                <TitleContainer>
-                    <NameContainer>
-                        <AreaText>{area}</AreaText>
-                        <TitleText>{exerciseName}</TitleText>
-                    </NameContainer>
-                    <AddtoRoutineBtn/>
-                </TitleContainer>
-                <TabContainer>
-                    <LeftTab 
-                        ref={leftTab} 
-                        style={leftTabActivate? activateTabStyle: null} 
-                        onPressIn={()=>onTabPress(leftTab)}>
-                            <TabText>운동 방법</TabText>
-                    </LeftTab>         
-                    <RightTab 
-                        ref={rightTab} 
-                        style={leftTabActivate? null: activateTabStyle} 
-                        onPressIn={()=>onTabPress(rightTab)}>
-                            <TabText>채팅 42개</TabText>
-                            { isAllRead? null : <NotReadDot/> }
-                    </RightTab>
-                </TabContainer>
+        <SafeAreaView style={{flex: 1, backgroundColor: `${colors.grey_1}`}}>
+            <Container>
+                <TopBtnContainer>
+                    <TopBtn/>
+                    <TopBtn/>
+                </TopBtnContainer>
+                <ImageContainer>
+                    <ExerciseImage resizeMode='contain'/>
+                </ImageContainer>
                 {
-                leftTabActivate?
-                    <ContentContainer 
-                        showsVerticalScrollIndicator={false}
-                        style={
-                            changedSPIndex == 0 || changedSPIndex == undefined?
-                                {marginBottom: 380}
-                                : null
-                        }
-                    >            
-                        <ProcessContainer>
-                        {                            
-                            processName.map((processName, i) => (
-                                <Process>
-                                    <ProcessNum>{'0'+ (i+1)}</ProcessNum>
-                                    <ProcessContent>
-                                        <ProcessName>{processName}</ProcessName>
-                                        <WrappedText textStyle={{fontWeight: 400, fontSize: `${13}px`, color: `${colors.black}`}}>
-                                            안장의 높이를 삼두 중앙보다 약간 위쪽과 같도록 맞춘 후 손잡이를 잡아주세요.
-                                        </WrappedText>
-                                    </ProcessContent>
-                                </Process>
-                            ))
-                        }
-                        </ProcessContainer>
+                    bubbleBool?
+                        <Bubble ref={bubble}>
+                            <BubbleText>{`+ 버튼을 눌러 마이루틴에 해당\n운동을 추가해보세요!`}</BubbleText>
+                            <BubbleArrow/>
+                        </Bubble>
+                        :
+                        null
+                }
 
-                        <CautionContainer>
-                            <CautionTitleContainer>
-                                <CautionImage/>
-                                <CautionTitle>이 부분은 특히 주의해주세요!</CautionTitle>
-                            </CautionTitleContainer>
-                            <CautionContentContainer>
-                            {
-                                caution.map((caution) => (
-                                    <CautionDetailContainer>
-                                        <CautionDot/>
-                                        <CautionDetail>{ caution }</CautionDetail>
-                                    </CautionDetailContainer>
-                                ))
-                            }
-                            </CautionContentContainer>
-                        </CautionContainer>
-                    </ContentContainer>
-                    : 
-                    <TouchableWithoutFeedback onPress={Keyboard.dismiss}><>
-                        <ContentContainer style={{paddingTop: 28}}>
-                            {
-                                userName.map((userName, i) => (
-                                    <ChatContainer>
-                                        <UserName>{userName}</UserName>
-                                        <MessageContainer>
-                                            <WrappedText textStyle={{fontWeight: 400, fontSize: 13, color: `${colors.black}`, lineHeight: 17}}>{msg[i]}</WrappedText>
-                                        </MessageContainer>
-                                    </ChatContainer>
-                                ))
-                            }
-                    {
+                <BottomSheet
+                    ref={bottomModal}
+                    index={0}
+                    snapPoints={snapPoints}
+                    enablePanDownToClose={false}
+                    onChange={index=> setChangedSPIndex(index)}
+                >
+                    <DictionaryContainer>
+                        <TitleContainer>
+                            <NameContainer>
+                                <AreaText>{area}</AreaText>
+                                <TitleText>{exerciseName}</TitleText>
+                            </NameContainer>
+                            <AddtoRoutineBtn/>
+                        </TitleContainer>
+                        <TabContainer>
+                            <LeftTab 
+                                ref={leftTab} 
+                                style={leftTabActivate? activateTabStyle: null} 
+                                onPressIn={()=>onTabPress(leftTab)}>
+                                    <TabText>운동 방법</TabText>
+                            </LeftTab>         
+                            <RightTab 
+                                ref={rightTab} 
+                                style={leftTabActivate? null: activateTabStyle} 
+                                onPressIn={()=>onTabPress(rightTab)}>
+                                    <TabText>채팅 42개</TabText>
+                                    { isAllRead? null : <NotReadDot/> }
+                            </RightTab>
+                        </TabContainer>
+                        {
+                        leftTabActivate?
+                            <BottomSheetScrollView 
+                                showsVerticalScrollIndicator={false}
+                            >            
+                                <ProcessContainer>
+                                {                            
+                                    processName.map((processName, i) => (
+                                        <Process>
+                                            <ProcessNum>{'0'+ (i+1)}</ProcessNum>
+                                            <ProcessContent>
+                                                <ProcessName>{processName}</ProcessName>
+                                                <WrappedText textStyle={{fontWeight: 400, fontSize: 13, color: `${colors.black}`}}>
+                                                    안장의 높이를 삼두 중앙보다 약간 위쪽과 같도록 맞춘 후 손잡이를 잡아주세요.
+                                                </WrappedText>
+                                            </ProcessContent>
+                                        </Process>
+                                    ))
+                                }
+                                </ProcessContainer>
+
+                                <CautionContainer>
+                                    <CautionTitleContainer>
+                                        <CautionImage/>
+                                        <CautionTitle>이 부분은 특히 주의해주세요!</CautionTitle>
+                                    </CautionTitleContainer>
+                                    <CautionContentContainer>
+                                    {
+                                        caution.map((caution) => (
+                                            <CautionDetailContainer>
+                                                <CautionDot/>
+                                                <CautionDetail>{ caution }</CautionDetail>
+                                            </CautionDetailContainer>
+                                        ))
+                                    }
+                                    </CautionContentContainer>
+                                </CautionContainer>
+                            </BottomSheetScrollView>
+                            : 
+                            <TouchableWithoutFeedback onPress={Keyboard.dismiss}><>
+                                <ContentContainer style={{paddingTop: 28}}>
+                                    {
+                                        userName.map((userName, i) => (
+                                            <ChatContainer>
+                                                <UserName>{userName}</UserName>
+                                                <MessageContainer>
+                                                    <WrappedText textStyle={{fontWeight: 400, fontSize: 13, color: `${colors.black}`, lineHeight: 17}}>{msg[i]}</WrappedText>
+                                                </MessageContainer>
+                                            </ChatContainer>
+                                        ))
+                                    }
+                                </ContentContainer>
+                                <JoinBtnContainer>
+                                    <JoinImage></JoinImage>
+                                    <JoinText>채팅 참여하기</JoinText>
+                                </JoinBtnContainer>
+
+                            </>
+                            </TouchableWithoutFeedback>
+                        } 
+                    </DictionaryContainer>
+                </BottomSheet>
+            </Container>
+        </SafeAreaView>
+    )
+} 
+
+                  {/* {
                         changedSPIndex == 1 ?
                             <KeyboardAvoidingView><TextInputBG>
                                 <TextInputContainer>
@@ -454,18 +472,4 @@ export default function DictionaryDetail(){
                             </TextInputBG></KeyboardAvoidingView>
                             :
                             null
-                    }
-                        </ContentContainer>
-                        <JoinBtnContainer onPress={() => bottomModal.current?.snapToIndex(1)}>
-                            <JoinImage></JoinImage>
-                            <JoinText>채팅 참여하기</JoinText>
-                        </JoinBtnContainer>
-
-                    </>
-                    </TouchableWithoutFeedback>
-                } 
-            </DictionaryContainer></BottomSheetModal>
-        </Container></SafeAreaView></BottomSheetModalProvider>
-    )
-
-} 
+                    } */}
