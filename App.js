@@ -9,6 +9,7 @@ import OnBoardingNav from './navigators/OnBoardingNav';
 import LoggedInNav from './navigators/LoggedInNav';
 import { AppContext } from './components/ContextProvider';
 import { useState } from 'react';
+import DictionaryNav from './DictionaryNav'
 
 const MyTheme = {
   ...DefaultTheme,
@@ -58,3 +59,4 @@ export default function App() {
     </AppContext.Provider>
   );
 }
+
