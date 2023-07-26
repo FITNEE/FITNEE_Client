@@ -8,10 +8,6 @@ export default function RoutineItem({
   onPress,
   select,
 }) {
-  //   const [select, SetSelect] = useState(false);
-  //   const itemPress = () => {
-  //     SetSelect(!select);
-  //   };
   return (
     <Container>
       <Item onPress={onPress}>

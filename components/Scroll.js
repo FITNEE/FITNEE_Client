@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { FlatList } from "react-native";
 import styled from "styled-components/native";
 import RoutineItem from "./RoutineItem";
+import { ScreenHeight } from "../Shared";
 
 const PageIndicator = ({ totalPages, currentPage }) => {
   return (
@@ -33,10 +34,9 @@ export default Scroll = ({ data }) => {
           <ItemConteiner>
             {routines.item.map((routine, id) => (
               <RoutineItem
+                key={id}
                 select={selectedID == id}
-                onPress={() => {
-                  selectedID == id ? setSelectedID(null) : setSelectedID(id);
-                }}
+                onPress={setSelectedID(id)}
                 day={routine.day}
                 parts={routine.parts}
                 exercises={routine.exercises}
@@ -47,7 +47,9 @@ export default Scroll = ({ data }) => {
       </RoutineContainer>
     );
   };
-
+  // onPress={() => {
+  //   selectedID == id ? setSelectedID(null) : setSelectedID(id);
+  // }}
   return (
     <Container>
       <FlatList

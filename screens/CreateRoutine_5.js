@@ -129,6 +129,7 @@ const Container = styled.View`
   width: 100%;
   align-items: center;
   justify-content: space-around;
+  margin-top: 60px;
 `;
 const TitleContainer = styled.View`
   width: 90%;
