@@ -79,18 +79,21 @@ const OnBoarding = ({ navigation }) => {
   };
   const handleSubmit = () => {
     console.log("submitted");
-    fetchResult(email).then((data) => {
-      console.log(data);
-      if (data.code == 3003) {
-        navigation.navigate("CreateAccount_1", {
-          email,
-        });
-      } else {
-        navigation.navigate("Login", {
-          email,
-        });
-      }
+    navigation.navigate("CreateAccount_1", {
+      email,
     });
+    // fetchResult(email).then((data) => {
+    //   console.log(data);
+    //   if (data.code == 3003) {
+    //     navigation.navigate("CreateAccount_1", {
+    //       email,
+    //     });
+    //   } else {
+    //     navigation.navigate("Login", {
+    //       email,
+    //     });
+    //   }
+    // });
   };
   return (
     <ScreenLayout>
