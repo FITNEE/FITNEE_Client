@@ -74,22 +74,21 @@ export default function exerciseCourse_1({ navigation }) {
 	];
 
 	const timeData = [
-		{ id: 1, duration: '2' },
-		{ id: 2, duration: '5' },
-		{ id: 3, duration: '4' },
-		{ id: 4, duration: '2' },
-		{ id: 5, duration: '5' },
-		{ id: 6, duration: '2' },
-		{ id: 7, duration: '2' },
+		// { id: 1, duration: '2' },
+		// { id: 2, duration: '5' },
+		// { id: 3, duration: '4' },
+		// { id: 4, duration: '2' },
+		// { id: 5, duration: '5' },
+		// { id: 6, duration: '2' },
+		// { id: 7, duration: '2' },
 	];
 
-	//const arr = timeData.map((item, id) => item.duration)
 
 	const goToCompleteExercise = () => navigation.navigate('exerciseCourse_2');
 	const [isPlaying, setIsPlaying] = React.useState(true);
 	const [advice, setAdvice] = React.useState('');
 	const [currentId, setCurrentId] = useState(1);
-	const [oneDuration, setOneDuration] = useState(timeData[0].duration);
+	const [oneDuration, setOneDuration] = useState(timeData[0]?.duration);
 	const [i, setI] = useState(1);
 	const [key, setKey] = useState(0);
 	const [exerciseName, setExerciseName] = useState('사이드 레터럴 레이즈');
@@ -121,14 +120,14 @@ export default function exerciseCourse_1({ navigation }) {
 		const nextData = timeData.find((item) => item.id === nextId);
 		const newDuration = nextData?.duration || 0;
 		//const newDuration = timeData[nextId]?.duration || 0;
-
-    //delay 동안 쉬도록
-    setIsPlaying(false)
-    setKey((prevKey) => prevKey + 1); //타이머 리셋
-    setTimeout(() => {
-      setIsPlaying(true)
-      setOneDuration(newDuration);
-    }, 2000); 
+		
+		//delay 동안 쉬도록
+		setIsPlaying(false)
+		setKey((prevKey) => prevKey + 1); //타이머 리셋
+		setTimeout(() => {
+			setIsPlaying(true)
+			setOneDuration(newDuration);
+    	}, 2000); 
 	};
 
 	useEffect(() => {
