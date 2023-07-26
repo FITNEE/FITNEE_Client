@@ -99,7 +99,7 @@ const AddtoBtn = styled.TouchableOpacity`
     height: 24px;
 `
 
-export default function DictionaryList({ navigation }){
+export default function Dictionary_2({ navigation }){
 
     const [part, setPart] = useState(['전신', '어깨', '팔', '가슴', '등', '복근'])
     const [exerciseName, setExerciseName] = useState(['데드리프트', '데드리프트', '데드리프트', '데드리프트', '데드리프트', '데드리프트', '데드리프트', '데드리프트', '데드리프트', '데드리프트'])
@@ -125,7 +125,7 @@ export default function DictionaryList({ navigation }){
                 <ListContainer showsVerticalScrollIndicator='false'>
                 {
                     exerciseName.map((exercise) => (
-                        <ExerciseContainer onPress={()=>navigation.navigate('Detail')}>
+                        <ExerciseContainer onPress={()=>navigation.navigate('Dictionary_3')}>
                             <ExerciseLeftContainer>
                                 <ExerciseImg></ExerciseImg>
                                 <ExerciseDetailContainer>

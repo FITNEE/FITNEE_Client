@@ -296,7 +296,7 @@ const SendBtn = styled.TouchableOpacity`
     border-radius: 16px;
 `
 
-export default function DictionaryDetail(){
+export default function Dictionary_3(){
 
     const activateTabStyle = { 
         borderBottomColor: `${colors.l_main}`,

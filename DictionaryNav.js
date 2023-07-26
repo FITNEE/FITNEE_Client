@@ -1,8 +1,8 @@
 import React from 'react'
 import { createStackNavigator  } from '@react-navigation/stack'
-import DictionarySearch from './DictionarySearch'
-import DictionaryDetail from './DictionaryDetail'
-import DictionaryList from './DictionaryList'
+import Dictionary_1 from './Dictionary_1'
+import Dictionary_2 from './Dictionary_2'
+import Dictionary_3 from './Dictionary_3'
 
 const Stack = createStackNavigator()
 
@@ -13,9 +13,9 @@ export default function DictionaryNav(){
             screenOptions={{
                 headerBackTitleVisible: false,
                 headerShown: false}}>
-            <Stack.Screen name='Search' component={DictionarySearch}/>
-            <Stack.Screen name='List' component={DictionaryList}/>
-            <Stack.Screen name='Detail' component={DictionaryDetail}/>
+            <Stack.Screen name='Dictionary_1' component={Dictionary_1}/>
+            <Stack.Screen name='Dictionary_2' component={Dictionary_2}/>
+            <Stack.Screen name='Dictionary_3' component={Dictionary_3}/>
         </Stack.Navigator>
     )
 }

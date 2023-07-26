@@ -133,7 +133,7 @@ const AutoSearchText = styled.Text`
     display: inline;
 `
 
-export default function DictionarySearch( {navigation} ){
+export default function Dictionary_1( {navigation} ){
 
     const [recentKeyword, setRecentKeyword] = useState([])
     const [hotKeyword, setHotKeyword] = useState(['바벨', '머신', '프리웨이트', '덤벨', '데드리프트', '사이드 레터럴 레이즈', '크런치'])
@@ -150,7 +150,7 @@ export default function DictionarySearch( {navigation} ){
         temp = [search, ...temp],
         setRecentKeyword(temp)
 
-        navigation.navigate('List')
+        navigation.navigate('Dictionary_2')
     }
 
     const convertPage = useEffect(()=>{
