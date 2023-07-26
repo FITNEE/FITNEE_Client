@@ -116,8 +116,11 @@ const LeftTab = styled.TouchableOpacity`
     border-bottom-width: 1px;
     border-bottom-color: ${colors.grey_1};
     
-    margin-left: 24px;
-    margin-right: 16px;
+    width: 155.5px;
+    left: 24px;
+
+    z-index: 1;
+    position: absolute;
 `
 const RightTab = styled.TouchableOpacity`
     flex: 1;
@@ -126,7 +129,10 @@ const RightTab = styled.TouchableOpacity`
     border-bottom-width: 1px;
     border-bottom-color: ${colors.grey_1};
 
-    margin-right: 24px;
+    right: 24px;
+    z-index: 1;
+    position: absolute;
+    width: 155.5px;
 `
 const TabText = styled.Text`
     font-size: 15px;
@@ -216,11 +222,10 @@ const CautionDetail = styled.Text`
     font-size: 13px;
 `
 
-const ChatGroupContainer = styled.View`
-`
 const ChatContainer = styled.View`
     margin-left: 24px;
     margin-bottom: 16px;
+    margin-right: 24px;
 `
 const UserName = styled.Text`
     color: ${colors.l_main};
@@ -234,6 +239,12 @@ const MessageContainer = styled.View`
     border-radius: 12px 12px 12px 0px;
     padding: 8px 16px;
     margin-right: 151px;
+`
+const MyMessageContainer = styled.View`
+    background-color: ${colors.grey_1};
+    border-radius: 12px 12px 0px 12px;
+    padding: 8px 16px;
+    margin-left: 151px;
 `
 
 const JoinBtnContainer = styled.TouchableOpacity`
@@ -306,7 +317,7 @@ export default function DictionaryDetail(){
     const [processName, setProcessName] = useState(['안장 높낮이 조절', '시작 자세', '마무리 자세'])
     const [caution, setCaution] = useState(['허리를 과도하게 안으로 넣지 마세요.', '적절한 무게로 승모근에 무리가 가지 않도록 하세요.', '안장과 바의 위치점을 올바르게 맞춰주세요.'])
     const [userName, setUserName] = useState(['근손실', '삼대오백', '근손실', '삼대오백', '근손실', '삼대오백', '근손실', '삼대오백', '근손실', '삼대오백', '근손실', '삼대오백'])
-    const [msg, setMsg] = useState(['사레레 무게 얼마나 들 수 있어야 어깨 부자 되나요?', '무게보다는 정확한 자세가 중요합니다. 특히 처음 할 때는 큰 근육에 자극 주기가 힘드니 꾸준히 하셔야해요!', '사레레 무게 얼마나 들 수 있어야 어깨 부자 되나요?', '무게보다는 정확한 자세가 중요합니다. 특히 처음 할 때는 큰 근육에 자극 주기가 힘드니 꾸준히 하셔야해요!', '사레레 무게 얼마나 들 수 있어야 어깨 부자 되나요?', '무게보다는 정확한 자세가 중요합니다. 특히 처음 할 때는 큰 근육에 자극 주기가 힘드니 꾸준히 하셔야해요!', '사레레 무게 얼마나 들 수 있어야 어깨 부자 되나요?', '무게보다는 정확한 자세가 중요합니다. 특히 처음 할 때는 큰 근육에 자극 주기가 힘드니 꾸준히 하셔야해요!', '사레레 무게 얼마나 들 수 있어야 어깨 부자 되나요?', '무게보다는 정확한 자세가 중요합니다. 특히 처음 할 때는 큰 근육에 자극 주기가 힘드니 꾸준히 하셔야해요!', '사레레 무게 얼마나 들 수 있어야 어깨 부자 되나요?', '무게보다는 정확한 자세가 중요합니다. 특히 처음 할 때는 큰 근육에 자극 주기가 힘드니 꾸준히 하셔야해요!'])
+    const [msg, setMsg] = useState([['사레레 무게 얼마나 들 수 있어야 어깨 부자 되나요?', true], ['무게보다는 정확한 자세가 중요합니다. 특히 처음 할 때는 큰 근육에 자극 주기가 힘드니 꾸준히 하셔야해요!', true], ['사레레 무게 얼마나 들 수 있어야 어깨 부자 되나요?', true], ['무게보다는 정확한 자세가 중요합니다. 특히 처음 할 때는 큰 근육에 자극 주기가 힘드니 꾸준히 하셔야해요!', true], ['사레레 무게 얼마나 들 수 있어야 어깨 부자 되나요?', true], ['무게보다는 정확한 자세가 중요합니다. 특히 처음 할 때는 큰 근육에 자극 주기가 힘드니 꾸준히 하셔야해요!', true], ['사레레 무게 얼마나 들 수 있어야 어깨 부자 되나요?', true], ['무게보다는 정확한 자세가 중요합니다. 특히 처음 할 때는 큰 근육에 자극 주기가 힘드니 꾸준히 하셔야해요!', true], ['사레레 무게 얼마나 들 수 있어야 어깨 부자 되나요?', true], ['무게보다는 정확한 자세가 중요합니다. 특히 처음 할 때는 큰 근육에 자극 주기가 힘드니 꾸준히 하셔야해요!', true], ['사레레 무게 얼마나 들 수 있어야 어깨 부자 되나요?', true], ['무게보다는 정확한 자세가 중요합니다. 특히 처음 할 때는 큰 근육에 자극 주기가 힘드니 꾸준히 하셔야해요!', false]])
     const [chat, setChat] = useState('')
     const [changedSPIndex, setChangedSPIndex] = useState()
     const snapPoints = useMemo(()=> ['48%', '86%'], [])
@@ -317,6 +328,7 @@ export default function DictionaryDetail(){
     const onChangeChat = (payload) => setChat(payload)
     const handleSnapPress = useCallback((index) => bottomModal.current?.snapToIndex(index))
     const onTabPress = (target) => {
+        setBubbleBool(false)
         target===leftTab? 
             setLeftTabActivate(true)
         : 
@@ -327,14 +339,12 @@ export default function DictionaryDetail(){
         chat.length == 0?
             null
         :
-            (temp = [...msg, chat],
-            console.log(temp),
-            // setMsg(chat),
+            (temp = [...msg, [chat, false]],
+            setMsg(temp),
             setChat(''),
             setJoinBtnBool(true))
     }
     const ShowTextInput = () => {
-        console.log(joinBtnBool)
         if(!joinBtnBool){
             return(
                 <TextInputBG>
@@ -349,34 +359,34 @@ export default function DictionaryDetail(){
                             onChangeText={text => {setChat(text)}}
                             value={chat}
                             onSubmitEditing={onSubmitChat}
+                            autoFocus={true}
                         />
-                        <SendBtn/>
+                        <SendBtn onPress={onSubmitChat}/>
                     </TextInputContainer>
                 </TextInputBG>
             )
         }
     }
-
-    useEffect(()=>{
-        setJoinBtnBool(true)
-        const timer = setTimeout(() => {
-            setBubbleBool(false)
-        }, 3000)
-
-        return ()=>clearTimeout(timer)
+    useEffect(()=> {
+        setBubbleBool(true)
     }, [])
 
 
 
+
+
     return (
-        <SafeAreaView style={{flex: 1, backgroundColor: `${colors.grey_1}`}}>
+        <TouchableWithoutFeedback
+            onPress={()=> setBubbleBool(false)}
+        >
+            <SafeAreaView style={{flex: 1, backgroundColor: `${colors.grey_1}`}}>
             <Container>
                 <TopBtnContainer>
                     <TopBtn/>
                     <TopBtn/>
                 </TopBtnContainer>
                 <ImageContainer>
-                    <ExerciseImage resizeMode='contain'/>
+                <ExerciseImage resizeMode='contain'/>
                 </ImageContainer>
                 {
                     bubbleBool?
@@ -461,18 +471,27 @@ export default function DictionaryDetail(){
                             <>
                             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                                 <BottomSheetScrollView 
-                                    ref={chatScrollView} 
+                                    ref={ (scrollView) => this.scrollView = scrollView } 
                                     style={{paddingTop: 28}} 
                                     showsVerticalScrollIndicator={false}
-
                                 >
                                     {
-                                        userName.map((userName, i) => (
+                                        msg.map((msg, i) => (
                                             <ChatContainer>
-                                                <UserName>{userName}</UserName>
-                                                <MessageContainer>
-                                                    <WrappedText textStyle={{fontWeight: 400, fontSize: 13, color: `${colors.black}`, lineHeight: 17}}>{msg[i]}</WrappedText>
-                                                </MessageContainer>
+                                                {
+                                                    msg[1] == true?
+                                                        <><UserName>{userName[i]}</UserName>
+                                                        <MessageContainer>
+                                                            <WrappedText textStyle={{fontWeight: 400, fontSize: 13, color: `${colors.black}`, lineHeight: 17}}>{msg[0]}</WrappedText>
+                                                        </MessageContainer></>
+                                                    :
+                                                    <MyMessageContainer>
+                                                        <WrappedText 
+                                                            textStyle={{fontWeight: 400, fontSize: 13, color: `${colors.black}`, lineHeight: 17}}
+                                                            containerStyle={{alignItems: 'left'}}>{msg[0]}</WrappedText>
+                                                    </MyMessageContainer>
+                                                    
+                                                }
                                             </ChatContainer>
                                         ))
                                     }
@@ -496,7 +515,7 @@ export default function DictionaryDetail(){
 
 
             </Container>
-        </SafeAreaView>
+        </SafeAreaView></TouchableWithoutFeedback>
     )
 } 
 
@@ -513,4 +532,15 @@ export default function DictionaryDetail(){
                                             <SendBtn/>
                                         </TextInputContainer>
                                     </TextInputBG></KeyboardAvoidingView>
+
+
+                                    
+    // useEffect(()=>{
+    //     setJoinBtnBool(true)
+    //     const timer = setTimeout(() => {
+    //         setBubbleBool(false)
+    //     }, 5000)
+
+    //     return ()=>clearTimeout(timer)
+    // }, [])
 */}
