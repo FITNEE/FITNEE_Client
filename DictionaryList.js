@@ -14,10 +14,10 @@ const TopContainer = styled.View`
     align-items: center; 
 
     border-bottom-width: 1px;
-    border-bottom-color: ${colors.grey1};
+    border-bottom-color: ${colors.grey_1};
 `
 const SearchContainer = styled.View`
-    background-color: ${colors.grey1};
+    background-color: ${colors.grey_1};
 
     border-radius: 12px;
     padding: 8px 12px;
@@ -48,7 +48,7 @@ const PartContainer = styled.ScrollView`
 `
 const Part = styled.TouchableOpacity`
     border-radius: 100px;
-    background-color: ${colors.grey1};
+    background-color: ${colors.grey_1};
  
     padding: 8px 20px;
     margin-right: 8px;
@@ -73,7 +73,7 @@ const ExerciseLeftContainer = styled.View`
     align-items: center;
 `
 const ExerciseImg = styled.Image`
-    background-color: ${colors.grey1};
+    background-color: ${colors.grey_1};
     width: 60px;
     height: 60px;
     border-radius: 30px;
@@ -91,7 +91,7 @@ const ExerciseName = styled.Text`
 const ExerciseArea = styled.Text`
     font-weight: 400;
     font-size: 13px;
-    color: ${colors.grey4};
+    color: ${colors.grey_4};
 `
 const AddtoBtn = styled.TouchableOpacity`
     background-color: red;

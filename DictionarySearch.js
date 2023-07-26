@@ -28,11 +28,11 @@ const TopContainer = styled.View`
     align-items: center; 
 
     border-bottom-width: 1px;
-    border-bottom-color: ${colors.grey1};
+    border-bottom-color: ${colors.grey_1};
 `
 
 const SearchContainer = styled.View`
-    background-color: ${colors.grey1};
+    background-color: ${colors.grey_1};
     /* width: 327px;
     height: 40px; */
 
@@ -101,7 +101,7 @@ const HotKeywordContainer = styled.View`
 
 
 const KeywordContainer = styled.View`
-    background-color: ${colors.grey1}; 
+    background-color: ${colors.grey_1}; 
     border-radius: 100px;
 
     margin-right: 4px;
@@ -111,7 +111,7 @@ const KeywordContainer = styled.View`
 const Keyword = styled.Text`
     font-weight: 600;
     font-size: 13px;
-    color: ${colors.grey7}; 
+    color: ${colors.grey_7}; 
  
 `
 
@@ -123,7 +123,7 @@ const AutoSearch = styled.TouchableOpacity`
     padding: 24px 16px;
 
     border-top-width: 1px;
-    border-top-color: ${colors.grey1};
+    border-top-color: ${colors.grey_1};
 `
 const AutoSearchText = styled.Text`
     font-weight: 500;
@@ -169,7 +169,7 @@ export default function DictionarySearch( {navigation} ){
                             <Logo/>
                             <SearchInput
                                 placeholder='운동명, 부위 검색'
-                                placeholderTextColor={colors.grey4}
+                                placeholderTextColor={colors.grey_4}
                                 returnKeyType='search'
                                 onChangeText={onChangeText}
                                 value={search}

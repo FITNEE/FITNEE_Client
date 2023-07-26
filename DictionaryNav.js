@@ -13,12 +13,9 @@ export default function DictionaryNav(){
             screenOptions={{
                 headerBackTitleVisible: false,
                 headerShown: false}}>
-            <Stack.Screen name='Detail' component={DictionaryDetail}/>
-            <Stack.Screen name='List' component={DictionaryList}/>
             <Stack.Screen name='Search' component={DictionarySearch}/>
-            
-            
-
+            <Stack.Screen name='List' component={DictionaryList}/>
+            <Stack.Screen name='Detail' component={DictionaryDetail}/>
         </Stack.Navigator>
     )
 }
