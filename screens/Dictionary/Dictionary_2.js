@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { ScrollView, SafeAreaView, TouchableOpacity } from 'react-native'
 import styled from 'styled-components/native';
-import { colors } from './colors'
+import { colors } from '../../colors'
 
 
 const Container = styled.View`

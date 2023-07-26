@@ -1,8 +1,8 @@
 import React from 'react'
 import { createStackNavigator  } from '@react-navigation/stack'
-import Dictionary_1 from './Dictionary_1'
-import Dictionary_2 from './Dictionary_2'
-import Dictionary_3 from './Dictionary_3'
+import Dictionary_1 from '../screens/Dictionary/Dictionary_1'
+import Dictionary_2 from '../screens/Dictionary/Dictionary_2'
+import Dictionary_3 from '../screens/Dictionary/Dictionary_3'
 
 const Stack = createStackNavigator()
 

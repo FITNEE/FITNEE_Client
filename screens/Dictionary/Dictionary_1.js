@@ -9,7 +9,7 @@ import {
     TouchableOpacity,
     SafeAreaView
     } from 'react-native';
-import { colors } from './colors'
+import { colors } from '../../colorslors'
 
 const Container = styled.View`
     flex: 1;
