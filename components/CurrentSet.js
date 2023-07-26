@@ -31,7 +31,6 @@ const TextLine = styled.View`
 	flex-direction: row;
 	height: 20px;
 	align-items: flex-end;
-	padding-top: 4px;
 `;
 
 const Box1 = styled.View`
