@@ -1,7 +1,25 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components/native";
 
 export default function CreateRoutine_1({ navigation }) {
+  const [home, SetHome] = useState(false);
+  const [fitness, SetFitness] = useState(false);
+  const [select, SetSelect] = useState(false);
+  const homePress = () => {
+    SetHome(!home);
+    if (fitness) {
+      SetFitness(!fitness);
+    }
+  };
+  const fitnessPress = () => {
+    SetFitness(!fitness);
+    if (home) {
+      SetHome(!home);
+    }
+  };
+  useEffect(() => {
+    SetSelect(home || fitness);
+  }, [home, fitness]);
   return (
     <Container>
       <StackBar>
@@ -12,17 +30,21 @@ export default function CreateRoutine_1({ navigation }) {
         <SubTitle>장소에 맞게 운동을 추천해 드릴게요</SubTitle>
       </TitleContainer>
       <SpaceContainer>
-        <SpaceItem>
+        <SpaceItem isActive={home} onPress={homePress}>
           <SpaceImage />
           <SpaceName>집</SpaceName>
         </SpaceItem>
-        <SpaceItem>
+        <SpaceItem isActive={fitness} onPress={fitnessPress}>
           <SpaceImage />
           <SpaceName>헬스장</SpaceName>
         </SpaceItem>
       </SpaceContainer>
-      <NextButton onPress={() => navigation.push("CreateRoutine_2")}>
-        <ButtonText>다음</ButtonText>
+      <NextButton
+        isActive={select}
+        onPress={() => navigation.push("CreateRoutine_2")}
+        disabled={!select}
+      >
+        <ButtonText isActive={select}>다음</ButtonText>
       </NextButton>
     </Container>
   );
@@ -69,10 +91,9 @@ const SpaceContainer = styled.View`
 const SpaceItem = styled.TouchableOpacity`
   width: 157px;
   height: 192px;
-  background-color: gray;
+  background-color: ${(props) => (props.isActive ? "#DDDDDD" : "white")};
   border-radius: 10px;
   align-items: center;
-
   justify-content: center;
 `;
 const SpaceImage = styled.Image`
@@ -89,8 +110,10 @@ const NextButton = styled.TouchableOpacity`
   height: 52px;
   align-items: center;
   justify-content: center;
-  background-color: #dddddd;
+  background-color: ${(props) => (props.isActive ? "#BFBFBF" : "#DDDDDD")};
   border-radius: 10px;
   margin-bottom: 45px;
 `;
-const ButtonText = styled.Text``;
+const ButtonText = styled.Text`
+  color: ${(props) => (props.isActive ? "black" : "#757575")};
+`;

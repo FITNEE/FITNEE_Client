@@ -1,3 +1,4 @@
+import CreateRoutineNav from "./navigation/CreateRoutineNav";
 import AppLoading from 'expo-app-loading';
 import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
 import OnBoardingNav from './navigators/OnBoardingNav';
