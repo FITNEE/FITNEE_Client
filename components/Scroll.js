@@ -36,7 +36,9 @@ export default Scroll = ({ data }) => {
               <RoutineItem
                 key={id}
                 select={selectedID == id}
-                onPress={setSelectedID(id)}
+                onPress={() => {
+                  setSelectedID(id);
+                }}
                 day={routine.day}
                 parts={routine.parts}
                 exercises={routine.exercises}
@@ -47,9 +49,7 @@ export default Scroll = ({ data }) => {
       </RoutineContainer>
     );
   };
-  // onPress={() => {
-  //   selectedID == id ? setSelectedID(null) : setSelectedID(id);
-  // }}
+
   return (
     <Container>
       <FlatList
