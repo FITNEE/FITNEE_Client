@@ -1,5 +1,9 @@
 import AppLoading from 'expo-app-loading';
 import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
+// import OnBoardingNav from './navigation/OnBoardingNav';
+import MyPageNav from './navigators/MyPageNav';
+// import LoggedInNav from './navigation/LoggedInNav';
+import { Context, ContextProvider } from './components/ContextProvider';
 import OnBoardingNav from './navigators/OnBoardingNav';
 import LoggedInNav from './navigators/LoggedInNav';
 import { AppContext } from './components/ContextProvider';
@@ -15,21 +19,15 @@ const MyTheme = {
 
 export default function App() {
   const [loading, setLoading] = useState(true);
-  const [loggedIn, setLoggedIn] = useState(false);
-  const [colorMode, setColorMode] = useState(false);
+  const [loggedIn, setLoggedIn] = useState(true);
   const onFinish = () => setLoading(false);
   const toggleLogin = () => {
     setLoggedIn(!loggedIn);
     console.log(loggedIn);
   };
-  const toggleColorMode = () => {
-    setColorMode(!colorMode);
-  };
   const userSettings = {
     toggleLogin,
-    toggleColorMode,
     loggedIn,
-    colorMode,
   };
 
   const preload = async () => {
@@ -39,19 +37,22 @@ export default function App() {
     // }
   };
 
-  if (loading) {
-    return (
-      <AppLoading
-        startAsync={preload}
-        onError={console.warn}
-        onFinish={onFinish}
-      />
-    );
-  }
+  // if (loading) {
+  //   return (
+  //     <AppLoading
+  //       startAsync={preload}
+  //       onError={console.warn}
+  //       onFinish={onFinish}
+  //     />
+  //   );
+  // }
+
+  const [isDark, setIsDark] = useState(false);
+
   return (
-    <AppContext.Provider value={userSettings}>
+    <AppContext.Provider value={{isDark, setIsDark,toggleLogin, loggedIn}}>
       <NavigationContainer theme={MyTheme}>
-        {loggedIn ? <LoggedInNav /> : <OnBoardingNav />}
+        <LoggedInNav />
       </NavigationContainer>
     </AppContext.Provider>
   );

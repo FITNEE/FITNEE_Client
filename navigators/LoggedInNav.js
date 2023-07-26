@@ -2,6 +2,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import HomeNav from './HomeNav';
 import MyRoutineNav from './MyRoutineNav';
+import MyPageNav from './MyPageNav';
 
 const Stack = createNativeStackNavigator();
 const Tabs = createBottomTabNavigator();
