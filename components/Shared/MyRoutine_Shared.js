@@ -1,6 +1,6 @@
-import styled from 'styled-components/native';
-import { colors } from '../../colors';
-import { ScreenWidth } from '../../Shared';
+import styled from "styled-components/native";
+import { colors } from "../../colors";
+import { ScreenWidth } from "../../Shared";
 
 const HeaderContainer = styled.View`
   width: ${ScreenWidth}px;
@@ -40,10 +40,42 @@ export const Header = ({ mode, parentFunction }) => {
   };
   return (
     <HeaderContainer>
-      <Title>{mode ? '루틴커스텀' : '마이루틴'}</Title>
+      <Title>{mode ? "루틴커스텀" : "마이루틴"}</Title>
       <Button onPress={handleSubmit}>
         {mode ? <ButtonText>완료</ButtonText> : <ButtonText>설정</ButtonText>}
       </Button>
     </HeaderContainer>
   );
 };
+
+export function clamp(value, lowerBound, upperBound) {
+  "worklet";
+  return Math.max(lowerBound, Math.min(value, upperBound));
+}
+
+export function objectMove(object, from, to) {
+  "worklet";
+  const newObject = Object.assign({}, object);
+
+  for (const id in object) {
+    if (object[id] === from) {
+      newObject[id] = to;
+    }
+
+    if (object[id] === to) {
+      newObject[id] = from;
+    }
+  }
+
+  return newObject;
+}
+export function listToObject(list) {
+  const values = Object.values(list);
+  const object = {};
+  for (let i = 0; i < values.length; i++) {
+    console.log(values[i].id);
+    object[values[i].id] = i;
+  }
+
+  return object;
+}

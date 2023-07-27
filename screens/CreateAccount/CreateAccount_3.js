@@ -142,6 +142,7 @@ const CreateAccount_3 = ({ route, navigation }) => {
   const onPressBottomModal = () => bottomModal.current?.present();
 
   useEffect(() => {
+    onPressBottomModal();
     let data = [];
     data.push("150 이하");
     for (var i = 151; i < 190; i++) {
@@ -156,7 +157,6 @@ const CreateAccount_3 = ({ route, navigation }) => {
     }
     data.push("90 이상");
     setWeights(data);
-    onPressBottomModal();
   }, []);
   useEffect(() => {
     const heightInM = height / 100;
