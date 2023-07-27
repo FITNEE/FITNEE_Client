@@ -5,7 +5,7 @@ import { Button } from '../Shared';
 import { styled } from 'styled-components/native';
 import { colors } from '../colors';
 import HomeRoutines from '../components/HomeRoutines';
-import NotHomeRoutines from '../components/NotHomeRoutine';
+import NotHomeRoutine from '../components/NotHomeRoutine';
 
 const Top = styled.View`
   width: 100%;
@@ -41,7 +41,7 @@ const PremiumText = styled.Text`
 
 const Home = () => {
   //const { toggleLogin } = useContext(AppContext);
-  const [showRoutine, setShowRoutine] = useState(true);
+  const [showRoutine, setShowRoutine] = useState(false);
 
   return (
     <SafeAreaView
@@ -57,7 +57,7 @@ const Home = () => {
           <Premium><Circle/><PremiumText>PREMIUM</PremiumText></Premium>
         </Top>
         {showRoutine && <HomeRoutines/>}
-        {!showRoutine && <NotHomeRoutines/>}
+        {!showRoutine && <NotHomeRoutine/>}
     </SafeAreaView>
   );
 };

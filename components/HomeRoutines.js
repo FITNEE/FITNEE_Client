@@ -1,5 +1,4 @@
 import React from "react";
-import { View, Text } from "react-native";
 import { styled } from "styled-components/native";
 import { colors } from "../colors";
 import { Dimensions } from "react-native";
@@ -65,6 +64,7 @@ const Cards = styled.ScrollView`
     margin-top: 16px;
     width: auto;
     padding: 0px 16px;
+    margin-bottom: 48px;
 `;
 const Card = styled.View`
     width: 188px;
@@ -86,6 +86,22 @@ const ExerciseName = styled.Text`
     font-style: normal;
     font-weight: 600;
     line-height: 22.5px;
+`;
+const Button = styled.TouchableOpacity`
+    margin-left: 16px;
+    margin-right: 16px;
+    margin-bottom: 8px;
+    border-radius: 12px;
+    align-items: center;
+    justify-content: center;
+    height: 52px;
+    background-color: ${colors.grey_2};
+`;
+const ButtonText = styled.Text`
+    font-size: 17px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 25.5px;
 `;
 
 export default function HomeRoutines() {
@@ -140,6 +156,12 @@ export default function HomeRoutines() {
                     <ExerciseName>{COMMENTDATA.name}</ExerciseName>
                 </Card>
             </Cards>
+            <Button>
+                <ButtonText>운동하러 가기</ButtonText>
+            </Button>
+            <Button style={{backgroundColor: colors.grey_1}}>
+                <ButtonText>루틴 수정하기</ButtonText>
+            </Button>
         </Container>
     );
 } ;
