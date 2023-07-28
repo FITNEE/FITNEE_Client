@@ -44,7 +44,7 @@ export default function App() {
   return (
     <>
       <SafeAreaProvider>
-        <SafeAreaView style={{ flex: 1 }}>
+        <SafeAreaView style={{ flex: 1, marginTop: 48 }}>
           {SCHEDULES.map((sche) => (
             <MovableSchedule
               key={sche.id}

@@ -79,3 +79,28 @@ export function listToObject(list) {
 
   return object;
 }
+export const ComponentTitle = ({ title, subTitle }) => {
+  const TextContainer = styled.View`
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-between;
+  `;
+  const _ComponentTitle = styled.Text`
+    font-size: 17px;
+    font-weight: 600;
+  `;
+  const _ComponentSubTitle = styled.Text`
+    font-size: 13px;
+    flex: 1;
+    color: ${colors.grey_6};
+    margin-top: 2px;
+    margin-left: 8px;
+    font-weight: 300;
+  `;
+  return (
+    <TextContainer>
+      <_ComponentTitle>{title}</_ComponentTitle>
+      <_ComponentSubTitle>{subTitle}</_ComponentSubTitle>
+    </TextContainer>
+  );
+};

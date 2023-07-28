@@ -1,15 +1,21 @@
 import React, { useState } from "react";
 import styled from "styled-components/native";
 import { FlatList } from "react-native";
-import Animated, {
-  withSpring,
-  useSharedValue,
-  useAnimatedStyle,
-} from "react-native-reanimated";
-import { Header } from "../../components/Shared/MyRoutine_Shared";
+import { useSharedValue } from "react-native-reanimated";
+import {
+  ComponentTitle,
+  Header,
+} from "../../components/Shared/MyRoutine_Shared";
 import { colors } from "../../colors";
 import { ScreenWidth } from "../../Shared";
-import { MovableSchedule } from "../../components/MovableSchedule";
+import { listToObject } from "../../components/Shared/MyRoutine_Shared";
+import {
+  DayText,
+  ScheduleChanger,
+  TextContainer,
+} from "../../components/ScheduleChanger";
+import { ExerciseItem } from "../../components/ExerciseItem";
+import { ExerciseItem_Custom } from "../../components/ExerciseItem_Custom";
 
 const ScreenBase = styled.SafeAreaView`
   width: 100%;
@@ -26,150 +32,81 @@ const ContentBase = styled.View`
 const ScreenLayout = styled.View`
   width: 100%;
 `;
-const ExerciseImg = styled.View`
-  width: 60px;
-  margin-right: 16px;
-  height: 60px;
-  background-color: ${colors.grey_3};
-  border-radius: 30px;
-`;
-const ExerciseContainer = styled.View`
-  padding: 16px;
-  flex-direction: column;
-  border-radius: 12px;
-  width: ${ScreenWidth - 48}px;
-  margin-left: 24px;
-  margin-top: 8px;
-  background-color: ${colors.white};
-`;
-const DefaultContainer = styled.View`
-  justify-content: space-between;
-  align-items: center;
-  flex-direction: row;
-`;
 const FlatListContainer = styled.View`
   width: 100%;
   height: 100%;
 `;
-const ExerciseTextContainer = styled.View`
-  flex: 1;
+const DayBase = styled.View`
+  margin-top: 40px;
+  width: ${ScreenWidth - 48}px;
+  margin-left: 24px;
   flex-direction: column;
 `;
-const ExerciseTitle = styled.Text`
-  font-size: 17px;
-  font-weight: 600;
-`;
-const ExerciseSubText = styled.Text`
-  font-size: 13px;
-  margin-top: 4px;
-  color: #757575;
-`;
-const DropDown = styled.TouchableOpacity`
-  width: 40px;
-  height: 40px;
+const DayContainer = styled.View`
+  width: 35px;
+  height: 60px;
+  border-radius: 30px;
+  padding-top: 8px;
   background-color: chartreuse;
-`;
-const ExtendedContainer = styled.View`
-  width: 100%;
-  padding: 8px 16px 0px 16px;
-`;
-
-const SetContainer = styled.View`
-  flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  padding-top: 12px;
-  width: 100%;
 `;
-
-const SetsText = styled.Text`
-  font-size: 17px;
-  color: ${colors.grey_8};
-  font-weight: 400;
+const Circle = styled.View`
+  width: 24px;
+  height: 24px;
+  background-color: ${colors.grey_1};
+  margin-bottom: 5.5px;
+  border-radius: 12px;
+`;
+const ScheduleContainer = styled.View`
+  flex-direction: row;
+  padding: 24px;
+  width: 100%;
+  justify-content: space-between;
+  height: 100px;
+  align-items: center;
+  background-color: white;
 `;
 
 const MyRoutine = ({ route, navigation }) => {
+  //prettier-ignore
+  const SCHEDULES = [{ id: 0,valid: false,},{id: 1,part: "코어",valid: true,},{id: 2,valid: false,},{id: 3,valid: false,},{id: 4,part: "하체",valid: true,},{id: 5,valid: false,},{id: 6,part: "상체",valid: true,}];
+  //prettier-ignore
+  const test = [{id: 1,title: "데드리프트",subText: "전신 | 3세트 | 빈 봉",setsNum: [15, 15, 15],},{id: 2,title: "사이드 레터럴레이션",subText: "전신 | 3세트 | 빈 봉",setsNum: [15, 15, 15],},{id: 3,title: "데드리프트",subText: "전신 | 3세트 | 빈 봉",setsNum: [15, 15, 15],},{id: 4,title: "데드리프트",subText: "전신 | 3세트 | 빈 봉",setsNum: [15, 15, 15],},{id: 5,title: "데드리프트",subText: "전신 | 3세트 | 빈 봉",setsNum: [15, 15, 15],},{id: 6,title: "데드리프트",subText: "전신 | 3세트 | 빈 봉",setsNum: [15, 15, 15],},{id: 7,title: "데드리프트",subText: "전신 | 3세트 | 빈 봉",setsNum: [15, 15, 15],},];
+  const days = ["월", "화", "수", "목", "금", "토", "일"];
   const [selectedId, setSelectedId] = useState(null);
   const [mode, setMode] = useState(false);
-  const positions = useSharedValue(listToObject(Schedules));
-
-  const test = [
-    {
-      id: 1,
-      title: "데드리프트",
-      subText: "전신 | 3세트 | 빈 봉",
-      setsNum: [15, 15, 15],
-    },
-    {
-      id: 2,
-      title: "사이드 레터럴레이션",
-      subText: "전신 | 3세트 | 빈 봉",
-      setsNum: [15, 15, 15],
-    },
-    {
-      id: 3,
-      title: "데드리프트",
-      subText: "전신 | 3세트 | 빈 봉",
-      setsNum: [15, 15, 15],
-    },
-    {
-      id: 4,
-      title: "데드리프트",
-      subText: "전신 | 3세트 | 빈 봉",
-      setsNum: [15, 15, 15],
-    },
-    {
-      id: 5,
-      title: "데드리프트",
-      subText: "전신 | 3세트 | 빈 봉",
-      setsNum: [15, 15, 15],
-    },
-    {
-      id: 6,
-      title: "데드리프트",
-      subText: "전신 | 3세트 | 빈 봉",
-      setsNum: [15, 15, 15],
-    },
-    {
-      id: 7,
-      title: "데드리프트",
-      subText: "전신 | 3세트 | 빈 봉",
-      setsNum: [15, 15, 15],
-    },
-  ];
+  const positions = useSharedValue(listToObject(SCHEDULES));
+  const today = 4;
+  const routine = [false, true, false, false, true, true, false];
   const toggleMode = () => {
     setMode(!mode);
   };
+
   const renderItem = ({ item }) => {
     return (
       <>
-        <ExerciseContainer>
-          <DefaultContainer>
-            <ExerciseImg />
-            <ExerciseTextContainer>
-              <ExerciseTitle>{item.title}</ExerciseTitle>
-              <ExerciseSubText>{item.subText}</ExerciseSubText>
-            </ExerciseTextContainer>
-            <DropDown
-              onPress={() => {
-                selectedId == item.id
-                  ? setSelectedId("")
-                  : setSelectedId(item.id);
-              }}
+        {mode ? (
+          <>
+            <ExerciseItem_Custom
+              id={item.id}
+              setsNum={item.setsNum}
+              title={item.title}
+              subText={item.subText}
+              selectedId={selectedId}
+              setSelectedId={setSelectedId}
             />
-          </DefaultContainer>
-          {selectedId == item.id && (
-            <ExtendedContainer>
-              {item.setsNum.map((item, id) => (
-                <SetContainer id style={{ fontWeight: 600 }}>
-                  <SetsText>{id + 1}</SetsText>
-                  <SetsText>-</SetsText>
-                  <SetsText>{item}회</SetsText>
-                </SetContainer>
-              ))}
-            </ExtendedContainer>
-          )}
-        </ExerciseContainer>
+          </>
+        ) : (
+          <ExerciseItem
+            id={item.id}
+            setsNum={item.setsNum}
+            title={item.title}
+            subText={item.subText}
+            selectedId={selectedId}
+            setSelectedId={setSelectedId}
+          />
+        )}
       </>
     );
   };
@@ -177,34 +114,51 @@ const MyRoutine = ({ route, navigation }) => {
     <ScreenBase>
       <Header mode={mode} parentFunction={toggleMode} />
       {mode ? (
-        <Animated.View
-          style={{
-            flex: 1,
-            position: "relative",
-            backgroundColor: "white",
-          }}
-          contentContainerStyle={{
-            height: 60,
-          }}
-        >
-          {Schedules.map((sche) => (
-            <MovableSchedule
-              key={sche.id}
-              id={sche.id}
-              part={sche.part}
-              positions={positions}
-              leftBound={10}
-              day={sche.day}
-              scheduleCount={sche.length}
-            />
-          ))}
-        </Animated.View>
+        <DayBase>
+          <ComponentTitle
+            title="요일변경"
+            subTitle="루틴을 원하는 요일에 끌어다 놓을 수 있어요"
+          />
+          <ScheduleChanger
+            SCHEDULES={SCHEDULES}
+            days={days}
+            positions={positions}
+            isCustom={mode}
+          />
+        </DayBase>
       ) : (
-        <SetContainer style={{ fontWeight: 600 }}>
-          <SetsText>hi</SetsText>
-          <SetsText>-</SetsText>
-          <SetsText>회</SetsText>
-        </SetContainer>
+        <ScheduleContainer>
+          <TextContainer>
+            {days.map((item, id) => (
+              <DayContainer
+                style={
+                  id == today
+                    ? { backgroundColor: colors.grey_7 }
+                    : { backgroundColor: colors.white }
+                }
+              >
+                <DayText
+                  style={
+                    id == today
+                      ? { color: colors.white }
+                      : { color: colors.black }
+                  }
+                >
+                  {item}
+                </DayText>
+                {routine[id] == true && (
+                  <Circle
+                    style={
+                      id == today
+                        ? { backgroundColor: colors.white }
+                        : { backgroundColor: colors.grey_3 }
+                    }
+                  />
+                )}
+              </DayContainer>
+            ))}
+          </TextContainer>
+        </ScheduleContainer>
       )}
 
       <ContentBase>

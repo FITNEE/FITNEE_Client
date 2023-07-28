@@ -13,8 +13,8 @@ export default function MyRoutineNav() {
         headerBackTitleVisible: false,
       }}
     >
-      {/* <Stack.Screen name='MyRoutine' component={MyRoutine} /> */}
-      <Stack.Screen name="Test" component={Test} />
+      <Stack.Screen name="MyRoutine" component={MyRoutine} />
+      {/* <Stack.Screen name="Test" component={Test} /> */}
     </Stack.Navigator>
   );
 }
