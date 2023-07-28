@@ -82,6 +82,7 @@ export function listToObject(list) {
 export const ComponentTitle = ({ title, subTitle }) => {
   const TextContainer = styled.View`
     flex-direction: row;
+    margin-top: 40px;
     width: 100%;
     justify-content: space-between;
   `;

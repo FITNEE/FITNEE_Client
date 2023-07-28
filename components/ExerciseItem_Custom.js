@@ -37,7 +37,6 @@ const ExerciseContainer = styled.View`
   flex-direction: column;
   border-radius: 12px;
   width: ${ScreenWidth - 48}px;
-  margin-left: 24px;
   margin-top: 16px;
   background-color: ${colors.white};
 `;

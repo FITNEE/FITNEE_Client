@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components/native";
-import { FlatList } from "react-native";
+import { FlatList, ScrollView } from "react-native";
 import { useSharedValue } from "react-native-reanimated";
 import {
   ComponentTitle,
@@ -36,11 +36,9 @@ const FlatListContainer = styled.View`
   width: 100%;
   height: 100%;
 `;
-const DayBase = styled.View`
-  margin-top: 40px;
+const ScrollLayout = styled.View`
   width: ${ScreenWidth - 48}px;
   margin-left: 24px;
-  flex-direction: column;
 `;
 const DayContainer = styled.View`
   width: 35px;
@@ -85,48 +83,20 @@ const MyRoutine = ({ route, navigation }) => {
 
   const renderItem = ({ item }) => {
     return (
-      <>
-        {mode ? (
-          <>
-            <ExerciseItem_Custom
-              id={item.id}
-              setsNum={item.setsNum}
-              title={item.title}
-              subText={item.subText}
-              selectedId={selectedId}
-              setSelectedId={setSelectedId}
-            />
-          </>
-        ) : (
-          <ExerciseItem
-            id={item.id}
-            setsNum={item.setsNum}
-            title={item.title}
-            subText={item.subText}
-            selectedId={selectedId}
-            setSelectedId={setSelectedId}
-          />
-        )}
-      </>
+      <ExerciseItem
+        id={item.id}
+        setsNum={item.setsNum}
+        title={item.title}
+        subText={item.subText}
+        selectedId={selectedId}
+        setSelectedId={setSelectedId}
+      />
     );
   };
   return (
     <ScreenBase>
       <Header mode={mode} parentFunction={toggleMode} />
-      {mode ? (
-        <DayBase>
-          <ComponentTitle
-            title="요일변경"
-            subTitle="루틴을 원하는 요일에 끌어다 놓을 수 있어요"
-          />
-          <ScheduleChanger
-            SCHEDULES={SCHEDULES}
-            days={days}
-            positions={positions}
-            isCustom={mode}
-          />
-        </DayBase>
-      ) : (
+      {!mode && (
         <ScheduleContainer>
           <TextContainer>
             {days.map((item, id) => (
@@ -160,19 +130,49 @@ const MyRoutine = ({ route, navigation }) => {
           </TextContainer>
         </ScheduleContainer>
       )}
-
-      <ContentBase>
-        <ScreenLayout>
-          <FlatListContainer>
-            <FlatList
-              showsVerticalScrollIndicator
-              data={test}
-              keyExtractor={(test) => test.id}
-              renderItem={renderItem}
+      {mode ? (
+        <ScrollView style={{ width: "100%" }}>
+          <ScrollLayout>
+            <ComponentTitle
+              title="요일변경"
+              subTitle="루틴을 원하는 요일에 끌어다 놓을 수 있어요"
             />
-          </FlatListContainer>
-        </ScreenLayout>
-      </ContentBase>
+            <ScheduleChanger
+              SCHEDULES={SCHEDULES}
+              days={days}
+              positions={positions}
+              isCustom={mode}
+            />
+            <ComponentTitle
+              title="요일변경"
+              subTitle="루틴을 원하는 요일에 끌어다 놓을 수 있어요"
+            />
+            {test.map((item) => (
+              <ExerciseItem_Custom
+                id={item.id}
+                setsNum={item.setsNum}
+                title={item.title}
+                subText={item.subText}
+                selectedId={selectedId}
+                setSelectedId={setSelectedId}
+              />
+            ))}
+          </ScrollLayout>
+        </ScrollView>
+      ) : (
+        <ContentBase>
+          <ScreenLayout>
+            <FlatListContainer>
+              <FlatList
+                showsVerticalScrollIndicator
+                data={test}
+                keyExtractor={(test) => test.id}
+                renderItem={renderItem}
+              />
+            </FlatListContainer>
+          </ScreenLayout>
+        </ContentBase>
+      )}
     </ScreenBase>
   );
 };

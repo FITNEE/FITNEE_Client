@@ -67,6 +67,7 @@ export const ExerciseItem = ({
   selectedId,
   setSelectedId,
 }) => {
+  console.log(setsNum);
   return (
     <ExerciseContainer>
       <DefaultContainer>
@@ -77,7 +78,7 @@ export const ExerciseItem = ({
         </ExerciseTextContainer>
         <DropDown
           onPress={() => {
-            selectedId == id ? setSelectedId("") : setSelectedId(item.id);
+            selectedId == id ? setSelectedId("") : setSelectedId(id);
           }}
         />
       </DefaultContainer>
