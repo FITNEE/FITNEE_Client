@@ -3,6 +3,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import HomeNav from './HomeNav';
 import MyRoutineNav from './MyRoutineNav';
 import MyPageNav from './MyPageNav';
+import DictionaryNav from './DictionaryNav'
 
 const Stack = createNativeStackNavigator();
 const Tabs = createBottomTabNavigator();
@@ -29,9 +30,7 @@ export default function LoggedInNav() {
       <Tabs.Screen name='HomeNav'>{() => <HomeNav />}</Tabs.Screen>
       <Tabs.Screen name='MyRoutineNav'>{() => <MyRoutineNav />}</Tabs.Screen>
       <Tabs.Screen name='ExerciseNav'>{() => <ExerciseNav />}</Tabs.Screen>
-      <Tabs.Screen name='ExerciseDictNav'>
-        {() => <ExerciseDictNav />}
-      </Tabs.Screen>
+      <Tabs.Screen name='DictionaryNav'>{() => <DictionaryNav />}</Tabs.Screen>
       <Tabs.Screen name='MyPageNav'>{() => <MyPageNav />}</Tabs.Screen>
     </Tabs.Navigator>
   );
