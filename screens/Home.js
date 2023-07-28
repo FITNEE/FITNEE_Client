@@ -16,20 +16,20 @@ const Top = styled.View`
 const Logo = styled.Image`
   width: 88px;
   height: 28px;
-  background-color: pink;
+  background-color: ${colors.grey_2};
 `;
 const Premium = styled.View`
   padding: 6px 12px 6px 6px;
   gap: 4px;
   border-radius: 100px;
   flex-direction: row;
-  background-color: ${colors.grey_2};
+  background-color: ${colors.grey_3};
   align-items: center;
 `;
 const Circle = styled.View`
   width: 20px;
   height: 20px;
-  background-color: pink;
+  background-color: ${colors.green};
   border-radius: 20px;
 `;
 const PremiumText = styled.Text`
@@ -41,7 +41,7 @@ const PremiumText = styled.Text`
 
 const Home = () => {
   //const { toggleLogin } = useContext(AppContext);
-  const [showRoutine, setShowRoutine] = useState(false);
+  const [showRoutine, SetShowRoutine] = useState(false);
 
   return (
     <SafeAreaView

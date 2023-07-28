@@ -4,89 +4,39 @@ import { styled } from "styled-components/native";
 import { colors } from "../colors";
 import { Dimensions } from "react-native";
 
-const windowWidth = Dimensions.get('window').width;
+const windowHeight = Dimensions.get('window').height;
 
 const Container = styled.View`
     width: 100%;
 `;
+const EmptyImage = styled.Image`
+    margin-top: ${windowHeight/6};
+    width: 125px;
+    height: 125px;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 62.5px;
+    background-color: ${colors.white};
+`;
 const TitleBlock = styled.View`
-    width: 100%;
-    margin-top: 66px;
+    margin-top: 16px;
     margin-bottom: 40px;
-    padding: 0px 24px;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
 `;
 const Title = styled.Text`
     font-size: 24px;
     font-style: normal;
     font-weight: 600;
     line-height: 33.6px;
-`;
-const Day = styled.View`
-    width: 64px;
-    height: 64px;
-    border-radius: 100px;
-    background-color: ${colors.grey_3};
-    justify-content: center;
-    align-items: center;
-`;
-const DayText = styled.Text`
+    height: 32px;
     text-align: center;
-    font-size: 15px;
+    margin-bottom: 10px;
+`;
+const SubText = styled.Text`
+    font-size: 13px;
     font-style: normal;
     font-weight: 400;
-    line-height: 22.5px;
-`;
-const SectionBlock = styled.View`
-    margin: 0px 24px;
-    padding: 7px 20px;
-    gap: 10px;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    background-color: ${colors.grey_2};
-    border-radius: 10px;
-`;
-
-const Section = styled.View`
-    align-items: center;
-    width: ${windowWidth/2-44}px;
-`;
-const SectionText = styled.Text`
-`;
-const Bar = styled.View`
-    width: 1px;
-    height: 26px;
-    background-color: ${colors.grey_4};
-`;
-const Cards = styled.ScrollView`
-    margin-top: 16px;
-    width: auto;
-    padding: 0px 16px;
-    margin-bottom: 48px;
-`;
-const Card = styled.View`
-    width: 188px;
-    height: 188px;
-    border-radius: 20px;
-    background-color: ${colors.grey_3};
-    margin: 0px 8px;
-    align-items: center;
-`;
-const ExerciseView = styled.Image`
-    width: 128px;
-    height: 128px;
-    border-radius: 100px;
-    background-color: ${colors.white};
-    margin: 16px 0px 10px 0px;
-`;
-const ExerciseName = styled.Text`
-    font-size: 15px;
-    font-style: normal;
-    font-weight: 600;
-    line-height: 22.5px;
+    line-height: 19.5px;
+    text-align: center;
 `;
 const Button = styled.TouchableOpacity`
     margin-left: 16px;
@@ -96,13 +46,14 @@ const Button = styled.TouchableOpacity`
     align-items: center;
     justify-content: center;
     height: 52px;
-    background-color: ${colors.grey_2};
+    background-color: ${colors.l_main};
 `;
 const ButtonText = styled.Text`
     font-size: 17px;
     font-style: normal;
     font-weight: 600;
     line-height: 25.5px;
+    color: ${colors.white};
 `;
 
 export default function NotHomeRoutine() {
@@ -116,52 +67,14 @@ export default function NotHomeRoutine() {
     
     return(
         <Container>
+            <EmptyImage/>
             <TitleBlock>
-                <Title>오늘 예정된{"\n"}운동 루틴이 있어요</Title>
-                <Day>
-                    <DayText>DAY3</DayText>
-                </Day>
+                <Title>등록된 운동루틴이 없어요</Title>
+                <SubText>간단한 질문에 답변하여{"\n"}나만의 루틴을 만들어보세요!</SubText>
             </TitleBlock>
-            <SectionBlock>
-                <Section>
-                    <SectionText>{'하체, 코어'}</SectionText>
-                </Section>
-                <Bar/>
-                <Section>
-                    <SectionText>{6}개의 운동</SectionText>
-                </Section>
-            </SectionBlock>
-            <Cards horizontal={true} showsHorizontalScrollIndicator={false}>
-                <Card>
-                    <ExerciseView/>
-                    <ExerciseName>{COMMENTDATA.name}데드리프트</ExerciseName>
-                </Card>
-                <Card>
-                    <ExerciseView/>
-                    <ExerciseName>{COMMENTDATA.name}</ExerciseName>
-                </Card>
-                <Card>
-                    <ExerciseView/>
-                    <ExerciseName>{COMMENTDATA.name}</ExerciseName>
-                </Card>
-                <Card>
-                    <ExerciseView/>
-                    <ExerciseName>{COMMENTDATA.name}</ExerciseName>
-                </Card>
-                <Card>
-                    <ExerciseView/>
-                    <ExerciseName>{COMMENTDATA.name}</ExerciseName>
-                </Card>
-                <Card>
-                    <ExerciseView/>
-                    <ExerciseName>{COMMENTDATA.name}</ExerciseName>
-                </Card>
-            </Cards>
+           
             <Button>
-                <ButtonText>운동하러 가기</ButtonText>
-            </Button>
-            <Button style={{backgroundColor: colors.grey_1}}>
-                <ButtonText>루틴 수정하기</ButtonText>
+                <ButtonText>AI 루틴 생성하기</ButtonText>
             </Button>
         </Container>
     );
