@@ -56,8 +56,7 @@ export default function App() {
   return (
     <AppContext.Provider value={{ isDark, setIsDark, toggleLogin, loggedIn }}>
       <NavigationContainer theme={MyTheme}>
-        {/* <LoggedInNav /> */}
-        <ExerciseCourseNav />
+        <LoggedInNav />
       </NavigationContainer>
     </AppContext.Provider>
   );
