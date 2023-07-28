@@ -1,9 +1,10 @@
-import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react'
+import React, { useState, useRef, useEffect, useCallback, useMemo, useContext } from 'react'
 import styled from 'styled-components/native'
 import { colors } from '../../colors'
 import { View, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, Platform, ScrollView, TouchableOpacity, SafeAreaView, Dimensions, Touchable } from 'react-native'
 import WrappedText from 'react-native-wrapped-text'
 import BottomSheet, { BottomSheetScrollView, BottomSheetTextInput } from "@gorhom/bottom-sheet";
+import { AppContext } from '../../components/ContextProvider';
 
 const SCREEN_WIDTH = Dimensions.get('screen').width;
 
@@ -51,11 +52,7 @@ const TitleContainer = styled.View`
 const NameContainer = styled.View`
     margin-right: 40px;
 `
-const AreaText = styled.Text`
-    color: ${colors.l_main};
-    font-weight: 400;
-    font-size: 13px;
-`
+
 const TitleText = styled.Text`
     color: ${colors.black};
     font-weight: 600;
@@ -71,7 +68,7 @@ const Bubble = styled.View`
     position: absolute;
     width: 154px;
     height: 50px;
-    background: #363636;
+    background: ${colors.grey_9};
     border-radius: 12px;
     align-items: center;
     justify-content: center;
@@ -89,7 +86,7 @@ const BubbleArrow = styled.View`
     right: 11px;
     height: 0;
     border: 8px solid transparent;
-    border-top-color: #363636;
+    border-top-color: ${colors.grey_9};
 	border-bottom: 0;
 `;
 const BubbleText = styled.Text`
@@ -140,7 +137,7 @@ const TabText = styled.Text`
     padding: 10px 0px;
 `
 const NotReadDot = styled.View`
-    background-color: '#FF3E49';
+    background-color: ${colors.red};
     width: 6px;
     height: 6px;
     border-radius: 3px;
@@ -162,11 +159,7 @@ const Process = styled.View`
 
     flex-direction: row;
 `
-const ProcessNum = styled.Text`
-    color: ${colors.l_main};
-    font-weight: 600;
-    font-size: 15px;
-`
+
 const ProcessContent = styled.View`
     align-items: flex-start;
     margin-left: 8px;
@@ -207,15 +200,6 @@ const CautionDetailContainer = styled.View`
     flex-direction: row;
     align-items: center;   
 `
-const CautionDot = styled.View`
-    background-color: #D9D9D9;
-    width: 12px;
-    height: 12px;
-    border-radius: 6px;
-    margin-right: 4px;
-    margin-top: 4px;
-    margin-bottom: 4px;
-`
 const CautionDetail = styled.Text`
     color: ${colors.black};
     font-weight: 400;
@@ -227,38 +211,24 @@ const ChatContainer = styled.View`
     margin-bottom: 16px;
     margin-right: 24px;
 `
-const UserName = styled.Text`
-    color: ${colors.l_main};
-    font-size: 11px;
-    font-weight: 400;
-    margin-left: 8px;
-    margin-bottom: 5px;
+
+const MessageWrapper = styled.View`
+    align-items: flex-start;
 `
 const MessageContainer = styled.View`
     background-color: ${colors.grey_1};
     border-radius: 12px 12px 12px 0px;
     padding: 8px 16px;
-    margin-right: 151px;
+    max-width: 200px;
 `
 const MyMessageContainer = styled.View`
     background-color: ${colors.grey_1};
     border-radius: 12px 12px 0px 12px;
     padding: 8px 16px;
-    margin-left: 151px;
+    max-width: 200px;
 `
-
-const JoinBtnContainer = styled.TouchableOpacity`
-    background-color: ${colors.grey_2};
-    border-radius:  100px;
-    padding: 10px 14px;
-    width: 123px;
-
-    flex-direction: row;
-    align-items: center;
-
-    position: absolute;
-    left: ${`${SCREEN_WIDTH/2-123/2}px`};
-    bottom: 5px;
+const MyMessageWrapper = styled.View`
+    align-items: flex-end;
 `
 const JoinImage = styled.Image`
     background-color: ${colors.red};
@@ -268,7 +238,7 @@ const JoinImage = styled.Image`
 `
 const JoinText = styled.Text`
     font-weight: 600;
-    color: ${colors.grey_7};
+    color: ${colors.white};
     font-size: 13;
 `
 const TextInputBG = styled.View`
@@ -289,17 +259,60 @@ const TextInput = styled.TextInput`
     width: 300px;
     margin-left: 15px;
 `
-const SendBtn = styled.TouchableOpacity`
-    background-color: ${colors.grey_1};
+
+
+export default function Dictionary_3(){
+
+    const {isDark} = useContext(AppContext);
+
+    const ProcessNum = styled.Text`
+    color: ${ isDark ? colors.d_main : colors.l_main};
+    font-weight: 600;
+    font-size: 15px;
+    `
+    const UserName = styled.Text`
+    color: ${ isDark ? colors.d_main : colors.l_main};
+    font-size: 11px;
+    font-weight: 400;
+    margin-left: 8px;
+    margin-bottom: 5px;
+    `
+    const AreaText = styled.Text`
+    color: ${ isDark ? colors.d_main : colors.l_main};
+    font-weight: 400;
+    font-size: 13px;
+    `
+    const CautionDot = styled.View`
+    background-color: ${ isDark ? colors.d_sub_1 : colors.l_sub_1};
+    width: 12px;
+    height: 12px;
+    border-radius: 6px;
+    margin-right: 4px;
+    margin-top: 4px;
+    margin-bottom: 4px;
+    `
+    const JoinBtnContainer = styled.TouchableOpacity`
+    background-color: ${ isDark ? colors.d_main : colors.l_main};
+    border-radius:  100px;
+    padding: 10px 14px;
+    width: 123px;
+
+    flex-direction: row;
+    align-items: center;
+
+    position: absolute;
+    left: ${`${SCREEN_WIDTH/2-123/2}px`};
+    bottom: 24px;
+    `
+    const SendBtn = styled.TouchableOpacity`
+    background-color: ${ isDark ? colors.d_main : colors.l_main};
     width: 32px;
     height: 32px;
     border-radius: 16px;
 `
 
-export default function Dictionary_3(){
-
     const activateTabStyle = { 
-        borderBottomColor: `${colors.l_main}`,
+        borderBottomColor: `${ isDark ? colors.d_main : colors.l_main}`,
         fontWeight: 600, // 이거 적용 안 된다
     }
 
@@ -320,7 +333,7 @@ export default function Dictionary_3(){
     const [msg, setMsg] = useState([['사레레 무게 얼마나 들 수 있어야 어깨 부자 되나요?', true], ['무게보다는 정확한 자세가 중요합니다. 특히 처음 할 때는 큰 근육에 자극 주기가 힘드니 꾸준히 하셔야해요!', true], ['사레레 무게 얼마나 들 수 있어야 어깨 부자 되나요?', true], ['무게보다는 정확한 자세가 중요합니다. 특히 처음 할 때는 큰 근육에 자극 주기가 힘드니 꾸준히 하셔야해요!', true], ['사레레 무게 얼마나 들 수 있어야 어깨 부자 되나요?', true], ['무게보다는 정확한 자세가 중요합니다. 특히 처음 할 때는 큰 근육에 자극 주기가 힘드니 꾸준히 하셔야해요!', true], ['사레레 무게 얼마나 들 수 있어야 어깨 부자 되나요?', true], ['무게보다는 정확한 자세가 중요합니다. 특히 처음 할 때는 큰 근육에 자극 주기가 힘드니 꾸준히 하셔야해요!', true], ['사레레 무게 얼마나 들 수 있어야 어깨 부자 되나요?', true], ['무게보다는 정확한 자세가 중요합니다. 특히 처음 할 때는 큰 근육에 자극 주기가 힘드니 꾸준히 하셔야해요!', true], ['사레레 무게 얼마나 들 수 있어야 어깨 부자 되나요?', true], ['무게보다는 정확한 자세가 중요합니다. 특히 처음 할 때는 큰 근육에 자극 주기가 힘드니 꾸준히 하셔야해요!', false]])
     const [chat, setChat] = useState('')
     const [changedSPIndex, setChangedSPIndex] = useState()
-    const snapPoints = useMemo(()=> ['48%', '86%'], [])
+    const snapPoints = useMemo(()=> ['45%', '96%'], [])
     const [bubbleBool, setBubbleBool] = useState(true)
     const [joinBtnBool, setJoinBtnBool] = useState(true)
 
@@ -372,9 +385,6 @@ export default function Dictionary_3(){
     }, [])
 
 
-
-
-
     return (
         <TouchableWithoutFeedback
             onPress={()=> setBubbleBool(false)}
@@ -405,6 +415,7 @@ export default function Dictionary_3(){
                     enablePanDownToClose={false}
                     onChange={index=> setChangedSPIndex(index)}
                     keyboardBehavior='extend'
+                    onPress={()=> setBubbleBool(false)}
                 >
                     <DictionaryContainer>
                         <TitleContainer>
@@ -480,17 +491,20 @@ export default function Dictionary_3(){
                                             <ChatContainer>
                                                 {
                                                     msg[1] == true?
-                                                        <><UserName>{userName[i]}</UserName>
-                                                        <MessageContainer>
-                                                            <WrappedText textStyle={{fontWeight: 400, fontSize: 13, color: `${colors.black}`, lineHeight: 17}}>{msg[0]}</WrappedText>
-                                                        </MessageContainer></>
+                                                        <MessageWrapper>
+                                                            <UserName>{userName[i]}</UserName>
+                                                            <MessageContainer>
+                                                                <WrappedText textStyle={{fontWeight: 400, fontSize: 13, color: `${colors.black}`, lineHeight: 17}}>{msg[0]}</WrappedText>
+                                                            </MessageContainer>
+                                                        </MessageWrapper>
                                                     :
-                                                    <MyMessageContainer>
-                                                        <WrappedText 
-                                                            textStyle={{fontWeight: 400, fontSize: 13, color: `${colors.black}`, lineHeight: 17}}
-                                                            containerStyle={{alignItems: 'left'}}>{msg[0]}</WrappedText>
-                                                    </MyMessageContainer>
-                                                    
+                                                        <MyMessageWrapper>
+                                                            <MyMessageContainer>
+                                                                <WrappedText 
+                                                                    textStyle={{fontWeight: 400, fontSize: 13, color: `${colors.black}`, lineHeight: 17}}
+                                                                    containerStyle={{alignItems: 'left'}}>{msg[0]}</WrappedText>
+                                                            </MyMessageContainer>
+                                                        </MyMessageWrapper>
                                                 }
                                             </ChatContainer>
                                         ))
@@ -518,29 +532,3 @@ export default function Dictionary_3(){
         </SafeAreaView></TouchableWithoutFeedback>
     )
 } 
-
-{/**
-
-                                    <KeyboardAvoidingView><TextInputBG>
-                                        <TextInputContainer>
-                                            <TextInput
-                                                type="text"
-                                                onChangeText={text => {setChat(text)}}
-                                                value={chat}
-                                                onSubmitEditing={onSubmitChat}
-                                            />
-                                            <SendBtn/>
-                                        </TextInputContainer>
-                                    </TextInputBG></KeyboardAvoidingView>
-
-
-                                    
-    // useEffect(()=>{
-    //     setJoinBtnBool(true)
-    //     const timer = setTimeout(() => {
-    //         setBubbleBool(false)
-    //     }, 5000)
-
-    //     return ()=>clearTimeout(timer)
-    // }, [])
-*/}

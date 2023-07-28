@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import styled from 'styled-components/native';
 import {
     TextInput, 
@@ -9,7 +9,10 @@ import {
     TouchableOpacity,
     SafeAreaView
     } from 'react-native';
-import { colors } from '../../colorslors'
+import { colors } from '../../colors'
+import { AppContext } from '../../components/ContextProvider';
+
+
 
 const Container = styled.View`
     flex: 1;
@@ -19,9 +22,6 @@ const Container = styled.View`
 `
 
 const TopContainer = styled.View`
-    /* width: 100%;
-    height: 56px; */
-
     padding: 8px 24px;
 
     justify-content: center;
@@ -33,20 +33,15 @@ const TopContainer = styled.View`
 
 const SearchContainer = styled.View`
     background-color: ${colors.grey_1};
-    /* width: 327px;
-    height: 40px; */
-
     border-radius: 12px;
-
     flex-direction: row;
     align-items: center;
-
     padding: 8px 12px;
 `
 const Logo = styled.Image`
     width: 24px;
     height: 24px;
-    background-color: red;
+    background-color: ${colors.red};
 
     margin-right: 12px;
 `
@@ -57,7 +52,6 @@ const SearchInput = styled.TextInput`
 
     width: 268px;
 `
-
 
 const BottomContainer = styled.View`
     padding: 40px 22px; 
@@ -80,8 +74,6 @@ const RecentKeywordContainer = styled.View`
     flex-direction: row;
     flex-wrap: wrap;
 `
-
-
 const HotContainer =  styled.View`
     height: 123px;
     width: 100%;
@@ -112,7 +104,6 @@ const Keyword = styled.Text`
     font-weight: 600;
     font-size: 13px;
     color: ${colors.grey_7}; 
- 
 `
 
 const AutoSearchContainer = styled.ScrollView`
@@ -129,12 +120,12 @@ const AutoSearchText = styled.Text`
     font-weight: 500;
     font-size: 15px;
     color: ${colors.black}; 
-
     display: inline;
 `
 
 export default function Dictionary_1( {navigation} ){
 
+    const { isDark } = useContext( AppContext )
     const [recentKeyword, setRecentKeyword] = useState([])
     const [hotKeyword, setHotKeyword] = useState(['바벨', '머신', '프리웨이트', '덤벨', '데드리프트', '사이드 레터럴 레이즈', '크런치'])
     const [search, setSearch] = useState('')
@@ -146,11 +137,16 @@ export default function Dictionary_1( {navigation} ){
     const onChangeText = (payload) => setSearch(payload)
     const onSubmitEditing = () => {
         let temp = [...recentKeyword]
-        recentKeyword.length === 3? temp = temp.slice(0, 2) : null
-        temp = [search, ...temp],
-        setRecentKeyword(temp)
 
-        navigation.navigate('Dictionary_2')
+        search.length == 0? 
+            null
+        :
+        (  
+            recentKeyword.length === 3? temp = temp.slice(0, 2) : null,
+            temp = [search, ...temp],
+            setRecentKeyword(temp),
+            navigation.navigate('Dictionary_2')
+        )
     }
 
     const convertPage = useEffect(()=>{
@@ -206,8 +202,9 @@ export default function Dictionary_1( {navigation} ){
                             </HotKeywordContainer>
                         </HotContainer>
                     </BottomContainer>}
-                    { isSearching && <AutoSearchContainer>
-                        <AutoSearch onPress={()=>navigation.navigate('Detail')}>
+                    { isSearching && <AutoSearchContainer> 
+                        {/* 라이트모드 다크모드 컬러 설정 필요 */}
+                        <AutoSearch onPress={()=>navigation.navigate('Dictionary_3')}>
                             <AutoSearchText style={{color: '#9747FF'}}>사
                                 <AutoSearchText>이드 레터럴 라이즈</AutoSearchText>
                             </AutoSearchText>
