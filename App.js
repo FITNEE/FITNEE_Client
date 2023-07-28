@@ -3,23 +3,11 @@ import AppLoading from "expo-app-loading";
 import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
 // import OnBoardingNav from './navigation/OnBoardingNav';
 import MyPageNav from "./navigators/MyPageNav";
-// import LoggedInNav from './navigation/LoggedInNav';
 import { Context, ContextProvider } from "./components/ContextProvider";
 import OnBoardingNav from "./navigators/OnBoardingNav";
 import LoggedInNav from "./navigators/LoggedInNav";
 import { AppContext } from "./components/ContextProvider";
 import { useState } from "react";
-import ExerciseCourseNav, {
-  ExerciseCourse,
-} from "./navigators/ExerciseCourseNav";
-
-const MyTheme = {
-  ...DefaultTheme,
-  colors: {
-    ...DefaultTheme.colors,
-    background: "#f3f3f3",
-  },
-};
 
 export default function App() {
   const [loading, setLoading] = useState(true);
