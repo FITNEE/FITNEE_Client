@@ -1,16 +1,17 @@
 import CreateRoutineNav from "./navigation/CreateRoutineNav";
-import AppLoading from 'expo-app-loading';
-import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
-import OnBoardingNav from './navigation/OnBoardingNav';
-import LoggedInNav from './navigation/LoggedInNav';
-import { Context, ContextProvider } from './components/ContextProvider';
-import { useState } from 'react';
+import AppLoading from "expo-app-loading";
+import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
+import OnBoardingNav from "./navigation/OnBoardingNav";
+import LoggedInNav from "./navigation/LoggedInNav";
+import { Context, ContextProvider } from "./components/ContextProvider";
+import { useState } from "react";
+import CreateRoutineHeader from "./components/CreateRoutineHeader";
 
 const MyTheme = {
   ...DefaultTheme,
   colors: {
     ...DefaultTheme.colors,
-    background: '#f3f3f3',
+    background: "#f3f3f3",
   },
 };
 

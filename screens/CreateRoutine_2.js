@@ -1,10 +1,18 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components/native";
 import { Picker, DatePicker } from "react-native-wheel-pick";
+import { useNavigationState } from "@react-navigation/native";
+import CreateRoutineHeader from "../components/CreateRoutineHeader";
 
 export default function CreateRoutine_2({ navigation }) {
   const [shouldRender, setShouldRender] = useState(true);
   const [dontKnow, setDontKnow] = useState(false);
+  const index = useNavigationState((state) => state.index);
+  useEffect(() => {
+    navigation.setOptions({
+      header: () => <CreateRoutineHeader title="루틴 등록" index={index} />,
+    });
+  }, []);
   const handleDontKnow = () => {
     setDontKnow(!dontKnow);
   };
@@ -19,15 +27,12 @@ export default function CreateRoutine_2({ navigation }) {
   }, []); // 빈 배열을 전달하여 컴포넌트가 마운트될 때만 실행
 
   let data = [];
-  for (var i = 0; i < 201; i++) {
+  for (var i = 0; i < 201; i += 5) {
     data.push(i);
   }
 
   return (
     <Container>
-      <StackBar>
-        <StackBarPin />
-      </StackBar>
       <TitleContainer>
         <Title>나의 예상 스쿼트 1RM은?</Title>
         {shouldRender ? (
@@ -70,19 +75,6 @@ const Container = styled.View`
   width: 100%;
   align-items: center;
   justify-content: space-between;
-`;
-const StackBar = styled.View`
-  width: 90%;
-  height: 10px;
-  background-color: #dddddd;
-  margin-top: 10px;
-  border-radius: 10px;
-`;
-const StackBarPin = styled.View`
-  width: 50%;
-  height: 100%;
-  background-color: #757575;
-  border-radius: 10px;
 `;
 const Bubble = styled.View`
   position: absolute;

@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components/native";
+import { useNavigationState } from "@react-navigation/native";
+import CreateRoutineHeader from "../components/CreateRoutineHeader";
 
 export default function CreateRoutine_3({ navigation }) {
   const [select, SetSelect] = useState(false);
@@ -12,6 +14,12 @@ export default function CreateRoutine_3({ navigation }) {
     { id: 5, name: "코어", selected: false },
     { id: 6, name: "하체", selected: false },
   ]);
+  const index = useNavigationState((state) => state.index);
+  useEffect(() => {
+    navigation.setOptions({
+      header: () => <CreateRoutineHeader title="루틴 등록" index={index} />,
+    });
+  }, []);
   const onPartPress = (id) => {
     setParts((prevParts) =>
       prevParts.map((part) =>
@@ -41,9 +49,6 @@ export default function CreateRoutine_3({ navigation }) {
   }, [allPart]);
   return (
     <Container>
-      <StackBar>
-        <StackBarPin />
-      </StackBar>
       <TitleContainer>
         <Title>{`운동할 부위를
 모두 선택하세요`}</Title>
@@ -80,19 +85,7 @@ const Container = styled.View`
   align-items: center;
   justify-content: space-between;
 `;
-const StackBar = styled.View`
-  width: 90%;
-  height: 10px;
-  background-color: #dddddd;
-  margin-top: 10px;
-  border-radius: 10px;
-`;
-const StackBarPin = styled.View`
-  width: 75%;
-  height: 100%;
-  background-color: #757575;
-  border-radius: 10px;
-`;
+
 const TitleContainer = styled.View`
   width: 90%;
   margin-bottom: 10px;

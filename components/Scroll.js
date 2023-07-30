@@ -111,7 +111,7 @@ const ItemConteiner = styled.View`
 const PageIndicatorContainer = styled.View`
   flex-direction: row;
   justify-content: center;
-  margin-top: 10px;
+  margin-bottom: 15px;
 `;
 const PageDot = styled.View`
   width: 10px;

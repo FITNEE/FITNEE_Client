@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components/native";
+import { useNavigationState } from "@react-navigation/native";
+import CreateRoutineHeader from "../components/CreateRoutineHeader";
 
 export default function CreateRoutine_4({ navigation }) {
   const [select, SetSelect] = useState(false);
@@ -14,6 +16,25 @@ export default function CreateRoutine_4({ navigation }) {
     { id: 6, name: "금", selected: false },
     { id: 7, name: "토", selected: false },
   ]);
+  const index = useNavigationState((state) => state.index);
+  useEffect(() => {
+    if (loading) {
+      navigation.setOptions({
+        header: () => <CreateRoutineHeader title="루틴 등록" index={4} />,
+      });
+    } else {
+      navigation.setOptions({
+        header: () => <CreateRoutineHeader title="루틴 등록" index={index} />,
+      });
+    }
+  }, [loading]);
+  const nextPress = () => {
+    SetLoading(true);
+    const timer = setTimeout(() => {
+      navigation.push("CreateRoutine_5");
+    }, 2000);
+    return () => clearTimeout(timer);
+  };
   const onDayPress = (id) => {
     setDays((prevDays) =>
       prevDays.map((day) =>
@@ -45,18 +66,12 @@ export default function CreateRoutine_4({ navigation }) {
   return (
     <Container>
       {loading ? (
-        (navigation.setOptions({ headerShown: false }),
-        (
-          <LoadingContainer>
-            <Loading />
-            <LoadingText>트레이닝 루틴을 생성 중입니다</LoadingText>
-          </LoadingContainer>
-        ))
+        <LoadingContainer>
+          <Loading />
+          <LoadingText>트레이닝 루틴을 생성 중입니다</LoadingText>
+        </LoadingContainer>
       ) : (
         <Container>
-          <StackBar>
-            <StackBarPin />
-          </StackBar>
           <TitleContainer>
             <Title>운동할 요일을 선택해주세요.</Title>
             <SubTitle>마이루틴에서 언제든지 변경할 수 있어요.</SubTitle>
@@ -77,11 +92,7 @@ export default function CreateRoutine_4({ navigation }) {
           <AllDayButton isActive={allDay} onPress={AllDayPress}>
             <AllDayText>매일 운동할래요</AllDayText>
           </AllDayButton>
-          <NextButton
-            isActive={select}
-            disabled={!select}
-            onPress={() => navigation.push("CreateRoutine_5")}
-          >
+          <NextButton isActive={select} disabled={!select} onPress={nextPress}>
             <ButtonText isActive={select}>선택 완료</ButtonText>
           </NextButton>
         </Container>
@@ -95,19 +106,6 @@ const Container = styled.View`
   width: 100%;
   align-items: center;
   justify-content: space-between;
-`;
-const StackBar = styled.View`
-  width: 90%;
-  height: 10px;
-  background-color: #dddddd;
-  margin-top: 10px;
-  border-radius: 10px;
-`;
-const StackBarPin = styled.View`
-  width: 100%;
-  height: 100%;
-  background-color: #757575;
-  border-radius: 10px;
 `;
 const TitleContainer = styled.View`
   width: 90%;
@@ -169,6 +167,7 @@ const LoadingContainer = styled.View`
   width: 100%;
   align-items: center;
   justify-content: center;
+  margin-bottom: 80px;
 `;
 const Loading = styled.View`
   width: 291px;
