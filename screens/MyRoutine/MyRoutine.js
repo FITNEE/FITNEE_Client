@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components/native";
 import { FlatList, ScrollView } from "react-native";
 import { useSharedValue } from "react-native-reanimated";
@@ -16,6 +16,9 @@ import {
 } from "../../components/ScheduleChanger";
 import { ExerciseItem } from "../../components/ExerciseItem";
 import { ExerciseItem_Custom } from "../../components/ExerciseItem_Custom";
+import { Alert } from "react-native";
+import { BottomSheetModal } from "@gorhom/bottom-sheet";
+import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 
 const ScreenBase = styled.SafeAreaView`
   width: 100%;
@@ -66,6 +69,11 @@ const ScheduleContainer = styled.View`
   background-color: white;
 `;
 
+const BottomSheetContainer = styled.View`
+  width: 100%;
+  height: 600px;
+  background-color: chartreuse;
+`;
 const MyRoutine = ({ route, navigation }) => {
   //prettier-ignore
   const SCHEDULES = [{ id: 0,valid: false,},{id: 1,part: "코어",valid: true,},{id: 2,valid: false,},{id: 3,valid: false,},{id: 4,part: "하체",valid: true,},{id: 5,valid: false,},{id: 6,part: "상체",valid: true,}];
@@ -74,13 +82,43 @@ const MyRoutine = ({ route, navigation }) => {
   const days = ["월", "화", "수", "목", "금", "토", "일"];
   const [selectedId, setSelectedId] = useState(null);
   const [mode, setMode] = useState(false);
+  const bottomModal = useRef();
+  const [snapPoints, setSnapPoints] = useState(["1%"]);
+  const [modalShown, setModalShown] = useState(false);
+
+  const hideModal = () => {
+    setSnapPoints(["1%"]);
+    setModalShown(false);
+  };
+  const popModal = () => {
+    setSnapPoints(["34%"]);
+    setModalShown(true);
+  };
   const positions = useSharedValue(listToObject(SCHEDULES));
   const today = 4;
   const routine = [false, true, false, false, true, true, false];
   const toggleMode = () => {
     setMode(!mode);
   };
-
+  const popMessage = () => {
+    Alert.alert("운동 편집", "", [
+      {
+        text: "상세옵션 편집",
+        onPress: () => popModal(),
+        style: "default",
+      },
+      {
+        text: "선택 운동 삭제",
+        onPress: () => console.log("OK Pressed"),
+        style: "destructive",
+      },
+      {
+        text: "취소",
+        onPress: () => console.log("Cancel Pressed"),
+        style: "default",
+      },
+    ]);
+  };
   const renderItem = ({ item }) => {
     return (
       <ExerciseItem
@@ -93,87 +131,105 @@ const MyRoutine = ({ route, navigation }) => {
       />
     );
   };
+  const onPressBottomModal = () => bottomModal.current?.present();
+  useEffect(() => {
+    onPressBottomModal();
+  }, []);
   return (
-    <ScreenBase>
-      <Header mode={mode} parentFunction={toggleMode} />
-      {!mode && (
-        <ScheduleContainer>
-          <TextContainer>
-            {days.map((item, id) => (
-              <DayContainer
-                style={
-                  id == today
-                    ? { backgroundColor: colors.grey_7 }
-                    : { backgroundColor: colors.white }
-                }
-              >
-                <DayText
+    <BottomSheetModalProvider>
+      <ScreenBase>
+        <Header mode={mode} parentFunction={toggleMode} />
+        {!mode && (
+          <ScheduleContainer>
+            <TextContainer>
+              {days.map((item, id) => (
+                <DayContainer
+                  id
                   style={
                     id == today
-                      ? { color: colors.white }
-                      : { color: colors.black }
+                      ? { backgroundColor: colors.grey_7 }
+                      : { backgroundColor: colors.white }
                   }
                 >
-                  {item}
-                </DayText>
-                {routine[id] == true && (
-                  <Circle
+                  <DayText
                     style={
                       id == today
-                        ? { backgroundColor: colors.white }
-                        : { backgroundColor: colors.grey_3 }
+                        ? { color: colors.white }
+                        : { color: colors.black }
                     }
-                  />
-                )}
-              </DayContainer>
-            ))}
-          </TextContainer>
-        </ScheduleContainer>
-      )}
-      {mode ? (
-        <ScrollView style={{ width: "100%" }}>
-          <ScrollLayout>
-            <ComponentTitle
-              title="요일변경"
-              subTitle="루틴을 원하는 요일에 끌어다 놓을 수 있어요"
-            />
-            <ScheduleChanger
-              SCHEDULES={SCHEDULES}
-              days={days}
-              positions={positions}
-              isCustom={mode}
-            />
-            <ComponentTitle
-              title="요일변경"
-              subTitle="루틴을 원하는 요일에 끌어다 놓을 수 있어요"
-            />
-            {test.map((item) => (
-              <ExerciseItem_Custom
-                id={item.id}
-                setsNum={item.setsNum}
-                title={item.title}
-                subText={item.subText}
-                selectedId={selectedId}
-                setSelectedId={setSelectedId}
+                  >
+                    {item}
+                  </DayText>
+                  {routine[id] == true && (
+                    <Circle
+                      style={
+                        id == today
+                          ? { backgroundColor: colors.white }
+                          : { backgroundColor: colors.grey_3 }
+                      }
+                    />
+                  )}
+                </DayContainer>
+              ))}
+            </TextContainer>
+          </ScheduleContainer>
+        )}
+        {mode ? (
+          <ScrollView style={{ width: "100%" }}>
+            <ScrollLayout>
+              <ComponentTitle
+                title="요일변경"
+                subTitle="루틴을 원하는 요일에 끌어다 놓을 수 있어요"
               />
-            ))}
-          </ScrollLayout>
-        </ScrollView>
-      ) : (
-        <ContentBase>
-          <ScreenLayout>
-            <FlatListContainer>
-              <FlatList
-                showsVerticalScrollIndicator
-                data={test}
-                keyExtractor={(test) => test.id}
-                renderItem={renderItem}
+              <ScheduleChanger
+                SCHEDULES={SCHEDULES}
+                days={days}
+                positions={positions}
+                isCustom={mode}
               />
-            </FlatListContainer>
-          </ScreenLayout>
-        </ContentBase>
-      )}
-    </ScreenBase>
+              <ComponentTitle
+                title="요일변경"
+                subTitle="루틴을 원하는 요일에 끌어다 놓을 수 있어요"
+              />
+              {test.map((item) => (
+                <ExerciseItem_Custom
+                  id={item.id}
+                  setsNum={item.setsNum}
+                  title={item.title}
+                  subText={item.subText}
+                  selectedId={selectedId}
+                  setSelectedId={setSelectedId}
+                  popMessage={popMessage}
+                />
+              ))}
+            </ScrollLayout>
+          </ScrollView>
+        ) : (
+          <ContentBase>
+            <ScreenLayout>
+              <FlatListContainer>
+                <FlatList
+                  showsVerticalScrollIndicator
+                  data={test}
+                  keyExtractor={(test) => test.id}
+                  renderItem={renderItem}
+                />
+              </FlatListContainer>
+            </ScreenLayout>
+          </ContentBase>
+        )}
+
+        <BottomSheetModal
+          ref={bottomModal}
+          index={0}
+          snapPoints={snapPoints}
+          enablePanDownToClose={false}
+          handleHeight={80}
+        >
+          <BottomSheetContainer />
+        </BottomSheetModal>
+      </ScreenBase>
+    </BottomSheetModalProvider>
   );
 };
 

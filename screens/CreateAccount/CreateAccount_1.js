@@ -40,6 +40,7 @@ const CreateAccount_1 = ({ route, navigation }) => {
   };
   return (
     <ScreenLayout>
+      <BackButton onPress={() => navigation.goBack()} />
       <TextContainer>
         <Title>환영해요! 계정을 생성할게요.</Title>
         <SubText>

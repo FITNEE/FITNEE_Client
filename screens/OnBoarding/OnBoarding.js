@@ -63,12 +63,12 @@ const SNSButton = styled.TouchableOpacity`
 `;
 const OnBoarding = ({ navigation }) => {
   const [email, setEmail] = useState("");
-  const [hasAccount, setHasAccount] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const fetchResult = async (email) => {
     try {
       let url = "https://gpthealth.shop/";
-      let detailAPI = "app/users/";
+      let detailAPI = "app/users";
       const queryStr = `?userId=${email}`;
       const response = await axios.get(url + detailAPI + queryStr);
       const data = response.data;
@@ -77,10 +77,12 @@ const OnBoarding = ({ navigation }) => {
       console.error("Failed to fetch data:", error);
     }
   };
+  const isUserId = email.indexOf("@") != -1 && email.length < 45;
   const handleSubmit = () => {
     console.log("submitted");
+    setIsLoading(true);
     fetchResult(email).then((data) => {
-      console.log(data);
+      setIsLoading(false);
       if (data.code == 3003) {
         navigation.navigate("CreateAccount_1", {
           email,
@@ -125,9 +127,10 @@ const OnBoarding = ({ navigation }) => {
         </SNSContainer>
       </BottomContainer>
       <Button
-        enabled={email.indexOf("@") != -1}
+        loading={isLoading}
+        enabled={isUserId && !isLoading}
         onPress={() => handleSubmit()}
-      ></Button>
+      />
     </ScreenLayout>
   );
 };

@@ -28,11 +28,6 @@ const Button = styled.TouchableOpacity`
   height: 56px;
   width: 56px;
 `;
-const Icon = styled.View`
-  background-color: red;
-  width: 24px;
-  height: 24px;
-`;
 
 export const Header = ({ mode, parentFunction }) => {
   const handleSubmit = () => {

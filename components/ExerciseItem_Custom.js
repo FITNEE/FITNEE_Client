@@ -32,7 +32,7 @@ const TextContainer = styled.View`
   flex-direction: row;
   justify-content: space-between;
 `;
-const ExerciseContainer = styled.View`
+const ExerciseContainer = styled.Pressable`
   padding: 8px;
   flex-direction: column;
   border-radius: 12px;
@@ -61,16 +61,9 @@ const AddText = styled.Text`
   font-weight: 500;
 `;
 
-export const ExerciseItem_Custom = ({
-  id,
-  setsNum,
-  title,
-  subText,
-  selectedId,
-  setSelectedId,
-}) => {
+export const ExerciseItem_Custom = ({ id, setsNum, title, popMessage }) => {
   return (
-    <ExerciseContainer>
+    <ExerciseContainer id={id} onLongPress={() => popMessage()}>
       <ExerciseTitle>{title}</ExerciseTitle>
       <ExtendedContainer>
         {setsNum.map((item, id) => (
