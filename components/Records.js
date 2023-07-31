@@ -4,11 +4,8 @@ import PercentageCircle from "react-native-progress-circle";
 import { styled } from "styled-components/native";
 import CalendarView from "./CalendarView";
 import { colors } from "../colors";
-import COMMENTDATA from "../screens/commentData";
-import DATEDATA from "../screens/dateData";
+import COMMENTDATA from "../screens/MyPage/COMMENTDATA";
 import { Image } from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
-import CalendarWeek from "./CalendarWeek";
 
     const Container = styled.View`
         width: 100%;

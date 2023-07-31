@@ -4,6 +4,7 @@ import { colors } from "../colors";
 import { Dimensions } from "react-native";
 import { View } from "react-native";
 import { FlatList } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 
 const windowWidth = Dimensions.get('window').width;
 
@@ -148,7 +149,12 @@ export default function HomeRoutines() {
             <ExerciseName>{item.name}</ExerciseName>
         </Card>
     )
-    
+
+    const navigation = useNavigation();
+    const navigateToExercise = ( ) => {
+        navigation.navigate("ExerciseCourse");
+    }
+
     return(
         <Container>
             <TitleBlock>
@@ -170,7 +176,7 @@ export default function HomeRoutines() {
                 keyExtractor={item => item.id}
                 showsHorizontalScrollIndicator={false}
             />
-            <Button>
+            <Button onPress={navigateToExercise}>
                 <ButtonText>운동하러 가기</ButtonText>
             </Button>
         </Container>

@@ -1,9 +1,9 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
-import MyPage from "../screens/MyPage";
-import Setting from "../screens/Setting";
-import UserInfo from "../screens/UserInfo";
-import EditUserInfo from "../screens/EditUserInfo";
+import MyPage from "../screens/MyPage/MyPage";
+import Setting from "../screens/MyPage/Setting";
+import UserInfo from "../screens/MyPage/UserInfo";
+import EditUserInfo from "../screens/MyPage/EditUserInfo";
 import { Image, Text, TouchableOpacity } from "react-native";
 import Back from '../assets/left_arrow.png';
 import LoggedInNav from "./LoggedInNav";

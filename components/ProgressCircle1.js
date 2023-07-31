@@ -4,7 +4,7 @@ import PercentageCircle from 'react-native-progress-circle';
 import { styled } from 'styled-components/native';
 
 const CircleBox = styled.View`
-	jusitfy-content: center;
+	justify-content: center;
 	align-items: center;
 `;
 
