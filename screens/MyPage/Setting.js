@@ -9,19 +9,25 @@ import { AppContext } from "../../components/ContextProvider";
         background-color: #fff;
         height: 100%;
     `;
-    const Profile = styled.View`
+    const Profile = styled.TouchableOpacity`
+        width: 100%;
         flex-direction: row;
         align-items: center;
         margin-top: 24px;
         padding-left: 24px;
         margin-bottom: 22px;
+        padding-right: 30px;
+        justify-content: space-between;
+    `;
+    const ProfileInfo = styled.View`
+        flex-direction: row;
     `;
     const ProfileImage = styled.View`
         width: 40px;
         height: 40px;
         border-radius: 20px;
         background-color: #ddd;
-        margin-right: 56px;
+        margin-right: 8px;
     `;
     const ProfileContents = styled.View`
     `;
@@ -31,12 +37,20 @@ import { AppContext } from "../../components/ContextProvider";
         font-weight: 600;
         line-height: 25.5px;
     `;
-    const Edit = styled.TouchableOpacity`
+    const Edit = styled.Text`
+        color: ${colors.l_main};
         font-size: 13px;
         font-style: normal;
         font-weight: 400;
         line-height: 19.5px;
     `;
+    const EditIcon = styled.Image`
+        width: 24px;
+        height: 24px;
+        background-color: pink;
+        margin-right: 0px;
+    `;
+
     const Bar = styled.View`
         height: 16px;
         background-color: #f3f3f3;
@@ -72,7 +86,7 @@ export default function Setting({ navigation }) {
     ];
 
     const Block = styled.TouchableOpacity`
-        padding: 15px 24px;
+        padding: 19px 24px;
         flex-direction: row;
         align-items: center;
         background-color: ${ isDark ? colors.d_background : colors.l_background};
@@ -81,12 +95,15 @@ export default function Setting({ navigation }) {
     return (
     <SafeAreaView>
     <Container>
-        <Profile>
-            <ProfileImage/>
-            <ProfileContents>
-                <Name>{username}</Name>
-                <Edit onPress={() => { navigation.navigate("UserInfo")}}><Text>계정 정보 수정하기</Text></Edit>
-            </ProfileContents>
+        <Profile onPress={() => { navigation.navigate("UserInfo")}}>
+            <ProfileInfo>
+                <ProfileImage/>
+                <ProfileContents>
+                    <Name>{username}</Name>
+                    <Edit>계정 정보 수정하기</Edit>
+                </ProfileContents>
+            </ProfileInfo>
+            <EditIcon/>
         </Profile>
         <ModeView>
             <BlockText>다크화면 모드</BlockText>

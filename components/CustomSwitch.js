@@ -22,7 +22,7 @@ const CustomSwitch = ({
         style={{
           height: 36,
           width: 64,
-          backgroundColor: isDark == 0 ? colors.white : colors.grey_4,
+          backgroundColor: isDark == 0 ? colors.grey_2 : colors.grey_4,
           borderRadius: 1000,
           flexDirection: 'row',
           justifyContent: 'center',
@@ -40,7 +40,10 @@ const CustomSwitch = ({
           }}>
           <Text
             style={{
-              color: isDark == 0 ? colors.grey_3 : colors.grey_4,
+              color: isDark == 0 ? colors.black : colors.grey_4,
+              fontSize: 11,
+              fontWeight: 600,
+              lineHeight: 16.5
             }}>
             {option1}
           </Text>
@@ -50,14 +53,17 @@ const CustomSwitch = ({
           onPress={() => updatedSwitchData(1)}
           style={{
             flex: 1,
-            backgroundColor: isDark == 1 ? colors.grey_1 : colors.white,
+            backgroundColor: isDark == 1 ? colors.grey_1 : colors.grey_2,
             borderRadius: 25,
             justifyContent: 'center',
             alignItems: 'center',
           }}>
           <Text
             style={{
-              color: isDark == 1 ? colors.grey_4 : colors.grey_1,
+              color: isDark == 1 ? colors.black : colors.grey_2,
+              fontSize: 11,
+              fontWeight: 600,
+              lineHeight: 16.5
             }}>
             {option2}
           </Text>
