@@ -68,7 +68,6 @@ export function listToObject(list) {
   const values = Object.values(list);
   const object = {};
   for (let i = 0; i < values.length; i++) {
-    console.log(values[i].id);
     object[values[i].id] = i;
   }
 

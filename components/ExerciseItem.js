@@ -49,7 +49,6 @@ const ExerciseContainer = styled.View`
   flex-direction: column;
   border-radius: 12px;
   width: ${ScreenWidth - 48}px;
-  margin-left: 24px;
   margin-top: 8px;
   background-color: ${colors.white};
 `;
@@ -67,7 +66,6 @@ export const ExerciseItem = ({
   selectedId,
   setSelectedId,
 }) => {
-  console.log(setsNum);
   return (
     <ExerciseContainer>
       <DefaultContainer>
@@ -78,12 +76,12 @@ export const ExerciseItem = ({
         </ExerciseTextContainer>
         <DropDown
           onPress={() => {
-            selectedId == id ? setSelectedId("") : setSelectedId(id);
+            selectedId == id ? setSelectedId(null) : setSelectedId(id);
           }}
         />
       </DefaultContainer>
       {selectedId == id && (
-        <ExtendedContainer>
+        <ExtendedContainer id>
           {setsNum.map((item, id) => (
             <SetContainer
               id
