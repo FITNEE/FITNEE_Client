@@ -3,6 +3,7 @@ import { View, Text } from "react-native";
 import { styled } from "styled-components/native";
 import { colors } from "../colors";
 import { Dimensions } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 
 const windowHeight = Dimensions.get('window').height;
 
@@ -64,6 +65,11 @@ export default function NotHomeRoutine() {
             "name": "데드리프트"
         }
     ]
+
+    const navigation = useNavigation();
+    const navigateToCreateRoutine = ( ) => {
+        navigation.navigate("createRoutine");
+    }
     
     return(
         <Container>
@@ -73,7 +79,7 @@ export default function NotHomeRoutine() {
                 <SubText>간단한 질문에 답변하여{"\n"}나만의 루틴을 만들어보세요!</SubText>
             </TitleBlock>
            
-            <Button>
+            <Button onPress={navigateToCreateRoutine}>
                 <ButtonText>AI 루틴 생성하기</ButtonText>
             </Button>
         </Container>
