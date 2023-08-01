@@ -74,7 +74,7 @@ const Container = styled.View`
   flex: 1;
   width: 100%;
   align-items: center;
-  justify-content: space-between;
+  justify-content: space-evenly;
 `;
 const Bubble = styled.View`
   position: absolute;
@@ -136,6 +136,6 @@ const NextButton = styled.TouchableOpacity`
   justify-content: center;
   background-color: #bfbfbf;
   border-radius: 10px;
-  margin-bottom: 50px;
+  margin-bottom: 20px;
 `;
 const ButtonText = styled.Text``;

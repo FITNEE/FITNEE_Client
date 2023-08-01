@@ -31,7 +31,7 @@ const Container = styled.View``;
 const Item = styled.TouchableOpacity`
   flex-direction: row;
   width: 303px;
-  height: 58px;
+  height: 45px;
   background-color: #f3f3f3;
   border-radius: 12px;
   align-items: center;
@@ -47,13 +47,13 @@ const ItemSubTitle = styled.Text`
   color: #757575;
 `;
 const ExerciseContainer = styled.View`
-  margin: 20px;
+  margin: 1px 20px;
 `;
 const ExerciseItem = styled.View`
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  margin: 5px;
+  margin: 3px;
 `;
 const ExerciseName = styled.Text`
   color: #757575;

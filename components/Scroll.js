@@ -88,12 +88,12 @@ const RoutineBox = styled.View`
 const RoutineTitleContainer = styled.View`
   position: absolute;
   width: 157px;
-  height: 30px;
+  height: 26px;
   align-items: center;
   justify-content: center;
   background-color: #dddddd;
   border-radius: 100px;
-  top: -15px;
+  top: -13px;
   left: 85px;
   z-index: 1;
 `;
@@ -104,7 +104,7 @@ const ItemConteiner = styled.View`
   border-color: #dddddd;
   border-radius: 20px;
   background-color: white;
-  padding: 20px;
+  padding: 10px;
 
   align-items: center;
 `;

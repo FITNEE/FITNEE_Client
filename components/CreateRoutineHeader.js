@@ -29,7 +29,7 @@ export default function CreateRoutineHeader({ title, index, children }) {
   );
 }
 const NoHeader = styled.View`
-  height: 110px;
+  height: 90px;
   background-color: #f3f3f3;
   align-items: center;
   justify-content: center;
@@ -37,19 +37,20 @@ const NoHeader = styled.View`
   opacity: 1;
 `;
 const HeaderContainer = styled.View`
-  height: 150px;
+  height: 100px;
   background-color: #f3f3f3;
   align-items: center;
   justify-content: center;
-  padding: 10px;
+  padding: 10px 10px;
 `;
 const Header = styled.View`
   flex-direction: row;
   width: 95%;
-  height: 56px;
+  height: 50px;
   background-color: #f3f3f3;
   align-items: center;
   padding: 10px;
+  margin-top: 10px;
 `;
 const BackButton = styled.TouchableOpacity``;
 const Title = styled.Text`
@@ -60,7 +61,7 @@ const Title = styled.Text`
 
 const StackBar = styled.View`
   width: 90%;
-  height: 10px;
+  height: 8px;
   background-color: #dddddd;
 
   border-radius: 10px;

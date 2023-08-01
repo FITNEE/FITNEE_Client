@@ -83,7 +83,7 @@ const Container = styled.View`
   flex: 1;
   width: 100%;
   align-items: center;
-  justify-content: space-between;
+  justify-content: space-evenly;
 `;
 
 const TitleContainer = styled.View`
@@ -138,7 +138,7 @@ const NextButton = styled.TouchableOpacity`
   justify-content: center;
   background-color: ${(props) => (props.isActive ? "#BFBFBF" : "#DDDDDD")};
   border-radius: 10px;
-  margin-bottom: 45px;
+  margin-bottom: 20px;
 `;
 const ButtonText = styled.Text`
   color: ${(props) => (props.isActive ? "black" : "#757575")};
