@@ -50,7 +50,7 @@ const Header = styled.View`
   background-color: #f3f3f3;
   align-items: center;
   padding: 10px;
-  margin-top: 10px;
+  margin-top: 22px;
 `;
 const BackButton = styled.TouchableOpacity``;
 const Title = styled.Text`
