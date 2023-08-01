@@ -17,7 +17,6 @@ const PageIndicator = ({ totalPages, currentPage }) => {
 export default Scroll = ({ data }) => {
   const [currentPage, setCurrentPage] = useState(0);
   const flatListRef = React.createRef();
-
   const [selectedID, setSelectedID] = useState("");
   const handleScroll = (event) => {
     const { contentOffset, layoutMeasurement } = event.nativeEvent;
@@ -67,6 +66,7 @@ export default Scroll = ({ data }) => {
           const width = event.nativeEvent.layoutMeasurement.width;
           const pageIndex = Math.round(offsetX / width);
           setCurrentPage(pageIndex);
+          setSelectedID("");
         }}
       />
       <PageIndicator totalPages={data.length} currentPage={currentPage} />
