@@ -49,6 +49,7 @@ const ExerciseContainer = styled.View`
   flex-direction: column;
   border-radius: 12px;
   width: ${ScreenWidth - 48}px;
+  margin-left: 24px;
   margin-top: 8px;
   background-color: ${colors.white};
 `;
@@ -60,9 +61,8 @@ const DefaultContainer = styled.View`
 
 export const ExerciseItem = ({
   id,
-  setsNum,
+  content,
   title,
-  subText,
   selectedId,
   setSelectedId,
 }) => {
@@ -72,7 +72,7 @@ export const ExerciseItem = ({
         <ExerciseImg />
         <ExerciseTextContainer>
           <ExerciseTitle>{title}</ExerciseTitle>
-          <ExerciseSubText>{subText}</ExerciseSubText>
+          {/* <ExerciseSubText>{subText}</ExerciseSubText> */}
         </ExerciseTextContainer>
         <DropDown
           onPress={() => {
@@ -82,7 +82,7 @@ export const ExerciseItem = ({
       </DefaultContainer>
       {selectedId == id && (
         <ExtendedContainer id>
-          {setsNum.map((item, id) => (
+          {content?.map((item, id) => (
             <SetContainer
               id
               style={{
@@ -90,8 +90,8 @@ export const ExerciseItem = ({
               }}
             >
               <SetsText>{id + 1}</SetsText>
-              <SetsText>-</SetsText>
-              <SetsText>{item}회</SetsText>
+              <SetsText>{item.weight ? `${item.weight}kg` : `-  kg`}</SetsText>
+              <SetsText>{item.rep} 회</SetsText>
             </SetContainer>
           ))}
         </ExtendedContainer>

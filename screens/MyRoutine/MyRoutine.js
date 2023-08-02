@@ -7,18 +7,16 @@ import {
   Header,
 } from "../../components/Shared/MyRoutine_Shared";
 import { colors } from "../../colors";
-import { ScreenHeight, ScreenWidth } from "../../Shared";
+import { ScreenWidth } from "../../Shared";
 import { listToObject } from "../../components/Shared/MyRoutine_Shared";
 import {
   DayText,
   ScheduleChanger,
   TextContainer,
 } from "../../components/ScheduleChanger";
+
 import { ExerciseItem } from "../../components/ExerciseItem";
-import {
-  ExerciseItem_Custom,
-  ExerciseItem_Detail,
-} from "../../components/ExerciseItem_Custom";
+import { ExerciseItem_Custom } from "../../components/ExerciseItem_Custom";
 import { Alert } from "react-native";
 import { BottomSheetModal } from "@gorhom/bottom-sheet";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
@@ -29,19 +27,14 @@ const ScreenBase = styled.SafeAreaView`
   flex: 1;
 `;
 
-const ScreenPressable = styled.Pressable`
-  width: 100%;
-  flex: 1;
-`;
 const ContentBase = styled.View`
   flex-direction: column;
-  align-items: center;
+  /* align-items: center; */
   justify-content: space-between;
   width: 100%;
   flex: 1;
-  background-color: #f3f3f3;
 `;
-const ScrollLayout = styled.Pressable`
+const ScrollPressable = styled.Pressable`
   width: ${ScreenWidth - 48}px;
   margin-left: 24px;
 `;
@@ -77,37 +70,24 @@ const BottomSheetContainer = styled.TouchableOpacity`
 `;
 const MyRoutine = () => {
   //prettier-ignore
-  const SCHEDULES = [{ id: 0,valid: false,},{id: 1,part: "코어",valid: true,},{id: 2,valid: false,},{id: 3,valid: false,},{id: 4,part: "하체",valid: true,},{id: 5,valid: false,},{id: 6,part: "상체",valid: true,}];
-  //prettier-ignore
-  const test = [{id: 0,title: "데드리프트",subText: "전신 | 3세트 | 빈 봉",setsNum: [15, 15, 15],},{id: 1,title: "사이드 레터럴레이션",subText: "전신 | 3세트 | 빈 봉",setsNum: [12, 5, 12],},{id: 2,title: "데드리프트",subText: "전신 | 3세트 | 빈 봉",setsNum: [15, 15, 15],},{id: 3,title: "데드리프트",subText: "전신 | 3세트 | 빈 봉",setsNum: [15, 15, 15],},{id: 4,title: "데드리프트",subText: "전신 | 3세트 | 빈 봉",setsNum: [15, 15, 15],},{id: 5,title: "데드리프트",subText: "전신 | 3세트 | 빈 봉",setsNum: [15, 15, 15],},{id: 6,title: "데드리프트",subText: "전신 | 3세트 | 빈 봉",setsNum: [15, 15, 15],},];
   const days = ["월", "화", "수", "목", "금", "토", "일"];
-  const [selectedId, setSelectedId] = useState(null);
-  const [data, setData] = useState([]);
+  const [SCHEDULES, setSCHEDULES] = useState([]);
+  const [routineData, setRoutineData] = useState([]);
+  const [newArr, setNewArr] = useState([]);
+  const [editingID, setEditingID] = useState(null);
   const [mode, setMode] = useState(false);
   const bottomModal = useRef();
-  const [focusedItem, setFocusedItem] = useState([]);
   const [snapPoints, setSnapPoints] = useState(["1%"]);
   const [modalShown, setModalShown] = useState(false);
+  const [selectedId, setSelectedId] = useState(null);
 
-  const hideModal = () => {
-    setSnapPoints(["1%"]);
-    setModalShown(false);
-    Keyboard.dismiss();
-  };
-  const popModal = () => {
-    setSnapPoints(["34%"]);
-    setModalShown(true);
-  };
   const extendModal = () => {
+    console.log("modal Extended");
     setSnapPoints(["60%"]);
-    setModalShown(true);
   };
-  const handleBottomSubmit = () => {
-    hideModal();
-    //setData()...
-  };
+
   const positions = useSharedValue(listToObject(SCHEDULES));
-  const today = 4;
+  const today = date.getDay();
   const routine = [false, true, false, false, true, true, false];
   const toggleMode = () => {
     setMode(!mode);
@@ -117,10 +97,15 @@ const MyRoutine = () => {
       {
         text: "상세옵션 편집",
         onPress: () => {
-          popModal();
-          let newArr = test[id];
-          console.log("선택된 Item:", newArr);
-          setFocusedItem(newArr);
+          //Modal을 띄우기 위해 필요한 유일한 조건
+          setModalShown(true);
+          setEditingID(id);
+          var arr = Array(routineData[id].content.length).fill({
+            rep: 0,
+            weight: 0,
+          });
+          setNewArr(arr);
+          console.log("newArr:", arr);
         },
         style: "default",
       },
@@ -136,13 +121,12 @@ const MyRoutine = () => {
       },
     ]);
   };
-  const renderItem = ({ item }) => {
+  const renderItem = ({ item, index }) => {
     return (
       <ExerciseItem
-        id={item.id}
-        setsNum={item.setsNum}
-        title={item.title}
-        subText={item.subText}
+        id={index}
+        content={item.content}
+        title={item.healthCategoryIdx}
         selectedId={selectedId}
         setSelectedId={setSelectedId}
       />
@@ -151,7 +135,7 @@ const MyRoutine = () => {
   const getRoutine = async () => {
     try {
       let url = "https://gpthealth.shop/";
-      let detailAPI = `app/routine/${4}`;
+      let detailAPI = `app/routine/${6}`;
       const response = await axios.get(url + detailAPI);
       const result = response.data;
       return result;
@@ -159,6 +143,7 @@ const MyRoutine = () => {
       console.error("Failed to fetch data:", error);
     }
   };
+  //요일 별 루틴 여부 파악위함
   const getRoutines = async () => {
     try {
       let url = "https://gpthealth.shop/";
@@ -175,10 +160,30 @@ const MyRoutine = () => {
     }
   };
   const onPressBottomModal = () => bottomModal.current?.present();
+  const handleBottomSubmit = (data) => {
+    //일단 ModalShown 변수를 false로 변경하여, 추후 Keyboard.dismiss()를 해도 keyboardDidhideListener
+    setModalShown(false);
+    Keyboard.dismiss();
+    // reset();
+  };
+
+  const editNewArr = (id, type, text) => {
+    let finalArr = newArr;
+    finalArr[id].type = text;
+  };
+  useEffect(() => {
+    if (modalShown == true) {
+      setSnapPoints(["34%"]);
+    } else {
+      setSnapPoints(["1%"]);
+    }
+    console.log(modalShown);
+  }, [modalShown]);
+
   useEffect(() => {
     onPressBottomModal();
-    getRoutine().then((res) => setData(res.result));
-    // getRoutines().then((result) => console.log(result));
+    // getRoutine().then((res) => setRoutineData(res.result));
+    getRoutines().then((res) => console.log(res.result));
   }, []);
   return (
     <BottomSheetModalProvider>
@@ -225,7 +230,8 @@ const MyRoutine = () => {
               width: "100%",
             }}
           >
-            <ScrollLayout onPress={() => hideModal()}>
+            <ScrollPressable onPress={() => Keyboard.dismiss()}>
+              {/* <ScrollPressable> */}
               <ComponentTitle
                 title="요일 변경"
                 subTitle="루틴을 원하는 요일에 끌어다 놓을 수 있어요"
@@ -240,25 +246,22 @@ const MyRoutine = () => {
                 title="운동 편집"
                 subTitle="루틴을 원하는 요일에 끌어다 놓을 수 있어요"
               />
-              {test.map((item) => (
+              {routineData?.map((item, id) => (
                 <ExerciseItem_Custom
-                  id={item.id}
-                  setsNum={item.setsNum}
-                  title={item.title}
-                  subText={item.subText}
-                  selectedId={selectedId}
-                  setSelectedId={setSelectedId}
-                  popMessage={() => popMessage(item.id)}
+                  id
+                  content={item.content}
+                  title={item.healthCategoryIdx}
+                  popMessage={() => popMessage(id)}
                 />
               ))}
-            </ScrollLayout>
+            </ScrollPressable>
           </ScrollView>
         ) : (
           <ContentBase>
             <FlatList
               showsVerticalScrollIndicator
-              data={test}
-              keyExtractor={(test) => test.id}
+              data={routineData}
+              keyExtractor={(data) => data.id}
               renderItem={renderItem}
             />
           </ContentBase>
@@ -275,33 +278,43 @@ const MyRoutine = () => {
           enableDismissOnClose
           handleIndicatorStyle={{ height: 0 }}
         >
-          <BottomSheetContainer onPress={() => popModal()}>
+          <BottomSheetContainer>
             <ExerciseContainer>
               <TopContainer>
-                <ExerciseTitle>{data?.healthCategoryIdx}</ExerciseTitle>
+                <ExerciseTitle>
+                  {routineData[editingID]?.healthCategoryIdx}
+                </ExerciseTitle>
                 <SubmitButton onPress={() => handleBottomSubmit()}>
                   <SubmitText>완료</SubmitText>
                 </SubmitButton>
               </TopContainer>
               <ExtendedContainer>
-                {focusedItem?.setsNum?.map((item, id) => (
+                {routineData[editingID]?.content.map((item, id) => (
                   <SetContainer id>
                     <ContentContainer>
                       <SetsText>{id + 1}</SetsText>
                       <EditBox
                         keyboardType="numeric"
-                        selectTextOnFocus
+                        selectTextOnFocus={item.weight != null}
+                        editable={item.weight != null}
                         onFocus={() => extendModal()}
+                        onChangeText={(text) => editNewArr(id, "rep", text)}
+                        style={
+                          !item.weight && { backgroundColor: colors.grey_2 }
+                        }
                       >
-                        <EditText>-</EditText>
+                        <EditText>{item.weight ? item.weight : "-"}</EditText>
                       </EditBox>
                       <SetsText>kg</SetsText>
                       <EditBox
                         keyboardType="numeric"
-                        selectTextOnFocus
+                        selectTextOnFocus={item.rep != null}
+                        editable={item.rep != null}
                         onFocus={() => extendModal()}
+                        onChangeText={(text) => editNewArr(id, rep, text)}
+                        style={!item.rep && { backgroundColor: colors.grey_2 }}
                       >
-                        <EditText>{item}</EditText>
+                        <EditText>{item.rep}</EditText>
                       </EditBox>
                       <SetsText>회</SetsText>
                     </ContentContainer>

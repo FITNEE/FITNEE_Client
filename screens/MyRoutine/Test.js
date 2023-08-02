@@ -1,63 +1,54 @@
-import React from "react";
-import { StatusBar } from "react-native";
-import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
-import { useSharedValue } from "react-native-reanimated";
-import { listToObject } from "../../components/Shared/MyRoutine_Shared";
-import { MovableSchedule } from "../../components/MovableSchedule";
+import React, { useState } from "react";
+import { View, TextInput, Button, Text } from "react-native";
+import { useForm, Controller } from "react-hook-form";
 
-const SCHEDULES = [
-  {
-    id: 0,
-    valid: false,
-  },
-  {
-    id: 1,
-    part: "코어",
-    valid: true,
-  },
-  {
-    id: 2,
-    valid: false,
-  },
-  {
-    id: 3,
-    valid: false,
-  },
-  {
-    id: 4,
-    part: "하체",
-    valid: true,
-  },
-  {
-    id: 5,
-    valid: false,
-  },
-  {
-    id: 6,
-    part: "상체",
-    valid: true,
-  },
-];
+const DynamicForm = () => {
+  const { control, handleSubmit, reset } = useForm();
+  const [inputPairs, setInputPairs] = useState([]);
 
-export default function App() {
-  const positions = useSharedValue(listToObject(SCHEDULES));
+  const addInputPair = () => {
+    setInputPairs([...inputPairs, { id: inputPairs.length }]);
+  };
+
+  const onFormSubmit = (data) => {
+    console.log(data);
+    reset();
+  };
+
   return (
-    <>
-      <SafeAreaProvider>
-        <SafeAreaView style={{ flex: 1, marginTop: 48 }}>
-          {SCHEDULES.map((sche) => (
-            <MovableSchedule
-              key={sche.id}
-              id={sche.id}
-              day={sche.day}
-              valid={sche.valid}
-              part={sche.part}
-              positions={positions}
-              songsCount={SCHEDULES.length}
-            />
-          ))}
-        </SafeAreaView>
-      </SafeAreaProvider>
-    </>
+    <View>
+      {inputPairs.map((inputPair, index) => (
+        <View key={inputPair.id} style={{ flexDirection: "row" }}>
+          <Controller
+            control={control}
+            render={({ field: { onChange, value } }) => (
+              <TextInput
+                onChangeText={(text) => onChange(text)}
+                value={value}
+                placeholder={`Input Pair ${index + 1} - A`}
+              />
+            )}
+            name={`inputPair${inputPair.id}A`}
+            defaultValue=""
+          />
+          <Controller
+            control={control}
+            render={({ field: { onChange, value } }) => (
+              <TextInput
+                onChangeText={(text) => onChange(text)}
+                value={value}
+                placeholder={`Input Pair ${index + 1} - B`}
+              />
+            )}
+            name={`inputPair${inputPair.id}B`}
+            defaultValue=""
+          />
+        </View>
+      ))}
+      <Button title="Add Input Pair" onPress={addInputPair} />
+      <Button title="Submit" onPress={handleSubmit(onFormSubmit)} />
+    </View>
   );
-}
+};
+
+export default DynamicForm;

@@ -61,17 +61,20 @@ const AddText = styled.Text`
   font-weight: 500;
 `;
 
-export const ExerciseItem_Custom = ({ id, setsNum, title, popMessage }) => {
+export const ExerciseItem_Custom = ({ id, content, title, popMessage }) => {
+  // console.log(content);
   return (
     <ExerciseContainer id={id} onLongPress={() => popMessage()}>
       <ExerciseTitle>{title}</ExerciseTitle>
       <ExtendedContainer id>
-        {setsNum.map((item, id) => (
+        {content.map((item, id) => (
           <SetContainer id>
             <TextContainer>
               <SetsText>{id + 1}</SetsText>
-              <SetsText>{`-      kg`}</SetsText>
-              <SetsText>{item + `    회`}</SetsText>
+              <SetsText>
+                {item.weight ? item.weight + `   kg` : `-   kg`}
+              </SetsText>
+              <SetsText>{item.rep + `   회`}</SetsText>
             </TextContainer>
             <DeleteButton />
           </SetContainer>
