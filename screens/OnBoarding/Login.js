@@ -36,7 +36,7 @@ const Login = ({ route, navigation }) => {
   const postLogin = async (email, PW) => {
     try {
       let url = "https://gpthealth.shop/";
-      let detailAPI = "app/login";
+      let detailAPI = "app/user/login";
       console.log(email, PW);
       let data = { userId: email, userPw: PW };
       // const queryStr = `?userId=${email}&userPw=${PW}`;
@@ -54,6 +54,8 @@ const Login = ({ route, navigation }) => {
   const handlePress = () => {
     setIsLoading(true);
     postLogin(email, PW).then((response) => {
+      console.log(response);
+      // console.log(response.result.accessToken);
       setToken(response.result.accessToken);
       toggleLogin();
     });
