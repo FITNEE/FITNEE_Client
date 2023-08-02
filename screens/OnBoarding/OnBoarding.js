@@ -68,7 +68,7 @@ const OnBoarding = ({ navigation }) => {
   const fetchResult = async (email) => {
     try {
       let url = "https://gpthealth.shop/";
-      let detailAPI = "app/users";
+      let detailAPI = "app/user/";
       const queryStr = `?userId=${email}`;
       const response = await axios.get(url + detailAPI + queryStr);
       const data = response.data;

@@ -1,9 +1,7 @@
 import CreateRoutineNav from "./navigation/CreateRoutineNav";
 import AppLoading from "expo-app-loading";
-import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
-// import OnBoardingNav from './navigation/OnBoardingNav';
+import { NavigationContainer } from "@react-navigation/native";
 import MyPageNav from "./navigators/MyPageNav";
-import { Context, ContextProvider } from "./components/ContextProvider";
 import OnBoardingNav from "./navigators/OnBoardingNav";
 import LoggedInNav from "./navigators/LoggedInNav";
 import { AppContext } from "./components/ContextProvider";
@@ -11,19 +9,14 @@ import { useState } from "react";
 
 export default function App() {
   const [loading, setLoading] = useState(true);
-  const [loggedIn, setLoggedIn] = useState(true);
+  const [loggedIn, setLoggedIn] = useState(false);
   const [token, setToken] = useState("");
+
   const onFinish = () => setLoading(false);
+
   const toggleLogin = () => {
     setLoggedIn(!loggedIn);
     console.log(loggedIn);
-  };
-  const userSettings = {
-    toggleLogin,
-    setToken,
-    toggleColorMode,
-    token,
-    loggedIn,
   };
 
   const preload = async () => {
@@ -46,9 +39,11 @@ export default function App() {
   const [isDark, setIsDark] = useState(false);
 
   return (
-    <AppContext.Provider value={{ isDark, setIsDark, toggleLogin, loggedIn }}>
-      <NavigationContainer theme={MyTheme}>
-        <LoggedInNav />
+    <AppContext.Provider
+      value={{ isDark, setIsDark, toggleLogin, loggedIn, setToken, token }}
+    >
+      <NavigationContainer>
+        {loggedIn ? <LoggedInNav /> : <OnBoardingNav />}
       </NavigationContainer>
     </AppContext.Provider>
   );
