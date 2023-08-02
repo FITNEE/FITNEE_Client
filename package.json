@@ -28,7 +28,7 @@
     "react-native-calendars": "^1.1300.0",
     "react-native-countdown-circle-timer": "^3.2.1",
     "react-native-event-listeners": "^1.0.7",
-    "react-native-gesture-handler": "^2.12.1",
+    "react-native-gesture-handler": "~2.9.0",
     "react-native-keyboard-aware-scroll-view": "^0.9.5",
     "react-native-picker": "^4.3.7",
     "react-native-progress-circle": "^2.1.0",

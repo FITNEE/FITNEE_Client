@@ -1,9 +1,9 @@
 import React, { useState, useRef, useEffect, useCallback, useMemo, useContext } from 'react'
 import styled from 'styled-components/native'
 import { colors } from '../../colors'
-import { View, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, Platform, ScrollView, TouchableOpacity, SafeAreaView, Dimensions, Touchable } from 'react-native'
+import { Alert, View, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, Platform, ScrollView, TouchableOpacity, SafeAreaView, Dimensions, Touchable } from 'react-native'
 import WrappedText from 'react-native-wrapped-text'
-import BottomSheet, { BottomSheetScrollView, BottomSheetTextInput } from "@gorhom/bottom-sheet";
+import BottomSheet, { BottomSheetScrollView, BottomSheetTextInput, BottomSheetBackdrop } from "@gorhom/bottom-sheet";
 import { AppContext } from '../../components/ContextProvider';
 
 const SCREEN_WIDTH = Dimensions.get('screen').width;
@@ -72,7 +72,7 @@ const Bubble = styled.View`
     border-radius: 12px;
     align-items: center;
     justify-content: center;
-    bottom: 330px;
+    bottom: 290px;
     right: 25px;
     z-index: 1;
 `;
@@ -87,7 +87,7 @@ const BubbleArrow = styled.View`
     height: 0;
     border: 8px solid transparent;
     border-top-color: ${colors.grey_9};
-	border-bottom: 0;
+   border-bottom: 0;
 `;
 const BubbleText = styled.Text`
     font-size: 11px;
@@ -228,7 +228,16 @@ const MyMessageContainer = styled.View`
     max-width: 200px;
 `
 const MyMessageWrapper = styled.View`
-    align-items: flex-end;
+    justify-content: flex-end;
+    align-items: center;
+    flex-direction: row;
+`
+const MsgDeleteBtn = styled.TouchableOpacity`
+    width: 24px;
+    height: 24px;
+    border-radius: 12px;
+    background-color: ${colors.red};
+    margin-right: 8px;
 `
 const JoinImage = styled.Image`
     background-color: ${colors.red};
@@ -320,7 +329,8 @@ export default function Dictionary_3(){
     const rightTab = useRef()
     const bottomModal = useRef()
     const bubble = useRef()
-    const chatScrollView = useRef()
+    const scrollView = useRef(null)
+    const textInputRef = useRef()
 
     const [area, setArea] = useState('어깨 | 측면 삼각근 | 머신')
     const [exerciseName, setExerciseName] = useState('사이드 레터럴 레이즈 머신')
@@ -336,10 +346,28 @@ export default function Dictionary_3(){
     const snapPoints = useMemo(()=> ['45%', '96%'], [])
     const [bubbleBool, setBubbleBool] = useState(true)
     const [joinBtnBool, setJoinBtnBool] = useState(true)
+    const [InputIsFocused, setInputIsFocused] = useState(false)
 
     const onPressJoinBtn = () => setJoinBtnBool(false)
     const onChangeChat = (payload) => setChat(payload)
+    const onFocusInput = () => {
+        scrollView.current.scrollToEnd({animated: true})
+    }
     const handleSnapPress = useCallback((index) => bottomModal.current?.snapToIndex(index))
+    const onPressMsgDeleteBtn = () => {
+        Alert.alert(
+            '이 기기에서 채팅 삭제', 
+            '현재 사용중인 기기에서만 삭제되며\n상대방의 채팅방에서는 삭제되지 않습니다.',
+            [
+                {text: '취소'},
+                {
+                    text: '삭제하기',
+                    onPress: () => console.log('delete'),
+                    style: 'destructive'
+                }
+            ]
+        )
+    }
     const onTabPress = (target) => {
         setBubbleBool(false)
         target===leftTab? 
@@ -373,6 +401,8 @@ export default function Dictionary_3(){
                             value={chat}
                             onSubmitEditing={onSubmitChat}
                             autoFocus={true}
+                            onFocus={onFocusInput}
+                            ref={textInputRef}
                         />
                         <SendBtn onPress={onSubmitChat}/>
                     </TextInputContainer>
@@ -380,6 +410,14 @@ export default function Dictionary_3(){
             )
         }
     }
+    const renderBackdrop = useCallback(
+        props => (
+          <BottomSheetBackdrop
+            {...props}
+          />
+        ), []
+    );
+    
     useEffect(()=> {
         setBubbleBool(true)
     }, [])
@@ -416,6 +454,7 @@ export default function Dictionary_3(){
                     onChange={index=> setChangedSPIndex(index)}
                     keyboardBehavior='extend'
                     onPress={()=> setBubbleBool(false)}
+                    backdropComponent={renderBackdrop}
                 >
                     <DictionaryContainer>
                         <TitleContainer>
@@ -482,7 +521,7 @@ export default function Dictionary_3(){
                             <>
                             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                                 <BottomSheetScrollView 
-                                    ref={ (scrollView) => this.scrollView = scrollView } 
+                                    ref={ scrollView } 
                                     style={{paddingTop: 28}} 
                                     showsVerticalScrollIndicator={false}
                                 >
@@ -499,6 +538,7 @@ export default function Dictionary_3(){
                                                         </MessageWrapper>
                                                     :
                                                         <MyMessageWrapper>
+                                                            <MsgDeleteBtn onPress={onPressMsgDeleteBtn}/>
                                                             <MyMessageContainer>
                                                                 <WrappedText 
                                                                     textStyle={{fontWeight: 400, fontSize: 13, color: `${colors.black}`, lineHeight: 17}}
