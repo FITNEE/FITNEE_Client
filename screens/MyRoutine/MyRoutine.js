@@ -87,7 +87,8 @@ const MyRoutine = () => {
   };
 
   const positions = useSharedValue(listToObject(SCHEDULES));
-  const today = date.getDay();
+  // const today = date.getDay();
+  const today = 4;
   const routine = [false, true, false, false, true, true, false];
   const toggleMode = () => {
     setMode(!mode);
@@ -183,7 +184,8 @@ const MyRoutine = () => {
   useEffect(() => {
     onPressBottomModal();
     // getRoutine().then((res) => setRoutineData(res.result));
-    getRoutines().then((res) => console.log(res.result));
+    // getRoutine().then((res) => console.log(res));
+    // getRoutines().then((res) => console.log(res.result));
   }, []);
   return (
     <BottomSheetModalProvider>
