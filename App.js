@@ -1,21 +1,22 @@
-import AppLoading from 'expo-app-loading';
-import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
-import OnBoardingNav from './navigators/OnBoardingNav';
-import LoggedInNav from './navigators/LoggedInNav';
-import { AppContext } from './components/ContextProvider';
-import { useState } from 'react';
+import AppLoading from "expo-app-loading";
+import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
+import OnBoardingNav from "./navigators/OnBoardingNav";
+import LoggedInNav from "./navigators/LoggedInNav";
+import { AppContext } from "./components/ContextProvider";
+import { useState } from "react";
 
 const MyTheme = {
   ...DefaultTheme,
   colors: {
     ...DefaultTheme.colors,
-    background: '#f3f3f3',
+    background: "#f3f3f3",
   },
 };
 
 export default function App() {
   const [loading, setLoading] = useState(true);
-  const [loggedIn, setLoggedIn] = useState(false);
+  const [loggedIn, setLoggedIn] = useState(true);
+  const [token, setToken] = useState("");
   const [colorMode, setColorMode] = useState(false);
   const onFinish = () => setLoading(false);
   const toggleLogin = () => {
@@ -27,7 +28,9 @@ export default function App() {
   };
   const userSettings = {
     toggleLogin,
+    setToken,
     toggleColorMode,
+    token,
     loggedIn,
     colorMode,
   };
