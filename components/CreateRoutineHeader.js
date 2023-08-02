@@ -1,13 +1,21 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import styled from "styled-components/native";
 import { useNavigation } from "@react-navigation/native";
+import { Animated } from "react-native";
 
 export default function CreateRoutineHeader({ title, index, children }) {
+  const [width, setWidth] = useState(0);
   const navigation = useNavigation();
+  const animatedValue = useRef(new Animated.Value(-300 + 80 * index)).current;
+  const reactive = useRef(new Animated.Value(-1000)).current;
   useEffect(() => {
-    console.log("인덱스 : ", index, typeof index);
-  }, []);
+    Animated.timing(animatedValue, {
+      toValue: -width + (width * (index + 1)) / 4,
+      duration: 500,
+      useNativeDriver: true,
+    }).start();
+  }, [index, width]);
   return (
     <>
       {index == 4 ? (
@@ -20,8 +28,26 @@ export default function CreateRoutineHeader({ title, index, children }) {
             </BackButton>
             <Title>{title}</Title>
           </Header>
-          <StackBar>
-            <StackBarPin index={index} />
+          <StackBar
+            onLayout={(e) => {
+              const newWidth = e.nativeEvent.layout.width;
+
+              setWidth(newWidth);
+            }}
+          >
+            <Animated.View
+              style={{
+                height: "100%",
+                width: "100%",
+                borderRadius: 10,
+                backgroundColor: "#757575",
+                transform: [
+                  {
+                    translateX: animatedValue,
+                  },
+                ],
+              }}
+            />
           </StackBar>
         </HeaderContainer>
       )}
@@ -63,8 +89,8 @@ const StackBar = styled.View`
   width: 90%;
   height: 8px;
   background-color: #dddddd;
-
   border-radius: 10px;
+  overflow: hidden;
 `;
 const StackBarPin = styled.View`
   width: ${({ index }) => (index + 1) * 25}%;
