@@ -1,63 +1,54 @@
-import React, { useRef, useState } from 'react';
-import { SafeAreaView, Text, View } from 'react-native';
-import Animated, {
-  useAnimatedGestureHandler,
-  withSpring,
-  runOnJS,
-  useSharedValue,
-  useAnimatedStyle,
-  withTiming,
-} from 'react-native-reanimated';
-import { PanGestureHandler } from 'react-native-gesture-handler';
-import styled from 'styled-components/native';
+import React, { useState } from "react";
+import { View, TextInput, Button, Text } from "react-native";
+import { useForm, Controller } from "react-hook-form";
 
-// const MarkerView = styled.View``;
+const DynamicForm = () => {
+  const { control, handleSubmit, reset } = useForm();
+  const [inputPairs, setInputPairs] = useState([]);
 
-const Test = () => {
-  const [moving, setMoving] = useState(false);
-  const X = useSharedValue(250);
-  const gestureHandler = useAnimatedGestureHandler({
-    onStart() {
-      runOnJS(setMoving)(true);
-    },
-    onActive(event) {
-      const positionY = event.absoluteY;
-      const positionX = event.absoluteX;
-      X.value = withTiming(positionX - 32, { duration: 16 });
-    },
-    onFinish() {
-      //positionX에 가장 가까이 위치한
-      X.value = 10;
-      runOnJS(setMoving)(false);
-    },
-  });
-  const animatedStyle = useAnimatedStyle(() => {
-    return {
-      position: 'absolute',
-      left: 0,
-      right: 0,
-      top: 0,
-      left: X.value,
-      zIndex: moving ? 1 : 0,
-      shadowColor: 'black',
-      shadowOffset: { height: 0, width: 0 },
-      shadowOpacity: withSpring(moving ? 0.2 : 0),
-      shadowRadius: 10,
-    };
-  }, [moving]);
+  const addInputPair = () => {
+    setInputPairs([...inputPairs, { id: inputPairs.length }]);
+  };
+
+  const onFormSubmit = (data) => {
+    console.log(data);
+    reset();
+  };
+
   return (
-    <Animated.View style={animatedStyle}>
-      <PanGestureHandler onGestureEvent={gestureHandler}>
-        <Animated.View
-          style={{
-            backgroundColor: 'chartreuse',
-            width: 64,
-            height: 64,
-          }}
-        ></Animated.View>
-      </PanGestureHandler>
-    </Animated.View>
+    <View>
+      {inputPairs.map((inputPair, index) => (
+        <View key={inputPair.id} style={{ flexDirection: "row" }}>
+          <Controller
+            control={control}
+            render={({ field: { onChange, value } }) => (
+              <TextInput
+                onChangeText={(text) => onChange(text)}
+                value={value}
+                placeholder={`Input Pair ${index + 1} - A`}
+              />
+            )}
+            name={`inputPair${inputPair.id}A`}
+            defaultValue=""
+          />
+          <Controller
+            control={control}
+            render={({ field: { onChange, value } }) => (
+              <TextInput
+                onChangeText={(text) => onChange(text)}
+                value={value}
+                placeholder={`Input Pair ${index + 1} - B`}
+              />
+            )}
+            name={`inputPair${inputPair.id}B`}
+            defaultValue=""
+          />
+        </View>
+      ))}
+      <Button title="Add Input Pair" onPress={addInputPair} />
+      <Button title="Submit" onPress={handleSubmit(onFormSubmit)} />
+    </View>
   );
 };
 
-export default Test;
+export default DynamicForm;

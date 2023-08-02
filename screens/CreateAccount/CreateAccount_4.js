@@ -1,10 +1,11 @@
-import React, { useContext, useEffect, useState } from 'react';
-import styled from 'styled-components/native';
-import { colors } from '../../colors';
-import { Title } from '../../components/Shared/OnBoarding_Shared';
-import { Button, BackButton } from '../../Shared';
-import LottieView from 'lottie-react-native';
-import { AppContext } from '../../components/ContextProvider';
+import React, { useContext, useEffect, useState } from "react";
+import styled from "styled-components/native";
+import { colors } from "../../colors";
+import { Title } from "../../components/Shared/OnBoarding_Shared";
+import { Button } from "../../Shared";
+import LottieView from "lottie-react-native";
+import { AppContext } from "../../components/ContextProvider";
+import axios from "axios";
 
 const ScreenLayout = styled.SafeAreaView`
   flex-direction: column;
@@ -48,12 +49,41 @@ const AnimationContainer = styled.View`
 
 const CreateAccount_4 = ({ route, navigation }) => {
   const [isLoading, setIsLoading] = useState(true);
-
-console.log(route.params)
-  const { toggleLogin } = useContext(AppContext);
-  setTimeout(() => {
-    setIsLoading(false);
-  }, 2000);
+  const postUser = async (data) => {
+    try {
+      let url = "https://gpthealth.shop/";
+      let detailAPI = "app/users";
+      const response = await axios.post(url + detailAPI, data, {
+        headers: {
+          "Content-Type": `application/json`,
+        },
+      });
+      const result = response.data;
+      return result;
+    } catch (error) {
+      console.error("Failed to fetch data:", error);
+    }
+  };
+  const handlePress = () => {
+    let data = {
+      userId: route.params.email, //string
+      userPw: route.params.PW, //string
+      userNickname: route.params.nickname, //string
+      gender: route.params.gender,
+      height: route.params.height,
+      weight: route.params.weight,
+      birthYear: route.params.birthYear,
+    };
+    postUser(data)
+      .then((response) => {
+        setToken(response.result.accessToken);
+      })
+      .then(setIsLoading(false));
+  };
+  const { toggleLogin, setToken } = useContext(AppContext);
+  useEffect(() => {
+    handlePress();
+  }, []);
   const goBackHome = () => {
     toggleLogin();
   };
@@ -62,7 +92,7 @@ console.log(route.params)
     <ScreenLayout>
       <TextContainer>
         <Title>
-          {isLoading ? '계정을 생성하는 중' : '계정 생성을 완료했어요!'}
+          {isLoading ? "계정을 생성하는 중" : "계정 생성을 완료했어요!"}
         </Title>
         <SubTitle>
           {isLoading
@@ -77,8 +107,8 @@ console.log(route.params)
       </AnimationContainer>
       <Button
         loading={isLoading}
-        enabled={isLoading == false}
-        text='시작하기'
+        enabled={!isLoading}
+        text="시작하기"
         onPress={() => goBackHome()}
       />
     </ScreenLayout>

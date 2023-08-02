@@ -1,14 +1,15 @@
-import React, { useContext, useState } from 'react';
-import styled from 'styled-components/native';
-import { colors } from '../../colors';
-import { Button, BackButton } from '../../Shared';
+import React, { useContext, useState } from "react";
+import styled from "styled-components/native";
+import { colors } from "../../colors";
+import { Button, BackButton } from "../../Shared";
 import {
   Input,
   ScreenLayout,
   StatusText,
   Title,
-} from '../../components/Shared/OnBoarding_Shared';
-import { AppContext } from '../../components/ContextProvider';
+} from "../../components/Shared/OnBoarding_Shared";
+import axios from "axios";
+import { AppContext } from "../../components/ContextProvider";
 const TextContainer = styled.View`
   margin-top: 124px;
   flex-direction: column;
@@ -28,18 +29,34 @@ const SubText = styled.Text`
 `;
 
 const Login = ({ route, navigation }) => {
-  const [PW, setPW] = useState('');
+  const [PW, setPW] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const { toggleLogin } = useContext(AppContext);
+  const { toggleLogin, setToken } = useContext(AppContext);
   const email = route.params.email;
-
+  const postLogin = async (email, PW) => {
+    try {
+      let url = "https://gpthealth.shop/";
+      let detailAPI = "app/login";
+      console.log(email, PW);
+      let data = { userId: email, userPw: PW };
+      // const queryStr = `?userId=${email}&userPw=${PW}`;
+      const response = await axios.post(url + detailAPI, data, {
+        headers: {
+          "Content-Type": `application/json`,
+        },
+      });
+      const result = response.data;
+      return result;
+    } catch (error) {
+      console.error("Failed to fetch data:", error);
+    }
+  };
   const handlePress = () => {
-    console.log('HandlePress');
-    //login (email, PW);
-    // setIsLoading(false)
-    //login mutation 실행 후 boolean값 대조하기
-    // if(true){toggleLogin()}
-    toggleLogin();
+    setIsLoading(true);
+    postLogin(email, PW).then((response) => {
+      setToken(response.result.accessToken);
+      toggleLogin();
+    });
   };
 
   return (
@@ -54,20 +71,18 @@ const Login = ({ route, navigation }) => {
         <Input
           placeholderTextColor={colors.grey_3}
           autoFocus
-          onSubmitEditing={() => {
-            console.log('HI');
-          }}
-          placeholder='password'
+          onSubmitEditing={() => handlePress()}
+          placeholder="password"
           secureTextEntry={true}
-          returnKeyType='done'
+          returnKeyType="done"
           blurOnSubmit={false}
           onChangeText={(text) => setPW(text)}
         />
       </InputContainer>
       <Button
         loading={isLoading}
-        enabled={PW.length > 7}
-        text='로그인'
+        enabled={(PW.length > 2) & !isLoading}
+        text="로그인"
         onPress={() => handlePress()}
       ></Button>
     </ScreenLayout>

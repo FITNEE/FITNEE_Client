@@ -53,6 +53,7 @@ const CreateAccount_2 = ({ route, navigation }) => {
       email,
       PW,
       nickname,
+      gender,
       birthYear,
     });
   };
@@ -109,16 +110,16 @@ const CreateAccount_2 = ({ route, navigation }) => {
             />
             <GenderContainer>
               <GenderButton
-                style={gender == 1 && { backgroundColor: colors.l_sub_1 }}
-                onPress={() => setGender(1)}
+                style={gender == 2 && { backgroundColor: colors.l_sub_1 }}
+                onPress={() => setGender(2)}
               >
                 <GenderText style={gender == 0 && { color: colors.grey_8 }}>
                   여성
                 </GenderText>
               </GenderButton>
               <GenderButton
-                style={gender == 0 && { backgroundColor: colors.l_sub_1 }}
-                onPress={() => setGender(0)}
+                style={gender == 1 && { backgroundColor: colors.l_sub_1 }}
+                onPress={() => setGender(1)}
               >
                 <GenderText style={gender == 0 && { color: colors.grey_8 }}>
                   남성

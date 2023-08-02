@@ -95,10 +95,9 @@ const CreateAccount_3 = ({ route, navigation }) => {
   const [heights, setHeights] = useState([]);
   const [weight, setWeight] = useState(0);
   const [weights, setWeights] = useState([]);
-  const [mode, setMode] = useState(null);
+  const [mode, setMode] = useState(0);
   const [snapPoints, setSnapPoints] = useState(["1%"]);
   const [BMI, setBMI] = useState(0);
-  console.log(mode);
   const bottomModal = useRef();
 
   const hideModal = () => {
@@ -113,6 +112,7 @@ const CreateAccount_3 = ({ route, navigation }) => {
   const PW = route.params.PW;
   const nickname = route.params.nickname;
   const birthYear = route.params.birthYear;
+  const gender = route.params.gender;
 
   console.log(route.params);
   const handleSubmit = () => {
@@ -122,6 +122,7 @@ const CreateAccount_3 = ({ route, navigation }) => {
       nickname,
       birthYear,
       height,
+      gender,
       weight,
     });
   };
@@ -142,6 +143,7 @@ const CreateAccount_3 = ({ route, navigation }) => {
   const onPressBottomModal = () => bottomModal.current?.present();
 
   useEffect(() => {
+    onPressBottomModal();
     let data = [];
     data.push("150 이하");
     for (var i = 151; i < 190; i++) {
@@ -156,7 +158,6 @@ const CreateAccount_3 = ({ route, navigation }) => {
     }
     data.push("90 이상");
     setWeights(data);
-    onPressBottomModal();
   }, []);
   useEffect(() => {
     const heightInM = height / 100;
@@ -182,18 +183,18 @@ const CreateAccount_3 = ({ route, navigation }) => {
             </SubText>
             <NumberInput
               value={height}
-              onPress={() => popModal(0)}
+              onPress={() => popModal(1)}
               placeholder="키"
-              active={mode == 0}
+              active={mode == 1}
             />
             <SubText style={{ marginLeft: 8, color: colors.grey_5 }}>
               몸무게(kg)
             </SubText>
             <NumberInput
               value={weight}
-              onPress={() => popModal(1)}
+              onPress={() => popModal(2)}
               placeholder="몸무게"
-              active={mode == 1}
+              active={mode == 2}
             />
           </BottomContainer>
           <BMIContainer>
@@ -215,13 +216,13 @@ const CreateAccount_3 = ({ route, navigation }) => {
           </BMIContainer>
           <Button enabled={height && weight} onPress={() => handleSubmit()} />
           <MyBottomSheet
-            setValue={mode == 0 ? setHeight : setWeight}
-            selectableDatas={mode == 0 ? heights : weights}
+            setValue={mode == 1 ? setHeight : setWeight}
+            selectableDatas={mode == 1 ? heights : weights}
             modalRef={bottomModal}
             snapPoints={snapPoints}
-            defaultVal={mode == 0 ? 170 : 60}
+            defaultVal={mode == 1 ? 170 : 60}
             hideFunc={() => hideModal()}
-            nextFunc={mode == 0 ? () => setMode(1) : () => hideModal()}
+            nextFunc={mode == 1 ? () => setMode(2) : () => hideModal()}
           />
         </ScreenLayout>
       </Pressable>
