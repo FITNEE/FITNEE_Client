@@ -12,6 +12,7 @@ import { useState } from "react";
 export default function App() {
   const [loading, setLoading] = useState(true);
   const [loggedIn, setLoggedIn] = useState(true);
+  const [token, setToken] = useState("");
   const onFinish = () => setLoading(false);
   const toggleLogin = () => {
     setLoggedIn(!loggedIn);
@@ -19,6 +20,9 @@ export default function App() {
   };
   const userSettings = {
     toggleLogin,
+    setToken,
+    toggleColorMode,
+    token,
     loggedIn,
   };
 
