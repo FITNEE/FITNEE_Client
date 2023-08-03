@@ -6,6 +6,7 @@ import OnBoardingNav from "./navigators/OnBoardingNav";
 import LoggedInNav from "./navigators/LoggedInNav";
 import { AppContext } from "./components/ContextProvider";
 import { useState } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function App() {
   const [loading, setLoading] = useState(true);
@@ -14,29 +15,34 @@ export default function App() {
 
   const onFinish = () => setLoading(false);
 
+  const [isDark, setIsDark] = useState(false);
   const toggleLogin = () => {
-    setLoggedIn(!loggedIn);
-    console.log(loggedIn);
+    if (loggedIn) {
+      AsyncStorage.removeItem("token");
+      setLoggedIn(false);
+    } else {
+      setLoggedIn(true);
+    }
   };
 
   const preload = async () => {
-    // const token = await AsyncStorage.getItem("token");
-    // if (token) {
-    // setLoggedIn(true);
-    // }
+    await AsyncStorage.getItem("token").then((token) => {
+      console.log(token);
+      if (token) {
+        setLoggedIn(true);
+      }
+    });
   };
 
-  // if (loading) {
-  //   return (
-  //     <AppLoading
-  //       startAsync={preload}
-  //       onError={console.warn}
-  //       onFinish={onFinish}
-  //     />
-  //   );
-  // }
-
-  const [isDark, setIsDark] = useState(false);
+  if (loading) {
+    return (
+      <AppLoading
+        startAsync={preload}
+        onError={console.warn}
+        onFinish={onFinish}
+      />
+    );
+  }
 
   return (
     <AppContext.Provider
