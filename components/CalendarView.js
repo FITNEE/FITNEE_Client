@@ -32,24 +32,26 @@ export default function CalendarView(props) {
             [selectedDate]: {
                 ...exerciseDay[selectedDate],
                 selected: true,
-                selectedColor: colors.grey_7
+                selectedColor: colors.l_main,
+                selectedTextColor: colors.white,
             }}}
         theme={{
-            todayTextColor: '#9747ff',
+            todayTextColor: colors.black,
             locale: 'ko',
             textDayFontSize: 13,
             textDayFontWeight: 400,
-            textDayStyle: {color: colors.grey_3},
-            textSectionTitleColor: colors.black,
+            textDayStyle: {color: colors.grey_7},
+            textSectionTitleColor: colors.grey_7,
             'stylesheet.calendar.header': {
                 monthText: {
                     fontSize: 15,
                     fontWeight: 600,
-                    color: "black",
+                    color: colors.black,
                     margin: 24 // default
                 }
             },
-            selectedDayBackgroundColor: colors.grey_3
+            selectedDayBackgroundColor: colors.l_sub_2,
+            selectedDayTextColor: colors.l_main,
         }}
         onDayPress={day => {
             props.dayFunction(day);
