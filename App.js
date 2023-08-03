@@ -1,7 +1,5 @@
-import CreateRoutineNav from "./navigation/CreateRoutineNav";
 import AppLoading from "expo-app-loading";
 import { NavigationContainer } from "@react-navigation/native";
-import MyPageNav from "./navigators/MyPageNav";
 import OnBoardingNav from "./navigators/OnBoardingNav";
 import LoggedInNav from "./navigators/LoggedInNav";
 import { AppContext } from "./components/ContextProvider";

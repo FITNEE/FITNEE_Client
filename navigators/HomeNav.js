@@ -14,7 +14,6 @@ export default function HomeNav() {
       }}
     >
       <Stack.Screen name="Home" component={Home} />
-      {/* <Stack.Screen name="Test" component={Test} /> */}
     </Stack.Navigator>
   );
 }

@@ -75,6 +75,7 @@ const Login = ({ route, navigation }) => {
         toggleLogin();
       } else {
         setStatusText(response.message);
+        setIsLoading(false);
       }
     });
   };
