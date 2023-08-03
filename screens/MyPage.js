@@ -29,12 +29,12 @@ export default function MyPage() {
       console.error("Failed to fetch data:", error);
     }
   };
-  const updatePWD = async () => {
+  const updatePWD = async (newPW) => {
     try {
       let url = "https://gpthealth.shop/";
       let detailAPI = `app/mypage/updatepwd`;
       const response = axios.put(url + detailAPI, {
-        userPw: "asdf",
+        userPw: newPW,
       });
 
       //   const result = response.data;
