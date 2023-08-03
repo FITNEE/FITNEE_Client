@@ -5,11 +5,12 @@ import { Button, BackButton } from "../../Shared";
 import {
   Input,
   ScreenLayout,
-  StatusText,
   Title,
 } from "../../components/Shared/OnBoarding_Shared";
 import axios from "axios";
 import { AppContext } from "../../components/ContextProvider";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
 const TextContainer = styled.View`
   margin-top: 124px;
   flex-direction: column;
@@ -21,6 +22,15 @@ const InputContainer = styled.View`
   width: 100%;
   margin-bottom: 232px;
 `;
+const PWStatusText = styled.Text`
+  font-size: 12px;
+  width: 100%;
+  text-align: right;
+  margin-bottom: 12px;
+  margin-right: 8px;
+  font-weight: 300;
+  color: ${colors.red};
+`;
 const SubText = styled.Text`
   font-size: 13px;
   margin-top: 8px;
@@ -31,6 +41,7 @@ const SubText = styled.Text`
 const Login = ({ route, navigation }) => {
   const [PW, setPW] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [statusText, setStatusText] = useState("");
   const { toggleLogin, setToken } = useContext(AppContext);
   const email = route.params.email;
   const postLogin = async (email, PW) => {
@@ -55,9 +66,16 @@ const Login = ({ route, navigation }) => {
     setIsLoading(true);
     postLogin(email, PW).then((response) => {
       console.log(response);
-      // console.log(response.result.accessToken);
-      setToken(response.result.accessToken);
-      toggleLogin();
+      //로그인 성공 시,
+      if (response.code == 1000) {
+        AsyncStorage.setItem("token", response.result.accessToken).then(
+          console.log("token set to AsyncStorage")
+        );
+        setToken(response.result.accessToken);
+        toggleLogin();
+      } else {
+        setStatusText(response.message);
+      }
     });
   };
 
@@ -69,8 +87,9 @@ const Login = ({ route, navigation }) => {
         <SubText>비밀번호를 입력해주세요.</SubText>
       </TextContainer>
       <InputContainer>
-        <StatusText>비밀번호가 일치하지 않습니다</StatusText>
+        <PWStatusText>{statusText}</PWStatusText>
         <Input
+          style={statusText && { border: ` 1px ${colors.red} solid` }}
           placeholderTextColor={colors.grey_3}
           autoFocus
           onSubmitEditing={() => handlePress()}

@@ -6,6 +6,7 @@ import { Button } from "../../Shared";
 import LottieView from "lottie-react-native";
 import { AppContext } from "../../components/ContextProvider";
 import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const ScreenLayout = styled.SafeAreaView`
   flex-direction: column;
@@ -77,6 +78,9 @@ const CreateAccount_4 = ({ route, navigation }) => {
     postUser(data)
       .then((response) => {
         setToken(response.result.accessToken);
+        AsyncStorage.setItem("token", response.result.accessToken).then(
+          console.log("token set to AsyncStorage")
+        );
       })
       .then(setIsLoading(false));
   };
