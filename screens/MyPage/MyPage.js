@@ -59,7 +59,7 @@ export default function MyPage() {
     };
     const SelectedBoxStyle = {
         borderBottomWidth: 2,
-        border: colors.grey_4
+        border: colors.l_main
     };
 
     return (
