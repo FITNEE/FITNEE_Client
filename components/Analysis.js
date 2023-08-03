@@ -2,17 +2,12 @@ import React, { useState } from "react";
 import { Text, View } from "react-native";
 import PercentageCircle from "react-native-progress-circle";
 import { styled } from "styled-components/native";
+import TotalChart from "./TotalChart";
 
 
     const Container = styled.View`
         width: 100%;
         margin-bottom: 50px;
-    `;
-    const Pictogram = styled.View`
-        height: 240px;
-        margin: 26px 24px 0px 24px;
-        border-radius: 20px;
-        background-color: #f3f3f3;
     `;
     const Exercise = styled.View`
         padding-top: 32px;
@@ -65,7 +60,7 @@ export default function Analysis() {
 
     return (
     <Container>
-    <Pictogram/>
+    <TotalChart/>
     <Exercise>
         <Title>운동 현황</Title>
         <Block>
