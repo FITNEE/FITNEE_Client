@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native";
 import { styled } from "styled-components/native";
 import { colors } from "../../colors";
@@ -10,7 +10,7 @@ import { colors } from "../../colors";
     `;
     const Profile = styled.View`
         align-items: center;
-        margin-top: 12px;
+        margin-top: 35px;
         margin-bottom: 32px;
     `;
     const ProfileImage = styled.TouchableOpacity`
@@ -60,6 +60,47 @@ import { colors } from "../../colors";
     `;
 
 export default function UserInfo({ navigation }) {
+
+    const [userData, setUserData] = useState([]);
+    const getUserInfoData = async () => {
+    try {
+        let url = "https://gpthealth.shop/";
+        let detailAPI = `app/mypage/userinfo`;
+        const response = await axios.get(
+        url + detailAPI
+        );
+        const result = response.data;
+        return result;
+    } catch (error) {
+        console.error("Failed to fetch data:", error);
+    }
+    };
+    /*
+    const updatePWD = async (newPW) => {
+    try {
+        let url = "https://gpthealth.shop/";
+        let detailAPI = `app/mypage/updatepwd`;
+        const response = axios.put(url + detailAPI, {
+        userPw: newPW,
+        });
+
+        //   const result = response.data;
+        return response;
+    } catch (error) {
+        console.error("Failed to fetch data:", error);
+    }
+    };
+    */
+
+    useEffect(() => {
+    // updatePWD().then((result) => {
+    //   console.log(result.data);
+    // });
+    getUserInfoData().then((response) => {
+        //setData(response);
+        console.log(response);
+        });
+        }, []);
     
     const USER_DATA = [
         {
@@ -92,7 +133,7 @@ export default function UserInfo({ navigation }) {
         </Block>
         <Bar/>
         <MiniBlock>
-            <Click><ClickText>비밀번호 수정</ClickText></Click>
+            <Click onPress={() => { navigation.navigate("EditPW")}}><ClickText>비밀번호 수정</ClickText></Click>
         </MiniBlock>
         <MiniBlock>
             <Click><ClickText>회원 탈퇴하기</ClickText></Click>
