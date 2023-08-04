@@ -12,9 +12,9 @@ export default function CalendarView(props) {
     const [selectedDate, setSelectedDate] = useState('');
 
     const exerciseDay = {
-        '2023-07-04': { selected: true },
-        '2023-07-06': { selected: true },
-        '2023-07-08': { selected: true },
+        '2023-08-02': { selected: true },
+        '2023-08-06': { selected: true },
+        '2023-08-08': { selected: true },
     }
     
     return ( <Calendar
@@ -37,10 +37,11 @@ export default function CalendarView(props) {
             }}}
         theme={{
             todayTextColor: colors.black,
+            todayBackgroundColor: colors.grey_2,
             locale: 'ko',
             textDayFontSize: 13,
             textDayFontWeight: 400,
-            textDayStyle: {color: colors.grey_7},
+            textDayStyle: {color: colors.grey_4},
             textSectionTitleColor: colors.grey_7,
             'stylesheet.calendar.header': {
                 monthText: {
@@ -50,8 +51,8 @@ export default function CalendarView(props) {
                     margin: 24 // default
                 }
             },
-            selectedDayBackgroundColor: colors.l_sub_2,
-            selectedDayTextColor: colors.l_main,
+            selectedDayTextColor: colors.black,
+            selectedDayBackgroundColor: 'transparent'
         }}
         onDayPress={day => {
             props.dayFunction(day);
