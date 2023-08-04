@@ -13,7 +13,7 @@ import { AppContext } from "../../components/ContextProvider";
         width: 100%;
         flex-direction: row;
         align-items: center;
-        margin-top: 24px;
+        margin-top: 35px;
         padding-left: 24px;
         margin-bottom: 22px;
         padding-right: 30px;

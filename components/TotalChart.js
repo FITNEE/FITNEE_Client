@@ -22,9 +22,6 @@ export default function TotalChart() {
         useShadowColorFromDataset: true,
         fillShadowGradientFromOpacity: 0.3,
         fillShadowGradientToOpacity: 0,
-        propsForBackgroundLines: {
-            colo
-        },
         
         backgroundGradientFrom: colors.grey_1,
         backgroundGradientTo: colors.grey_1,
@@ -49,11 +46,11 @@ export default function TotalChart() {
         };
 
         
-     const lastDataIndex = data.labels.length - 1;
-  const valueDataset0 = data.datasets[0].data[lastDataIndex];
-  const valueDataset1 = data.datasets[1].data[lastDataIndex];
-  const maxValue = Math.max(valueDataset0, valueDataset1);
-  const isDataset0Larger = maxValue === valueDataset0;
+    const lastDataIndex = data.labels.length - 1;
+    const valueDataset0 = data.datasets[0].data[lastDataIndex];
+    const valueDataset1 = data.datasets[1].data[lastDataIndex];
+    const maxValue = Math.max(valueDataset0, valueDataset1);
+    const isDataset0Larger = maxValue === valueDataset0;
         
 
     return (
