@@ -93,6 +93,7 @@ const TopContainer = styled.View`
   justify-content: space-between;
   align-items: center;
   margin-bottom: 16px;
+  height: 24px;
 `;
 const ExerciseTitle = styled.Text`
   font-size: 17px;
@@ -176,7 +177,8 @@ const MyRoutine = () => {
 
   const extendModal = () => {
     console.log("modal Extended");
-    setSnapPoints(["60%"]);
+    //기존 스냅포인트 수치보다 키보드 절대높이인 28%를 더하여서 유동적인 bottomSheet면적에 대비
+    setSnapPoints([`${parseInt(snapPoints[0]) + 28}%`]);
   };
   const toggleMode = () => {
     setMode(!mode);
@@ -186,13 +188,10 @@ const MyRoutine = () => {
       {
         text: "상세옵션 편집",
         onPress: () => {
-          //Modal을 띄우기 위해 필요한 유일한 조건
           setModalShown(true);
+          setSnapPoints([`${10 + 8 * newRoutine[id].content.length}%`]);
+          //확대하고자 하는 운동종목의 세트수에 따라 확장되는 정도를 유동적으로 제어하기 위함
           setEditingID(id);
-          // var arr = Array(routineData[id].content.length).fill({
-          //   rep: 0,
-          //   weight: 0,
-          // });
         },
         style: "default",
       },
@@ -264,7 +263,7 @@ const MyRoutine = () => {
   };
   useEffect(() => {
     if (modalShown == true) {
-      setSnapPoints(["34%"]);
+      // setSnapPoints([`${20 * newRoutine[editingID].content.length}%`]);
     } else {
       setSnapPoints(["1%"]);
     }
@@ -272,10 +271,23 @@ const MyRoutine = () => {
   }, [modalShown]);
 
   const editRoutine = (id, type, value) => {
-    let newArr = JSON.parse(JSON.stringify(routineData));
-    console.log(newArr[editingID].content[id].type);
-    console.log(routineData[editingID]?.content);
+    let newArr = JSON.parse(JSON.stringify(newRoutine));
+    if (type == "repeat") {
+      newArr[editingID].content[id].rep = value;
+    } else if (type == "weight") {
+      newArr[editingID].content[id].weight = value;
+    } else if (type == "deleteSet") {
+      newArr[id].content.splice(value, 1);
+    } else {
+      newArr[id].content.push({
+        rep: newArr[id].content[newArr[id].content.length - 1].rep,
+        weight: newArr[id].content[newArr[id].content.length - 1].weight,
+      });
+    }
+    console.log("editRoutine수행 후 결과값:", newArr[id].content);
+    setNewRoutine(newArr);
   };
+
   const onPressBottomModal = () => bottomModal.current?.present();
 
   useEffect(() => {
@@ -283,12 +295,14 @@ const MyRoutine = () => {
       getRoutine().then((res) => {
         if (res.code == 1000) {
           setRoutineData(res.result);
+          setNewRoutine(res.result);
         } else {
           console.log("요일 루틴 가져오기 실패");
         }
       });
     }
   }, [selectedDay]);
+
   useEffect(() => {
     onPressBottomModal();
     /**요일별 루틴 유무를 파악하고 화면에 출력하는 과정 */
@@ -368,11 +382,13 @@ const MyRoutine = () => {
                     title="운동 편집"
                     subTitle="루틴을 원하는 요일에 끌어다 놓을 수 있어요"
                   />
-                  {routineData?.map((item, id) => (
+                  {newRoutine?.map((item, id) => (
                     <ExerciseItem_Custom
                       key={id}
+                      id={id}
                       content={item.content}
                       title={item.exerciseName}
+                      editRoutine={editRoutine}
                       popMessage={() => popMessage(id)}
                     />
                   ))}
@@ -421,9 +437,9 @@ const MyRoutine = () => {
                   </SubmitButton>
                 </TopContainer>
                 <ExtendedContainer>
-                  {routineData /** 운동이 없는 요일을 선택했을 경우, Null값이 반환됨에 따라 
+                  {newRoutine /** 운동이 없는 요일을 선택했을 경우, Null값이 반환됨에 따라 
                   null을 object로 만들수 없다는 오류를 피하기 위함 */ &&
-                    routineData[editingID]?.content.map((item, id) => (
+                    newRoutine[editingID]?.content.map((item, id) => (
                       <SetContainer key={id}>
                         <ContentContainer>
                           <SetsText>{id + 1}</SetsText>
