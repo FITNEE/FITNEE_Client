@@ -131,23 +131,23 @@ export default function Dictionary_2({ navigation, route }){
         navigation.goBack()
     }
 
-    // const getPartsExercise = async () => {
-    //     try {
-    //       let url = "https://gpthealth.shop/";
-    //       let detailAPI = "/app/dictionary/exerciseinfo";
-    //       const response = await axios.get(url + detailAPI, {
-    //         params:{
-    //             parts: "엉덩이"
-    //         }
-    //       });
-    //       const result = response.data;
-    //       console.log(result.result)
-    //       return result;
-    //     } 
-    //     catch (error) {
-    //       console.error("Failed to fetch data:", error);
-    //     }
-    //   };
+    const getPartsExercise = async () => {
+        try {
+          let url = "https://gpthealth.shop/";
+          let detailAPI = "/app/dictionary/exerciseinfo";
+          const response = await axios.get(url + detailAPI, {
+            params:{
+                parts: "엉덩이"
+            }
+          });
+          const result = response.data;
+          console.log(result.result)
+          return result;
+        } 
+        catch (error) {
+          console.error("Failed to fetch data:", error);
+        }
+      };
       
 
     return(
@@ -172,23 +172,7 @@ export default function Dictionary_2({ navigation, route }){
                     }
                     </PartContainer>
                 </TopContainer>
-                <ListContainer showsVerticalScrollIndicator='false'>
-                {
-                    exerciseName.map((exercise) => (
-          
-          <ExerciseContainer onPress={()=>navigation.navigate('Dictionary_3')}>
-                            <ExerciseLeftContainer>
-                                <ExerciseImg></ExerciseImg>
-                                <ExerciseDetailContainer>
-                                    <ExerciseName>데드리프트</ExerciseName>
-                                    <ExerciseArea>전신 | 코어 | 바벨</ExerciseArea>                        
-                                </ExerciseDetailContainer>
-                            </ExerciseLeftContainer>
-                            <AddtoBtn/>
-                        </ExerciseContainer>
-                    ))
-                }
-                </ListContainer>
+                
             </Container>
         </SafeAreaView>
     )

@@ -1,18 +1,18 @@
-import React, { useState, useRef, useEffect, useCallback, useMemo, useContext } from 'react'
+import React, { useState, useRef, useEffect, useCallback, useMemo, useContext, createContext } from 'react'
 import styled from 'styled-components/native'
 import { colors } from '../../colors'
-import { Alert, View, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, Platform, ScrollView, TouchableOpacity, SafeAreaView, Dimensions, Touchable } from 'react-native'
+import { Dimensions, Alert, TouchableWithoutFeedback, ScrollView, SafeAreaView } from 'react-native'
 import WrappedText from 'react-native-wrapped-text'
-import BottomSheet, { BottomSheetScrollView, BottomSheetTextInput, BottomSheetBackdrop } from "@gorhom/bottom-sheet";
+import BottomSheet, { BottomSheetScrollView, BottomSheetBackdrop } from "@gorhom/bottom-sheet";
 import { AppContext } from '../../components/ContextProvider';
+import Dictionary_LeftTab from '../../components/Dictionary_LeftTab'
+import Dictionary_RightTab from '../../components/Dictionary_RightTab'
 
-const SCREEN_WIDTH = Dimensions.get('screen').width;
-
+const SCREEN_WIDTH = Dimensions.get('screen').width
 const Container = styled.View`
     flex: 1;
     background-color: ${colors.grey_1};
 `
-
 const TopBtnContainer = styled.View`
     flex-direction: row;
     justify-content: space-between;
@@ -52,7 +52,6 @@ const TitleContainer = styled.View`
 const NameContainer = styled.View`
     margin-right: 40px;
 `
-
 const TitleText = styled.Text`
     color: ${colors.black};
     font-weight: 600;
@@ -72,11 +71,10 @@ const Bubble = styled.View`
     border-radius: 12px;
     align-items: center;
     justify-content: center;
-    bottom: 290px;
+    bottom: 40%;
     right: 25px;
     z-index: 1;
-`;
-
+`
 const BubbleArrow = styled.View`
     position: absolute;
     display: block;
@@ -88,14 +86,13 @@ const BubbleArrow = styled.View`
     border: 8px solid transparent;
     border-top-color: ${colors.grey_9};
    border-bottom: 0;
-`;
+`
 const BubbleText = styled.Text`
     font-size: 11px;
     color: white;
     font-weight: 400;
     line-height: 18px;
-`;
-
+`
 const TabContainer = styled.View`
     margin-top: 8px;
     height: 45px;
@@ -145,100 +142,6 @@ const NotReadDot = styled.View`
     margin-top: 10px;
     margin-left: 3px;
 `
-
-const ContentContainer = styled.ScrollView`
-`
-const ProcessContainer = styled.View`
-    margin: 16px 24px;
-`
-const Process = styled.View`
-    background-color: ${colors.grey_1};
-    border-radius: 12px;
-    padding: 20px 24px;
-    margin-bottom: 8px;
-
-    flex-direction: row;
-`
-
-const ProcessContent = styled.View`
-    align-items: flex-start;
-    margin-left: 8px;
-    margin-right: 21px;
-`
-const ProcessName = styled.Text`
-    color: ${colors.black};
-    font-weight: 600;
-    font-size: 15px;
-    margin-bottom: 8px;
-`
-
-const CautionContainer = styled.View`
-    margin: 36px 24px;
-`
-const CautionTitleContainer = styled.View`
-    flex-direction: row;
-    align-items: center;
-    margin-bottom: 16px;
-`
-const CautionImage = styled.Image`
-    background-color: ${colors.red};
-    width: 20px;
-    height: 20px;
-    margin-right: 4px;
-`
-const CautionTitle = styled.Text`
-    color: ${colors.black};
-    font-weight: 600;
-    font-size: 15px;
-`
-const CautionContentContainer = styled.View`
-    padding: 24px;
-    background-color: ${colors.grey_1};
-    border-radius: 12px;
-`
-const CautionDetailContainer = styled.View`
-    flex-direction: row;
-    align-items: center;   
-`
-const CautionDetail = styled.Text`
-    color: ${colors.black};
-    font-weight: 400;
-    font-size: 13px;
-`
-
-const ChatContainer = styled.View`
-    margin-left: 24px;
-    margin-bottom: 16px;
-    margin-right: 24px;
-`
-
-const MessageWrapper = styled.View`
-    align-items: flex-start;
-`
-const MessageContainer = styled.View`
-    background-color: ${colors.grey_1};
-    border-radius: 12px 12px 12px 0px;
-    padding: 8px 16px;
-    max-width: 200px;
-`
-const MyMessageContainer = styled.View`
-    background-color: ${colors.grey_1};
-    border-radius: 12px 12px 0px 12px;
-    padding: 8px 16px;
-    max-width: 200px;
-`
-const MyMessageWrapper = styled.View`
-    justify-content: flex-end;
-    align-items: center;
-    flex-direction: row;
-`
-const MsgDeleteBtn = styled.TouchableOpacity`
-    width: 24px;
-    height: 24px;
-    border-radius: 12px;
-    background-color: ${colors.red};
-    margin-right: 8px;
-`
 const JoinImage = styled.Image`
     background-color: ${colors.red};
     width: 20px;
@@ -250,165 +153,49 @@ const JoinText = styled.Text`
     color: ${colors.white};
     font-size: 13;
 `
-const TextInputBG = styled.View`
-    background-color: ${colors.grey_1};
-    justify-content: center;
-    align-items: center;
-    padding: 9px 16px;
-`
-const TextInputContainer = styled.View`
-    background-color: white;
-    border-radius: 50px;
-    width: 100%;
-    flex-direction: row;
-    padding: 6px;
-`
-const TextInput = styled.TextInput`
-    color: ${colors.black};
-    width: 300px;
-    margin-left: 15px;
-`
 
+const DictionaryContext = createContext()
 
 export default function Dictionary_3({ navigation }){
 
     const {isDark} = useContext(AppContext);
 
-    const ProcessNum = styled.Text`
-    color: ${ isDark ? colors.d_main : colors.l_main};
-    font-weight: 600;
-    font-size: 15px;
-    `
-    const UserName = styled.Text`
-    color: ${ isDark ? colors.d_main : colors.l_main};
-    font-size: 11px;
-    font-weight: 400;
-    margin-left: 8px;
-    margin-bottom: 5px;
-    `
     const AreaText = styled.Text`
-    color: ${ isDark ? colors.d_main : colors.l_main};
-    font-weight: 400;
-    font-size: 13px;
-    `
-    const CautionDot = styled.View`
-    background-color: ${ isDark ? colors.d_sub_1 : colors.l_sub_1};
-    width: 12px;
-    height: 12px;
-    border-radius: 6px;
-    margin-right: 4px;
-    margin-top: 4px;
-    margin-bottom: 4px;
+        color: ${ isDark ? colors.d_main : colors.l_main};
+        font-weight: 400;
+        font-size: 13px;
     `
     const JoinBtnContainer = styled.TouchableOpacity`
-    background-color: ${ isDark ? colors.d_main : colors.l_main};
-    border-radius:  100px;
-    padding: 10px 14px;
-    width: 123px;
-
-    flex-direction: row;
-    align-items: center;
-
-    position: absolute;
-    left: ${`${SCREEN_WIDTH/2-123/2}px`};
-    bottom: 24px;
+        background-color: ${ isDark ? colors.d_main : colors.l_main};
+        border-radius:  100px;
+        padding: 10px 14px;
+        width: 123px;
+        flex-direction: row;
+        align-items: center;
+        position: absolute;
+        left: ${`${SCREEN_WIDTH/2-123/2}px`};
+        bottom: 24px;
     `
-    const SendBtn = styled.TouchableOpacity`
-    background-color: ${ isDark ? colors.d_main : colors.l_main};
-    width: 32px;
-    height: 32px;
-    border-radius: 16px;
-`
-
-    const activateTabStyle = { 
-        borderBottomColor: `${ isDark ? colors.d_main : colors.l_main}`,
-        fontWeight: 600, // 이거 적용 안 된다
-    }
-
     const leftTab = useRef()
     const rightTab = useRef()
     const bottomModal = useRef()
-    const bubble = useRef()
-    const scrollView = useRef(null)
 
     const [area, setArea] = useState('어깨 | 측면 삼각근 | 머신')
     const [exerciseName, setExerciseName] = useState('사이드 레터럴 레이즈 머신')
     const [leftTabActivate, setLeftTabActivate ] = useState(true)
     const [notReadCount, setNoteradCount] = useState(0)
     const [isAllRead, setIsAllRead] = useState(true)
-    const [processName, setProcessName] = useState(['안장 높낮이 조절', '시작 자세', '마무리 자세'])
-    const [caution, setCaution] = useState(['허리를 과도하게 안으로 넣지 마세요.', '적절한 무게로 승모근에 무리가 가지 않도록 하세요.', '안장과 바의 위치점을 올바르게 맞춰주세요.'])
-    const [userName, setUserName] = useState(['근손실', '삼대오백', '근손실', '삼대오백', '근손실', '삼대오백', '근손실', '삼대오백', '근손실', '삼대오백', '근손실', '삼대오백'])
-    const [msg, setMsg] = useState([['사레레 무게 얼마나 들 수 있어야 어깨 부자 되나요?', true], ['무게보다는 정확한 자세가 중요합니다. 특히 처음 할 때는 큰 근육에 자극 주기가 힘드니 꾸준히 하셔야해요!', true], ['사레레 무게 얼마나 들 수 있어야 어깨 부자 되나요?', true], ['무게보다는 정확한 자세가 중요합니다. 특히 처음 할 때는 큰 근육에 자극 주기가 힘드니 꾸준히 하셔야해요!', true], ['사레레 무게 얼마나 들 수 있어야 어깨 부자 되나요?', true], ['무게보다는 정확한 자세가 중요합니다. 특히 처음 할 때는 큰 근육에 자극 주기가 힘드니 꾸준히 하셔야해요!', true], ['사레레 무게 얼마나 들 수 있어야 어깨 부자 되나요?', true], ['무게보다는 정확한 자세가 중요합니다. 특히 처음 할 때는 큰 근육에 자극 주기가 힘드니 꾸준히 하셔야해요!', true], ['사레레 무게 얼마나 들 수 있어야 어깨 부자 되나요?', true], ['무게보다는 정확한 자세가 중요합니다. 특히 처음 할 때는 큰 근육에 자극 주기가 힘드니 꾸준히 하셔야해요!', true], ['사레레 무게 얼마나 들 수 있어야 어깨 부자 되나요?', true], ['무게보다는 정확한 자세가 중요합니다. 특히 처음 할 때는 큰 근육에 자극 주기가 힘드니 꾸준히 하셔야해요!', false]])
-    const [chat, setChat] = useState('')
     const [changedSPIndex, setChangedSPIndex] = useState()
     const snapPoints = useMemo(()=> ['45%', '96%'], [])
     const [bubbleBool, setBubbleBool] = useState(true)
     const [joinBtnBool, setJoinBtnBool] = useState(true)
-    const [InputIsFocused, setInputIsFocused] = useState(false)
 
-    const onPressJoinBtn = () => setJoinBtnBool(false)
-    const onChangeChat = (payload) => setChat(payload)
-    const onFocusInput = () => {
-        scrollView.current.scrollToEnd({animated: true})
-    }
-    const handleSnapPress = useCallback((index) => bottomModal.current?.snapToIndex(index))
-    const onPressMsgDeleteBtn = () => {
-        Alert.alert(
-            '이 기기에서 채팅 삭제', 
-            '현재 사용중인 기기에서만 삭제되며\n상대방의 채팅방에서는 삭제되지 않습니다.',
-            [
-                {text: '취소'},
-                {
-                    text: '삭제하기',
-                    onPress: () => console.log('delete'),
-                    style: 'destructive'
-                }
-            ]
-        )
-    }
     const onTabPress = (target) => {
         setBubbleBool(false)
         target===leftTab? 
             setLeftTabActivate(true)
         : 
             setLeftTabActivate(false)
-    }
-    const onSubmitChat = () => {
-        let temp = []
-        chat.length == 0?
-            null
-        :
-            (temp = [...msg, [chat, false]],
-            setMsg(temp),
-            setChat(''),
-            setJoinBtnBool(true), 
-            scrollView.current.scrollToEnd({animated: true}))
-    }
-    const ShowTextInput = () => {
-        if(!joinBtnBool){
-            return(
-                <TextInputBG>
-                    <TextInputContainer>
-                        <BottomSheetTextInput
-                            style={{
-                                color: `${colors.black}`,
-                                width: 300,
-                                marginLeft: 15
-                            }}
-                            type="text"
-                            onChangeText={text => {setChat(text)}}
-                            value={chat}
-                            onSubmitEditing={onSubmitChat}
-                            autoFocus={true}
-                            onFocus={onFocusInput}
-                            // onPressIn={onFocusInput}
-                        />
-                        <SendBtn onPress={onSubmitChat}/>
-                    </TextInputContainer>
-                </TextInputBG>
-            )
-        }
     }
     const renderBackdrop = useCallback(
         props => (
@@ -438,7 +225,7 @@ export default function Dictionary_3({ navigation }){
                     </ImageContainer>
                     {
                         bubbleBool?
-                            <Bubble ref={bubble}>
+                            <Bubble>
                                 <BubbleText>{`+ 버튼을 눌러 마이루틴에 해당\n운동을 추가해보세요!`}</BubbleText>
                                 <BubbleArrow/>
                             </Bubble>
@@ -466,99 +253,28 @@ export default function Dictionary_3({ navigation }){
                             <TabContainer>
                                 <LeftTab 
                                     ref={leftTab} 
-                                    style={leftTabActivate? activateTabStyle: null} 
+                                    style={leftTabActivate? {borderBottomColor: `${ isDark ? colors.d_main : colors.l_main}`}: null} 
                                     onPressIn={()=>onTabPress(leftTab)}>
-                                        <TabText>운동 방법</TabText>
+                                        <TabText style={leftTabActivate? {fontWeight: 600}: null}>운동 방법</TabText>
                                 </LeftTab>         
                                 <RightTab 
                                     ref={rightTab} 
-                                    style={leftTabActivate? null: activateTabStyle} 
+                                    style={leftTabActivate? null: {borderBottomColor: `${ isDark ? colors.d_main : colors.l_main}`}} 
                                     onPressIn={()=>onTabPress(rightTab)}>
-                                        <TabText>채팅 42개</TabText>
+                                        <TabText style={leftTabActivate? null: {fontWeight: 600}}>채팅 42개</TabText>
                                         { isAllRead? null : <NotReadDot/> }
                                 </RightTab>
                             </TabContainer>
                             {
-                            leftTabActivate?
-                                <BottomSheetScrollView 
-                                    showsVerticalScrollIndicator={false}
-                                >            
-                                    <ProcessContainer>
-                                    {                            
-                                        processName.map((processName, i) => (
-                                            <Process>
-                                                <ProcessNum>{'0'+ (i+1)}</ProcessNum>
-                                                <ProcessContent>
-                                                    <ProcessName>{processName}</ProcessName>
-                                                    <WrappedText textStyle={{fontWeight: 400, fontSize: 13, color: `${colors.black}`}}>
-                                                        안장의 높이를 삼두 중앙보다 약간 위쪽과 같도록 맞춘 후 손잡이를 잡아주세요.
-                                                    </WrappedText>
-                                                </ProcessContent>
-                                            </Process>
-                                        ))
-                                    }
-                                    </ProcessContainer>
-
-                                    <CautionContainer>
-                                        <CautionTitleContainer>
-                                            <CautionImage/>
-                                            <CautionTitle>이 부분은 특히 주의해주세요!</CautionTitle>
-                                        </CautionTitleContainer>
-                                        <CautionContentContainer>
-                                        {
-                                            caution.map((caution) => (
-                                                <CautionDetailContainer>
-                                                    <CautionDot/>
-                                                    <CautionDetail>{ caution }</CautionDetail>
-                                                </CautionDetailContainer>
-                                            ))
-                                        }
-                                        </CautionContentContainer>
-                                    </CautionContainer>
-                                </BottomSheetScrollView>
-                                : 
-                                <>
-                                <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-                                    <BottomSheetScrollView 
-                                        ref={ scrollView } 
-                                        style={{paddingTop: 28}} 
-                                        showsVerticalScrollIndicator={false}
-                                    >
-                                        {
-                                            msg.map((msg, i) => (
-                                                <ChatContainer>
-                                                    {
-                                                        msg[1] == true?
-                                                            <MessageWrapper>
-                                                                <UserName>{userName[i]}</UserName>
-                                                                <MessageContainer>
-                                                                    <WrappedText textStyle={{fontWeight: 400, fontSize: 13, color: `${colors.black}`, lineHeight: 17}}>{msg[0]}</WrappedText>
-                                                                </MessageContainer>
-                                                            </MessageWrapper>
-                                                        :
-                                                            <MyMessageWrapper>
-                                                                <MsgDeleteBtn onPress={onPressMsgDeleteBtn}/>
-                                                                <MyMessageContainer>
-                                                                    <WrappedText 
-                                                                        textStyle={{fontWeight: 400, fontSize: 13, color: `${colors.black}`, lineHeight: 17}}
-                                                                        containerStyle={{alignItems: 'left'}}>{msg[0]}</WrappedText>
-                                                                </MyMessageContainer>
-                                                            </MyMessageWrapper>
-                                                    }
-                                                </ChatContainer>
-                                            ))
-                                        }
-                                        <View style={{height: 40}}/>
-                                    </BottomSheetScrollView>
-                                </TouchableWithoutFeedback>
-                                { ShowTextInput() }
-                                </>
+                                leftTabActivate? 
+                                    <Dictionary_LeftTab/> : 
+                                    <Dictionary_RightTab joinBtnBool={joinBtnBool}/>
                             } 
                         </DictionaryContainer>
                     </BottomSheet>
                     {
                         !leftTabActivate && joinBtnBool?
-                            <JoinBtnContainer onPress={onPressJoinBtn}>
+                            <JoinBtnContainer onPress={()=>setJoinBtnBool(false)}>
                                 <JoinImage></JoinImage>
                                 <JoinText>채팅 참여하기</JoinText>
                             </JoinBtnContainer>
