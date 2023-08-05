@@ -1,11 +1,11 @@
-import React, { useContext, useState } from 'react';
-import { SafeAreaView, Text, View } from 'react-native';
-import { AppContext } from '../../components/ContextProvider';
-import { Button } from '../../Shared';
-import { styled } from 'styled-components/native';
-import { colors } from '../../colors';
-import HomeRoutines from '../../components/HomeRoutines';
-import NotHomeRoutine from '../../components/NotHomeRoutine';
+import React, { useContext, useState } from "react";
+import { SafeAreaView, Text, View } from "react-native";
+import { AppContext } from "../../components/ContextProvider";
+import { Button } from "../../Shared";
+import { styled } from "styled-components/native";
+import { colors } from "../../colors";
+import HomeRoutines from "../../components/HomeRoutines";
+import NotHomeRoutine from "../../components/NotHomeRoutine";
 
 const Top = styled.View`
   width: 100%;
@@ -46,18 +46,21 @@ const Home = () => {
   return (
     <SafeAreaView
       style={{
-        width: '100%',
-        flex: 1
+        width: "100%",
+        flex: 1,
       }}
     >
       {/*<Text>Home</Text>
       <Button enabled={true} text='logOut' onPress={() => toggleLogin()} />*/}
-        <Top>
-          <Logo/>
-          <Premium><Circle/><PremiumText>PREMIUM</PremiumText></Premium>
-        </Top>
-        {showRoutine && <HomeRoutines/>}
-        {!showRoutine && <NotHomeRoutine/>}
+      <Top>
+        <Logo />
+        <Premium>
+          <Circle />
+          <PremiumText>PREMIUM</PremiumText>
+        </Premium>
+      </Top>
+      {showRoutine && <HomeRoutines />}
+      {!showRoutine && <NotHomeRoutine />}
     </SafeAreaView>
   );
 };
