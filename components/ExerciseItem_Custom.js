@@ -61,26 +61,34 @@ const AddText = styled.Text`
   font-weight: 500;
 `;
 
-export const ExerciseItem_Custom = ({ content, title, popMessage }) => {
+export const ExerciseItem_Custom = ({
+  id,
+  content,
+  title,
+  popMessage,
+  editRoutine,
+}) => {
   // console.log(content);
   return (
     <ExerciseContainer onLongPress={() => popMessage()}>
       <ExerciseTitle>{title}</ExerciseTitle>
       <ExtendedContainer id>
-        {content.map((item, id) => (
-          <SetContainer key={id}>
+        {content.map((item, contentId) => (
+          <SetContainer key={contentId}>
             <TextContainer>
-              <SetsText>{id + 1}</SetsText>
+              <SetsText>{contentId + 1}</SetsText>
               <SetsText>
                 {item.weight ? item.weight + `   kg` : `-   kg`}
               </SetsText>
               <SetsText>{item.rep + `   회`}</SetsText>
             </TextContainer>
-            <DeleteButton />
+            <DeleteButton
+              onPress={() => editRoutine(id, "deleteSet", contentId)}
+            />
           </SetContainer>
         ))}
 
-        <AddButton onPress={() => console.log("pressed")}>
+        <AddButton onPress={() => editRoutine(id, "add", 0)}>
           <AddText>세트 추가</AddText>
         </AddButton>
       </ExtendedContainer>
