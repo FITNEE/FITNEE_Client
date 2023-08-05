@@ -180,7 +180,70 @@ const MyRoutine = () => {
     //기존 스냅포인트 수치보다 키보드 절대높이인 28%를 더하여서 유동적인 bottomSheet면적에 대비
     setSnapPoints([`${parseInt(snapPoints[0]) + 28}%`]);
   };
+  const updateRoutine = async () => {
+    try {
+      console.log(
+        "SCHEDULE[selectedDay].routineId:",
+        SCHEDULE[selectedDay].routineId
+      );
+      let url = "https://gpthealth.shop/";
+      let detailAPI = `app/routine/${SCHEDULE[selectedDay].routineId}`;
+      const response = await axios.put(url + detailAPI, newRoutine, {
+        headers: {
+          "Content-Type": `application/json`,
+        },
+      });
+      const result = response.data;
+      return result;
+    } catch (error) {
+      console.error("Failed to fetch data:", error);
+    }
+  };
+  const updateSchedule = async (data) => {
+    try {
+      let url = "https://gpthealth.shop/";
+      let detailAPI = `app/routine/calendar`;
+      const response = await axios.put(url + detailAPI, data, {
+        headers: {
+          "Content-Type": `application/json`,
+        },
+      });
+      const result = response.data;
+      return result;
+    } catch (error) {
+      console.error("Failed to fetch data:", error);
+    }
+  };
   const toggleMode = () => {
+    if (mode) {
+      updateRoutine().then(
+        (
+          res //눌렀을 때 mode가 true였을 때, 즉 커스텀모드에서 완료버튼을 눌렀을때.
+        ) => console.log("putRoutine api 호출결과:", res)
+      );
+      if (newSCHE) {
+        //SCHEDULE의 변경이 있었을 경우,
+        let newArr = new Array(SCHEDULE.length);
+        newArr[0] = { monRoutineIdx: SCHEDULE[newSCHE[0]].routineId };
+        newArr[1] = { tueRoutineIdx: SCHEDULE[newSCHE[1]].routineId };
+        newArr[2] = { wedRoutineIdx: SCHEDULE[newSCHE[2]].routineId };
+        newArr[3] = { thuRoutineIdx: SCHEDULE[newSCHE[3]].routineId };
+        newArr[4] = { friRoutineIdx: SCHEDULE[newSCHE[4]].routineId };
+        newArr[5] = { satRoutineIdx: SCHEDULE[newSCHE[5]].routineId };
+        newArr[6] = { sunRoutineIdx: SCHEDULE[newSCHE[6]].routineId };
+        // setSCHEDULE(newArr);
+        console.log("SCHEDULE:", SCHEDULE);
+        console.log("newSCHE:", newSCHE);
+        console.log("newArr:", newArr);
+        // for (let i = 0; i < SCHEDULE.length; i++) {
+        //   tempArr[i].id = newSCHE[i];
+        // }
+      }
+      // console.log(tempArr);
+      //   updateSchedule(tempArr).then((res) =>
+      //   console.log("putRoutineSchedule api 호출결과:", res)
+      // );
+    }
     setMode(!mode);
   };
   const popMessage = (id) => {
@@ -232,7 +295,7 @@ const MyRoutine = () => {
       console.error("Failed to fetch data:", error);
     }
   };
-  const handleBottomSubmit = (data) => {
+  const handleBottomSubmit = () => {
     //일단 ModalShown 변수를 false로 변경하여
     setModalShown(false);
     Keyboard.dismiss();
@@ -309,14 +372,14 @@ const MyRoutine = () => {
     getRoutines().then((res) => {
       if (res.result) {
         //올바른 데이터 백엔드로부터 받아옴
-        console.log("res.result[0]:", res.result);
+        console.log("rawSCHEData", res.result);
         console.log(selectedDay);
         processDayData(res.result);
       } else {
         console.log("백엔드로부터 올바른 myRoutines 데이터 받아오지 못함");
       }
     });
-  }, []);
+  }, [mode]);
   return (
     <BottomSheetModalProvider>
       <ScreenBase>
