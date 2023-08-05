@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components/native';
 import {
     TextInput, 
@@ -18,12 +18,12 @@ const Container = styled.View`
     flex: 1;
     width: 100%;
     background-color: white;
-    padding-top: 24px;
 `
 
 const TopContainer = styled.View`
     padding: 8px 24px;
 
+    flex-direction: row;
     justify-content: center;
     align-items: center; 
 
@@ -49,8 +49,13 @@ const SearchInput = styled.TextInput`
     font-size: 16px;
     font-weight: 400;
     color: ${colors.black};
-
-    width: 268px;
+    width: 240px;
+`
+const DeleteAllBtn = styled.TouchableOpacity`
+    width: 24px;
+    height: 24px;
+    background-color: ${colors.red};
+    margin-left: 16px;
 `
 
 const BottomContainer = styled.View`
@@ -126,6 +131,9 @@ const AutoSearchText = styled.Text`
 export default function Dictionary_1( {navigation} ){
 
     const { isDark } = useContext( AppContext )
+
+    const textInputRef = useRef()
+
     const [recentKeyword, setRecentKeyword] = useState([])
     const [hotKeyword, setHotKeyword] = useState(['바벨', '머신', '프리웨이트', '덤벨', '데드리프트', '사이드 레터럴 레이즈', '크런치'])
     const [search, setSearch] = useState('')
@@ -145,18 +153,18 @@ export default function Dictionary_1( {navigation} ){
             recentKeyword.length === 3? temp = temp.slice(0, 2) : null,
             temp = [search, ...temp],
             setRecentKeyword(temp),
-            navigation.navigate('Dictionary_2')
+            navigation.navigate('Dictionary_2', {search: {search}})
         )
     }
 
-    const convertPage = useEffect(()=>{
+    useEffect(()=>{
         search.length === 0?
             setIsSearching(false)
             : setIsSearching(true)
-    })
+    }, [search])
+
          
     return(
-
         <SafeAreaView style={{backgroundColor: 'white', flex: 1}}>
             <TouchableWithoutFeedback style={{flex:1}} onPress={Keyboard.dismiss}>
                 <Container>
@@ -164,6 +172,7 @@ export default function Dictionary_1( {navigation} ){
                         <SearchContainer>
                             <Logo/>
                             <SearchInput
+                                ref={textInputRef}
                                 placeholder='운동명, 부위 검색'
                                 placeholderTextColor={colors.grey_4}
                                 returnKeyType='search'
@@ -173,6 +182,7 @@ export default function Dictionary_1( {navigation} ){
                                 >
                             </SearchInput>
                         </SearchContainer>
+                        <DeleteAllBtn/>
                     </TopContainer>
                     { !isSearching && <BottomContainer>
                         <RecentContainer style={{marginBottom: 56}}>

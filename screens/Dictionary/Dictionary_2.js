@@ -1,8 +1,9 @@
-import React, { useState, useContext } from 'react'
-import { ScrollView, SafeAreaView, TouchableOpacity } from 'react-native'
+import React, { useState, useContext, useEffect } from 'react'
+import { Pressable, ScrollView, SafeAreaView, TouchableOpacity } from 'react-native'
 import styled from 'styled-components/native';
 import { colors } from '../../colors'
 import { AppContext } from '../../components/ContextProvider';
+import axios from 'axios';
 
 
 const Container = styled.View`
@@ -18,12 +19,11 @@ const TopContainer = styled.View`
     border-bottom-width: 1px;
     border-bottom-color: ${colors.grey_1};
 `
-const SearchContainer = styled.View`
+const SearchContainer = styled.Pressable`
     background-color: ${colors.grey_1};
 
     border-radius: 12px;
     padding: 8px 12px;
-    /* margin: 0px 24px; */
 
     flex-direction: row;
     align-items: center;
@@ -37,7 +37,7 @@ const Logo = styled.Image`
 
     margin-right: 12px;
 `
-const SearchInput = styled.TextInput`
+const SearchInput = styled.Text`
     font-size: 16px;
     font-weight: 400;
     color: ${colors.black};
@@ -50,7 +50,7 @@ const Part = styled.TouchableOpacity`
     border-radius: 100px;
     background-color: ${colors.grey_1};
  
-    padding: 8px 20px;
+    padding: 8px 15px;
     margin-right: 8px;
 `
 const PartText = styled.Text`
@@ -100,14 +100,15 @@ const AddtoBtn = styled.TouchableOpacity`
     height: 24px;
 `
 
-export default function Dictionary_2({ navigation }){
+export default function Dictionary_2({ navigation, route }){
 
-    const {isDark} = useContext(AppContext);
+    const {isDark} = useContext(AppContext)
+    const { search } = route.params
 
     const PressedPart = styled.TouchableOpacity`
         border-radius: 100px;
         background-color: ${ isDark ? colors.d_sub_2 : colors.l_sub_2};
-        padding: 8px 20px;
+        padding: 8px 15px;
         margin-right: 8px;
     `
     const PressedPartText = styled.Text`
@@ -116,7 +117,7 @@ export default function Dictionary_2({ navigation }){
         color: ${ isDark ? colors.d_main : colors.l_main};
     `
 
-    const [part, setPart] = useState([['전신', false], ['어깨', false], ['팔', false], ['가슴', false], ['등', false], ['복근', false]])
+    const [part, setPart] = useState([['전신', false], ['어깨', false], ['상체', false], ['가슴', false], ['등', false], ['복근', false], ['하체', false], ['엉덩이', false], ['유산소', false]])
     const [exerciseName, setExerciseName] = useState(['데드리프트', '데드리프트'])
 
     const onPressPart = (i) => {
@@ -125,13 +126,37 @@ export default function Dictionary_2({ navigation }){
         setPart(temp)
     }
 
+    const goBack = ()=>{
+        navigation.setOptions({animationEnabled: false})
+        navigation.goBack()
+    }
+
+    // const getPartsExercise = async () => {
+    //     try {
+    //       let url = "https://gpthealth.shop/";
+    //       let detailAPI = "/app/dictionary/exerciseinfo";
+    //       const response = await axios.get(url + detailAPI, {
+    //         params:{
+    //             parts: "엉덩이"
+    //         }
+    //       });
+    //       const result = response.data;
+    //       console.log(result.result)
+    //       return result;
+    //     } 
+    //     catch (error) {
+    //       console.error("Failed to fetch data:", error);
+    //     }
+    //   };
+      
+
     return(
         <SafeAreaView style={{flex: 1, backgroundColor: 'white'}}>
             <Container>
                 <TopContainer>
                     <SearchContainer>
                         <Logo/>
-                        <SearchInput/>
+                        <SearchInput>{search.search}</SearchInput>
                     </SearchContainer>
                     <PartContainer 
                         horizontal 
@@ -150,7 +175,8 @@ export default function Dictionary_2({ navigation }){
                 <ListContainer showsVerticalScrollIndicator='false'>
                 {
                     exerciseName.map((exercise) => (
-                        <ExerciseContainer onPress={()=>navigation.navigate('Dictionary_3')}>
+          
+          <ExerciseContainer onPress={()=>navigation.navigate('Dictionary_3')}>
                             <ExerciseLeftContainer>
                                 <ExerciseImg></ExerciseImg>
                                 <ExerciseDetailContainer>

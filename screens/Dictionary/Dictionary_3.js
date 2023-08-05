@@ -270,7 +270,7 @@ const TextInput = styled.TextInput`
 `
 
 
-export default function Dictionary_3(){
+export default function Dictionary_3({ navigation }){
 
     const {isDark} = useContext(AppContext);
 
@@ -330,7 +330,6 @@ export default function Dictionary_3(){
     const bottomModal = useRef()
     const bubble = useRef()
     const scrollView = useRef(null)
-    const textInputRef = useRef()
 
     const [area, setArea] = useState('어깨 | 측면 삼각근 | 머신')
     const [exerciseName, setExerciseName] = useState('사이드 레터럴 레이즈 머신')
@@ -383,7 +382,8 @@ export default function Dictionary_3(){
             (temp = [...msg, [chat, false]],
             setMsg(temp),
             setChat(''),
-            setJoinBtnBool(true))
+            setJoinBtnBool(true), 
+            scrollView.current.scrollToEnd({animated: true}))
     }
     const ShowTextInput = () => {
         if(!joinBtnBool){
@@ -402,7 +402,7 @@ export default function Dictionary_3(){
                             onSubmitEditing={onSubmitChat}
                             autoFocus={true}
                             onFocus={onFocusInput}
-                            ref={textInputRef}
+                            // onPressIn={onFocusInput}
                         />
                         <SendBtn onPress={onSubmitChat}/>
                     </TextInputContainer>
@@ -428,147 +428,145 @@ export default function Dictionary_3(){
             onPress={()=> setBubbleBool(false)}
         >
             <SafeAreaView style={{flex: 1, backgroundColor: `${colors.grey_1}`}}>
-            <Container>
-                <TopBtnContainer>
-                    <TopBtn/>
-                    <TopBtn/>
-                </TopBtnContainer>
-                <ImageContainer>
-                <ExerciseImage resizeMode='contain'/>
-                </ImageContainer>
-                {
-                    bubbleBool?
-                        <Bubble ref={bubble}>
-                            <BubbleText>{`+ 버튼을 눌러 마이루틴에 해당\n운동을 추가해보세요!`}</BubbleText>
-                            <BubbleArrow/>
-                        </Bubble>
-                        :
-                        null
-                }
-
-                <BottomSheet
-                    ref={bottomModal}
-                    index={0}
-                    snapPoints={snapPoints}
-                    enablePanDownToClose={false}
-                    onChange={index=> setChangedSPIndex(index)}
-                    keyboardBehavior='extend'
-                    onPress={()=> setBubbleBool(false)}
-                    backdropComponent={renderBackdrop}
-                >
-                    <DictionaryContainer>
-                        <TitleContainer>
-                            <NameContainer>
-                                <AreaText>{area}</AreaText>
-                                <TitleText>{exerciseName}</TitleText>
-                            </NameContainer>
-                            <AddtoRoutineBtn/>
-                        </TitleContainer>
-                        <TabContainer>
-                            <LeftTab 
-                                ref={leftTab} 
-                                style={leftTabActivate? activateTabStyle: null} 
-                                onPressIn={()=>onTabPress(leftTab)}>
-                                    <TabText>운동 방법</TabText>
-                            </LeftTab>         
-                            <RightTab 
-                                ref={rightTab} 
-                                style={leftTabActivate? null: activateTabStyle} 
-                                onPressIn={()=>onTabPress(rightTab)}>
-                                    <TabText>채팅 42개</TabText>
-                                    { isAllRead? null : <NotReadDot/> }
-                            </RightTab>
-                        </TabContainer>
-                        {
-                        leftTabActivate?
-                            <BottomSheetScrollView 
-                                showsVerticalScrollIndicator={false}
-                            >            
-                                <ProcessContainer>
-                                {                            
-                                    processName.map((processName, i) => (
-                                        <Process>
-                                            <ProcessNum>{'0'+ (i+1)}</ProcessNum>
-                                            <ProcessContent>
-                                                <ProcessName>{processName}</ProcessName>
-                                                <WrappedText textStyle={{fontWeight: 400, fontSize: 13, color: `${colors.black}`}}>
-                                                    안장의 높이를 삼두 중앙보다 약간 위쪽과 같도록 맞춘 후 손잡이를 잡아주세요.
-                                                </WrappedText>
-                                            </ProcessContent>
-                                        </Process>
-                                    ))
-                                }
-                                </ProcessContainer>
-
-                                <CautionContainer>
-                                    <CautionTitleContainer>
-                                        <CautionImage/>
-                                        <CautionTitle>이 부분은 특히 주의해주세요!</CautionTitle>
-                                    </CautionTitleContainer>
-                                    <CautionContentContainer>
-                                    {
-                                        caution.map((caution) => (
-                                            <CautionDetailContainer>
-                                                <CautionDot/>
-                                                <CautionDetail>{ caution }</CautionDetail>
-                                            </CautionDetailContainer>
-                                        ))
-                                    }
-                                    </CautionContentContainer>
-                                </CautionContainer>
-                            </BottomSheetScrollView>
-                            : 
-                            <>
-                            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+                <Container>
+                    <TopBtnContainer>
+                        <TopBtn onPress={()=>navigation.goBack()}/>
+                        <TopBtn/>
+                    </TopBtnContainer>
+                    <ImageContainer>
+                        <ExerciseImage resizeMode='contain'/>
+                    </ImageContainer>
+                    {
+                        bubbleBool?
+                            <Bubble ref={bubble}>
+                                <BubbleText>{`+ 버튼을 눌러 마이루틴에 해당\n운동을 추가해보세요!`}</BubbleText>
+                                <BubbleArrow/>
+                            </Bubble>
+                            :
+                            null
+                    }
+                    <BottomSheet
+                        ref={bottomModal}
+                        index={0}
+                        snapPoints={snapPoints}
+                        enablePanDownToClose={false}
+                        onChange={index=> setChangedSPIndex(index)}
+                        keyboardBehavior='extend'
+                        onPress={()=> setBubbleBool(false)}
+                        backdropComponent={renderBackdrop}
+                    >
+                        <DictionaryContainer>
+                            <TitleContainer>
+                                <NameContainer>
+                                    <AreaText>{area}</AreaText>
+                                    <TitleText>{exerciseName}</TitleText>
+                                </NameContainer>
+                                <AddtoRoutineBtn/>
+                            </TitleContainer>
+                            <TabContainer>
+                                <LeftTab 
+                                    ref={leftTab} 
+                                    style={leftTabActivate? activateTabStyle: null} 
+                                    onPressIn={()=>onTabPress(leftTab)}>
+                                        <TabText>운동 방법</TabText>
+                                </LeftTab>         
+                                <RightTab 
+                                    ref={rightTab} 
+                                    style={leftTabActivate? null: activateTabStyle} 
+                                    onPressIn={()=>onTabPress(rightTab)}>
+                                        <TabText>채팅 42개</TabText>
+                                        { isAllRead? null : <NotReadDot/> }
+                                </RightTab>
+                            </TabContainer>
+                            {
+                            leftTabActivate?
                                 <BottomSheetScrollView 
-                                    ref={ scrollView } 
-                                    style={{paddingTop: 28}} 
                                     showsVerticalScrollIndicator={false}
-                                >
-                                    {
-                                        msg.map((msg, i) => (
-                                            <ChatContainer>
-                                                {
-                                                    msg[1] == true?
-                                                        <MessageWrapper>
-                                                            <UserName>{userName[i]}</UserName>
-                                                            <MessageContainer>
-                                                                <WrappedText textStyle={{fontWeight: 400, fontSize: 13, color: `${colors.black}`, lineHeight: 17}}>{msg[0]}</WrappedText>
-                                                            </MessageContainer>
-                                                        </MessageWrapper>
-                                                    :
-                                                        <MyMessageWrapper>
-                                                            <MsgDeleteBtn onPress={onPressMsgDeleteBtn}/>
-                                                            <MyMessageContainer>
-                                                                <WrappedText 
-                                                                    textStyle={{fontWeight: 400, fontSize: 13, color: `${colors.black}`, lineHeight: 17}}
-                                                                    containerStyle={{alignItems: 'left'}}>{msg[0]}</WrappedText>
-                                                            </MyMessageContainer>
-                                                        </MyMessageWrapper>
-                                                }
-                                            </ChatContainer>
+                                >            
+                                    <ProcessContainer>
+                                    {                            
+                                        processName.map((processName, i) => (
+                                            <Process>
+                                                <ProcessNum>{'0'+ (i+1)}</ProcessNum>
+                                                <ProcessContent>
+                                                    <ProcessName>{processName}</ProcessName>
+                                                    <WrappedText textStyle={{fontWeight: 400, fontSize: 13, color: `${colors.black}`}}>
+                                                        안장의 높이를 삼두 중앙보다 약간 위쪽과 같도록 맞춘 후 손잡이를 잡아주세요.
+                                                    </WrappedText>
+                                                </ProcessContent>
+                                            </Process>
                                         ))
                                     }
-                                    <View style={{height: 50}}/>
+                                    </ProcessContainer>
+
+                                    <CautionContainer>
+                                        <CautionTitleContainer>
+                                            <CautionImage/>
+                                            <CautionTitle>이 부분은 특히 주의해주세요!</CautionTitle>
+                                        </CautionTitleContainer>
+                                        <CautionContentContainer>
+                                        {
+                                            caution.map((caution) => (
+                                                <CautionDetailContainer>
+                                                    <CautionDot/>
+                                                    <CautionDetail>{ caution }</CautionDetail>
+                                                </CautionDetailContainer>
+                                            ))
+                                        }
+                                        </CautionContentContainer>
+                                    </CautionContainer>
                                 </BottomSheetScrollView>
-                            </TouchableWithoutFeedback>
-                            { ShowTextInput() }
-                            </>
-                        } 
-                    </DictionaryContainer>
-                </BottomSheet>
-                {
-                    !leftTabActivate && joinBtnBool?
-                        <JoinBtnContainer onPress={onPressJoinBtn}>
-                            <JoinImage></JoinImage>
-                            <JoinText>채팅 참여하기</JoinText>
-                        </JoinBtnContainer>
-                        :
-                        null
-                }
-
-
-            </Container>
-        </SafeAreaView></TouchableWithoutFeedback>
+                                : 
+                                <>
+                                <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+                                    <BottomSheetScrollView 
+                                        ref={ scrollView } 
+                                        style={{paddingTop: 28}} 
+                                        showsVerticalScrollIndicator={false}
+                                    >
+                                        {
+                                            msg.map((msg, i) => (
+                                                <ChatContainer>
+                                                    {
+                                                        msg[1] == true?
+                                                            <MessageWrapper>
+                                                                <UserName>{userName[i]}</UserName>
+                                                                <MessageContainer>
+                                                                    <WrappedText textStyle={{fontWeight: 400, fontSize: 13, color: `${colors.black}`, lineHeight: 17}}>{msg[0]}</WrappedText>
+                                                                </MessageContainer>
+                                                            </MessageWrapper>
+                                                        :
+                                                            <MyMessageWrapper>
+                                                                <MsgDeleteBtn onPress={onPressMsgDeleteBtn}/>
+                                                                <MyMessageContainer>
+                                                                    <WrappedText 
+                                                                        textStyle={{fontWeight: 400, fontSize: 13, color: `${colors.black}`, lineHeight: 17}}
+                                                                        containerStyle={{alignItems: 'left'}}>{msg[0]}</WrappedText>
+                                                                </MyMessageContainer>
+                                                            </MyMessageWrapper>
+                                                    }
+                                                </ChatContainer>
+                                            ))
+                                        }
+                                        <View style={{height: 40}}/>
+                                    </BottomSheetScrollView>
+                                </TouchableWithoutFeedback>
+                                { ShowTextInput() }
+                                </>
+                            } 
+                        </DictionaryContainer>
+                    </BottomSheet>
+                    {
+                        !leftTabActivate && joinBtnBool?
+                            <JoinBtnContainer onPress={onPressJoinBtn}>
+                                <JoinImage></JoinImage>
+                                <JoinText>채팅 참여하기</JoinText>
+                            </JoinBtnContainer>
+                            :
+                            null
+                    }
+                </Container>
+            </SafeAreaView>
+        </TouchableWithoutFeedback>
     )
 } 
