@@ -164,7 +164,7 @@ const MyRoutine = () => {
   //요일 슬라이드로 변경되는 실시간 SCHEDULE배열 임시 저장하기 위한 함수
   const [newRoutine, setNewRoutine] = useState([]);
 
-  const [newSCHE, setNewSCHE] = useState([]);
+  const [newSCHE, setNewSCHE] = useState(null);
   //console.log("newSCHE:", newSCHE); // {"0": 0, "1": 1, "2": 2, "3": 3, "4": 6, "5": 4, "6": 5}
   //이전 ID값과 변경 이후 ID값 매칭된거, 이거로 app/routine/calendar 호출하기
   const [selectedDay, setSelectedDay] = useState((new Date().getDay() + 6) % 7);
@@ -182,15 +182,15 @@ const MyRoutine = () => {
   };
   const updateRoutine = async () => {
     try {
-      console.log(
-        "SCHEDULE[selectedDay].routineId:",
-        SCHEDULE[selectedDay].routineId
-      );
+      // console.log(
+      //   "SCHEDULE[selectedDay].routineId:",
+      //   SCHEDULE[selectedDay].routineId
+      // );
       let url = "https://gpthealth.shop/";
       let detailAPI = `app/routine/${SCHEDULE[selectedDay].routineId}`;
       const response = await axios.put(url + detailAPI, newRoutine, {
         headers: {
-          "Content-Type": `application/json`,
+          "Content-Type": "application/json",
         },
       });
       const result = response.data;
@@ -202,10 +202,10 @@ const MyRoutine = () => {
   const updateSchedule = async (data) => {
     try {
       let url = "https://gpthealth.shop/";
-      let detailAPI = `app/routine/calendar`;
+      let detailAPI = "app/routine/calendar";
       const response = await axios.put(url + detailAPI, data, {
         headers: {
-          "Content-Type": `application/json`,
+          "Content-Type": "application/json",
         },
       });
       const result = response.data;
@@ -217,32 +217,29 @@ const MyRoutine = () => {
   const toggleMode = () => {
     if (mode) {
       updateRoutine().then(
-        (
-          res //눌렀을 때 mode가 true였을 때, 즉 커스텀모드에서 완료버튼을 눌렀을때.
-        ) => console.log("putRoutine api 호출결과:", res)
+        (res) => console.log("putRoutine api 호출결과:", res) //눌렀을 때 mode가 true였을 때, 즉 커스텀모드에서 완료버튼을 눌렀을때.
       );
       if (newSCHE) {
+        let newSCHE_1 = JSON.parse(JSON.stringify(newSCHE));
+        let tempNewSCHE = Object.keys(newSCHE_1).reduce((acc, k) => {
+          let country = newSCHE_1[k];
+          acc[country] = [...(acc[country] || []), k];
+          return acc;
+        }, {});
         //SCHEDULE의 변경이 있었을 경우,
-        let newArr = new Array(SCHEDULE.length);
-        newArr[0] = { monRoutineIdx: SCHEDULE[newSCHE[0]].routineId };
-        newArr[1] = { tueRoutineIdx: SCHEDULE[newSCHE[1]].routineId };
-        newArr[2] = { wedRoutineIdx: SCHEDULE[newSCHE[2]].routineId };
-        newArr[3] = { thuRoutineIdx: SCHEDULE[newSCHE[3]].routineId };
-        newArr[4] = { friRoutineIdx: SCHEDULE[newSCHE[4]].routineId };
-        newArr[5] = { satRoutineIdx: SCHEDULE[newSCHE[5]].routineId };
-        newArr[6] = { sunRoutineIdx: SCHEDULE[newSCHE[6]].routineId };
-        // setSCHEDULE(newArr);
-        console.log("SCHEDULE:", SCHEDULE);
-        console.log("newSCHE:", newSCHE);
-        console.log("newArr:", newArr);
-        // for (let i = 0; i < SCHEDULE.length; i++) {
-        //   tempArr[i].id = newSCHE[i];
-        // }
+        let data = {
+          monRoutineIdx: SCHEDULE[tempNewSCHE[0]].routineId,
+          tueRoutineIdx: SCHEDULE[tempNewSCHE[1]].routineId,
+          wedRoutineIdx: SCHEDULE[tempNewSCHE[2]].routineId,
+          thuRoutineIdx: SCHEDULE[tempNewSCHE[3]].routineId,
+          friRoutineIdx: SCHEDULE[tempNewSCHE[4]].routineId,
+          satRoutineIdx: SCHEDULE[tempNewSCHE[5]].routineId,
+          sunRoutineIdx: SCHEDULE[tempNewSCHE[6]].routineId,
+        }; //0번째 153
+        updateSchedule(data).then((res) =>
+          console.log("putRoutineSchedule api 호출결과:", res)
+        );
       }
-      // console.log(tempArr);
-      //   updateSchedule(tempArr).then((res) =>
-      //   console.log("putRoutineSchedule api 호출결과:", res)
-      // );
     }
     setMode(!mode);
   };
@@ -287,7 +284,7 @@ const MyRoutine = () => {
   const getRoutines = async () => {
     try {
       let url = "https://gpthealth.shop/";
-      let detailAPI = `app/routine/calendar`;
+      let detailAPI = "app/routine/calendar";
       const response = await axios.get(url + detailAPI);
       const result = response.data;
       return result;
@@ -303,6 +300,7 @@ const MyRoutine = () => {
   /**백엔드로부터 받아온 rawData를 요일요약 상단 컴퍼넌트에 렌더링하고자 숫자값만 담긴 배열로 후가공*/
   const processDayData = (rawData) => {
     let newArr = new Array(rawData.length);
+    console.log(newArr);
     newArr[0] = { id: 0, routineId: rawData.monRoutineIdx };
     newArr[1] = { id: 1, routineId: rawData.tueRoutineIdx };
     newArr[2] = { id: 2, routineId: rawData.wedRoutineIdx };
@@ -372,8 +370,7 @@ const MyRoutine = () => {
     getRoutines().then((res) => {
       if (res.result) {
         //올바른 데이터 백엔드로부터 받아옴
-        console.log("rawSCHEData", res.result);
-        console.log(selectedDay);
+        // console.log("rawSCHEData", res.result);
         processDayData(res.result);
       } else {
         console.log("백엔드로부터 올바른 myRoutines 데이터 받아오지 못함");
