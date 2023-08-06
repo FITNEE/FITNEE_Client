@@ -23,7 +23,6 @@ export default function Dictionary_AutoSearch(props){
 
     const navigateToDic3 = () => props.navigateToDic3()
 
-
     return(
         <AutoSearchContainer> 
             {/* 라이트모드 다크모드 컬러 설정 필요 */}
