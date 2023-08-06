@@ -1,19 +1,82 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components/native";
+import { useNavigationState } from "@react-navigation/native";
+import CreateRoutineHeader from "../components/CreateRoutineHeader";
+import { useRecoilState } from "recoil";
+import { CreateRoutineAtom } from "../recoil/CreateRoutineAtom";
+import axios from "axios";
 
 export default function CreateRoutine_4({ navigation }) {
   const [select, SetSelect] = useState(false);
   const [allDay, SetAllDay] = useState(false);
   const [loading, SetLoading] = useState(false);
+  const [routine, setRoutine] = useRecoilState(CreateRoutineAtom);
   const [days, setDays] = useState([
-    { id: 1, name: "일", selected: false },
-    { id: 2, name: "월", selected: false },
-    { id: 3, name: "화", selected: false },
-    { id: 4, name: "수", selected: false },
-    { id: 5, name: "목", selected: false },
-    { id: 6, name: "금", selected: false },
-    { id: 7, name: "토", selected: false },
+    { id: 1, name: "일", selected: false, ename: "Sunday" },
+    { id: 2, name: "월", selected: false, ename: "Monday" },
+    { id: 3, name: "화", selected: false, ename: "Tuesday" },
+    { id: 4, name: "수", selected: false, ename: "Wednesday" },
+    { id: 5, name: "목", selected: false, ename: "Thursday" },
+    { id: 6, name: "금", selected: false, ename: "Friday" },
+    { id: 7, name: "토", selected: false, ename: "Saturday" },
   ]);
+  const index = useNavigationState((state) => state.index);
+  useEffect(() => {
+    if (loading) {
+      navigation.setOptions({
+        header: () => <CreateRoutineHeader title="루틴 등록" index={4} />,
+      });
+    } else {
+      navigation.setOptions({
+        header: () => <CreateRoutineHeader title="루틴 등록" index={index} />,
+      });
+    }
+  }, [loading]);
+  // useEffect(() => {
+  //   console.log("atom4 : ", routine);
+  // }, [routine]);
+  useEffect(() => {
+    if (loading) {
+      handleSubmit();
+    }
+  }, [routine]);
+
+  const nextPress = () => {
+    const selectedDays = days
+      .filter((day) => day.selected)
+      .map((day) => day.ename);
+    setRoutine((prev) => ({
+      ...prev,
+      dayOfWeeks: selectedDays,
+    }));
+    SetLoading(true);
+  };
+
+  // const timer = setTimeout(() => {
+  //   navigation.push("CreateRoutine_5");
+  // }, 2000);
+  // return () => clearTimeout(timer);
+
+  const handleSubmit = async () => {
+    try {
+      console.log("test : ", routine);
+      const response = await axios.post(
+        "https://gpthealth.shop/app/routine",
+        routine,
+        {
+          headers: { "Content-Type": `application/json` },
+        }
+      );
+      console.log("Response:", response.data);
+
+      navigation.push("CreateRoutine_5", {
+        responseData: response.data.result,
+      });
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
   const onDayPress = (id) => {
     setDays((prevDays) =>
       prevDays.map((day) =>
@@ -45,18 +108,12 @@ export default function CreateRoutine_4({ navigation }) {
   return (
     <Container>
       {loading ? (
-        (navigation.setOptions({ headerShown: false }),
-        (
-          <LoadingContainer>
-            <Loading />
-            <LoadingText>트레이닝 루틴을 생성 중입니다</LoadingText>
-          </LoadingContainer>
-        ))
+        <LoadingContainer>
+          <Loading />
+          <LoadingText>트레이닝 루틴을 생성 중입니다</LoadingText>
+        </LoadingContainer>
       ) : (
         <Container>
-          <StackBar>
-            <StackBarPin />
-          </StackBar>
           <TitleContainer>
             <Title>운동할 요일을 선택해주세요.</Title>
             <SubTitle>마이루틴에서 언제든지 변경할 수 있어요.</SubTitle>
@@ -77,11 +134,7 @@ export default function CreateRoutine_4({ navigation }) {
           <AllDayButton isActive={allDay} onPress={AllDayPress}>
             <AllDayText>매일 운동할래요</AllDayText>
           </AllDayButton>
-          <NextButton
-            isActive={select}
-            disabled={!select}
-            onPress={() => navigation.push("CreateRoutine_5")}
-          >
+          <NextButton isActive={select} disabled={!select} onPress={nextPress}>
             <ButtonText isActive={select}>선택 완료</ButtonText>
           </NextButton>
         </Container>
@@ -94,20 +147,7 @@ const Container = styled.View`
   flex: 1;
   width: 100%;
   align-items: center;
-  justify-content: space-between;
-`;
-const StackBar = styled.View`
-  width: 90%;
-  height: 10px;
-  background-color: #dddddd;
-  margin-top: 10px;
-  border-radius: 10px;
-`;
-const StackBarPin = styled.View`
-  width: 100%;
-  height: 100%;
-  background-color: #757575;
-  border-radius: 10px;
+  justify-content: space-around;
 `;
 const TitleContainer = styled.View`
   width: 90%;
@@ -159,7 +199,6 @@ const NextButton = styled.TouchableOpacity`
   justify-content: center;
   background-color: ${(props) => (props.isActive ? "#BFBFBF" : "#DDDDDD")};
   border-radius: 10px;
-  margin-bottom: 45px;
 `;
 const ButtonText = styled.Text`
   color: ${(props) => (props.isActive ? "black" : "#757575")};
@@ -169,6 +208,7 @@ const LoadingContainer = styled.View`
   width: 100%;
   align-items: center;
   justify-content: center;
+  margin-bottom: 80px;
 `;
 const Loading = styled.View`
   width: 291px;
