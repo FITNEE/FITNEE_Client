@@ -2,6 +2,8 @@ import React from "react";
 import styled from "styled-components/native";
 import { colors } from "../colors";
 import { ScreenWidth } from "../Shared";
+import { WithLocalSvg } from "react-native-svg";
+import Edit from "../assets/SVGs/Edit.svg";
 
 const SetContainer = styled.View`
   flex-direction: row;
@@ -30,6 +32,8 @@ const SetsText = styled.Text`
 `;
 const DropDown = styled.TouchableOpacity`
   width: 40px;
+  justify-content: center;
+  align-items: center;
   height: 40px;
   background-color: chartreuse;
 `;
@@ -81,7 +85,14 @@ export const ExerciseItem = ({
           onPress={() => {
             selectedId == id ? setSelectedId(null) : setSelectedId(id);
           }}
-        />
+        >
+          <WithLocalSvg
+            // style={focused ? { color: '#0351ea' } : { color: '#747474' }}
+            width={24}
+            height={24}
+            asset={Edit}
+          />
+        </DropDown>
       </DefaultContainer>
       {selectedId == id && (
         <ExtendedContainer id>

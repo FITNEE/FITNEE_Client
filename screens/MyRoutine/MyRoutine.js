@@ -212,9 +212,9 @@ const MyRoutine = () => {
   };
   const toggleMode = () => {
     if (mode) {
-      // updateRoutine().then(
-      //   (res) => console.log("putRoutine api 호출결과:", res) //눌렀을 때 mode가 true였을 때, 즉 커스텀모드에서 완료버튼을 눌렀을때.
-      // );
+      updateRoutine().then(
+        (res) => console.log("putRoutine api 호출결과:", res) //눌렀을 때 mode가 true였을 때, 즉 커스텀모드에서 완료버튼을 눌렀을때.
+      );
       if (newSCHE) {
         //SCHEDULE의 변경이 있었을 경우,
         let newSCHE_1 = JSON.parse(JSON.stringify(newSCHE));
