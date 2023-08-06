@@ -17,7 +17,6 @@ const PageIndicator = ({ totalPages, currentPage }) => {
 export default Scroll = ({ data }) => {
   const [currentPage, setCurrentPage] = useState(0);
   const flatListRef = React.createRef();
-
   const [selectedID, setSelectedID] = useState("");
   const handleScroll = (event) => {
     const { contentOffset, layoutMeasurement } = event.nativeEvent;
@@ -36,7 +35,9 @@ export default Scroll = ({ data }) => {
               <RoutineItem
                 key={id}
                 select={selectedID == id}
-                onPress={setSelectedID(id)}
+                onPress={() => {
+                  setSelectedID(id);
+                }}
                 day={routine.day}
                 parts={routine.parts}
                 exercises={routine.exercises}
@@ -47,9 +48,7 @@ export default Scroll = ({ data }) => {
       </RoutineContainer>
     );
   };
-  // onPress={() => {
-  //   selectedID == id ? setSelectedID(null) : setSelectedID(id);
-  // }}
+
   return (
     <Container>
       <FlatList
@@ -67,6 +66,7 @@ export default Scroll = ({ data }) => {
           const width = event.nativeEvent.layoutMeasurement.width;
           const pageIndex = Math.round(offsetX / width);
           setCurrentPage(pageIndex);
+          setSelectedID("");
         }}
       />
       <PageIndicator totalPages={data.length} currentPage={currentPage} />
@@ -81,6 +81,7 @@ const RoutineContainer = styled.View`
   justify-content: center;
   margin-left: 30px;
   margin-right: 30px;
+  margin-top: 10px;
 `;
 const RoutineBox = styled.View`
   width: 100%;
@@ -88,12 +89,12 @@ const RoutineBox = styled.View`
 const RoutineTitleContainer = styled.View`
   position: absolute;
   width: 157px;
-  height: 30px;
+  height: 26px;
   align-items: center;
   justify-content: center;
   background-color: #dddddd;
   border-radius: 100px;
-  top: -15px;
+  top: -13px;
   left: 85px;
   z-index: 1;
 `;
@@ -104,14 +105,14 @@ const ItemConteiner = styled.View`
   border-color: #dddddd;
   border-radius: 20px;
   background-color: white;
-  padding: 20px;
-
-  align-items: center;
+  padding: 10px 10px;
+  justify-content: flex-end;
+  align-items: flex-end;
 `;
 const PageIndicatorContainer = styled.View`
   flex-direction: row;
   justify-content: center;
-  margin-top: 10px;
+  margin-bottom: 15px;
 `;
 const PageDot = styled.View`
   width: 10px;
