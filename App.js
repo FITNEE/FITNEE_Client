@@ -6,6 +6,7 @@ import LoggedInNav from "./navigation/LoggedInNav";
 import { Context, ContextProvider } from "./components/ContextProvider";
 import { useState } from "react";
 import CreateRoutineHeader from "./components/CreateRoutineHeader";
+import { RecoilRoot } from "recoil";
 
 const MyTheme = {
   ...DefaultTheme,
@@ -34,8 +35,10 @@ export default function App() {
     );
   }
   return (
-    <NavigationContainer theme={MyTheme}>
-      <CreateRoutineNav />
-    </NavigationContainer>
+    <RecoilRoot>
+      <NavigationContainer theme={MyTheme}>
+        <CreateRoutineNav />
+      </NavigationContainer>
+    </RecoilRoot>
   );
 }

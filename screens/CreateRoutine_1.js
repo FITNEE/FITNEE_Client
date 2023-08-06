@@ -2,17 +2,23 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components/native";
 import { useNavigationState } from "@react-navigation/native";
 import CreateRoutineHeader from "../components/CreateRoutineHeader";
+import { useRecoilState } from "recoil";
+import { CreateRoutineAtom } from "../recoil/CreateRoutineAtom";
 
 export default function CreateRoutine_1({ navigation }) {
   const [home, SetHome] = useState(false);
   const [fitness, SetFitness] = useState(false);
   const [select, SetSelect] = useState(false);
   const index = useNavigationState((state) => state.index);
+  const [routine, setRoutine] = useRecoilState(CreateRoutineAtom);
   useEffect(() => {
     navigation.setOptions({
       header: () => <CreateRoutineHeader title="루틴 등록" index={index} />,
     });
   }, []);
+  useEffect(() => {
+    // console.log("atom : ", routine);
+  }, [routine]);
   const homePress = () => {
     SetHome(!home);
     if (fitness) {
@@ -25,7 +31,14 @@ export default function CreateRoutine_1({ navigation }) {
       SetHome(!home);
     }
   };
-
+  const nextButton = () => {
+    setRoutine((prev) => ({
+      ...prev,
+      place: home ? "home" : "gym",
+    }));
+    console.log("atom : ", routine);
+    navigation.push("CreateRoutine_2");
+  };
   useEffect(() => {
     SetSelect(home || fitness);
   }, [home, fitness]);
@@ -45,11 +58,7 @@ export default function CreateRoutine_1({ navigation }) {
           <SpaceName>헬스장</SpaceName>
         </SpaceItem>
       </SpaceContainer>
-      <NextButton
-        isActive={select}
-        onPress={() => navigation.push("CreateRoutine_2")}
-        disabled={!select}
-      >
+      <NextButton isActive={select} onPress={nextButton} disabled={!select}>
         <ButtonText isActive={select}>다음</ButtonText>
       </NextButton>
     </Container>

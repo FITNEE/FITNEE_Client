@@ -7,7 +7,7 @@ import { Animated } from "react-native";
 export default function CreateRoutineHeader({ title, index, children }) {
   const [width, setWidth] = useState(0);
   const navigation = useNavigation();
-  const animatedValue = useRef(new Animated.Value(-300 + 80 * index)).current;
+  const animatedValue = useRef(new Animated.Value(-320 + 80 * index)).current;
   const reactive = useRef(new Animated.Value(-1000)).current;
   useEffect(() => {
     Animated.timing(animatedValue, {
@@ -55,24 +55,24 @@ export default function CreateRoutineHeader({ title, index, children }) {
   );
 }
 const NoHeader = styled.View`
-  height: 90px;
+  height: 80px;
   background-color: #f3f3f3;
   align-items: center;
   justify-content: center;
-  padding: 10px;
+
   opacity: 1;
 `;
 const HeaderContainer = styled.View`
-  height: 100px;
+  height: 80px;
   background-color: #f3f3f3;
   align-items: center;
-  justify-content: center;
-  padding: 10px 10px;
+  justify-content: flex-end;
+  padding: 0px 10px;
 `;
 const Header = styled.View`
   flex-direction: row;
   width: 95%;
-  height: 50px;
+  height: 40px;
   background-color: #f3f3f3;
   align-items: center;
   padding: 10px;
@@ -87,7 +87,7 @@ const Title = styled.Text`
 
 const StackBar = styled.View`
   width: 90%;
-  height: 8px;
+  height: 6px;
   background-color: #dddddd;
   border-radius: 10px;
   overflow: hidden;

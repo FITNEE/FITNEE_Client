@@ -2,19 +2,23 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components/native";
 import { useNavigationState } from "@react-navigation/native";
 import CreateRoutineHeader from "../components/CreateRoutineHeader";
+import { useRecoilState } from "recoil";
+import { CreateRoutineAtom } from "../recoil/CreateRoutineAtom";
+import axios from "axios";
 
 export default function CreateRoutine_4({ navigation }) {
   const [select, SetSelect] = useState(false);
   const [allDay, SetAllDay] = useState(false);
   const [loading, SetLoading] = useState(false);
+  const [routine, setRoutine] = useRecoilState(CreateRoutineAtom);
   const [days, setDays] = useState([
-    { id: 1, name: "일", selected: false },
-    { id: 2, name: "월", selected: false },
-    { id: 3, name: "화", selected: false },
-    { id: 4, name: "수", selected: false },
-    { id: 5, name: "목", selected: false },
-    { id: 6, name: "금", selected: false },
-    { id: 7, name: "토", selected: false },
+    { id: 1, name: "일", selected: false, ename: "Sunday" },
+    { id: 2, name: "월", selected: false, ename: "Monday" },
+    { id: 3, name: "화", selected: false, ename: "Tuesday" },
+    { id: 4, name: "수", selected: false, ename: "Wednesday" },
+    { id: 5, name: "목", selected: false, ename: "Thursday" },
+    { id: 6, name: "금", selected: false, ename: "Friday" },
+    { id: 7, name: "토", selected: false, ename: "Saturday" },
   ]);
   const index = useNavigationState((state) => state.index);
   useEffect(() => {
@@ -28,13 +32,42 @@ export default function CreateRoutine_4({ navigation }) {
       });
     }
   }, [loading]);
+  useEffect(() => {
+    console.log("atom4 : ", routine);
+  }, [routine]);
+
   const nextPress = () => {
+    const selectedDays = days
+      .filter((day) => day.selected)
+      .map((day) => day.ename);
+    setRoutine((prev) => ({
+      ...prev,
+      dayOfWeeks: selectedDays,
+    }));
     SetLoading(true);
+    handleSubmit();
     const timer = setTimeout(() => {
       navigation.push("CreateRoutine_5");
     }, 2000);
     return () => clearTimeout(timer);
   };
+
+  const handleSubmit = async () => {
+    try {
+      const response = await axios.post(
+        "https://gpthealth.shop/app/routine",
+        routine,
+        {
+          headers: { "Content-Type": `application/json` },
+        }
+      );
+
+      console.log("Response:", response.data);
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
   const onDayPress = (id) => {
     setDays((prevDays) =>
       prevDays.map((day) =>

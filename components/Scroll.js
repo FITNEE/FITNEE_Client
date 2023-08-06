@@ -81,6 +81,7 @@ const RoutineContainer = styled.View`
   justify-content: center;
   margin-left: 30px;
   margin-right: 30px;
+  margin-top: 10px;
 `;
 const RoutineBox = styled.View`
   width: 100%;
@@ -104,9 +105,9 @@ const ItemConteiner = styled.View`
   border-color: #dddddd;
   border-radius: 20px;
   background-color: white;
-  padding: 10px;
-
-  align-items: center;
+  padding: 10px 10px;
+  justify-content: flex-end;
+  align-items: flex-end;
 `;
 const PageIndicatorContainer = styled.View`
   flex-direction: row;

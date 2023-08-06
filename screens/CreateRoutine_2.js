@@ -3,16 +3,30 @@ import styled from "styled-components/native";
 import { Picker, DatePicker } from "react-native-wheel-pick";
 import { useNavigationState } from "@react-navigation/native";
 import CreateRoutineHeader from "../components/CreateRoutineHeader";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { CreateRoutineAtom } from "../recoil/CreateRoutineAtom";
 
 export default function CreateRoutine_2({ navigation }) {
   const [shouldRender, setShouldRender] = useState(true);
   const [dontKnow, setDontKnow] = useState(false);
+  const [value, setValue] = useState(0);
+  const [routine, setRoutine] = useRecoilState(CreateRoutineAtom);
   const index = useNavigationState((state) => state.index);
   useEffect(() => {
     navigation.setOptions({
       header: () => <CreateRoutineHeader title="루틴 등록" index={index} />,
     });
   }, []);
+  useEffect(() => {
+    console.log("atom2 : ", routine);
+  }, [routine]);
+  const nextButton = () => {
+    setRoutine((prev) => ({
+      ...prev,
+      RM: value,
+    }));
+    navigation.push("CreateRoutine_3");
+  };
   const handleDontKnow = () => {
     setDontKnow(!dontKnow);
   };
@@ -54,16 +68,17 @@ export default function CreateRoutine_2({ navigation }) {
           height: 200,
           borderRadius: 20,
         }}
-        selectedValue="40"
+        selectedValue="0"
         pickerData={data}
         onValueChange={(value) => {
+          setValue(value);
           console.log(value);
         }}
       />
       <DontKnowButton isActive={dontKnow} onPress={handleDontKnow}>
         <DontKnowText>잘 모르겠어요</DontKnowText>
       </DontKnowButton>
-      <NextButton onPress={() => navigation.push("CreateRoutine_3")}>
+      <NextButton onPress={nextButton}>
         <ButtonText>다음</ButtonText>
       </NextButton>
     </Container>
