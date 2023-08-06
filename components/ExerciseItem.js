@@ -21,7 +21,7 @@ const ExerciseTitle = styled.Text`
 const ExerciseSubText = styled.Text`
   font-size: 13px;
   margin-top: 4px;
-  color: #757575;
+  color: ${colors.l_main};
 `;
 const SetsText = styled.Text`
   font-size: 17px;
@@ -63,6 +63,7 @@ export const ExerciseItem = ({
   id,
   content,
   title,
+  parts,
   selectedId,
   setSelectedId,
 }) => {
@@ -72,7 +73,9 @@ export const ExerciseItem = ({
         <ExerciseImg />
         <ExerciseTextContainer>
           <ExerciseTitle>{title}</ExerciseTitle>
-          {/* <ExerciseSubText>{subText}</ExerciseSubText> */}
+          <ExerciseSubText>
+            {parts} | {content.length}세트
+          </ExerciseSubText>
         </ExerciseTextContainer>
         <DropDown
           onPress={() => {
@@ -84,7 +87,7 @@ export const ExerciseItem = ({
         <ExtendedContainer id>
           {content?.map((item, id) => (
             <SetContainer
-              id
+              key={id}
               style={{
                 fontWeight: 600,
               }}
