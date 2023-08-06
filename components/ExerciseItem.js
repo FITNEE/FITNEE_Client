@@ -2,8 +2,10 @@ import React from "react";
 import styled from "styled-components/native";
 import { colors } from "../colors";
 import { ScreenWidth } from "../Shared";
+
 import { WithLocalSvg } from "react-native-svg";
-import Edit from "../assets/SVGs/Edit.svg";
+import ToggleDown from "../assets/SVGs/ToggleDown.svg";
+import ToggleUp from "../assets/SVGs/ToggleUp.svg";
 
 const SetContainer = styled.View`
   flex-direction: row;
@@ -35,7 +37,6 @@ const DropDown = styled.TouchableOpacity`
   justify-content: center;
   align-items: center;
   height: 40px;
-  background-color: chartreuse;
 `;
 const ExtendedContainer = styled.View`
   width: 100%;
@@ -45,7 +46,7 @@ const ExerciseImg = styled.View`
   width: 60px;
   margin-right: 16px;
   height: 60px;
-  background-color: ${colors.grey_3};
+  background-color: ${colors.grey_1};
   border-radius: 30px;
 `;
 const ExerciseContainer = styled.View`
@@ -90,7 +91,7 @@ export const ExerciseItem = ({
             // style={focused ? { color: '#0351ea' } : { color: '#747474' }}
             width={24}
             height={24}
-            asset={Edit}
+            asset={selectedId == id ? ToggleUp : ToggleDown}
           />
         </DropDown>
       </DefaultContainer>
@@ -104,7 +105,7 @@ export const ExerciseItem = ({
               }}
             >
               <SetsText>{id + 1}</SetsText>
-              <SetsText>{item.weight ? `${item.weight}kg` : `-  kg`}</SetsText>
+              <SetsText>{item.weight ? `${item.weight} kg` : `-  kg`}</SetsText>
               <SetsText>{item.rep} 회</SetsText>
             </SetContainer>
           ))}

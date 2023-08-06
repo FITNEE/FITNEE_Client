@@ -2,6 +2,8 @@ import React from "react";
 import styled from "styled-components/native";
 import { colors } from "../colors";
 import { ScreenWidth } from "../Shared";
+import { WithLocalSvg } from "react-native-svg";
+import Trash from "../assets/SVGs/Trash.svg";
 
 const SetContainer = styled.View`
   flex-direction: row;
@@ -9,7 +11,7 @@ const SetContainer = styled.View`
   align-items: center;
   padding-top: 12px;
   padding: 12px 16px;
-  background-color: ${colors.grey_2};
+  background-color: ${colors.grey_1};
   width: 100%;
   border-radius: 8px;
   margin-top: 4px;
@@ -41,7 +43,6 @@ const ExerciseContainer = styled.Pressable`
   background-color: ${colors.white};
 `;
 const DeleteButton = styled.TouchableOpacity`
-  background-color: ${colors.red};
   height: 24px;
   width: 24px;
   margin-left: 20px;
@@ -49,16 +50,17 @@ const DeleteButton = styled.TouchableOpacity`
 const AddButton = styled.TouchableOpacity`
   justify-content: center;
   align-items: center;
-  background-color: ${colors.white};
+  background-color: ${colors.l_sub_2};
   width: 100%;
   border-radius: 8px;
   margin-top: 4px;
   height: 48px;
-  border: 1px dashed ${colors.black};
+  border: 1px dashed ${colors.l_main};
 `;
 const AddText = styled.Text`
   font-size: 17px;
-  font-weight: 500;
+  color: ${colors.l_main};
+  font-weight: 600;
 `;
 
 export const ExerciseItem_Custom = ({
@@ -84,7 +86,9 @@ export const ExerciseItem_Custom = ({
             </TextContainer>
             <DeleteButton
               onPress={() => editRoutine(id, "deleteSet", contentId)}
-            />
+            >
+              <WithLocalSvg width={24} height={24} asset={Trash} />
+            </DeleteButton>
           </SetContainer>
         ))}
 

@@ -6,7 +6,7 @@ import {
   Header,
 } from "../../components/Shared/MyRoutine_Shared";
 import { colors } from "../../colors";
-import { ScreenWidth } from "../../Shared";
+import { ScreenHeight, ScreenWidth } from "../../Shared";
 import {
   DayText,
   ScheduleChanger,
@@ -19,6 +19,12 @@ import { Alert } from "react-native";
 import { BottomSheetModal } from "@gorhom/bottom-sheet";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import axios from "axios";
+import { WithLocalSvg } from "react-native-svg";
+import Exercise from "../../assets/SVGs/Exercise.svg";
+import Animated, {
+  useAnimatedStyle,
+  withSpring,
+} from "react-native-reanimated";
 
 const ScreenBase = styled.SafeAreaView`
   width: 100%;
@@ -39,6 +45,7 @@ const ContentLayout = styled.View`
   background-color: #f6f8fa;
 `;
 const ScreenBaseCustom = styled.View`
+  background-color: ${colors.black};
   width: 100%;
   height: 100%;
   flex: 1;
@@ -95,6 +102,11 @@ const TopContainer = styled.View`
   margin-bottom: 16px;
   height: 24px;
 `;
+const NoRoutineText = styled.Text`
+  font-size: 15px;
+  color: ${colors.grey_7};
+  font-weight: 400;
+`;
 const ExerciseTitle = styled.Text`
   font-size: 17px;
   margin-bottom: 6px;
@@ -105,7 +117,7 @@ const SetContainer = styled.View`
   justify-content: space-between;
   align-items: center;
   padding: 12px 16px;
-  background-color: ${colors.grey_2};
+  background-color: ${colors.grey_1};
   height: 48px;
   border-radius: 8px;
   margin-top: 10px;
@@ -133,7 +145,7 @@ const EditBox = styled.TextInput`
   align-items: center;
   border-radius: 8px;
   width: 56px;
-  background-color: ${colors.grey_4};
+  background-color: ${colors.grey_2};
 `;
 
 const SubmitText = styled.Text`
@@ -147,7 +159,7 @@ const SubmitButton = styled.TouchableOpacity`
   margin-left: 20px;
 `;
 
-const MyRoutine = () => {
+export default MyRoutine = ({ route, navigation }) => {
   //prettier-ignore
   const days = ["월", "화", "수", "목", "금", "토", "일"];
   //커스텀 or 일반 보기모드 식별 위함
@@ -229,6 +241,14 @@ const MyRoutine = () => {
           console.log("putRoutineSchedule api 호출결과:", res)
         );
       }
+      getRoutine().then((res) => {
+        if (res.code == 1000) {
+          setRoutineData(res.result);
+          setNewRoutine(res.result);
+        } else {
+          console.log("요일 루틴 가져오기 실패");
+        }
+      });
     }
     setMode(!mode);
   };
@@ -356,6 +376,12 @@ const MyRoutine = () => {
     });
   }, [selectedDay, mode]);
 
+  const animatedStyle = useAnimatedStyle(() => {
+    return {
+      backgroundColor: colors.grey_1,
+      opacity: withSpring(modalShown ? 0.2 : 1),
+    };
+  }, [modalShown]);
   useEffect(() => {
     onPressBottomModal();
   }, []);
@@ -370,7 +396,11 @@ const MyRoutine = () => {
   return (
     <BottomSheetModalProvider>
       <ScreenBase>
-        <Header mode={mode} parentFunction={toggleMode} />
+        <Header
+          mode={mode}
+          parentFunction={toggleMode}
+          onPress={() => setMode(false)}
+        />
         <ContentLayout>
           {!mode && ( //루틴 요약내용을 확인할 수 있는 주간달력 컴퍼넌트
             <ScheduleContainer>
@@ -402,7 +432,13 @@ const MyRoutine = () => {
                               ? { backgroundColor: colors.white }
                               : { backgroundColor: colors.grey_3 }
                           }
-                        />
+                        >
+                          <WithLocalSvg
+                            width={24}
+                            height={24}
+                            asset={Exercise}
+                          />
+                        </Circle>
                       )}
                   </DayContainer>
                 ))}
@@ -417,31 +453,35 @@ const MyRoutine = () => {
               }}
             >
               <ScreenBaseCustom>
-                <ScrollPressable onPress={() => Keyboard.dismiss()}>
-                  <ComponentTitle
-                    title="요일 변경"
-                    subTitle="루틴을 원하는 요일에 끌어다 놓을 수 있어요"
-                  />
-                  <ScheduleChanger
-                    SCHEDULE={SCHEDULE}
-                    days={days}
-                    setNewSCHE={setNewSCHE}
-                  />
-                  <ComponentTitle
-                    title="운동 편집"
-                    subTitle="루틴을 원하는 요일에 끌어다 놓을 수 있어요"
-                  />
-                  {newRoutine?.map((item, id) => (
-                    <ExerciseItem_Custom
-                      key={id}
-                      id={id}
-                      content={item.content}
-                      title={item.exerciseName}
-                      editRoutine={editRoutine}
-                      popMessage={() => popMessage(id)}
+                <Animated.View style={animatedStyle}>
+                  <ScrollPressable onPress={() => Keyboard.dismiss()}>
+                    <ComponentTitle
+                      title="요일 변경"
+                      subTitle="루틴을 원하는 요일에 끌어다 놓을 수 있어요"
                     />
-                  ))}
-                </ScrollPressable>
+                    <ScheduleChanger
+                      SCHEDULE={SCHEDULE}
+                      days={days}
+                      setNewSCHE={setNewSCHE}
+                    />
+
+                    <ComponentTitle
+                      title="운동 편집"
+                      subTitle="루틴을 원하는 요일에 끌어다 놓을 수 있어요"
+                    />
+
+                    {newRoutine?.map((item, id) => (
+                      <ExerciseItem_Custom
+                        key={id}
+                        id={id}
+                        content={item.content}
+                        title={item.exerciseName}
+                        editRoutine={editRoutine}
+                        popMessage={() => popMessage(id)}
+                      />
+                    ))}
+                  </ScrollPressable>
+                </Animated.View>
               </ScreenBaseCustom>
             </ScrollView>
           ) : (
@@ -454,9 +494,9 @@ const MyRoutine = () => {
                 />
               ) : (
                 <ContentContainer>
-                  <ExerciseTitle style={{ textAlign: "center", width: "100%" }}>
-                    해당 요일에는 루틴이 없어요 :(
-                  </ExerciseTitle>
+                  <NoRoutineText style={{ textAlign: "center", width: "100%" }}>
+                    해당 요일에는 루틴이 없어요
+                  </NoRoutineText>
                 </ContentContainer>
               )}
             </ContentBase>
@@ -479,7 +519,7 @@ const MyRoutine = () => {
                   <ExerciseTitle>
                     {routineData /** 운동이 없는 요일을 선택했을 경우, Null값이 반환됨에 따라 
                   null을 object로 만들수 없다는 오류를 피하기 위함 */ &&
-                      routineData[editingID]?.healthCategoryIdx}
+                      routineData[editingID]?.exerciseName}
                   </ExerciseTitle>
                   <SubmitButton onPress={() => handleBottomSubmit()}>
                     <SubmitText>완료</SubmitText>
@@ -501,10 +541,14 @@ const MyRoutine = () => {
                               editRoutine(id, "weight", value)
                             }
                             style={
-                              !item.weight && { backgroundColor: colors.grey_2 }
+                              !item.weight && {
+                                backgroundColor: colors.grey_2,
+                              }
                             }
                           >
-                            <EditText>
+                            <EditText
+                              style={item.weight && { color: colors.l_main }}
+                            >
                               {item.weight ? item.weight : "-"}
                             </EditText>
                           </EditBox>
@@ -521,7 +565,9 @@ const MyRoutine = () => {
                               !item.rep && { backgroundColor: colors.grey_2 }
                             }
                           >
-                            <EditText>{item.rep}</EditText>
+                            <EditText style={{ color: colors.l_main }}>
+                              {item.rep}
+                            </EditText>
                           </EditBox>
                           <SetsText>회</SetsText>
                         </ContentContainer>
@@ -536,5 +582,3 @@ const MyRoutine = () => {
     </BottomSheetModalProvider>
   );
 };
-
-export default MyRoutine;
