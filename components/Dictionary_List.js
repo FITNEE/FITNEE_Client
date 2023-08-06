@@ -48,6 +48,24 @@ export default function Dictionary_List(props){
     const navigateToDic3 = () => props.navigateToDic3()
     const [exerciseName, setExerciseName] = useState(['데드리프트', '데드리프트'])
 
+    const getPartsExercise = async () => {
+        try {
+          let url = "https://gpthealth.shop/";
+          let detailAPI = "/app/dictionary/exerciseinfo";
+          const response = await axios.get(url + detailAPI, {
+            params:{
+                parts: "엉덩이"
+            }
+          });
+          const result = response.data;
+          console.log(result.result)
+          return result;
+        } 
+        catch (error) {
+          console.error("Failed to fetch data:", error);
+        }
+    }
+
     return(
         <ListContainer showsVerticalScrollIndicator='false'>
         {

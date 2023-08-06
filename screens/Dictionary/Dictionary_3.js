@@ -203,11 +203,12 @@ export default function Dictionary_3({ navigation }){
             {...props}
           />
         ), []
-    );
+    )
     
     useEffect(()=> {
         setBubbleBool(true)
     }, [])
+    const parentSetJoinBtnBool = (newBool) => setJoinBtnBool(newBool)
 
 
     return (
@@ -268,7 +269,10 @@ export default function Dictionary_3({ navigation }){
                             {
                                 leftTabActivate? 
                                     <Dictionary_LeftTab/> : 
-                                    <Dictionary_RightTab joinBtnBool={joinBtnBool}/>
+                                    <Dictionary_RightTab 
+                                        parentJoinBtnBool={joinBtnBool}
+                                        parentSetJoinBtnBool={parentSetJoinBtnBool}
+                                        />
                             } 
                         </DictionaryContainer>
                     </BottomSheet>
