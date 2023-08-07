@@ -92,16 +92,6 @@ export default function MyPageNav() {
               ></Image>
             </TouchableOpacity>
           ),
-          headerRight: () => (
-            <TouchableOpacity
-              onPress={() => navigation.navigate("UserInfo")}
-              style={{ marginRight: 24 }}
-            >
-              <Text style={{ fontSize: 17, fontWeight: 600, color: "#9747FF" }}>
-                완료
-              </Text>
-            </TouchableOpacity>
-          ),
         })}
       />
       <Stack.Screen

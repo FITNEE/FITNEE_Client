@@ -46,16 +46,28 @@ const InputContainer = styled.View`
 `;
 
 export default function EditPW({ navigation }) {
-  const [name, onChangeName] = useState("초코맛 프로틴");
-  const [birth, onChangeBirth] = useState("1998");
-  const email = useState(["protein012@gmail.com"]);
-
   const [PW, setPW] = useState("pjk"); // 값 받아오기
   const [rewrittenPW, setRewrittenPW] = useState("");
   const [newPW, setNewPW] = useState("");
   const [rewrittenNewPW, setRewrittenNewPW] = useState("");
+
+  const updateUserInfo = async (newPW) => {
+    try {
+      let url = "https://gpthealth.shop/";
+      let detailAPI = `app/mypage/updateuser`;
+      const response = await axios.put(url + detailAPI, {
+        userPW: newPW,
+      });
+      const updateResult = response.data;
+      return updateResult;
+    } catch (error) {
+      console.error("Failed to fetch data:", error);
+    }
+  };
+
   const handlePress = () => {
     navigation.navigate("UserInfo");
+    updateUserInfo(newPW).then(alert("변경되었습니다"));
   };
 
   return (
@@ -117,11 +129,7 @@ export default function EditPW({ navigation }) {
           </InputContainer>
 
           <Button
-            enabled={
-              rewrittenPW == PW &&
-              rewrittenNewPW != "" &&
-              rewrittenNewPW == newPW
-            }
+            enabled={rewrittenNewPW != "" && rewrittenNewPW == newPW}
             onPress={() => handlePress()}
           />
         </Container>
