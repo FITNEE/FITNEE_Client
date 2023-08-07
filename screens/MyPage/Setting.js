@@ -1,9 +1,10 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Text, SafeAreaView } from "react-native";
 import { styled } from "styled-components/native";
 import Mode from "../../components/Mode";
 import { colors } from "../../colors";
 import { AppContext } from "../../components/ContextProvider";
+import axios from "axios";
 
 const Container = styled.View`
   background-color: #fff;
@@ -29,19 +30,14 @@ const ProfileImage = styled.View`
   background-color: #ddd;
   margin-right: 8px;
 `;
-const ProfileContents = styled.View``;
+const ProfileContents = styled.View`
+  justify-content: center;
+`;
 const Name = styled.Text`
   font-size: 17px;
   font-style: normal;
   font-weight: 600;
   line-height: 25.5px;
-`;
-const Edit = styled.Text`
-  color: ${colors.l_main};
-  font-size: 13px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 19.5px;
 `;
 const EditIcon = styled.Image`
   width: 24px;
@@ -74,14 +70,33 @@ const BlockContent = styled.View`
 export default function Setting({ navigation }) {
   const { isDark } = useContext(AppContext);
   const { toggleLogin } = useContext(AppContext);
-  const username = useState("초코맛 프로틴");
-
-  const USER_DATA = [
+  const [userInfo, setUserInfo] = useState([
     {
-      id: 1,
-      username: "초코맛 프로틴",
+      birthYear: "",
+      userId: "",
+      userNickname: "",
     },
-  ];
+  ]);
+
+  const getUserInfoData = async () => {
+    try {
+      let url = "https://gpthealth.shop/";
+      let detailAPI = `app/mypage/userinfo`;
+      const response = await axios.get(url + detailAPI);
+      const result = response.data;
+      return result;
+    } catch (error) {
+      console.error("Failed to fetch data:", error);
+    }
+  };
+
+  useEffect(() => {
+    getUserInfoData().then((result) => {
+      setUserInfo(result.result);
+    });
+  }, []);
+
+  const getUserName = userInfo[0].userNickname;
 
   const Block = styled.TouchableOpacity`
     padding: 19px 24px;
@@ -101,8 +116,7 @@ export default function Setting({ navigation }) {
           <ProfileInfo>
             <ProfileImage />
             <ProfileContents>
-              <Name>{username}</Name>
-              <Edit>계정 정보 수정하기</Edit>
+              <Name>{getUserName}</Name>
             </ProfileContents>
           </ProfileInfo>
           <EditIcon />
