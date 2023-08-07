@@ -1,12 +1,14 @@
 import React, { useEffect, useRef, useState } from "react";
+import { ActivityIndicator, Keyboard, Alert } from "react-native";
 import styled from "styled-components/native";
-import { ActivityIndicator, Keyboard } from "react-native";
-import { Header } from "../../components/Shared/MyRoutine_Shared";
-import { colors } from "../../colors";
-import { Alert } from "react-native";
-import { BottomSheetModal } from "@gorhom/bottom-sheet";
-import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
+import {
+  BottomSheetModal,
+  BottomSheetModalProvider,
+} from "@gorhom/bottom-sheet";
 import axios from "axios";
+
+import { colors } from "../../colors";
+import { Header } from "../../components/Shared/MyRoutine_Shared";
 import { pressBack } from "../../components/myRoutine/Functions";
 import { MyToast, showToast } from "../../components/myRoutine/MyToast";
 import WeekCalendar from "../../components/myRoutine/WeekCalendar";
@@ -137,7 +139,6 @@ export default MyRoutine = () => {
   //이전 ID값과 변경 이후 ID값 매칭된거, 이거로 app/routine/calendar 호출하기
   const [selectedDay, setSelectedDay] = useState((new Date().getDay() + 6) % 7);
 
-  const bottomModal = useRef();
   const [snapPoints, setSnapPoints] = useState(["1%"]);
   const [modalState, setModalState] = useState(0);
 
@@ -310,7 +311,6 @@ export default MyRoutine = () => {
     console.log("editRoutine수행 후 결과값:", newArr[id].content);
     setNewRoutine(newArr);
   };
-  const onPressBottomModal = () => bottomModal.current?.present();
 
   useEffect(() => {
     if (SCHEDULE[selectedDay] != undefined) {
@@ -332,6 +332,8 @@ export default MyRoutine = () => {
     }
   }, [modalState]);
 
+  const bottomModal = useRef();
+  const onPressBottomModal = () => bottomModal.current?.present();
   useEffect(() => {
     onPressBottomModal();
   }, []);
