@@ -192,6 +192,7 @@ export default MyRoutine = ({ route, navigation }) => {
     //기존 스냅포인트 수치보다 키보드 절대높이인 28%를 더하여서 유동적인 bottomSheet면적에 대비
     setSnapPoints([`${parseInt(snapPoints[0]) + 28}%`]);
   };
+
   const updateRoutine = async () => {
     try {
       let url = "https://gpthealth.shop/";
@@ -207,6 +208,7 @@ export default MyRoutine = ({ route, navigation }) => {
       console.error("Failed to fetch data:", error);
     }
   };
+
   const updateSchedule = async (data) => {
     try {
       let url = "https://gpthealth.shop/";
@@ -222,11 +224,13 @@ export default MyRoutine = ({ route, navigation }) => {
       console.error("Failed to fetch data:", error);
     }
   };
+
   const toggleMode = () => {
     if (mode) {
       updateRoutine().then(
         (res) => console.log("putRoutine api 호출결과:", res) //눌렀을 때 mode가 true였을 때, 즉 커스텀모드에서 완료버튼을 눌렀을때.
       );
+      console.log("newSCHE:", newSCHE);
       if (newSCHE) {
         //SCHEDULE의 변경이 있었을 경우,
         let newSCHE_1 = JSON.parse(JSON.stringify(newSCHE));
@@ -240,6 +244,7 @@ export default MyRoutine = ({ route, navigation }) => {
         updateSchedule(data).then((res) =>
           console.log("putRoutineSchedule api 호출결과:", res)
         );
+        setNewSCHE(null);
       }
       getRoutine().then((res) => {
         if (res.code == 1000) {

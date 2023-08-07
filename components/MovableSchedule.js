@@ -11,8 +11,7 @@ import Animated, {
 } from "react-native-reanimated";
 import { PanGestureHandler } from "react-native-gesture-handler";
 import * as Haptics from "expo-haptics";
-import { BlurView } from "expo-blur";
-import { clamp, listToObject, objectMove } from "./Shared/MyRoutine_Shared";
+import { clamp, objectMove } from "./Shared/MyRoutine_Shared";
 import { colors } from "../colors";
 import { ScreenWidth } from "../Shared";
 import { styled } from "styled-components/native";
@@ -97,13 +96,11 @@ export const MovableSchedule = ({
 
   return (
     <Animated.View style={animatedStyle}>
-      <BlurView intensity={moving ? 100 : 0} tint="light">
-        <PanGestureHandler onGestureEvent={gestureHandler}>
-          <Animated.View>
-            <Schedule routineId={routineId} text={id} />
-          </Animated.View>
-        </PanGestureHandler>
-      </BlurView>
+      <PanGestureHandler onGestureEvent={gestureHandler}>
+        <Animated.View>
+          <Schedule routineId={routineId} text={id} />
+        </Animated.View>
+      </PanGestureHandler>
     </Animated.View>
   );
 };
