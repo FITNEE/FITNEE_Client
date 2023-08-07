@@ -82,9 +82,10 @@ const RecTextLine = styled.TouchableOpacity`
   justify-content: space-between;
 `;
 
-export default function Records() {
+export default function Records(props) {
   const [now, setNow] = useState(new Date());
-  const month = now.getMonth() + 1;
+  const exerciseDays = props.exerciseDays;
+  const month = props.month;
   const date = now.getDate();
 
   // now date에 해당하는 값 가져오기
@@ -107,7 +108,7 @@ export default function Records() {
 
   return (
     <Container>
-      <CalendarView dayFunction={dayLoad} />
+      <CalendarView exerciseDays={exerciseDays} dayFunction={dayLoad} />
       <Bar />
 
       <Exercise>
