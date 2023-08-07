@@ -92,7 +92,6 @@ const RecentTitle = styled.Text`
     margin-bottom: 16px;
 `
 const RecentKeywordContainer = styled.View`
-    display: inline-block;
     flex-direction: row;
     flex-wrap: wrap;
 `
@@ -108,7 +107,6 @@ const HotTitle = styled.Text`
     margin-bottom: 16px;
 `
 const PopularKeywordsContainer = styled.View`
-    display: inline-block;
     flex-direction: row;
     flex-wrap: wrap;
 `
@@ -145,37 +143,45 @@ export default function Dictionary_1( {navigation} ){
     const [search, setSearch] = useState('')
     const [isSearching, setIsSearching] = useState(false)
     const [isSubmit, setIsSubmit] = useState(false)
-    const [part, setPart] = useState([['전신', false], ['어깨', false], ['상체', false], ['가슴', false], ['등', false], ['복근', false], ['하체', false], ['엉덩이', false], ['유산소', false]])
+    const [part, setPart] = useState([['유산소', false], ['어깨', false], ['상체', false], ['가슴', false], ['등', false], ['복근', false], ['하체', false], ['엉덩이', false], ])
     const [popularKeywords, setPopularKeywords] = useState([])
     const [recentKeywords, setRecentKeywords] = useState([])
+    const [searchList, setSearchList] = useState([])
     
-    const onChangeText = (payload) => setSearch(payload)
+    // 사용자가 키보드에서 검색 버튼 눌렀을 때
     const onSubmitEditing = () => {
         setIsSubmit(true)
         setIsSearching(false)
         postKeywords(search)
     }
+
+    // 사용자가 검색창에 onFocus 했을 때
     const onFocusInput = ()=>{
         setIsSubmit(false)
         search.length == 0? null: setIsSearching(true)
     }
+    
+    // 검색List창에서 부위 버튼 toggle
     const onPressPart = (i) => {
         let temp = [...part]
         temp[i][1] = !temp[i][1]
         setPart(temp)
     }
+    // 검색창 옆 X 버튼 눌렀을 때
     const onDeleteInput = () => {
-        setSearch('')
-        setIsSearching(false)
+        setSearch('') 
+        setIsSearching(false) // 키워드들 보이게
         setIsSubmit(false)
     }
 
+    // 검색어(search)가 비어있으면 IsSearching = true / 아니면 false
     useEffect(()=>{
         search.length === 0?
             setIsSearching(false)
             : setIsSearching(true)
     }, [search])
-
+    
+    // 최근 검색 키워드, 인기 키워드 받아오는 API
     const getKeywords = async () => {
         try {
             let url = "https://gpthealth.shop/"
@@ -187,25 +193,8 @@ export default function Dictionary_1( {navigation} ){
         catch (error) {
           console.error("Failed to fetch data:", error);
         }
-    }    
-    const postKeywords = async (search) => {
-        try {
-            let url = "https://gpthealth.shop/"
-            let detailAPI = "/app/dictionary/usersearch"
-            const response = await axios.post(url + detailAPI, null, 
-                {
-                    params: {
-                        search: search
-                    }
-                })
-            const result = response.data
-            console.log(result.result)
-            if(result.isSuccess) console.log('검색기록 세이브 완료')
-        } 
-        catch (error) {                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
-          console.error("Failed to fetch data:", error);
-        }
-    } 
+    }  
+    // getKeywords로 키워드들 받아와서 recetKeywords, popularKeywords에 저장
     useEffect(()=>{
         getKeywords().then((result)=>{
             let temp = result.recentKeywords
@@ -218,6 +207,57 @@ export default function Dictionary_1( {navigation} ){
         })
     }, [])
          
+
+    // 검색한 단어를 최근 검색 키워드에 저장하는 API  
+    const postKeywords = async (search) => {
+        try {
+            let url = "https://gpthealth.shop/"
+            let detailAPI = "/app/dictionary/usersearch"
+            const response = await axios.post(url + detailAPI, null, 
+                {
+                    params: {
+                        search: search
+                    }
+                })
+            const result = response.data
+
+            if(result.isSuccess) console.log(`검색기록 저장 성공(검색어: ${search})`)
+            else console.log(`검색기록 저장 실패(검색어: ${search})`)
+        } 
+        catch (error) {                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
+          console.error("Failed to fetch data:", error);
+        }
+    } 
+
+    // 검색어에 따라 일치하는 운동리스트 불러오는 API
+    const postSearch = async (text) => {
+        try {
+            let url = "https://gpthealth.shop/"
+            let detailAPI = "/app/dictionary/searchexercise"
+            const response = await axios.post(url + detailAPI, null, 
+                {
+                    params: {
+                        search: text
+                    }
+                })
+            const result = response.data
+            return result.result
+
+
+            if(result.isSuccess) console.log('검색리스트 불러오기 성공')
+            else console.log('검색리스트 불러오기 실패')
+        } 
+        catch (error) {                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
+            console.error("Failed to fetch data:", error);
+        }
+    } 
+    // 검색어 변경될 때마다 search값 update
+    const onChangeText = (event) => {
+        const {eventCount, target, text} = event.nativeEvent
+        setSearch(text)
+        postSearch(text).then((result)=>setSearchList(result))
+    }
+
     return(
         <SafeAreaView style={{backgroundColor: 'white', flex: 1}}>
             <TouchableWithoutFeedback style={{flex:1}} onPress={Keyboard.dismiss}>
@@ -231,8 +271,8 @@ export default function Dictionary_1( {navigation} ){
                                     placeholder='운동명, 부위 검색'
                                     placeholderTextColor={colors.grey_4}
                                     returnKeyType='search'
-                                    onChangeText={onChangeText}
-                                    value={search}
+                                    onChange={onChangeText}
+                                    // value={search}
                                     onSubmitEditing={onSubmitEditing}
                                     onFocus={onFocusInput}
                                     >
@@ -284,13 +324,18 @@ export default function Dictionary_1( {navigation} ){
                     }
                     { isSearching && !isSubmit && 
                         <Dictionary_AutoSearch 
-                            navigateToDic3={()=>navigation.navigate('Dictionary_3')} 
+                            navigation = {navigation} 
+                            parentSearch = {search}
+                            parentSearchList = {searchList}
                     />}
                     { isSubmit && <Dictionary_List
-                        navigateToDic3={()=>navigation.navigate('Dictionary_3')}
+                        navigation = {navigation}
+                        searchList = {searchList}
                     />}
                 </Container>
             </TouchableWithoutFeedback>
         </SafeAreaView>
     )
 } 
+
+
