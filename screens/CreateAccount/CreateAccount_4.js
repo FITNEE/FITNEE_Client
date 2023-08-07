@@ -1,7 +1,10 @@
 import React, { useContext, useEffect, useState } from "react";
 import styled from "styled-components/native";
 import { colors } from "../../colors";
-import { Title } from "../../components/Shared/OnBoarding_Shared";
+import {
+  ScreenContainer,
+  Title,
+} from "../../components/Shared/OnBoarding_Shared";
 import { Button } from "../../Shared";
 import LottieView from "lottie-react-native";
 import { AppContext } from "../../components/ContextProvider";
@@ -15,7 +18,6 @@ const ScreenLayout = styled.SafeAreaView`
   width: 90%;
   margin-left: 5%;
   flex: 1;
-  background-color: #f3f3f3;
 `;
 const SubTitle = styled.Text`
   text-align: center;
@@ -93,29 +95,31 @@ const CreateAccount_4 = ({ route, navigation }) => {
   };
 
   return (
-    <ScreenLayout>
-      <TextContainer>
-        <Title>
-          {isLoading ? "계정을 생성하는 중" : "계정 생성을 완료했어요!"}
-        </Title>
-        <SubTitle>
-          {isLoading
-            ? `잠시만 기다려 주세요
+    <ScreenContainer>
+      <ScreenLayout>
+        <TextContainer>
+          <Title>
+            {isLoading ? "계정을 생성하는 중" : "계정 생성을 완료했어요!"}
+          </Title>
+          <SubTitle>
+            {isLoading
+              ? `잠시만 기다려 주세요
             `
-            : `이제 인공지능이 만들어주는
+              : `이제 인공지능이 만들어주는
 운동루틴을 경험하러 가볼까요?`}
-        </SubTitle>
-      </TextContainer>
-      <AnimationContainer>
-        {isLoading ? <LottieView /> : <Test></Test>}
-      </AnimationContainer>
-      <Button
-        loading={isLoading}
-        enabled={!isLoading}
-        text="시작하기"
-        onPress={() => goBackHome()}
-      />
-    </ScreenLayout>
+          </SubTitle>
+        </TextContainer>
+        <AnimationContainer>
+          {isLoading ? <LottieView /> : <Test></Test>}
+        </AnimationContainer>
+        <Button
+          loading={isLoading}
+          enabled={!isLoading}
+          text="시작하기"
+          onPress={() => goBackHome()}
+        />
+      </ScreenLayout>
+    </ScreenContainer>
   );
 };
 

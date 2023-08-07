@@ -3,7 +3,7 @@ import styled from "styled-components/native";
 import { colors } from "../../colors";
 import { Button, ScreenWidth, BackButton } from "../../Shared";
 //prettier-ignore
-import {Input,Title,ScreenLayout,SubText,NumberInput,MyBottomSheet} from "../../components/Shared/OnBoarding_Shared";
+import {Input,Title,ScreenLayout,SubText,NumberInput,MyBottomSheet, InputTitle} from "../../components/Shared/OnBoarding_Shared";
 
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { Keyboard, Pressable } from "react-native";
@@ -50,7 +50,7 @@ const BMILine = styled.View`
   height: 19px;
   width: 1px;
   margin-left: 9px;
-  border: 1px dashed black;
+  border: 1px dashed ${colors.black};
 `;
 
 const PointRadius = 10;
@@ -63,7 +63,7 @@ const BMIMarkerContainer = styled.View`
 `;
 
 const BMIPointer = styled.View`
-  background-color: #363636;
+  background-color: ${colors.black};
   border-radius: ${PointRadius}px;
   height: ${PointRadius * 2}px;
   width: ${PointRadius * 2}px;
@@ -76,7 +76,7 @@ const BMIView = styled.View`
   height: ${TextBoxHeight}px;
   justify-content: center;
   align-items: center;
-  background-color: #363636;
+  background-color: ${colors.black};
   margin-left: ${-62 + PointRadius}px;
   top: ${-lineHeight - TextBoxHeight}px;
 `;
@@ -178,18 +178,14 @@ const CreateAccount_3 = ({ route, navigation }) => {
 딱 맞는 루틴 생성을 위해 꼭 필요한 정보에요.`}</SubTitle>
           </TextContainer>
           <BottomContainer>
-            <SubText style={{ marginLeft: 8, color: colors.grey_5 }}>
-              키(cm)
-            </SubText>
+            <InputTitle>키(cm)</InputTitle>
             <NumberInput
               value={height}
               onPress={() => popModal(1)}
               placeholder="키"
               active={mode == 1}
             />
-            <SubText style={{ marginLeft: 8, color: colors.grey_5 }}>
-              몸무게(kg)
-            </SubText>
+            <InputTitle style={{ marginTop: 16 }}>몸무게 (kg)</InputTitle>
             <NumberInput
               value={weight}
               onPress={() => popModal(2)}

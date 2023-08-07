@@ -1,6 +1,6 @@
 import styled from "styled-components/native";
 import { colors } from "../../colors";
-import { BackButton, ScreenWidth } from "../../Shared";
+import { ScreenWidth } from "../../Shared";
 import { WithLocalSvg } from "react-native-svg";
 import Edit from "../../assets/SVGs/Edit.svg";
 import Left from "../../assets/SVGs/Left.svg";

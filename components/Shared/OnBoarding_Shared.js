@@ -12,7 +12,7 @@ export const Title = styled.Text`
 `;
 
 export const Input = styled.TextInput`
-  padding: 15px 7px;
+  padding: 15px 16px;
   border-radius: 4px;
   background-color: white;
   border-radius: 10px;
@@ -27,6 +27,14 @@ export const SubText = styled.Text`
   line-height: 19px;
   color: ${colors.black};
 `;
+export const InputTitle = styled.Text`
+  font-size: 12px;
+  margin-left: 16px;
+  margin-bottom: 2px;
+  font-weight: 400;
+  line-height: 19px;
+  color: ${colors.l_main};
+`;
 export const StatusText = styled.Text`
   font-size: 12px;
   width: 100%;
@@ -34,11 +42,13 @@ export const StatusText = styled.Text`
   margin-bottom: 12px;
   margin-right: 8px;
   font-weight: 300;
-  color: ${colors.grey_4};
+  margin-top: 16px;
+  color: ${colors.grey_7};
 `;
 
-const ScreenContainer = styled.SafeAreaView`
+export const ScreenContainer = styled.SafeAreaView`
   flex: 1;
+  background-color: ${colors.grey_1};
 `;
 const KeyBoardAwareContainer = styled.KeyboardAvoidingView`
   flex-direction: column;
@@ -47,7 +57,6 @@ const KeyBoardAwareContainer = styled.KeyboardAvoidingView`
   width: 90%;
   margin-left: 5%;
   flex: 1;
-  /* height: 90%; */
 `;
 
 export const ScreenLayout = ({ children }) => {
@@ -63,7 +72,7 @@ export const ScreenLayout = ({ children }) => {
 //****************** NumberInput  *******************************************************/
 
 const NumberContainer = styled.TouchableOpacity`
-  margin-top: 16px;
+  margin-top: 2px;
   padding: 15px 7px;
   border-radius: 4px;
   background-color: white;
@@ -72,7 +81,9 @@ const NumberContainer = styled.TouchableOpacity`
   height: 48px;
 `;
 
-const NumberText = styled.Text``;
+const NumberText = styled.Text`
+  margin-left: 8px;
+`;
 
 export const NumberInput = ({ onPress, value, placeholder, active }) => {
   console.log(active);
