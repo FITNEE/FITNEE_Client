@@ -14,6 +14,8 @@ export default function App() {
   const onFinish = () => setLoading(false);
 
   const [isDark, setIsDark] = useState(false);
+  const [isTabVisible, setIsTabVisible] = useState(true);
+
   const toggleLogin = () => {
     if (loggedIn) {
       AsyncStorage.removeItem("token");
@@ -44,7 +46,16 @@ export default function App() {
 
   return (
     <AppContext.Provider
-      value={{ isDark, setIsDark, toggleLogin, loggedIn, setToken, token }}
+      value={{
+        isDark,
+        setIsDark,
+        toggleLogin,
+        loggedIn,
+        setToken,
+        token,
+        isTabVisible,
+        setIsTabVisible,
+      }}
     >
       <NavigationContainer>
         {loggedIn ? <LoggedInNav /> : <OnBoardingNav />}

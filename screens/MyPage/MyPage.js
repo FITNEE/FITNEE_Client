@@ -6,9 +6,16 @@ import Analysis from "../../components/Analysis";
 import { colors } from "../../colors";
 import { AppContext } from "../../components/ContextProvider";
 import axios from "axios";
+import { useIsFocused } from "@react-navigation/native";
 
 export default function MyPage() {
-  const { isDark } = useContext(AppContext);
+  const isFocused = useIsFocused();
+  const { isDark, setIsTabVisible } = useContext(AppContext);
+
+  useEffect(() => {
+    isFocused && setIsTabVisible(true);
+  }, [isFocused]);
+
   const [date, setDate] = useState([]);
 
   const [now, setNow] = useState(new Date());
@@ -29,7 +36,6 @@ export default function MyPage() {
   useEffect(() => {
     getMyPageData(month).then((dateResult) => {
       setDate(dateResult.result);
-      console.log(date);
     });
   }, []);
 
