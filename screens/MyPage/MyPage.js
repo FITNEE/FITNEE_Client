@@ -1,34 +1,31 @@
 import React, { useContext, useEffect, useState } from "react";
 import { SafeAreaView } from "react-native";
 import { styled } from "styled-components/native";
-import Records from "../components/Records";
-import Analysis from "../components/Analysis";
-import { colors } from "../colors";
-import { AppContext } from "../components/ContextProvider";
+import Records from "../../components/Records";
+import Analysis from "../../components/Analysis";
+import { colors } from "../../colors";
+import { AppContext } from "../../components/ContextProvider";
 import axios from "axios";
 
 export default function MyPage() {
   const { isDark } = useContext(AppContext);
   const [data, setData] = useState([]);
-  // let month =date.todayMoth()
-  let month = 6;
+
+  const [now, setNow] = useState(new Date());
+  let month = now.getMonth() + 1;
+
   const getMyPageData = async (month) => {
     try {
       let url = "https://gpthealth.shop/";
       let detailAPI = `app/mypage?month=${month}`;
-      const response = await axios.get(
-        url + detailAPI
-        // params: {
-        //   month: month,
-        // },
-        //}
-      );
+      const response = await axios.get(url + detailAPI);
       const result = response.data;
       return result;
     } catch (error) {
       console.error("Failed to fetch data:", error);
     }
   };
+  /*
   const updatePWD = async (newPW) => {
     try {
       let url = "https://gpthealth.shop/";
@@ -36,20 +33,18 @@ export default function MyPage() {
       const response = axios.put(url + detailAPI, {
         userPw: newPW,
       });
-
-      //   const result = response.data;
+      const result = response.data;
       return response;
     } catch (error) {
       console.error("Failed to fetch data:", error);
     }
   };
+  */
 
   useEffect(() => {
-    // updatePWD().then((result) => {
-    //   console.log(result.data);
-    // });
-    getMyPageData(month).then((response) => setData(response.code));
+    getMyPageData(month).then((result) => setData(result));
   }, []);
+
   const [showRecords, SetShowRecords] = useState(true);
 
   const TOTAL_DATA = [
@@ -107,20 +102,34 @@ export default function MyPage() {
     border: colors.grey_4,
   };
 
-    return (
-        <SafeAreaView>
-            <Container>
-                <Choice>
-                    <ChoiceButton onPress={() => {SetShowRecords(true);}} style={showRecords&& SelectedBoxStyle}>
-                        <ChoiceText
-                            style={showRecords&& SelectedTextStyle}
-                        >운동 기록</ChoiceText></ChoiceButton>
-                    <ChoiceButton onPress={() => {SetShowRecords(false);}} style={!showRecords&& SelectedBoxStyle}>
-                        <ChoiceText style={!showRecords&& SelectedTextStyle}>운동 분석 및 현황</ChoiceText></ChoiceButton>
-                </Choice>
-                {showRecords && <Records/>}
-                {!showRecords && <Analysis/>}
-            </Container>
-        </SafeAreaView>
+  return (
+    <SafeAreaView>
+      <Container>
+        <Choice>
+          <ChoiceButton
+            onPress={() => {
+              SetShowRecords(true);
+            }}
+            style={showRecords && SelectedBoxStyle}
+          >
+            <ChoiceText style={showRecords && SelectedTextStyle}>
+              운동 기록
+            </ChoiceText>
+          </ChoiceButton>
+          <ChoiceButton
+            onPress={() => {
+              SetShowRecords(false);
+            }}
+            style={!showRecords && SelectedBoxStyle}
+          >
+            <ChoiceText style={!showRecords && SelectedTextStyle}>
+              운동 분석 및 현황
+            </ChoiceText>
+          </ChoiceButton>
+        </Choice>
+        {showRecords && <Records />}
+        {!showRecords && <Analysis />}
+      </Container>
+    </SafeAreaView>
   );
 }
