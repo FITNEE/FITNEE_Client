@@ -1,11 +1,11 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useLayoutEffect, useState } from "react";
 import { Text, SafeAreaView } from "react-native";
 import { styled } from "styled-components/native";
 import Mode from "../../components/Mode";
 import { colors } from "../../colors";
 import { AppContext } from "../../components/ContextProvider";
 import axios from "axios";
-import { useIsFocused } from "@react-navigation/native";
+import { useIsFocused, useNavigation } from "@react-navigation/native";
 
 const Container = styled.View`
   background-color: #fff;
@@ -70,7 +70,12 @@ const BlockContent = styled.View`
 
 export default function Setting({ navigation }) {
   const isFocused = useIsFocused();
-  const { isDark } = useContext(AppContext);
+  const { isDark, setIsTabVisible } = useContext(AppContext);
+
+  useEffect(() => {
+    setIsTabVisible(false);
+  });
+
   const { toggleLogin } = useContext(AppContext);
   const [userInfo, setUserInfo] = useState([
     {
