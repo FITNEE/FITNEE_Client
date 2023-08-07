@@ -11,6 +11,7 @@ import axios from "axios";
 import { TouchableOpacity } from "react-native";
 import { Image } from "react-native";
 import Back from "../../assets/left_arrow.png";
+import { Alert } from "react-native";
 
 const Container = styled.View`
   background-color: #fff;
@@ -153,7 +154,21 @@ export default function EditUserInfo({ navigation }) {
   useEffect(() => {
     navigation.setOptions({
       headerLeft: () => (
-        <TouchableOpacity onPress={() => navigation.goBack()}>
+        <TouchableOpacity
+          onPress={() => {
+            Alert.alert("변경 사항을 폐기하시겠습니까?", "", [
+              {
+                text: "계속 편집하기",
+                style: "cancel",
+              },
+              {
+                text: "변경사항 폐기",
+                style: "destructive",
+                onPress: () => navigation.goBack(),
+              },
+            ]);
+          }}
+        >
           <Image
             source={Back}
             style={{ width: 24, height: 24, marginLeft: 24 }}
@@ -163,13 +178,13 @@ export default function EditUserInfo({ navigation }) {
       headerRight: () => (
         <TouchableOpacity
           onPress={() => {
-            error &&
+            !error &&
               updateUserInfo(newNickname).then((updateResult) => {
+                console.log(newNickname);
                 console.log(updateResult);
               });
             navigation.navigate("UserInfo");
           }}
-          // put 받아오기
           style={{ marginRight: 24 }}
         >
           <Text style={{ fontSize: 17, fontWeight: 600, color: "#9747FF" }}>
@@ -178,7 +193,7 @@ export default function EditUserInfo({ navigation }) {
         </TouchableOpacity>
       ),
     });
-  }, []);
+  }, [error, newNickname]);
 
   return (
     <SafeAreaView>
