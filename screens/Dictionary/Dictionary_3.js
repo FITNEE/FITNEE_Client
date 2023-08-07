@@ -156,8 +156,8 @@ const JoinText = styled.Text`
 
 const DictionaryContext = createContext()
 
-export default function Dictionary_3({ navigation }){
-
+export default function Dictionary_3({ navigation, route }){
+    const exerciseInfo = route.params.exercise
     const {isDark} = useContext(AppContext);
 
     const AreaText = styled.Text`
@@ -180,15 +180,13 @@ export default function Dictionary_3({ navigation }){
     const rightTab = useRef()
     const bottomModal = useRef()
 
-    const [area, setArea] = useState('어깨 | 측면 삼각근 | 머신')
-    const [exerciseName, setExerciseName] = useState('사이드 레터럴 레이즈 머신')
     const [leftTabActivate, setLeftTabActivate ] = useState(true)
     const [notReadCount, setNoteradCount] = useState(0)
     const [isAllRead, setIsAllRead] = useState(true)
-    const [changedSPIndex, setChangedSPIndex] = useState()
-    const snapPoints = useMemo(()=> ['45%', '96%'], [])
-    const [bubbleBool, setBubbleBool] = useState(true)
-    const [joinBtnBool, setJoinBtnBool] = useState(true)
+    
+    const [bubbleBool, setBubbleBool] = useState(true) // 말풍선 나타내기
+    const [joinBtnBool, setJoinBtnBool] = useState(true) // 참여하기 버튼 나타내기
+    const snapPoints = useMemo(()=> ['45%', '96%'], []) // modal이 가리는 화면%
 
     const onTabPress = (target) => {
         setBubbleBool(false)
@@ -207,8 +205,29 @@ export default function Dictionary_3({ navigation }){
     
     useEffect(()=> {
         setBubbleBool(true)
+        
     }, [])
     const parentSetJoinBtnBool = (newBool) => setJoinBtnBool(newBool)
+
+    const [exerciseDetail, setExerciseDetail] = useState({})
+    const getExerciseDetail = async () => {
+        try {
+            let url = "https://gpthealth.shop/"
+            let detailAPI = "/app/dictionary/exercisemethod"
+            const response = await axios.get(url + detailAPI)
+            const result = response.data
+            return result.result;
+        } 
+        catch (error) {
+          console.error("Failed to fetch data:", error);
+        }
+    }
+    useEffect(()=>{
+        getExerciseDetail().then((result)=>{
+            setExerciseDetail(result)
+        })
+    }, [])  
+
 
 
     return (
@@ -238,7 +257,6 @@ export default function Dictionary_3({ navigation }){
                         index={0}
                         snapPoints={snapPoints}
                         enablePanDownToClose={false}
-                        onChange={index=> setChangedSPIndex(index)}
                         keyboardBehavior='extend'
                         onPress={()=> setBubbleBool(false)}
                         backdropComponent={renderBackdrop}
@@ -246,8 +264,8 @@ export default function Dictionary_3({ navigation }){
                         <DictionaryContainer>
                             <TitleContainer>
                                 <NameContainer>
-                                    <AreaText>{area}</AreaText>
-                                    <TitleText>{exerciseName}</TitleText>
+                                    <AreaText>{exerciseInfo.parts} | {exerciseInfo.muscle} | {exerciseInfo.equipment}</AreaText>
+                                    <TitleText>{exerciseInfo.name}</TitleText>
                                 </NameContainer>
                                 <AddtoRoutineBtn/>
                             </TitleContainer>
@@ -268,7 +286,10 @@ export default function Dictionary_3({ navigation }){
                             </TabContainer>
                             {
                                 leftTabActivate? 
-                                    <Dictionary_LeftTab/> : 
+                                    <Dictionary_LeftTab 
+                                        exerciseDetail = {exerciseDetail}
+                                    /> 
+                                    : 
                                     <Dictionary_RightTab 
                                         parentJoinBtnBool={joinBtnBool}
                                         parentSetJoinBtnBool={parentSetJoinBtnBool}

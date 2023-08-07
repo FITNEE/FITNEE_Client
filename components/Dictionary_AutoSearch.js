@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components/native'
 import {colors} from '../colors'
 
@@ -16,30 +16,54 @@ const AutoSearchText = styled.Text`
     font-weight: 500;
     font-size: 15px;
     color: ${colors.black}; 
-    display: inline;
 `
+const ColoredSearchText = styled.Text`
+    font-weight: 500;
+    font-size: 15px;
+    color: ${colors.l_main}; 
+`
+
 
 export default function Dictionary_AutoSearch(props){
 
-    const navigateToDic3 = () => props.navigateToDic3()
+    const { navigation, parentSearch, parentSearchList } = props
+    const [searchList, setSearchList] = useState(parentSearchList)
+    useEffect(()=>{
+        setSearchList(parentSearchList)
+    }, [parentSearchList])
+
+    const splitString = (str) => {
+        const regex = new RegExp(`(${parentSearch})`, 'g')
+        const splitStr = str.split(regex)
+        const extracted = splitStr.filter((item) => item !== '')
+        return extracted
+    }
+    const onPress = (exercise) => navigation.navigate('Dictionary_3', {exercise})
 
     return(
         <AutoSearchContainer> 
-            {/* 라이트모드 다크모드 컬러 설정 필요 */}
-            <AutoSearch onPress={navigateToDic3}>
-                <AutoSearchText style={{color: '#9747FF'}}>사
-                    <AutoSearchText>이드 레터럴 라이즈</AutoSearchText>
-                </AutoSearchText>
-            </AutoSearch>
-            <AutoSearch>
-                <AutoSearchText >사이드 
-                    <AutoSearchText style={{color: '#9747FF'}}> 레터럴 </AutoSearchText>
-                    라이즈
-                </AutoSearchText>
-            </AutoSearch>
-            <AutoSearch>
-                <AutoSearchText>사이드 레터럴 라이즈</AutoSearchText>
-            </AutoSearch>
+            {
+                searchList === undefined?
+                null
+                :
+                searchList.map((words)=>{
+                    let splitedString = splitString(words.name)
+                    return(
+                        <AutoSearch onPress={()=> onPress(words)}>
+                            <AutoSearchText>
+                            {
+                                splitedString.map((word) => (
+                                    word == parentSearch?
+                                    <ColoredSearchText>{ word }</ColoredSearchText>
+                                    :
+                                    <AutoSearchText>{ word }</AutoSearchText>
+                                ))
+                            }
+                            </AutoSearchText>
+                        </AutoSearch>
+                    )
+                })
+            }
         </AutoSearchContainer>
     )
 }

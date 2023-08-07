@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import styled from 'styled-components/native'
 import {colors} from '../colors'
 
@@ -45,38 +45,22 @@ const AddtoBtn = styled.TouchableOpacity`
 
 export default function Dictionary_List(props){
 
-    const navigateToDic3 = () => props.navigateToDic3()
-    const [exerciseName, setExerciseName] = useState(['데드리프트', '데드리프트'])
-
-    const getPartsExercise = async () => {
-        try {
-          let url = "https://gpthealth.shop/";
-          let detailAPI = "/app/dictionary/exerciseinfo";
-          const response = await axios.get(url + detailAPI, {
-            params:{
-                parts: "엉덩이"
-            }
-          });
-          const result = response.data;
-          console.log(result.result)
-          return result;
-        } 
-        catch (error) {
-          console.error("Failed to fetch data:", error);
-        }
-    }
+    const { navigation, searchList } = props
+    const onPress = (exercise) => navigation.navigate('Dictionary_3', {exercise})
 
     return(
         <ListContainer showsVerticalScrollIndicator='false'>
         {
-            exerciseName.map((exercise) => (
-  
-                <ExerciseContainer onPress={navigateToDic3}>
+            searchList === undefined?
+            null
+            :
+            searchList.map((exercise) => (
+                <ExerciseContainer onPress={()=> onPress(exercise)}>
                     <ExerciseLeftContainer>
                         <ExerciseImg></ExerciseImg>
                         <ExerciseDetailContainer>
-                            <ExerciseName>데드리프트</ExerciseName>
-                            <ExerciseArea>전신 | 코어 | 바벨</ExerciseArea>                        
+                            <ExerciseName>{exercise.name}</ExerciseName>
+                            <ExerciseArea>{exercise.parts} | {exercise.muscle} | {exercise.equipment}</ExerciseArea>                        
                         </ExerciseDetailContainer>
                     </ExerciseLeftContainer>
                     <AddtoBtn/>

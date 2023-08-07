@@ -63,8 +63,8 @@ const CautionDetail = styled.Text`
     font-size: 13px;
 `
 
-export default function Dictionary_LeftTab(){
-
+export default function Dictionary_LeftTab(props){
+    // const {exerciseDetail} = props.exerciseDetail
     const {isDark} = useContext(AppContext)
 
     const ProcessNum = styled.Text`
