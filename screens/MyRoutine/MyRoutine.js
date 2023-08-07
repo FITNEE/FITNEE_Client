@@ -6,7 +6,7 @@ import {
   Header,
 } from "../../components/Shared/MyRoutine_Shared";
 import { colors } from "../../colors";
-import { ScreenHeight, ScreenWidth } from "../../Shared";
+import { ScreenWidth } from "../../Shared";
 import {
   DayText,
   ScheduleChanger,
@@ -19,12 +19,14 @@ import { Alert } from "react-native";
 import { BottomSheetModal } from "@gorhom/bottom-sheet";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import axios from "axios";
-import { WithLocalSvg } from "react-native-svg";
+import { LocalSvg, WithLocalSvg } from "react-native-svg";
 import Exercise from "../../assets/SVGs/Exercise.svg";
+import Check from "../../assets/SVGs/Check.svg";
 import Animated, {
   useAnimatedStyle,
   withSpring,
 } from "react-native-reanimated";
+import Toast from "react-native-toast-message";
 
 const ScreenBase = styled.SafeAreaView`
   width: 100%;
@@ -53,6 +55,22 @@ const ScreenBaseCustom = styled.View`
 const ScrollPressable = styled.Pressable`
   width: ${ScreenWidth - 48}px;
   margin-left: 24px;
+`;
+const ToastBase = styled.View`
+  height: 44px;
+  width: 90%;
+  border-radius: 12px;
+  background-color: ${colors.black};
+  justify-content: center;
+  flex-direction: row;
+  align-items: center;
+  padding: 0px 16px;
+`;
+const ToastText = styled.Text`
+  color: white;
+  font-size: 13px;
+  font-weight: 600;
+  flex: 1;
 `;
 const DayContainer = styled.TouchableOpacity`
   width: 35px;
@@ -159,7 +177,7 @@ const SubmitButton = styled.TouchableOpacity`
   margin-left: 20px;
 `;
 
-export default MyRoutine = ({ route, navigation }) => {
+export default MyRoutine = () => {
   //prettier-ignore
   const days = ["월", "화", "수", "목", "금", "토", "일"];
   //커스텀 or 일반 보기모드 식별 위함
@@ -225,10 +243,27 @@ export default MyRoutine = ({ route, navigation }) => {
     }
   };
 
+  const toastConfig = {
+    success: () => (
+      <ToastBase>
+        <ToastText>루틴이 수정되었습니다.</ToastText>
+        <WithLocalSvg width={24} height={24} asset={Check} />
+      </ToastBase>
+    ),
+  };
   const toggleMode = () => {
     if (mode) {
       updateRoutine().then(
-        (res) => console.log("putRoutine api 호출결과:", res) //눌렀을 때 mode가 true였을 때, 즉 커스텀모드에서 완료버튼을 눌렀을때.
+        (res) => {
+          console.log("updateRoutine api 호출결과:", res);
+          Toast.show({
+            type: "success",
+            position: "bottom",
+            autoHide: true,
+            visibilityTime: 2500,
+            bottomOffset: 20,
+          });
+        } //눌렀을 때 mode가 true였을 때, 즉 커스텀모드에서 완료버튼을 눌렀을때.
       );
       console.log("newSCHE:", newSCHE);
       if (newSCHE) {
@@ -242,7 +277,7 @@ export default MyRoutine = ({ route, navigation }) => {
         //prettier-ignore
         let data = {"monRoutineIdx": SCHEDULE[tempNewSCHE[0]].routineId,"tueRoutineIdx": SCHEDULE[tempNewSCHE[1]].routineId,"wedRoutineIdx": SCHEDULE[tempNewSCHE[2]].routineId,"thuRoutineIdx": SCHEDULE[tempNewSCHE[3]].routineId,"friRoutineIdx": SCHEDULE[tempNewSCHE[4]].routineId,"satRoutineIdx": SCHEDULE[tempNewSCHE[5]].routineId,"sunRoutineIdx": SCHEDULE[tempNewSCHE[6]].routineId,}; //0번째 153
         updateSchedule(data).then((res) =>
-          console.log("putRoutineSchedule api 호출결과:", res)
+          console.log("updateRoutineSchedule api 호출결과:", res)
         );
         setNewSCHE(null);
       }
@@ -271,7 +306,7 @@ export default MyRoutine = ({ route, navigation }) => {
       },
       {
         text: "선택 운동 삭제",
-        onPress: () => console.log("OK Pressed"),
+        onPress: () => editRoutine(id, "deleteExercise", 1),
         style: "destructive",
       },
       {
@@ -347,6 +382,8 @@ export default MyRoutine = ({ route, navigation }) => {
       newArr[editingID].content[id].weight = value;
     } else if (type == "deleteSet") {
       newArr[id].content.splice(value, 1);
+    } else if (type == "deleteExercise") {
+      newArr.splice(id, 1);
     } else {
       newArr[id].content.push({
         rep: newArr[id].content[newArr[id].content.length - 1].rep,
@@ -357,6 +394,23 @@ export default MyRoutine = ({ route, navigation }) => {
     setNewRoutine(newArr);
   };
 
+  const pressBack = () => {
+    setMode(false);
+    Alert.alert("이 변경 사항을 폐기하시겠습니까?", "", [
+      {
+        text: "계속 편집하기",
+        onPress: () => {
+          setMode(true);
+        },
+        style: "default",
+      },
+      {
+        text: "변경사항 폐기",
+        onPress: () => console.log("변경사항 폐기"),
+        style: "destructive",
+      },
+    ]);
+  };
   const onPressBottomModal = () => bottomModal.current?.present();
 
   useEffect(() => {
@@ -373,7 +427,6 @@ export default MyRoutine = ({ route, navigation }) => {
     getRoutines().then((res) => {
       if (res.result) {
         //올바른 데이터 백엔드로부터 받아옴
-        // console.log("rawSCHEData", res.result);
         processDayData(res.result);
       } else {
         console.log("백엔드로부터 올바른 myRoutines 데이터 받아오지 못함");
@@ -404,7 +457,7 @@ export default MyRoutine = ({ route, navigation }) => {
         <Header
           mode={mode}
           parentFunction={toggleMode}
-          onPress={() => setMode(false)}
+          onPress={() => pressBack()}
         />
         <ContentLayout>
           {!mode && ( //루틴 요약내용을 확인할 수 있는 주간달력 컴퍼넌트
@@ -504,6 +557,7 @@ export default MyRoutine = ({ route, navigation }) => {
                   </NoRoutineText>
                 </ContentContainer>
               )}
+              <Toast config={toastConfig} />
             </ContentBase>
           )}
 
