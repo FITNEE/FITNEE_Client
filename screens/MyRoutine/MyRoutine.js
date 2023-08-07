@@ -1,37 +1,17 @@
 import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components/native";
-import {
-  ActivityIndicator,
-  FlatList,
-  Keyboard,
-  ScrollView,
-} from "react-native";
-import {
-  ComponentTitle,
-  Header,
-} from "../../components/Shared/MyRoutine_Shared";
+import { ActivityIndicator, Keyboard } from "react-native";
+import { Header } from "../../components/Shared/MyRoutine_Shared";
 import { colors } from "../../colors";
-import { ScreenWidth } from "../../Shared";
-import {
-  DayText,
-  ScheduleChanger,
-  TextContainer,
-} from "../../components/ScheduleChanger";
-import { ExerciseItem } from "../../components/ExerciseItem";
-import { ExerciseItem_Custom } from "../../components/ExerciseItem_Custom";
 import { Alert } from "react-native";
 import { BottomSheetModal } from "@gorhom/bottom-sheet";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import axios from "axios";
-import { WithLocalSvg } from "react-native-svg";
-import Exercise from "../../assets/SVGs/Exercise.svg";
-import Animated, {
-  useAnimatedStyle,
-  withSpring,
-} from "react-native-reanimated";
 import { pressBack } from "../../components/myRoutine/Functions";
-import { days } from "../../components/myRoutine/data";
 import { MyToast, showToast } from "../../components/myRoutine/MyToast";
+import WeekCalendar from "../../components/myRoutine/WeekCalendar";
+import List_Custom from "../../components/myRoutine/List_Custom";
+import List_Normal from "../../components/myRoutine/List_Normal";
 
 const ScreenBase = styled.SafeAreaView`
   width: 100%;
@@ -50,40 +30,6 @@ const ContentLayout = styled.View`
   flex-direction: column;
   flex: 1;
   background-color: #f6f8fa;
-`;
-const ScreenBaseCustom = styled.View`
-  background-color: ${colors.black};
-  width: 100%;
-  height: 100%;
-  flex: 1;
-`;
-const ScrollPressable = styled.Pressable`
-  width: ${ScreenWidth - 48}px;
-  margin-left: 24px;
-`;
-const DayContainer = styled.TouchableOpacity`
-  width: 35px;
-  height: 60px;
-  border-radius: 30px;
-  padding-top: 8px;
-  justify-content: space-between;
-  align-items: center;
-`;
-const Circle = styled.View`
-  width: 24px;
-  height: 24px;
-  background-color: ${colors.grey_1};
-  margin-bottom: 5.5px;
-  border-radius: 12px;
-`;
-const ScheduleContainer = styled.View`
-  flex-direction: row;
-  padding: 24px;
-  width: 100%;
-  justify-content: space-between;
-  height: 100px;
-  align-items: center;
-  background-color: white;
 `;
 const BottomSheetContainer = styled.TouchableOpacity`
   width: 100%;
@@ -193,14 +139,17 @@ export default MyRoutine = () => {
 
   const bottomModal = useRef();
   const [snapPoints, setSnapPoints] = useState(["1%"]);
-  const [modalShown, setModalShown] = useState(false);
+  const [modalState, setModalState] = useState(0);
 
   const [selectedId, setSelectedId] = useState(null);
 
   const extendModal = () => {
     console.log("modal Extended");
     //기존 스냅포인트 수치보다 키보드 절대높이인 28%를 더하여서 유동적인 bottomSheet면적에 대비
-    setSnapPoints([`${parseInt(snapPoints[0]) + 28}%`]);
+    if (modalState != 2) {
+      setSnapPoints([`${parseInt(snapPoints[0]) + 28}%`]);
+    }
+    setModalState(2);
   };
 
   const toggleMode = () => {
@@ -251,7 +200,7 @@ export default MyRoutine = () => {
       {
         text: "상세옵션 편집",
         onPress: () => {
-          setModalShown(true);
+          setModalState(1);
           setSnapPoints([`${10 + 8 * newRoutine[id].content.length}%`]);
           //확대하고자 하는 운동종목의 세트수에 따라 확장되는 정도를 유동적으로 제어하기 위함
           setEditingID(id);
@@ -270,22 +219,9 @@ export default MyRoutine = () => {
       },
     ]);
   };
-  const renderItem = ({ item, index }) => {
-    return (
-      <ExerciseItem
-        key={SCHEDULE[selectedDay] * index}
-        id={index}
-        content={item.content}
-        title={item.exerciseName}
-        parts={item.exerciseParts}
-        selectedId={selectedId}
-        setSelectedId={setSelectedId}
-      />
-    );
-  };
   const handleBottomSubmit = () => {
-    //일단 ModalShown 변수를 false로 변경하여
-    setModalShown(false);
+    //일단 ModalState 변수를 0으로 변경하여
+    setModalState(0);
     Keyboard.dismiss();
   };
   /**백엔드로부터 받아온 rawData를 요일요약 상단 컴퍼넌트에 렌더링하고자 숫자값만 담긴 배열로 후가공*/
@@ -389,23 +325,16 @@ export default MyRoutine = () => {
       });
     }
   }, [selectedDay]);
+
   useEffect(() => {
-    if (modalShown == true) {
-    } else {
+    if (modalState == 0) {
       setSnapPoints(["1%"]);
     }
-  }, [modalShown]);
+  }, [modalState]);
 
   useEffect(() => {
     onPressBottomModal();
   }, []);
-
-  const animatedStyle = useAnimatedStyle(() => {
-    return {
-      backgroundColor: colors.grey_1,
-      opacity: withSpring(modalShown ? 0.2 : 1),
-    };
-  }, [modalShown]);
 
   return (
     <BottomSheetModalProvider>
@@ -417,87 +346,21 @@ export default MyRoutine = () => {
         />
         <ContentLayout>
           {!mode && ( //루틴 요약내용을 확인할 수 있는 주간달력 컴퍼넌트
-            <ScheduleContainer>
-              <TextContainer>
-                {days.map((item, id) => (
-                  <DayContainer
-                    onPress={() => setSelectedDay(id)}
-                    key={id}
-                    style={
-                      id == selectedDay
-                        ? { backgroundColor: colors.l_main }
-                        : { backgroundColor: colors.white }
-                    }
-                  >
-                    <DayText
-                      style={
-                        id == selectedDay
-                          ? { color: colors.white }
-                          : { color: colors.black }
-                      }
-                    >
-                      {item}
-                    </DayText>
-                    {SCHEDULE[id]?.routineId != 0 && // SCHEDULE 배열의 id번째 요소는 0이 아닌 다른 숫자라면 id번째 요일에 운동이 존재한다는 것 의미
-                      SCHEDULE[id] && ( // SCHEDULE 배열의 id번째 요소가 존재하지 않는다는것은, 애초에 SCHEDULE배열로 후가공하기 위해 필요한 rawData가 백엔드로부터 전해지지 않았다는 것을 의미
-                        <Circle
-                          style={
-                            id == selectedDay //만일 선택된 날짜랑 운동있는 요일이랑 겹치면 색상을 변경해야하기 때문에 css 예외처리
-                              ? { backgroundColor: colors.white }
-                              : { backgroundColor: colors.grey_3 }
-                          }
-                        >
-                          <WithLocalSvg
-                            width={24}
-                            height={24}
-                            asset={Exercise}
-                          />
-                        </Circle>
-                      )}
-                  </DayContainer>
-                ))}
-              </TextContainer>
-            </ScheduleContainer>
+            <WeekCalendar
+              setSelectedDay={setSelectedDay}
+              selectedDay={selectedDay}
+              SCHEDULE={SCHEDULE}
+            />
           )}
           {mode ? (
-            <ScrollView
-              style={{
-                width: "100%",
-                flex: 1,
-              }}
-            >
-              <ScreenBaseCustom>
-                <Animated.View style={animatedStyle}>
-                  <ScrollPressable onPress={() => Keyboard.dismiss()}>
-                    <ComponentTitle
-                      title="요일 변경"
-                      subTitle="루틴을 원하는 요일에 끌어다 놓을 수 있어요"
-                    />
-                    <ScheduleChanger
-                      SCHEDULE={SCHEDULE}
-                      days={days}
-                      setNewSCHE={setNewSCHE}
-                    />
-
-                    <ComponentTitle
-                      title="운동 편집"
-                      subTitle="루틴을 원하는 요일에 끌어다 놓을 수 있어요"
-                    />
-
-                    {newRoutine?.map((item, id) => (
-                      <ExerciseItem_Custom
-                        key={id}
-                        id={id}
-                        content={item.content}
-                        title={item.exerciseName}
-                        editRoutine={editRoutine}
-                        popMessage={() => popMessage(id)}
-                      />
-                    ))}
-                  </ScrollPressable>
-                </Animated.View>
-              </ScreenBaseCustom>
-            </ScrollView>
+            <List_Custom
+              modalState={modalState}
+              SCHEDULE={SCHEDULE}
+              newRoutine={newRoutine}
+              editRoutine={editRoutine}
+              popMessage={popMessage}
+              setNewSCHE={setNewSCHE}
+            />
           ) : (
             <ContentBase>
               {isLoading ? (
@@ -505,10 +368,10 @@ export default MyRoutine = () => {
                   <ActivityIndicator size="large" color={colors.l_main} />
                 </IndicatorBase>
               ) : routineData ? (
-                <FlatList
-                  showsVerticalScrollIndicator
-                  data={routineData}
-                  renderItem={renderItem}
+                <List_Normal
+                  routineData={routineData}
+                  selectedId={selectedId}
+                  setSelectedId={setSelectedId}
                 />
               ) : (
                 <ContentContainer>
