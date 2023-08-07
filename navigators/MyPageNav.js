@@ -66,16 +66,7 @@ export default function MyPageNav() {
               ></Image>
             </TouchableOpacity>
           ),
-          headerRight: () => (
-            <TouchableOpacity
-              onPress={() => navigation.navigate("EditUserInfo")}
-              style={{ marginRight: 24 }}
-            >
-              <Text style={{ fontSize: 17, fontWeight: 600, color: "#9747FF" }}>
-                수정
-              </Text>
-            </TouchableOpacity>
-          ),
+          headerRight: false,
         })}
       />
       <Stack.Screen
@@ -83,7 +74,7 @@ export default function MyPageNav() {
         component={EditUserInfo}
         options={({ navigation }) => ({
           animationEnabled: false,
-          headerTitle: "계정 정보",
+          headerTitle: "닉네임 변경",
           headerLeft: () => (
             <TouchableOpacity onPress={() => navigation.goBack()}>
               <Image

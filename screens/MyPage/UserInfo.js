@@ -125,7 +125,7 @@ export default function UserInfo({ navigation }) {
         <Profile>
           <ProfileImage></ProfileImage>
         </Profile>
-        <NickBlock>
+        <NickBlock onPress={() => navigation.navigate("EditUserInfo")}>
           <BlockTitle>닉네임</BlockTitle>
           <NickContent>
             <NickText>{getUserName}</NickText>
