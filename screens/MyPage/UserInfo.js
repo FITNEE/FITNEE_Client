@@ -5,6 +5,7 @@ import { colors } from "../../colors";
 import axios from "axios";
 import { Dimensions } from "react-native";
 import { ScreenWidth } from "../../Shared";
+import { useIsFocused } from "@react-navigation/native";
 
 const Container = styled.View`
   background-color: #fff;
@@ -86,6 +87,7 @@ const ClickText = styled.Text`
 `;
 
 export default function UserInfo({ navigation }) {
+  const isFocused = useIsFocused();
   const [userInfo, setUserInfo] = useState([
     {
       birthYear: "",
@@ -107,10 +109,11 @@ export default function UserInfo({ navigation }) {
   };
 
   useEffect(() => {
-    getUserInfoData().then((result) => {
-      setUserInfo(result.result);
-    });
-  }, []);
+    isFocused &&
+      getUserInfoData().then((result) => {
+        setUserInfo(result.result);
+      });
+  }, [isFocused]);
 
   const getUserName = userInfo[0].userNickname;
   const getBirthYear = userInfo[0].birthYear.toString();

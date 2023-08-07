@@ -5,6 +5,7 @@ import Mode from "../../components/Mode";
 import { colors } from "../../colors";
 import { AppContext } from "../../components/ContextProvider";
 import axios from "axios";
+import { useIsFocused } from "@react-navigation/native";
 
 const Container = styled.View`
   background-color: #fff;
@@ -68,6 +69,7 @@ const BlockContent = styled.View`
 `;
 
 export default function Setting({ navigation }) {
+  const isFocused = useIsFocused();
   const { isDark } = useContext(AppContext);
   const { toggleLogin } = useContext(AppContext);
   const [userInfo, setUserInfo] = useState([
@@ -91,10 +93,11 @@ export default function Setting({ navigation }) {
   };
 
   useEffect(() => {
-    getUserInfoData().then((result) => {
-      setUserInfo(result.result);
-    });
-  }, []);
+    isFocused &&
+      getUserInfoData().then((result) => {
+        setUserInfo(result.result);
+      });
+  }, [isFocused]);
 
   const getUserName = userInfo[0].userNickname;
 
