@@ -1,9 +1,18 @@
 import React from "react";
 import styled from "styled-components/native";
-import { colors } from "../colors";
+import { days } from "./data";
+import { Keyboard, ScrollView } from "react-native";
+import Animated, {
+  useAnimatedStyle,
+  withSpring,
+} from "react-native-reanimated";
+import { colors } from "../../colors";
+import { ComponentTitle } from "../Shared/MyRoutine_Shared";
+import { ScheduleChanger } from "../ScheduleChanger";
 import { ScreenWidth } from "../Shared";
+
 import { WithLocalSvg } from "react-native-svg";
-import Trash from "../assets/SVGs/Trash.svg";
+import Trash from "../../assets/SVGs/Trash.svg";
 
 const SetContainer = styled.View`
   flex-direction: row;
@@ -63,7 +72,7 @@ const AddText = styled.Text`
   font-weight: 600;
 `;
 
-export const ExerciseItem_Custom = ({
+const ExerciseItem_Custom = ({
   id,
   content,
   title,
@@ -96,5 +105,73 @@ export const ExerciseItem_Custom = ({
         </AddButton>
       </ExtendedContainer>
     </ExerciseContainer>
+  );
+};
+
+const ScreenBaseCustom = styled.View`
+  background-color: ${colors.black};
+  width: 100%;
+  height: 100%;
+  flex: 1;
+`;
+const ScrollPressable = styled.Pressable`
+  width: ${ScreenWidth - 48}px;
+  margin-left: 24px;
+`;
+
+export default List_Custom = ({
+  modalState,
+  SCHEDULE,
+  newRoutine,
+  editRoutine,
+  popMessage,
+  setNewSCHE,
+}) => {
+  const animatedStyle = useAnimatedStyle(() => {
+    return {
+      backgroundColor: colors.grey_1,
+      opacity: withSpring(modalState != 0 ? 0.2 : 1),
+    };
+  }, [modalState]);
+
+  return (
+    <ScrollView
+      style={{
+        width: "100%",
+        flex: 1,
+      }}
+    >
+      <ScreenBaseCustom>
+        <Animated.View style={animatedStyle}>
+          <ScrollPressable onPress={() => Keyboard.dismiss()}>
+            <ComponentTitle
+              title="요일 변경"
+              subTitle="루틴을 원하는 요일에 끌어다 놓을 수 있어요"
+            />
+            <ScheduleChanger
+              SCHEDULE={SCHEDULE}
+              days={days}
+              setNewSCHE={setNewSCHE}
+            />
+
+            <ComponentTitle
+              title="운동 편집"
+              subTitle="루틴을 원하는 요일에 끌어다 놓을 수 있어요"
+            />
+
+            {newRoutine?.map((item, id) => (
+              <ExerciseItem_Custom
+                key={id}
+                id={id}
+                content={item.content}
+                title={item.exerciseName}
+                editRoutine={editRoutine}
+                popMessage={() => popMessage(id)}
+              />
+            ))}
+          </ScrollPressable>
+        </Animated.View>
+      </ScreenBaseCustom>
+    </ScrollView>
   );
 };
