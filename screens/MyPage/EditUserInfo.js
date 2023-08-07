@@ -146,10 +146,17 @@ export default function EditUserInfo({ navigation }) {
 
   const change = () => {
     checkOnlyOneNickName(newNickname).then((checkResult) => {
-      setCheck(true);
-      checkResult.result ? setError(true) : setError(false);
+      if (newNickname == "") {
+        alert("변경할 닉네임을 입력해주세요");
+      } else {
+        setCheck(true);
+        checkResult.result ? setError(true) : setError(false);
+        checkResult.result ? setEnabled(false) : setEnabled(true);
+      }
     });
   };
+
+  const [enabled, setEnabled] = useState(false);
 
   useEffect(() => {
     navigation.setOptions({
@@ -177,23 +184,26 @@ export default function EditUserInfo({ navigation }) {
       ),
       headerRight: () => (
         <TouchableOpacity
+          disabled={!enabled}
           onPress={() => {
-            !error &&
-              updateUserInfo(newNickname).then((updateResult) => {
-                console.log(newNickname);
-                console.log(updateResult);
-              });
+            !error && updateUserInfo(newNickname);
             navigation.navigate("UserInfo");
           }}
           style={{ marginRight: 24 }}
         >
-          <Text style={{ fontSize: 17, fontWeight: 600, color: "#9747FF" }}>
+          <Text
+            style={{
+              fontSize: 17,
+              fontWeight: 600,
+              color: enabled ? colors.l_main : colors.grey_2,
+            }}
+          >
             저장
           </Text>
         </TouchableOpacity>
       ),
     });
-  }, [error, newNickname]);
+  }, [error, newNickname, enabled]);
 
   return (
     <SafeAreaView>
@@ -210,6 +220,7 @@ export default function EditUserInfo({ navigation }) {
             <InputRed error={error} check={check}>
               <InputBlock
                 editable
+                autoFocus
                 onChangeText={(text) => setNewNickname(text)}
                 placeholder={getUserName}
               />
