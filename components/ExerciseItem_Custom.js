@@ -70,7 +70,6 @@ export const ExerciseItem_Custom = ({
   popMessage,
   editRoutine,
 }) => {
-  // console.log(content);
   return (
     <ExerciseContainer onLongPress={() => popMessage()}>
       <ExerciseTitle>{title}</ExerciseTitle>
@@ -93,29 +92,6 @@ export const ExerciseItem_Custom = ({
         ))}
 
         <AddButton onPress={() => editRoutine(id, "add", 0)}>
-          <AddText>세트 추가</AddText>
-        </AddButton>
-      </ExtendedContainer>
-    </ExerciseContainer>
-  );
-};
-export const ExerciseItem_Detail = ({ id, setsNum, title, popMessage }) => {
-  return (
-    <ExerciseContainer id={id} onLongPress={() => popMessage()}>
-      <ExerciseTitle>{title}</ExerciseTitle>
-      <ExtendedContainer id>
-        {setsNum.map((item, id) => (
-          <SetContainer id>
-            <TextContainer>
-              <SetsText>{id + 1}</SetsText>
-              <SetsText>{`-      kg`}</SetsText>
-              <SetsText>{item + `    회`}</SetsText>
-            </TextContainer>
-            <DeleteButton />
-          </SetContainer>
-        ))}
-
-        <AddButton onPress={() => console.log("pressed")}>
           <AddText>세트 추가</AddText>
         </AddButton>
       </ExtendedContainer>

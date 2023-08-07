@@ -1,6 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components/native";
-import { FlatList, Keyboard, ScrollView } from "react-native";
+import {
+  ActivityIndicator,
+  FlatList,
+  Keyboard,
+  ScrollView,
+} from "react-native";
 import {
   ComponentTitle,
   Header,
@@ -12,21 +17,21 @@ import {
   ScheduleChanger,
   TextContainer,
 } from "../../components/ScheduleChanger";
-
 import { ExerciseItem } from "../../components/ExerciseItem";
 import { ExerciseItem_Custom } from "../../components/ExerciseItem_Custom";
 import { Alert } from "react-native";
 import { BottomSheetModal } from "@gorhom/bottom-sheet";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import axios from "axios";
-import { LocalSvg, WithLocalSvg } from "react-native-svg";
+import { WithLocalSvg } from "react-native-svg";
 import Exercise from "../../assets/SVGs/Exercise.svg";
-import Check from "../../assets/SVGs/Check.svg";
 import Animated, {
   useAnimatedStyle,
   withSpring,
 } from "react-native-reanimated";
-import Toast from "react-native-toast-message";
+import { pressBack } from "../../components/myRoutine/Functions";
+import { days } from "../../components/myRoutine/data";
+import { MyToast, showToast } from "../../components/myRoutine/MyToast";
 
 const ScreenBase = styled.SafeAreaView`
   width: 100%;
@@ -55,22 +60,6 @@ const ScreenBaseCustom = styled.View`
 const ScrollPressable = styled.Pressable`
   width: ${ScreenWidth - 48}px;
   margin-left: 24px;
-`;
-const ToastBase = styled.View`
-  height: 44px;
-  width: 90%;
-  border-radius: 12px;
-  background-color: ${colors.black};
-  justify-content: center;
-  flex-direction: row;
-  align-items: center;
-  padding: 0px 16px;
-`;
-const ToastText = styled.Text`
-  color: white;
-  font-size: 13px;
-  font-weight: 600;
-  flex: 1;
 `;
 const DayContainer = styled.TouchableOpacity`
   width: 35px;
@@ -130,6 +119,12 @@ const ExerciseTitle = styled.Text`
   margin-bottom: 6px;
   font-weight: 500;
 `;
+const IndicatorBase = styled.View`
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+`;
 const SetContainer = styled.View`
   flex-direction: row;
   justify-content: space-between;
@@ -178,11 +173,9 @@ const SubmitButton = styled.TouchableOpacity`
 `;
 
 export default MyRoutine = () => {
-  //prettier-ignore
-  const days = ["월", "화", "수", "목", "금", "토", "일"];
   //커스텀 or 일반 보기모드 식별 위함
   const [mode, setMode] = useState(false);
-
+  const [isLoading, setIsLoading] = useState(false);
   //요일별 운동 유무 및 각 요일 운동 idx 보관목적 ->custom하면서 변경될 수 있기에 useState로 저장
   const [SCHEDULE, setSCHEDULE] = useState([]);
 
@@ -195,7 +188,6 @@ export default MyRoutine = () => {
   const [newRoutine, setNewRoutine] = useState([]);
 
   const [newSCHE, setNewSCHE] = useState(null);
-  //console.log("newSCHE:", newSCHE); // {"0": 0, "1": 1, "2": 2, "3": 3, "4": 6, "5": 4, "6": 5}
   //이전 ID값과 변경 이후 ID값 매칭된거, 이거로 app/routine/calendar 호출하기
   const [selectedDay, setSelectedDay] = useState((new Date().getDay() + 6) % 7);
 
@@ -211,61 +203,31 @@ export default MyRoutine = () => {
     setSnapPoints([`${parseInt(snapPoints[0]) + 28}%`]);
   };
 
-  const updateRoutine = async () => {
-    try {
-      let url = "https://gpthealth.shop/";
-      let detailAPI = `app/routine/${SCHEDULE[selectedDay].routineId}`;
-      const response = await axios.put(url + detailAPI, newRoutine, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      const result = response.data;
-      return result;
-    } catch (error) {
-      console.error("Failed to fetch data:", error);
-    }
-  };
-
-  const updateSchedule = async (data) => {
-    try {
-      let url = "https://gpthealth.shop/";
-      let detailAPI = "app/routine/calendar";
-      const response = await axios.put(url + detailAPI, data, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      const result = response.data;
-      return result;
-    } catch (error) {
-      console.error("Failed to fetch data:", error);
-    }
-  };
-
-  const toastConfig = {
-    success: () => (
-      <ToastBase>
-        <ToastText>루틴이 수정되었습니다.</ToastText>
-        <WithLocalSvg width={24} height={24} asset={Check} />
-      </ToastBase>
-    ),
-  };
   const toggleMode = () => {
     if (mode) {
       updateRoutine().then(
         (res) => {
           console.log("updateRoutine api 호출결과:", res);
-          Toast.show({
-            type: "success",
-            position: "bottom",
-            autoHide: true,
-            visibilityTime: 2500,
-            bottomOffset: 20,
+          getRoutine().then((res) => {
+            if (res.code == 1000) {
+              console.log("getRoutine 실행됨", res);
+              setRoutineData(res.result);
+              setNewRoutine(res.result);
+            } else {
+              console.log("요일 루틴 가져오기 실패");
+            }
           });
+          showToast();
         } //눌렀을 때 mode가 true였을 때, 즉 커스텀모드에서 완료버튼을 눌렀을때.
       );
-      console.log("newSCHE:", newSCHE);
+      getRoutines().then((res) => {
+        if (res.result) {
+          //올바른 데이터 백엔드로부터 받아옴
+          processDayData(res.result);
+        } else {
+          console.log("백엔드로부터 올바른 myRoutines 데이터 받아오지 못함");
+        }
+      });
       if (newSCHE) {
         //SCHEDULE의 변경이 있었을 경우,
         let newSCHE_1 = JSON.parse(JSON.stringify(newSCHE));
@@ -276,19 +238,11 @@ export default MyRoutine = () => {
         }, {});
         //prettier-ignore
         let data = {"monRoutineIdx": SCHEDULE[tempNewSCHE[0]].routineId,"tueRoutineIdx": SCHEDULE[tempNewSCHE[1]].routineId,"wedRoutineIdx": SCHEDULE[tempNewSCHE[2]].routineId,"thuRoutineIdx": SCHEDULE[tempNewSCHE[3]].routineId,"friRoutineIdx": SCHEDULE[tempNewSCHE[4]].routineId,"satRoutineIdx": SCHEDULE[tempNewSCHE[5]].routineId,"sunRoutineIdx": SCHEDULE[tempNewSCHE[6]].routineId,}; //0번째 153
-        updateSchedule(data).then((res) =>
+        updateRoutines(data).then((res) =>
           console.log("updateRoutineSchedule api 호출결과:", res)
         );
         setNewSCHE(null);
       }
-      getRoutine().then((res) => {
-        if (res.code == 1000) {
-          setRoutineData(res.result);
-          setNewRoutine(res.result);
-        } else {
-          console.log("요일 루틴 가져오기 실패");
-        }
-      });
     }
     setMode(!mode);
   };
@@ -317,7 +271,6 @@ export default MyRoutine = () => {
     ]);
   };
   const renderItem = ({ item, index }) => {
-    console.log(item);
     return (
       <ExerciseItem
         key={SCHEDULE[selectedDay] * index}
@@ -330,8 +283,23 @@ export default MyRoutine = () => {
       />
     );
   };
-
-  /**각 요일별로 존재하는 루틴의 Idx 값을 반환 */
+  const handleBottomSubmit = () => {
+    //일단 ModalShown 변수를 false로 변경하여
+    setModalShown(false);
+    Keyboard.dismiss();
+  };
+  /**백엔드로부터 받아온 rawData를 요일요약 상단 컴퍼넌트에 렌더링하고자 숫자값만 담긴 배열로 후가공*/
+  const processDayData = (rawData) => {
+    let newArr = new Array(rawData.length);
+    newArr[0] = { id: 0, routineId: rawData.monRoutineIdx };
+    newArr[1] = { id: 1, routineId: rawData.tueRoutineIdx };
+    newArr[2] = { id: 2, routineId: rawData.wedRoutineIdx };
+    newArr[3] = { id: 3, routineId: rawData.thuRoutineIdx };
+    newArr[4] = { id: 4, routineId: rawData.friRoutineIdx };
+    newArr[5] = { id: 5, routineId: rawData.satRoutineIdx };
+    newArr[6] = { id: 6, routineId: rawData.sunRoutineIdx };
+    setSCHEDULE(newArr);
+  };
   const getRoutines = async () => {
     try {
       let url = "https://gpthealth.shop/";
@@ -343,37 +311,50 @@ export default MyRoutine = () => {
       console.error("Failed to fetch data:", error);
     }
   };
-  const handleBottomSubmit = () => {
-    //일단 ModalShown 변수를 false로 변경하여
-    setModalShown(false);
-    Keyboard.dismiss();
-  };
-  /**백엔드로부터 받아온 rawData를 요일요약 상단 컴퍼넌트에 렌더링하고자 숫자값만 담긴 배열로 후가공*/
-  const processDayData = (rawData) => {
-    let newArr = new Array(rawData.length);
-    console.log(newArr);
-    newArr[0] = { id: 0, routineId: rawData.monRoutineIdx };
-    newArr[1] = { id: 1, routineId: rawData.tueRoutineIdx };
-    newArr[2] = { id: 2, routineId: rawData.wedRoutineIdx };
-    newArr[3] = { id: 3, routineId: rawData.thuRoutineIdx };
-    newArr[4] = { id: 4, routineId: rawData.friRoutineIdx };
-    newArr[5] = { id: 5, routineId: rawData.satRoutineIdx };
-    newArr[6] = { id: 6, routineId: rawData.sunRoutineIdx };
-    setSCHEDULE(newArr);
-  };
   const getRoutine = async () => {
+    setIsLoading(true);
     try {
       let url = "https://gpthealth.shop/";
       //후가공한 SCHEDULE 배열에서의 IDX값을 그대로 가져와 query스트링으로 추가
       let detailAPI = `app/routine/${SCHEDULE[selectedDay].routineId}`;
       const response = await axios.get(url + detailAPI);
       const result = response.data;
+      setIsLoading(false);
       return result;
     } catch (error) {
       console.error("Failed to fetch data:", error);
     }
   };
-
+  const updateRoutine = async () => {
+    try {
+      let url = "https://gpthealth.shop/";
+      let detailAPI = `app/routine/${SCHEDULE[selectedDay].routineId}`;
+      const response = await axios.put(url + detailAPI, newRoutine, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const result = response.data;
+      return result;
+    } catch (error) {
+      console.error("Failed to fetch data:", error);
+    }
+  };
+  const updateRoutines = async (data) => {
+    try {
+      let url = "https://gpthealth.shop/";
+      let detailAPI = "app/routine/calendar";
+      const response = await axios.put(url + detailAPI, data, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const result = response.data;
+      return result;
+    } catch (error) {
+      console.error("Failed to fetch data:", error);
+    }
+  };
   const editRoutine = (id, type, value) => {
     let newArr = JSON.parse(JSON.stringify(newRoutine));
     if (type == "repeat") {
@@ -393,29 +374,12 @@ export default MyRoutine = () => {
     console.log("editRoutine수행 후 결과값:", newArr[id].content);
     setNewRoutine(newArr);
   };
-
-  const pressBack = () => {
-    setMode(false);
-    Alert.alert("이 변경 사항을 폐기하시겠습니까?", "", [
-      {
-        text: "계속 편집하기",
-        onPress: () => {
-          setMode(true);
-        },
-        style: "default",
-      },
-      {
-        text: "변경사항 폐기",
-        onPress: () => console.log("변경사항 폐기"),
-        style: "destructive",
-      },
-    ]);
-  };
   const onPressBottomModal = () => bottomModal.current?.present();
 
   useEffect(() => {
     if (SCHEDULE[selectedDay] != undefined) {
       getRoutine().then((res) => {
+        console.log(res);
         if (res.code == 1000) {
           setRoutineData(res.result);
           setNewRoutine(res.result);
@@ -424,15 +388,17 @@ export default MyRoutine = () => {
         }
       });
     }
-    getRoutines().then((res) => {
-      if (res.result) {
-        //올바른 데이터 백엔드로부터 받아옴
-        processDayData(res.result);
-      } else {
-        console.log("백엔드로부터 올바른 myRoutines 데이터 받아오지 못함");
-      }
-    });
-  }, [selectedDay, mode]);
+  }, [selectedDay]);
+  useEffect(() => {
+    if (modalShown == true) {
+    } else {
+      setSnapPoints(["1%"]);
+    }
+  }, [modalShown]);
+
+  useEffect(() => {
+    onPressBottomModal();
+  }, []);
 
   const animatedStyle = useAnimatedStyle(() => {
     return {
@@ -440,24 +406,14 @@ export default MyRoutine = () => {
       opacity: withSpring(modalShown ? 0.2 : 1),
     };
   }, [modalShown]);
-  useEffect(() => {
-    onPressBottomModal();
-  }, []);
 
-  useEffect(() => {
-    if (modalShown == true) {
-    } else {
-      setSnapPoints(["1%"]);
-    }
-    console.log("modalShown:", modalShown);
-  }, [modalShown]);
   return (
     <BottomSheetModalProvider>
       <ScreenBase>
         <Header
           mode={mode}
           parentFunction={toggleMode}
-          onPress={() => pressBack()}
+          onPress={() => pressBack(setMode)}
         />
         <ContentLayout>
           {!mode && ( //루틴 요약내용을 확인할 수 있는 주간달력 컴퍼넌트
@@ -544,7 +500,11 @@ export default MyRoutine = () => {
             </ScrollView>
           ) : (
             <ContentBase>
-              {routineData ? (
+              {isLoading ? (
+                <IndicatorBase>
+                  <ActivityIndicator size="large" color={colors.l_main} />
+                </IndicatorBase>
+              ) : routineData ? (
                 <FlatList
                   showsVerticalScrollIndicator
                   data={routineData}
@@ -557,7 +517,7 @@ export default MyRoutine = () => {
                   </NoRoutineText>
                 </ContentContainer>
               )}
-              <Toast config={toastConfig} />
+              <MyToast />
             </ContentBase>
           )}
 

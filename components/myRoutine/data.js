@@ -1,0 +1,2 @@
+//prettier-ignore
+export const days = ["월", "화", "수", "목", "금", "토", "일"];
