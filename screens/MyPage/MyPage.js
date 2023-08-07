@@ -9,40 +9,28 @@ import axios from "axios";
 
 export default function MyPage() {
   const { isDark } = useContext(AppContext);
-  const [data, setData] = useState([]);
+  const [date, setDate] = useState([]);
 
   const [now, setNow] = useState(new Date());
-  let month = now.getMonth() + 1;
+  const [month, setMonth] = useState(now.getMonth() + 1);
 
   const getMyPageData = async (month) => {
     try {
       let url = "https://gpthealth.shop/";
       let detailAPI = `app/mypage?month=${month}`;
       const response = await axios.get(url + detailAPI);
-      const result = response.data;
-      return result;
+      const dateResult = response.data;
+      return dateResult;
     } catch (error) {
       console.error("Failed to fetch data:", error);
     }
   };
-  /*
-  const updatePWD = async (newPW) => {
-    try {
-      let url = "https://gpthealth.shop/";
-      let detailAPI = `app/mypage/updatepwd`;
-      const response = axios.put(url + detailAPI, {
-        userPw: newPW,
-      });
-      const result = response.data;
-      return response;
-    } catch (error) {
-      console.error("Failed to fetch data:", error);
-    }
-  };
-  */
 
   useEffect(() => {
-    getMyPageData(month).then((result) => setData(result));
+    getMyPageData(month).then((dateResult) => {
+      setDate(dateResult.result);
+      console.log(date);
+    });
   }, []);
 
   const [showRecords, SetShowRecords] = useState(true);
@@ -127,7 +115,7 @@ export default function MyPage() {
             </ChoiceText>
           </ChoiceButton>
         </Choice>
-        {showRecords && <Records />}
+        {showRecords && <Records exerciseDays={date} month={month} />}
         {!showRecords && <Analysis />}
       </Container>
     </SafeAreaView>

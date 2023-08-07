@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Calendar, LocaleConfig } from "react-native-calendars";
 import { colors } from "../colors";
 import { Image, Dimensions } from "react-native";
+import { format } from "date-fns";
 
 LocaleConfig.locales["ko"] = {
   monthNames: [
@@ -47,14 +48,17 @@ LocaleConfig.defaultLocale = "ko";
 
 export default function CalendarView(props) {
   const windowWidth = Dimensions.get("window").width;
+  const today = format(new Date(), "yyyy-MM-dd");
+  const days = props.exerciseDays.map((day) =>
+    format(new Date(day.day), "yyyy-MM-dd")
+  );
+  const exerciseDay = days.reduce((acc, current) => {
+    const formattedDate = format(new Date(current), "yyyy-MM-dd");
+    acc[formattedDate] = { selected: true };
+    return acc;
+  }, {});
 
   const [selectedDate, setSelectedDate] = useState("");
-
-  const exerciseDay = {
-    "2023-08-02": { selected: true },
-    "2023-08-06": { selected: true },
-    "2023-08-08": { selected: true },
-  };
 
   return (
     <Calendar
@@ -85,6 +89,11 @@ export default function CalendarView(props) {
       }}
       markedDates={{
         ...exerciseDay,
+        [today]: {
+          selected: true,
+          selectedColor: colors.grey_2,
+          selectedTextColor: colors.black,
+        },
         [selectedDate]: {
           ...exerciseDay[selectedDate],
           selected: true,
@@ -93,8 +102,6 @@ export default function CalendarView(props) {
         },
       }}
       theme={{
-        todayTextColor: colors.black,
-        todayBackgroundColor: colors.grey_2,
         locale: "ko",
         textDayFontSize: 13,
         textDayFontWeight: 400,
@@ -111,11 +118,12 @@ export default function CalendarView(props) {
         selectedDayTextColor: colors.black,
         selectedDayBackgroundColor: "transparent",
       }}
-      onDayPress={(day) => {
-        props.dayFunction(day);
-        setSelectedDate(day.dateString);
+      onDayPress={(pressDay) => {
+        props.dayFunction(pressDay);
+        setSelectedDate(pressDay.dateString);
       }}
-      //hideArrows={true}
+      //onPressArrowLeft={() => console.log("left")}
+      //onPressArrowRight={() => console.log("right")}
       hideExtraDays={true}
     />
   );
