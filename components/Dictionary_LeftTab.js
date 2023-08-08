@@ -1,9 +1,12 @@
-import React, {useState, useContext} from 'react'
+import React, {useState, useContext, useEffect} from 'react'
+import { ActivityIndicator } from 'react-native'
 import styled from 'styled-components/native'
 import WrappedText from 'react-native-wrapped-text'
 import { BottomSheetScrollView } from "@gorhom/bottom-sheet"
 import {colors} from '../colors'
 import { AppContext } from './ContextProvider'
+import axios from 'axios'
+import { set } from 'date-fns'
 
 const ProcessContainer = styled.View`
     margin: 16px 24px;
@@ -64,7 +67,7 @@ const CautionDetail = styled.Text`
 `
 
 export default function Dictionary_LeftTab(props){
-    // const {exerciseDetail} = props.exerciseDetail
+    const exerciseName = props.exerciseName
     const {isDark} = useContext(AppContext)
 
     const ProcessNum = styled.Text`
@@ -81,44 +84,105 @@ export default function Dictionary_LeftTab(props){
     margin-top: 4px;
     margin-bottom: 4px;
     `
-    const [processName, setProcessName] = useState(['안장 높낮이 조절', '시작 자세', '마무리 자세'])
-    const [caution, setCaution] = useState(['허리를 과도하게 안으로 넣지 마세요.', '적절한 무게로 승모근에 무리가 가지 않도록 하세요.', '안장과 바의 위치점을 올바르게 맞춰주세요.'])
+
+    const [exerciseDetail, setExerciseDetail] = useState()
+    const getExerciseDetail = async () => {
+        try {
+            let url = "https://gpthealth.shop/"
+            let detailAPI = "/app/dictionary/exercisemethod"
+            const response = await axios.get(url + detailAPI, {
+                params: {
+                    name: exerciseName
+                }
+            })
+            const result = response.data
+
+            if(result.isSuccess) console.log(`과정, 주의사항 불러오기 성공 (검색어: ${exerciseName})`)
+            else console.log(`과정, 주의사항 불러오기 실패 (검색어: ${exerciseName})`)
+            
+            return result.result;
+        } 
+        catch (error) {
+          console.error("Failed to fetch data:", error);
+        }
+    }
+    // const [caution, setCaution] = useState()
+    useEffect(()=>{
+        getExerciseDetail().then((result)=>{
+            setExerciseDetail(result)
+            // console.log(result.exercisecaution[0])
+            // // const cautions = Object.values(exerciseDetail?.exercisecaution[0]?).map(value=>value)
+            // // setCaution(cautions)
+        })
+    }, [])  
+
 
     return(
         <BottomSheetScrollView 
         showsVerticalScrollIndicator={false}
-        >            
+        >        
             <ProcessContainer>
+            
             {                            
-                processName.map((processName, i) => (
+                exerciseDetail === undefined?
+                null
+                :
+                exerciseDetail.exerciseinfo.map((exerciseinfo, i) => (
                     <Process>
-                        <ProcessNum>{'0'+ (i+1)}</ProcessNum>
+                        <ProcessNum>{`0${exerciseinfo.num}`}</ProcessNum>
                         <ProcessContent>
-                            <ProcessName>{processName}</ProcessName>
+                            <ProcessName>{exerciseinfo.title}</ProcessName>
                             <WrappedText textStyle={{fontWeight: 400, fontSize: 13, color: `${colors.black}`}}>
-                                안장의 높이를 삼두 중앙보다 약간 위쪽과 같도록 맞춘 후 손잡이를 잡아주세요.
+                                {exerciseinfo.content}
                             </WrappedText>
                         </ProcessContent>
                     </Process>
                 ))
-            }
+            } 
             </ProcessContainer>
-            <CautionContainer>
-                <CautionTitleContainer>
-                    <CautionImage/>
-                    <CautionTitle>이 부분은 특히 주의해주세요!</CautionTitle>
-                </CautionTitleContainer>
-                <CautionContentContainer>
-                {
-                    caution.map((caution) => (
+            
+            {
+                <CautionContainer>
+                    <CautionTitleContainer>
+                        <CautionImage/>
+                        <CautionTitle>이 부분은 특히 주의해주세요!</CautionTitle>
+                    </CautionTitleContainer>
+                    <CautionContentContainer>  
+                         <CautionDetailContainer>
+                            <CautionDot/>
+                            <CautionDetail>{exerciseDetail?.exercisecaution[0].caution1}</CautionDetail>
+                        </CautionDetailContainer>        
                         <CautionDetailContainer>
                             <CautionDot/>
-                            <CautionDetail>{ caution }</CautionDetail>
-                        </CautionDetailContainer>
-                    ))
-                }
-                </CautionContentContainer>
-            </CautionContainer>
+                            <CautionDetail>{exerciseDetail?.exercisecaution[0].caution2}</CautionDetail>
+                        </CautionDetailContainer> 
+                        <CautionDetailContainer>
+                            <CautionDot/>
+                            <CautionDetail>{exerciseDetail?.exercisecaution[0].caution3}</CautionDetail>
+                        </CautionDetailContainer>                   
+                    {/* {
+                        exerciseDetail?.exercisecaution.map((cautionObject)=>{
+                            let temp = Object.values(cautionObject)
+                            console.log(temp)
+                            temp?.map((v)=>{
+                                console.log(v)
+                                (
+                                <CautionDetailContainer>
+                                     <CautionDot/>
+                                     <CautionDetail>안녕</CautionDetail>
+                                </CautionDetailContainer>
+                            )})
+                            // (
+                            //     <CautionDetailContainer>
+                            //           <CautionDot/>
+                            //           <CautionDetail>안녕</CautionDetail>
+                            //      </CautionDetailContainer>
+                            // )
+                        })
+                    } */}
+                    </CautionContentContainer>
+                </CautionContainer>
+            }
         </BottomSheetScrollView>
     )
 }
