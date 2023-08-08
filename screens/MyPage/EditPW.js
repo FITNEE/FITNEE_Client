@@ -8,6 +8,7 @@ import {
 import { styled } from "styled-components/native";
 import { colors } from "../../colors";
 import { Button } from "../../Shared";
+import axios from "axios";
 
 const Container = styled.View`
   height: 100%;
@@ -50,13 +51,51 @@ export default function EditPW({ navigation }) {
   const [rewrittenPW, setRewrittenPW] = useState("");
   const [newPW, setNewPW] = useState("");
   const [rewrittenNewPW, setRewrittenNewPW] = useState("");
+  const [errorPW, setErrorPW] = useState(false);
+  const [errorNewPW, setErrorNewPW] = useState(false);
+  const [messageErrorPW, setMessageErrorPW] = useState("");
+  const [visibleErrorNewPW, setVisibleErrorNewPW] = useState(false);
 
-  const updateUserInfo = async (newPW) => {
+  const checkPW = async (userPW) => {
     try {
       let url = "https://gpthealth.shop/";
-      let detailAPI = `app/mypage/updateuser`;
+      let detailAPI = `app/mypage/comparepwd`;
+      console.log(userPW);
+      const response = await axios.post(url + detailAPI, {
+        userPw: userPW,
+      });
+      const checkResult = response.data;
+      return checkResult;
+    } catch (error) {
+      console.error("Failed to fetch data:", error);
+    }
+  };
+
+  const check = () => {
+    checkPW(rewrittenPW).then((checkResult) => {
+      console.log(checkResult.isSuccess);
+      setErrorPW(!checkResult.isSuccess);
+    });
+    checkPW(newPW).then((checkResult) => {
+      console.log(checkResult.isSuccess);
+      setErrorNewPW(checkResult.isSuccess);
+      checkResult.code === 706 &&
+        setMessageErrorPW("기존 비밀번호와 동일합니다.");
+      checkResult.code === 707 && newPW.length < 4 && setErrorNewPW(true);
+      checkResult.code === 707 &&
+        newPW.length < 4 &&
+        setMessageErrorPW("4글자 이상");
+      !errorPW && !errorNewPW && setMessageErrorPW("");
+      !errorPW && !errorNewPW && setVisibleErrorNewPW(true);
+    });
+  };
+
+  const updateUserPW = async (newPW) => {
+    try {
+      let url = "https://gpthealth.shop/";
+      let detailAPI = `app/mypage/updatepwd`;
       const response = await axios.put(url + detailAPI, {
-        userPW: newPW,
+        userPw: newPW,
       });
       const updateResult = response.data;
       return updateResult;
@@ -66,8 +105,9 @@ export default function EditPW({ navigation }) {
   };
 
   const handlePress = () => {
-    navigation.navigate("UserInfo");
-    updateUserInfo(newPW).then(alert("변경되었습니다"));
+    updateUserPW(newPW).then((updateResult) => {
+      console.log(updateResult);
+    });
   };
 
   return (
@@ -79,10 +119,9 @@ export default function EditPW({ navigation }) {
       >
         <Container>
           <InputContainer>
-            <InputRed error={rewrittenPW != PW}>
+            <InputRed error={errorPW}>
               <Input
                 placeholderTextColor={colors.grey_6}
-                value={rewrittenPW}
                 autoFocus
                 placeholder="기존 비밀번호 확인"
                 secureTextEntry={true}
@@ -92,9 +131,9 @@ export default function EditPW({ navigation }) {
               />
             </InputRed>
             <StatusText>
-              {rewrittenPW == PW ? "" : "비밀번호가 일치하지 않습니다"}
+              {errorPW ? "비밀번호가 일치하지 않습니다" : ""}
             </StatusText>
-            <InputRed error={newPW.length > 0 && newPW.length < 4}>
+            <InputRed error={errorNewPW}>
               <Input
                 placeholderTextColor={colors.grey_6}
                 placeholder="새 비밀번호"
@@ -104,15 +143,10 @@ export default function EditPW({ navigation }) {
                 onChangeText={(text) => setNewPW(text)}
               />
             </InputRed>
-            <StatusText>
-              {newPW.length > 0 && newPW.length < 4
-                ? "비밀번호는 최소 4글자입니다"
-                : ""}
-            </StatusText>
+            <StatusText>{messageErrorPW}</StatusText>
             <InputRed error={rewrittenNewPW != newPW}>
               <Input
                 placeholderTextColor={colors.grey_6}
-                value={rewrittenNewPW}
                 onSubmitEditing={() => {
                   rewrittenNewPW == newPW && handlePress();
                 }}
@@ -124,14 +158,28 @@ export default function EditPW({ navigation }) {
               />
             </InputRed>
             <StatusText>
-              {rewrittenNewPW == newPW ? "" : "비밀번호가 일치하지 않습니다"}
+              {visibleErrorNewPW
+                ? rewrittenNewPW == newPW
+                  ? "비밀번호가 일치합니다."
+                  : "비밀번호가 일치하지 않습니다"
+                : ""}
             </StatusText>
           </InputContainer>
-
-          <Button
-            enabled={rewrittenNewPW != "" && rewrittenNewPW == newPW}
-            onPress={() => handlePress()}
-          />
+          {visibleErrorNewPW ? (
+            <Button
+              enabled={
+                visibleErrorNewPW && !errorNewPW && rewrittenNewPW == newPW
+              }
+              onPress={handlePress}
+              text={"새 비밀번호 저장"}
+            />
+          ) : (
+            <Button
+              onPress={check}
+              enabled={rewrittenPW != "" && newPW != ""}
+              text={"확인"}
+            ></Button>
+          )}
         </Container>
       </TouchableWithoutFeedback>
     </SafeAreaView>
