@@ -52,10 +52,13 @@ const TitleContainer = styled.View`
 const NameContainer = styled.View`
     margin-right: 40px;
 `
+const TitleWrapper = styled.View`
+`
 const TitleText = styled.Text`
     color: ${colors.black};
     font-weight: 600;
     font-size: 24px;
+    padding-top: 8px;
 `
 const AddtoRoutineBtn = styled.TouchableOpacity`
     background-color: ${colors.red};
@@ -154,8 +157,6 @@ const JoinText = styled.Text`
     font-size: 13;
 `
 
-const DictionaryContext = createContext()
-
 export default function Dictionary_3({ navigation, route }){
     const exerciseInfo = route.params.exercise
     const {isDark} = useContext(AppContext);
@@ -209,26 +210,6 @@ export default function Dictionary_3({ navigation, route }){
     }, [])
     const parentSetJoinBtnBool = (newBool) => setJoinBtnBool(newBool)
 
-    const [exerciseDetail, setExerciseDetail] = useState({})
-    const getExerciseDetail = async () => {
-        try {
-            let url = "https://gpthealth.shop/"
-            let detailAPI = "/app/dictionary/exercisemethod"
-            const response = await axios.get(url + detailAPI)
-            const result = response.data
-            return result.result;
-        } 
-        catch (error) {
-          console.error("Failed to fetch data:", error);
-        }
-    }
-    useEffect(()=>{
-        getExerciseDetail().then((result)=>{
-            setExerciseDetail(result)
-        })
-    }, [])  
-
-
 
     return (
         <TouchableWithoutFeedback
@@ -265,7 +246,7 @@ export default function Dictionary_3({ navigation, route }){
                             <TitleContainer>
                                 <NameContainer>
                                     <AreaText>{exerciseInfo.parts} | {exerciseInfo.muscle} | {exerciseInfo.equipment}</AreaText>
-                                    <TitleText>{exerciseInfo.name}</TitleText>
+                                    <TitleWrapper><TitleText>{exerciseInfo.name}</TitleText></TitleWrapper>
                                 </NameContainer>
                                 <AddtoRoutineBtn/>
                             </TitleContainer>
@@ -287,7 +268,7 @@ export default function Dictionary_3({ navigation, route }){
                             {
                                 leftTabActivate? 
                                     <Dictionary_LeftTab 
-                                        exerciseDetail = {exerciseDetail}
+                                        exerciseName = {exerciseInfo.name}
                                     /> 
                                     : 
                                     <Dictionary_RightTab 

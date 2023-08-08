@@ -205,7 +205,7 @@ export default function Dictionary_1( {navigation} ){
             temp2 = temp.map((keyword)=>keyword.text)
             setPopularKeywords(temp2)
         })
-    }, [])
+    }, [isSearching, isSubmit])
          
 
     // 검색한 단어를 최근 검색 키워드에 저장하는 API  
@@ -272,7 +272,7 @@ export default function Dictionary_1( {navigation} ){
                                     placeholderTextColor={colors.grey_4}
                                     returnKeyType='search'
                                     onChange={onChangeText}
-                                    // value={search}
+                                    value={search}
                                     onSubmitEditing={onSubmitEditing}
                                     onFocus={onFocusInput}
                                     >
@@ -295,7 +295,7 @@ export default function Dictionary_1( {navigation} ){
                         </PartContainer>}
                     </TopContainer>
                     { !isSearching && !isSubmit &&
-                        <BottomContainer onPress={getKeywords}>
+                        <BottomContainer>
                             <RecentContainer style={{marginBottom: 56}}>
                                 <RecentTitle>최근 검색 키워드</RecentTitle>
                                 <RecentKeywordContainer>
