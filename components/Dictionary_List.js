@@ -45,17 +45,41 @@ const AddtoBtn = styled.TouchableOpacity`
 
 export default function Dictionary_List(props){
 
-    const { navigation, searchList } = props
+    //props
+    const { navigation, searchList, part } = props
+
+    // 검색리스트의 아이템 터치시 사전상세페이지로 이동, exercise = {equipment, muscle, name, parts}
     const onPress = (exercise) => navigation.navigate('Dictionary_3', {exercise})
+    
+    // 부위toggle버튼 클릭시 해당되는 운동들만 보여줌
+    const [filteredList, setFilteredList] = useState(searchList)
+
+    // const [selectedParts, setSelectedParts] = useState([])
+    const filterList = () => {
+        const selectedParts = part.filter(item => item[1]).map(item => item[0])
+        
+        if(selectedParts.length == 0){ // 선택된 버튼이 없으면 전부 보여주기(default)
+            setFilteredList(searchList)
+        }
+        else{
+            const tempList = searchList.filter(item => selectedParts.includes(item.parts))
+            setFilteredList(tempList)
+        }
+        
+    }
+    useEffect(()=>{
+        filterList()
+    }, [part, searchList])
+
 
     return(
         <ListContainer showsVerticalScrollIndicator='false'>
         {
-            searchList === undefined?
+            filteredList === undefined?
             null
             :
-            searchList.map((exercise) => (
-                <ExerciseContainer onPress={()=> onPress(exercise)}>
+            filteredList?.map((exercise, i) => (
+                <ExerciseContainer key={i} onPress={()=> onPress(exercise)}>
                     <ExerciseLeftContainer>
                         <ExerciseImg></ExerciseImg>
                         <ExerciseDetailContainer>
@@ -63,7 +87,7 @@ export default function Dictionary_List(props){
                             <ExerciseArea>{exercise.parts} | {exercise.muscle} | {exercise.equipment}</ExerciseArea>                        
                         </ExerciseDetailContainer>
                     </ExerciseLeftContainer>
-                    <AddtoBtn/>
+                    <AddtoBtn onPress={filterList}/>
                 </ExerciseContainer>
             ))
         }

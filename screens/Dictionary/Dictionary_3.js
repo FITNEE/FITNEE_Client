@@ -274,6 +274,7 @@ export default function Dictionary_3({ navigation, route }){
                                     <Dictionary_RightTab 
                                         parentJoinBtnBool={joinBtnBool}
                                         parentSetJoinBtnBool={parentSetJoinBtnBool}
+                                        exerciseName = {exerciseInfo.name}
                                         />
                             } 
                         </DictionaryContainer>

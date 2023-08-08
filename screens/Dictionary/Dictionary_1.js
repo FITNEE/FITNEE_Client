@@ -256,7 +256,7 @@ export default function Dictionary_1( {navigation} ){
         setSearch(text)
         postSearch(text).then((result)=>setSearchList(result))
     }
-
+    // 최근검색어, 인기검색어 클릭시 검색List 화면으로 전환
     const onPressKeyword = (keyword) => {
         postSearch(keyword).then((result)=>setSearchList(result))
         setSearch(keyword)
@@ -336,6 +336,7 @@ export default function Dictionary_1( {navigation} ){
                     { isSubmit && <Dictionary_List
                         navigation = {navigation}
                         searchList = {searchList}
+                        part = {part}
                     />}
                 </Container>
             </TouchableWithoutFeedback>
