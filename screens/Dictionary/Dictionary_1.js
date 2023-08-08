@@ -110,8 +110,8 @@ const PopularKeywordsContainer = styled.View`
     flex-direction: row;
     flex-wrap: wrap;
 `
-const KeywordContainer = styled.View`
-    background-color: ${colors.grey_1}; 
+const KeywordContainer = styled.TouchableOpacity`
+    background-color: ${colors.grey_1};
     border-radius: 100px;
 
     margin-right: 4px;
@@ -243,7 +243,6 @@ export default function Dictionary_1( {navigation} ){
             const result = response.data
             return result.result
 
-
             if(result.isSuccess) console.log('검색리스트 불러오기 성공')
             else console.log('검색리스트 불러오기 실패')
         } 
@@ -256,6 +255,12 @@ export default function Dictionary_1( {navigation} ){
         const {eventCount, target, text} = event.nativeEvent
         setSearch(text)
         postSearch(text).then((result)=>setSearchList(result))
+    }
+
+    const onPressKeyword = (keyword) => {
+        postSearch(keyword).then((result)=>setSearchList(result))
+        setSearch(keyword)
+        setIsSubmit(true)
     }
 
     return(
@@ -301,7 +306,7 @@ export default function Dictionary_1( {navigation} ){
                                 <RecentKeywordContainer>
                                 {
                                     recentKeywords.map((keyword) => (
-                                        <KeywordContainer>
+                                        <KeywordContainer onPress={()=>onPressKeyword(keyword)}>
                                             <Keyword>{keyword}</Keyword>
                                         </KeywordContainer>
                                     ))
@@ -313,7 +318,7 @@ export default function Dictionary_1( {navigation} ){
                                 <PopularKeywordsContainer>
                                 {
                                     popularKeywords.map((keyword) => (
-                                        <KeywordContainer>
+                                        <KeywordContainer onPress={()=>onPressKeyword(keyword)}>
                                             <Keyword>{keyword}</Keyword>
                                         </KeywordContainer>
                                     ))
