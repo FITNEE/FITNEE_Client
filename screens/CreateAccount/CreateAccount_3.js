@@ -10,6 +10,10 @@ import { Pressable } from "react-native";
 
 import { WithLocalSvg } from "react-native-svg";
 import BMIImg from "../../assets/SVGs/BMI.svg";
+import Animated, {
+  useAnimatedStyle,
+  withSpring,
+} from "react-native-reanimated";
 
 const SubTitle = styled.Text`
   margin-top: 8px;
@@ -42,10 +46,6 @@ const BMIContainer = styled.View`
   width: 100%;
 `;
 
-const BMIIndicator = styled.View`
-  width: 100%;
-  z-index: 99;
-`;
 const BMILine = styled.View`
   height: 19px;
   width: 1px;
@@ -97,15 +97,18 @@ const CreateAccount_3 = ({ route, navigation }) => {
   const [weights, setWeights] = useState([]);
   const [mode, setMode] = useState(0);
   const [snapPoints, setSnapPoints] = useState(["1%"]);
+  const [modalShown, setModalShown] = useState(false);
+
   const [BMI, setBMI] = useState(0);
   const bottomModal = useRef();
 
+  console.log("modalShown:", modalShown);
   const hideModal = () => {
-    setSnapPoints(["1%"]);
+    setModalShown(false);
     setMode(null);
   };
   const popModal = (id) => {
-    setSnapPoints(["34%"]);
+    setModalShown(true);
     setMode(id);
   };
   const email = route.params.email;
@@ -114,7 +117,6 @@ const CreateAccount_3 = ({ route, navigation }) => {
   const birthYear = route.params.birthYear;
   const gender = route.params.gender;
 
-  console.log(route.params);
   const handleSubmit = () => {
     navigation.navigate("CreateAccount_4", {
       email,
@@ -143,7 +145,6 @@ const CreateAccount_3 = ({ route, navigation }) => {
   const onPressBottomModal = () => bottomModal.current?.present();
 
   useEffect(() => {
-    onPressBottomModal();
     let data = [];
     data.push("150 이하");
     for (var i = 151; i < 190; i++) {
@@ -160,9 +161,24 @@ const CreateAccount_3 = ({ route, navigation }) => {
     setWeights(data);
   }, []);
   useEffect(() => {
+    onPressBottomModal();
+    if (modalShown == true) {
+      setSnapPoints(["40%"]);
+    } else {
+      setSnapPoints(["1%"]);
+    }
+  }, [modalShown]);
+  useEffect(() => {
     const heightInM = height / 100;
     setBMI(weight / (heightInM ^ 2));
   }, [height, weight]);
+  const animatedStyle = useAnimatedStyle(() => {
+    return {
+      width: "100%",
+      zIndex: 99,
+      left: withSpring(`${(BMI - 15) * 4}%`),
+    };
+  }, [modalShown]);
 
   return (
     <BottomSheetModalProvider>
@@ -194,18 +210,18 @@ const CreateAccount_3 = ({ route, navigation }) => {
             />
           </BottomContainer>
           <BMIContainer>
-            <BMIIndicator>
-              <BMIView style={{ left: `${(BMI - 15) * 4}%` }}>
+            <Animated.View style={animatedStyle}>
+              <BMIView>
                 <BMITitle>BMI {BMI.toFixed(1)}</BMITitle>
                 <BMIText>{BMIStatusText(BMI.toFixed(1))}</BMIText>
               </BMIView>
-              <BMIMarkerContainer style={{ left: `${(BMI - 15) * 4}%` }}>
+              <BMIMarkerContainer>
                 <BMILine />
                 <BMIPointer />
               </BMIMarkerContainer>
-            </BMIIndicator>
+            </Animated.View>
             <WithLocalSvg
-              width={ScreenWidth * 0.9}
+              width={ScreenWidth * 0.8}
               height={40}
               asset={BMIImg}
             />
@@ -216,7 +232,7 @@ const CreateAccount_3 = ({ route, navigation }) => {
             selectableDatas={mode == 1 ? heights : weights}
             modalRef={bottomModal}
             snapPoints={snapPoints}
-            defaultVal={mode == 1 ? 170 : 60}
+            defaultVal={mode == 1 ? "170" : "60"}
             hideFunc={() => hideModal()}
             nextFunc={mode == 1 ? () => setMode(2) : () => hideModal()}
           />

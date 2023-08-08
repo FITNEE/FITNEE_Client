@@ -55,7 +55,7 @@ const CreateAccount_4 = ({ route, navigation }) => {
   const postUser = async (data) => {
     try {
       let url = "https://gpthealth.shop/";
-      let detailAPI = "app/users";
+      let detailAPI = "app/user";
       const response = await axios.post(url + detailAPI, data, {
         headers: {
           "Content-Type": `application/json`,
@@ -79,6 +79,7 @@ const CreateAccount_4 = ({ route, navigation }) => {
     };
     postUser(data)
       .then((response) => {
+        console.log("postUser 실행결과:", response);
         setToken(response.result.accessToken);
         AsyncStorage.setItem("token", response.result.accessToken).then(
           console.log("token set to AsyncStorage")
