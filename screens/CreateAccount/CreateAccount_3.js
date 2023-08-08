@@ -3,10 +3,10 @@ import styled from "styled-components/native";
 import { colors } from "../../colors";
 import { Button, ScreenWidth, BackButton } from "../../Shared";
 //prettier-ignore
-import {Input,Title,ScreenLayout,SubText,NumberInput,MyBottomSheet, InputTitle} from "../../components/Shared/OnBoarding_Shared";
+import {Title,ScreenLayout,NumberInput,MyBottomSheet, InputTitle} from "../../components/Shared/OnBoarding_Shared";
 
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
-import { Keyboard, Pressable } from "react-native";
+import { Pressable } from "react-native";
 
 import { WithLocalSvg } from "react-native-svg";
 import BMIImg from "../../assets/SVGs/BMI.svg";

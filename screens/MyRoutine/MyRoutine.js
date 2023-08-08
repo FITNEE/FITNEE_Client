@@ -9,11 +9,23 @@ import axios from "axios";
 
 import { colors } from "../../colors";
 import { Header } from "../../components/Shared/MyRoutine_Shared";
-import { pressBack } from "../../components/myRoutine/Functions";
+import {
+  pressBack,
+  processDayData,
+} from "../../components/myRoutine/Functions";
 import { MyToast, showToast } from "../../components/myRoutine/MyToast";
 import WeekCalendar from "../../components/myRoutine/WeekCalendar";
 import List_Custom from "../../components/myRoutine/List_Custom";
 import List_Normal from "../../components/myRoutine/List_Normal";
+import {
+  getRoutines,
+  getRoutine,
+  updateRoutine,
+} from "../../components/myRoutine/data";
+import {
+  ContentContainer,
+  NoRoutineText,
+} from "../../components/myRoutine/styled";
 
 const ScreenBase = styled.SafeAreaView`
   width: 100%;
@@ -43,13 +55,7 @@ const ExerciseContainer = styled.Pressable`
   flex-direction: column;
   background-color: ${colors.white};
 `;
-const ContentContainer = styled.View`
-  height: 100%;
-  width: 100%;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-`;
+
 const TopContainer = styled.View`
   flex-direction: row;
   justify-content: space-between;
@@ -57,11 +63,7 @@ const TopContainer = styled.View`
   margin-bottom: 16px;
   height: 24px;
 `;
-const NoRoutineText = styled.Text`
-  font-size: 15px;
-  color: ${colors.grey_7};
-  font-weight: 400;
-`;
+
 const ExerciseTitle = styled.Text`
   font-size: 17px;
   margin-bottom: 6px;
@@ -153,31 +155,36 @@ export default MyRoutine = () => {
     setModalState(2);
   };
 
-  const toggleMode = () => {
-    if (mode) {
-      updateRoutine().then(
-        (res) => {
-          console.log("updateRoutine api 호출결과:", res);
-          getRoutine().then((res) => {
+  const updateDatas = () => {
+    getRoutines().then((res) => {
+      if (res.result) {
+        setSCHEDULE(processDayData(res.result));
+        getRoutine(processDayData(res.result), selectedDay, setIsLoading).then(
+          (res) => {
             if (res.code == 1000) {
-              console.log("getRoutine 실행됨", res);
               setRoutineData(res.result);
               setNewRoutine(res.result);
             } else {
-              console.log("요일 루틴 가져오기 실패");
+              console.log("routine 데이터 받아오지 못함");
             }
-          });
+          }
+        );
+      } else {
+        console.log("calender 데이터 받아오지 못함+routine데이터도 실패");
+      }
+    });
+  };
+
+  const toggleMode = () => {
+    if (mode) {
+      //putRoutine으로 전송하는 데이터가 []임을 방지하고자 나온 임시대책. 추후 수정예정
+      updateRoutine(SCHEDULE, selectedDay, newRoutine).then(
+        (res) => {
+          console.log("updateRoutine api 호출결과:", res);
+          updateDatas();
           showToast();
         } //눌렀을 때 mode가 true였을 때, 즉 커스텀모드에서 완료버튼을 눌렀을때.
       );
-      getRoutines().then((res) => {
-        if (res.result) {
-          //올바른 데이터 백엔드로부터 받아옴
-          processDayData(res.result);
-        } else {
-          console.log("백엔드로부터 올바른 myRoutines 데이터 받아오지 못함");
-        }
-      });
       if (newSCHE) {
         //SCHEDULE의 변경이 있었을 경우,
         let newSCHE_1 = JSON.parse(JSON.stringify(newSCHE));
@@ -225,58 +232,6 @@ export default MyRoutine = () => {
     setModalState(0);
     Keyboard.dismiss();
   };
-  /**백엔드로부터 받아온 rawData를 요일요약 상단 컴퍼넌트에 렌더링하고자 숫자값만 담긴 배열로 후가공*/
-  const processDayData = (rawData) => {
-    let newArr = new Array(rawData.length);
-    newArr[0] = { id: 0, routineId: rawData.monRoutineIdx };
-    newArr[1] = { id: 1, routineId: rawData.tueRoutineIdx };
-    newArr[2] = { id: 2, routineId: rawData.wedRoutineIdx };
-    newArr[3] = { id: 3, routineId: rawData.thuRoutineIdx };
-    newArr[4] = { id: 4, routineId: rawData.friRoutineIdx };
-    newArr[5] = { id: 5, routineId: rawData.satRoutineIdx };
-    newArr[6] = { id: 6, routineId: rawData.sunRoutineIdx };
-    setSCHEDULE(newArr);
-  };
-  const getRoutines = async () => {
-    try {
-      let url = "https://gpthealth.shop/";
-      let detailAPI = "app/routine/calendar";
-      const response = await axios.get(url + detailAPI);
-      const result = response.data;
-      return result;
-    } catch (error) {
-      console.error("Failed to fetch data:", error);
-    }
-  };
-  const getRoutine = async () => {
-    setIsLoading(true);
-    try {
-      let url = "https://gpthealth.shop/";
-      //후가공한 SCHEDULE 배열에서의 IDX값을 그대로 가져와 query스트링으로 추가
-      let detailAPI = `app/routine/${SCHEDULE[selectedDay].routineId}`;
-      const response = await axios.get(url + detailAPI);
-      const result = response.data;
-      setIsLoading(false);
-      return result;
-    } catch (error) {
-      console.error("Failed to fetch data:", error);
-    }
-  };
-  const updateRoutine = async () => {
-    try {
-      let url = "https://gpthealth.shop/";
-      let detailAPI = `app/routine/${SCHEDULE[selectedDay].routineId}`;
-      const response = await axios.put(url + detailAPI, newRoutine, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      const result = response.data;
-      return result;
-    } catch (error) {
-      console.error("Failed to fetch data:", error);
-    }
-  };
   const updateRoutines = async (data) => {
     try {
       let url = "https://gpthealth.shop/";
@@ -314,8 +269,8 @@ export default MyRoutine = () => {
 
   useEffect(() => {
     if (SCHEDULE[selectedDay] != undefined) {
-      getRoutine().then((res) => {
-        console.log(res);
+      getRoutine(SCHEDULE, selectedDay, setIsLoading).then((res) => {
+        console.log("selectedDay변경으로 실행된 getRoutine 실행결과:", res);
         if (res.code == 1000) {
           setRoutineData(res.result);
           setNewRoutine(res.result);
@@ -334,8 +289,10 @@ export default MyRoutine = () => {
 
   const bottomModal = useRef();
   const onPressBottomModal = () => bottomModal.current?.present();
+
   useEffect(() => {
     onPressBottomModal();
+    updateDatas();
   }, []);
 
   return (
@@ -377,9 +334,7 @@ export default MyRoutine = () => {
                 />
               ) : (
                 <ContentContainer>
-                  <NoRoutineText style={{ textAlign: "center", width: "100%" }}>
-                    해당 요일에는 루틴이 없어요
-                  </NoRoutineText>
+                  <NoRoutineText>해당 요일에는 루틴이 없어요</NoRoutineText>
                 </ContentContainer>
               )}
               <MyToast />

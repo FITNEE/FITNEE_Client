@@ -109,15 +109,6 @@ export default List_Normal = ({ routineData, selectedId, setSelectedId }) => {
           </ExtendedContainer>
         )}
       </ExerciseContainer>
-      //   <ExerciseItem
-      //     key={SCHEDULE[selectedDay] * index}
-      //     id={index}
-      //     content={item.content}
-      //     title={item.exerciseName}
-      //     parts={item.exerciseParts}
-      //     selectedId={selectedId}
-      //     setSelectedId={setSelectedId}
-      //   />
     );
   };
 
