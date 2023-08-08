@@ -9,11 +9,11 @@ import Animated, {
 import { colors } from "../../colors";
 import { ComponentTitle } from "../Shared/MyRoutine_Shared";
 import { ScheduleChanger } from "../ScheduleChanger";
-import { ScreenWidth } from "../Shared";
+import { ScreenHeight, ScreenWidth } from "../Shared";
 
 import { WithLocalSvg } from "react-native-svg";
 import Trash from "../../assets/SVGs/Trash.svg";
-import { ContentContainer, NoRoutineText } from "./styled";
+import { ContentContainer, NoRoutineText } from "../Shared/MyRoutine_Shared";
 
 const SetContainer = styled.View`
   flex-direction: row;
@@ -131,6 +131,7 @@ export default List_Custom = ({
   const animatedStyle = useAnimatedStyle(() => {
     return {
       backgroundColor: colors.grey_1,
+      height: ScreenHeight,
       opacity: withSpring(modalState != 0 ? 0.2 : 1),
     };
   }, [modalState]);

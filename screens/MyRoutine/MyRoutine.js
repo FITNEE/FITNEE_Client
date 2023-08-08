@@ -25,7 +25,7 @@ import {
 import {
   ContentContainer,
   NoRoutineText,
-} from "../../components/myRoutine/styled";
+} from "../../components/Shared/MyRoutine_Shared";
 
 const ScreenBase = styled.SafeAreaView`
   width: 100%;
@@ -177,7 +177,6 @@ export default MyRoutine = () => {
 
   const toggleMode = () => {
     if (mode) {
-      //putRoutine으로 전송하는 데이터가 []임을 방지하고자 나온 임시대책. 추후 수정예정
       updateRoutine(SCHEDULE, selectedDay, newRoutine).then(
         (res) => {
           console.log("updateRoutine api 호출결과:", res);
@@ -254,7 +253,16 @@ export default MyRoutine = () => {
     } else if (type == "weight") {
       newArr[editingID].content[id].weight = value;
     } else if (type == "deleteSet") {
-      newArr[id].content.splice(value, 1);
+      if (newArr[id].content.length == 1) {
+        Alert.alert("최소 세트가 1개 있어야 해요", "", [
+          {
+            text: "확인",
+            style: "default",
+          },
+        ]);
+      } else {
+        newArr[id].content.splice(value, 1);
+      }
     } else if (type == "deleteExercise") {
       newArr.splice(id, 1);
     } else {
@@ -263,7 +271,6 @@ export default MyRoutine = () => {
         weight: newArr[id].content[newArr[id].content.length - 1].weight,
       });
     }
-    console.log("editRoutine수행 후 결과값:", newArr[id].content);
     setNewRoutine(newArr);
   };
 
@@ -388,7 +395,7 @@ export default MyRoutine = () => {
                             <EditText
                               style={item.weight && { color: colors.l_main }}
                             >
-                              {item.weight ? item.weight : "-"}
+                              {item.weight}
                             </EditText>
                           </EditBox>
                           <SetsText>kg</SetsText>

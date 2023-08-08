@@ -111,3 +111,18 @@ export const ComponentTitle = ({ title, subTitle }) => {
     </TextContainer>
   );
 };
+
+export const ContentContainer = styled.View`
+  flex: 1;
+  width: 100%;
+  align-items: center;
+  flex-direction: row;
+  justify-content: center;
+`;
+export const NoRoutineText = styled.Text`
+  font-size: 15px;
+  color: ${colors.grey_7};
+  font-weight: 400;
+  text-align: center;
+  width: 100%;
+`;
