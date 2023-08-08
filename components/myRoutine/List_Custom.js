@@ -13,6 +13,7 @@ import { ScreenWidth } from "../Shared";
 
 import { WithLocalSvg } from "react-native-svg";
 import Trash from "../../assets/SVGs/Trash.svg";
+import { ContentContainer, NoRoutineText } from "./styled";
 
 const SetContainer = styled.View`
   flex-direction: row;
@@ -159,16 +160,24 @@ export default List_Custom = ({
               subTitle="루틴을 원하는 요일에 끌어다 놓을 수 있어요"
             />
 
-            {newRoutine?.map((item, id) => (
-              <ExerciseItem_Custom
-                key={id}
-                id={id}
-                content={item.content}
-                title={item.exerciseName}
-                editRoutine={editRoutine}
-                popMessage={() => popMessage(id)}
-              />
-            ))}
+            {newRoutine ? (
+              newRoutine?.map((item, id) => (
+                <ExerciseItem_Custom
+                  key={id}
+                  id={id}
+                  content={item.content}
+                  title={item.exerciseName}
+                  editRoutine={editRoutine}
+                  popMessage={() => popMessage(id)}
+                />
+              ))
+            ) : (
+              <ContentContainer>
+                <NoRoutineText style={{ marginTop: 160 }}>
+                  해당 요일에는 루틴이 없어요
+                </NoRoutineText>
+              </ContentContainer>
+            )}
           </ScrollPressable>
         </Animated.View>
       </ScreenBaseCustom>
