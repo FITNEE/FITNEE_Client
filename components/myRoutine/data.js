@@ -30,8 +30,9 @@ export const getRoutine = async (mySCHEDULE, selectedDay, setIsLoading) => {
 };
 
 export const updateRoutine = async (mySCHEDULE, selectedDay, newRoutine) => {
-  if (newRoutine != []) {
-    console.log("newRoutine 비어있어서 updateRoutine 실행취소");
+  if (newRoutine == undefined) {
+    let message = "newRoutine가 undefined여서, updateRoutine 실행취소";
+    return message;
   } else {
     try {
       let url = "https://gpthealth.shop/";
