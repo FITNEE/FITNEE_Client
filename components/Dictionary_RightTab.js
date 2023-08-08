@@ -111,7 +111,7 @@ export default function Dictionary_RightTab(props) {
   
 
   // 참여하기 버튼
-  const { parentJoinBtnBool, parentSetJoinBtnBool } = props
+  const { parentJoinBtnBool, parentSetJoinBtnBool, exerciseName } = props
   const [childJoinBtnBool, setChildJoinBtnBool] = useState(parentJoinBtnBool)
   useEffect(() => {
     setChildJoinBtnBool(parentJoinBtnBool)
@@ -141,18 +141,20 @@ export default function Dictionary_RightTab(props) {
     getChat().then((result) => {
       setMsg(result.result.chattinginfo)
     })
-  }, [])
+  }, [parentJoinBtnBool])
   const postChat = async () => {
     try {
         let url = "https://gpthealth.shop/"
         let detailAPI = "/app/dictionary/chatting"
         const response = await axios.post(url + detailAPI, {
-            "name": "사이드 레터럴 레이즈",
+            "name": exerciseName,
             "userNickname": myNickName,
             "text": chat
         })
         const result = response.data
-        console.log(`postChat : ${result.result.isSuccess}`)
+        if(result.result.isSuccess) 
+            console.log(`채팅 업로드 성공 (운동: ${exerciseName}, 닉네임: ${myNickName}, 내용: ${chat})`)
+        else console.log(`채팅 업로드 실패 (운동: ${exerciseName}, 닉네임: ${myNickName}, 내용: ${chat})`)
     } 
     catch (error) {                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
       console.error("Failed to fetch data:", error);
@@ -160,95 +162,94 @@ export default function Dictionary_RightTab(props) {
 } 
 const getNickname = async () => {
     try {
-        let url = "https://gpthealth.shop/";
-        let detailAPI = `app/mypage/userinfo`;
+        let url = "https://gpthealth.shop/"
+        let detailAPI = `app/mypage/userinfo`
         const response = await axios.get(url + detailAPI);
         const result = response.data
-        return result;
+        return result
     } 
     catch (error) {
       console.error("Failed to fetch data:", error);
     }
-  };
+  }
   useEffect(()=>{
     getNickname().then((result)=>{
-        // console.log(`getNickName : ${result.result[0].userNickname}`)
         setMyNickName(result.result[0].userNickname)
     })
   }, [])
 
-  return (
-    <>
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <BottomSheetScrollView
-          ref={scrollviewRef}
-          style={{ paddingTop: 28 }}
-          showsVerticalScrollIndicator={false}
-        >
-          {msg.map((msg, i) => (
-            <ChatContainer>
-              {msg.userNickname != myNickName ? (
-                <MessageWrapper>
-                    <UserName>{msg.userNickname}</UserName>
-                    <MessageContainer>
-                        <WrappedText
-                        textStyle={{
-                            fontWeight: 400,
-                            fontSize: 13,
-                            color: `${colors.black}`,
-                            lineHeight: 17,
-                        }}
-                        >
-                        {msg.text}
-                        </WrappedText>
-                    </MessageContainer>
-                </MessageWrapper>
-              ) : (
-                <MyMessageWrapper>
-                  <MsgDeleteBtn onPress={onPressMsgDeleteBtn} />
-                  <MyMessageContainer>
-                    <WrappedText
-                        textStyle={{
-                            fontWeight: 400,
-                            fontSize: 13,
-                            color: `${colors.black}`,
-                            lineHeight: 17,
-                        }}
-                      containerStyle={{ alignItems: "left" }}
-                    >
-                      {msg.text}
-                    </WrappedText>
-                  </MyMessageContainer>
-                </MyMessageWrapper>
-              )}
-            </ChatContainer>
-          ))}
-          <View style={{ height: 40 }} />
-        </BottomSheetScrollView>
-      </TouchableWithoutFeedback>
 
-      {childJoinBtnBool ? null : (
-        <TextInputBG>
-          <TextInputContainer>
-            <BottomSheetTextInput
-              style={{
-                color: `${colors.black}`,
-                width: 300,
-                marginLeft: 15,
-              }}
-              type="text"
-              onChangeText={(text) => {
-                setChat(text);
-              }}
-              value={chat}
-              onSubmitEditing={onSubmitChat}
-              autoFocus={true}
-              onFocus={onFocusInput}
-            />
-            <SendBtn onPress={onSubmitChat} />
-          </TextInputContainer>
-        </TextInputBG>
-      )}
-    </>
-  );
+    return (
+      <>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <BottomSheetScrollView
+                ref={scrollviewRef}
+                style={{ paddingTop: 28 }}
+                showsVerticalScrollIndicator={false}
+            >
+                {msg.map((msg, i) => (
+                    <ChatContainer key={i}>
+                        {msg.userNickname != myNickName ? 
+                            (<MessageWrapper>
+                                <UserName>{msg.userNickname}</UserName>
+                                <MessageContainer>
+                                    <WrappedText
+                                    textStyle={{
+                                        fontWeight: 400,
+                                        fontSize: 13,
+                                        color: `${colors.black}`,
+                                        lineHeight: 17,
+                                    }}
+                                    >
+                                    {msg.text}
+                                    </WrappedText>
+                                </MessageContainer>
+                            </MessageWrapper>)
+                        : 
+                            (<MyMessageWrapper>
+                                <MsgDeleteBtn onPress={onPressMsgDeleteBtn} />
+                                <MyMessageContainer>
+                                    <WrappedText
+                                        textStyle={{
+                                            fontWeight: 400,
+                                            fontSize: 13,
+                                            color: `${colors.black}`,
+                                            lineHeight: 17,
+                                        }}
+                                        containerStyle={{ alignItems: "left" }}
+                                    >
+                                        {msg.text}
+                                    </WrappedText>
+                                </MyMessageContainer>
+                            </MyMessageWrapper>)}
+                    </ChatContainer>
+                ))}
+                <View style={{ height: 40 }} />
+            </BottomSheetScrollView>
+        </TouchableWithoutFeedback>
+
+        {childJoinBtnBool ? null : (
+          <TextInputBG>
+            <TextInputContainer>
+              <BottomSheetTextInput
+                style={{
+                  color: `${colors.black}`,
+                  width: 300,
+                  marginLeft: 15,
+                }}
+                type="text"
+                onChangeText={(text) => {
+                  setChat(text);
+                }}
+                value={chat}
+                onSubmitEditing={onSubmitChat}
+                autoFocus={true}
+                onFocus={onFocusInput}
+              />
+              <SendBtn onPress={onSubmitChat} />
+            </TextInputContainer>
+          </TextInputBG>
+        )}
+      </>
+    )
 }
