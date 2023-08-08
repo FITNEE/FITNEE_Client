@@ -5,7 +5,7 @@ import { Button, BackButton } from "../../Shared";
 //prettier-ignore
 import {Input,Title,ScreenLayout,SubText,NumberInput,MyBottomSheet, InputTitle} from "../../components/Shared/OnBoarding_Shared";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
-import { Pressable } from "react-native";
+import { Keyboard, Pressable } from "react-native";
 import { WithLocalSvg } from "react-native-svg";
 import Check from "../../assets/SVGs/Check.svg";
 
@@ -68,7 +68,7 @@ const CreateAccount_2 = ({ route, navigation }) => {
     setModalShown(false);
   };
   const popModal = () => {
-    setSnapPoints(["34%"]);
+    setSnapPoints(["40%"]);
     setModalShown(true);
   };
   const onPressBottomModal = () => bottomModal.current?.present();
@@ -105,7 +105,7 @@ const CreateAccount_2 = ({ route, navigation }) => {
             <Input
               placeholderTextColor={colors.grey_5}
               autoFocus
-              onSubmitEditing={() => popModal()}
+              onSubmitEditing={() => Keyboard.dismiss()}
               placeholder="닉네임"
               returnKeyType="next"
               blurOnSubmit={false}
