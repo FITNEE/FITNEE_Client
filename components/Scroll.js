@@ -7,9 +7,10 @@ import { ScreenHeight } from "../Shared";
 const PageIndicator = ({ totalPages, currentPage }) => {
   return (
     <PageIndicatorContainer>
-      {Array.from({ length: totalPages }, (_, index) => (
-        <PageDot key={index} active={index === currentPage} />
-      ))}
+      {Array.from({ length: totalPages }, (_, index) => {
+        console.log("text : ", index, currentPage);
+        return <PageDot key={index} active={index === currentPage} />;
+      })}
     </PageIndicatorContainer>
   );
 };
@@ -18,9 +19,10 @@ export default Scroll = ({ data }) => {
   const [currentPage, setCurrentPage] = useState(0);
   const flatListRef = React.createRef();
   const [selectedID, setSelectedID] = useState("");
+
   const handleScroll = (event) => {
     const { contentOffset, layoutMeasurement } = event.nativeEvent;
-    const pageIndex = Math.floor(contentOffset.x / layoutMeasurement.width);
+    const pageIndex = Math.round(contentOffset.x / layoutMeasurement.width);
     setCurrentPage(pageIndex);
   };
   // useEffect(() => {
@@ -40,7 +42,7 @@ export default Scroll = ({ data }) => {
                 key={id}
                 select={selectedID == id}
                 onPress={() => {
-                  setSelectedID(id * index);
+                  setSelectedID(id);
                 }}
                 day={routine.day}
                 parts={routine.parts}
@@ -68,9 +70,8 @@ export default Scroll = ({ data }) => {
         onMomentumScrollEnd={(event) => {
           const offsetX = event.nativeEvent.contentOffset.x;
           const width = event.nativeEvent.layoutMeasurement.width;
-          const pageIndex = Math.round(offsetX / width);
+          const pageIndex = Math.round(offsetX / width); // Math.round 대신 Math.floor를 사용합니다.
           setCurrentPage(pageIndex);
-          // setSelectedID("");
         }}
       />
       <PageIndicator totalPages={data.length} currentPage={currentPage} />
