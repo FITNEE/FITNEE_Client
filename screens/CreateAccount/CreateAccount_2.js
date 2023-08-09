@@ -3,9 +3,11 @@ import styled from "styled-components/native";
 import { colors } from "../../colors";
 import { Button, BackButton } from "../../Shared";
 //prettier-ignore
-import {Input,Title,ScreenLayout,SubText,NumberInput,MyBottomSheet} from "../../components/Shared/OnBoarding_Shared";
+import {Input,Title,ScreenLayout,SubText,NumberInput,MyBottomSheet, InputTitle} from "../../components/Shared/OnBoarding_Shared";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
-import { Pressable } from "react-native";
+import { Keyboard, Pressable } from "react-native";
+import { WithLocalSvg } from "react-native-svg";
+import Check from "../../assets/SVGs/Check.svg";
 
 const TextContainer = styled.View`
   margin-top: 124px;
@@ -24,14 +26,17 @@ const GenderContainer = styled.View`
   margin-top: 16px;
   flex-direction: row;
   justify-content: space-between;
+  margin-bottom: 16px;
 `;
 
 const GenderButton = styled.TouchableOpacity`
   background-color: ${colors.white};
+  flex-direction: row;
   border-radius: 12px;
   height: 56px;
+  align-items: center;
   padding: 16px;
-  justify-content: center;
+  justify-content: space-between;
   width: 48%;
 `;
 
@@ -63,7 +68,7 @@ const CreateAccount_2 = ({ route, navigation }) => {
     setModalShown(false);
   };
   const popModal = () => {
-    setSnapPoints(["34%"]);
+    setSnapPoints(["40%"]);
     setModalShown(true);
   };
   const onPressBottomModal = () => bottomModal.current?.present();
@@ -96,13 +101,11 @@ const CreateAccount_2 = ({ route, navigation }) => {
             </SubText>
           </TextContainer>
           <BottomContainer>
-            <SubText style={{ margin: 8, color: colors.grey_7 }}>
-              닉네임
-            </SubText>
+            <InputTitle>닉네임</InputTitle>
             <Input
               placeholderTextColor={colors.grey_5}
               autoFocus
-              onSubmitEditing={() => popModal()}
+              onSubmitEditing={() => Keyboard.dismiss()}
               placeholder="닉네임"
               returnKeyType="next"
               blurOnSubmit={false}
@@ -110,20 +113,38 @@ const CreateAccount_2 = ({ route, navigation }) => {
             />
             <GenderContainer>
               <GenderButton
-                style={gender == 2 && { backgroundColor: colors.l_sub_1 }}
+                style={
+                  gender == 2 && {
+                    backgroundColor: colors.l_sub_2,
+                    borderColor: colors.l_main,
+                    borderWidth: 1,
+                  }
+                }
                 onPress={() => setGender(2)}
               >
-                <GenderText style={gender == 0 && { color: colors.grey_8 }}>
+                <GenderText style={gender == 2 && { color: colors.grey_8 }}>
                   여성
                 </GenderText>
+                {gender == 2 && (
+                  <WithLocalSvg width={24} height={24} asset={Check} />
+                )}
               </GenderButton>
               <GenderButton
-                style={gender == 1 && { backgroundColor: colors.l_sub_1 }}
+                style={
+                  gender == 1 && {
+                    backgroundColor: colors.l_sub_2,
+                    borderColor: colors.l_main,
+                    borderWidth: 1,
+                  }
+                }
                 onPress={() => setGender(1)}
               >
-                <GenderText style={gender == 0 && { color: colors.grey_8 }}>
+                <GenderText style={gender == 1 && { color: colors.grey_8 }}>
                   남성
                 </GenderText>
+                {gender == 1 && (
+                  <WithLocalSvg width={24} height={24} asset={Check} />
+                )}
               </GenderButton>
             </GenderContainer>
             <NumberInput

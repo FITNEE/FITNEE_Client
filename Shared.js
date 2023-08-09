@@ -1,10 +1,10 @@
-import styled from 'styled-components/native';
-import { colors } from './colors';
-import { ActivityIndicator, Dimensions } from 'react-native';
-import Back from './assets/left_arrow.png';
+import styled from "styled-components/native";
+import { colors } from "./colors";
+import { ActivityIndicator, Dimensions } from "react-native";
+import Back from "./assets/left_arrow.png";
 
-export const ScreenWidth = Dimensions.get('screen').width;
-export const ScreenHeight = Dimensions.get('screen').height;
+export const ScreenWidth = Dimensions.get("screen").width;
+export const ScreenHeight = Dimensions.get("screen").height;
 //****************** 뒤로가기  *******************************************************/
 const BackButtonContainer = styled.TouchableOpacity`
   position: absolute;
@@ -32,7 +32,7 @@ const MyButton = styled.TouchableOpacity`
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  height: 46px;
+  height: 52px;
   border-radius: 16px;
   width: 100%;
   margin-bottom: 24px;
@@ -45,7 +45,7 @@ const ButtonText = styled.Text`
 export const Button = ({
   enabled,
   onPress,
-  text = '확인',
+  text = "확인",
   loading = false,
 }) => {
   return (
