@@ -39,7 +39,7 @@ const PremiumText = styled.Text`
   line-height: 19.5px;
 `;
 
-const Home = () => {
+const Home = ({ navigation }) => {
   //const { toggleLogin } = useContext(AppContext);
   const [showRoutine, SetShowRoutine] = useState(true);
 
