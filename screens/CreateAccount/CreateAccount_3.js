@@ -119,7 +119,7 @@ export const BMIBase = ({ BMIMode }) => {
       >
         <BMIBar
           style={{
-            backgroundColor: BMIMode == 0 ? colors.blue : colors.grey_2,
+            backgroundColor: BMIMode == 1 ? colors.blue : colors.grey_2,
             borderTopLeftRadius: 8,
             borderBottomLeftRadius: 8,
           }}
@@ -133,7 +133,7 @@ export const BMIBase = ({ BMIMode }) => {
       >
         <BMIBar
           style={{
-            backgroundColor: BMIMode == 1 ? colors.green : colors.grey_3,
+            backgroundColor: BMIMode == 2 ? colors.green : colors.grey_3,
           }}
         />
         <BMINumber>18.5</BMINumber>
@@ -145,7 +145,7 @@ export const BMIBase = ({ BMIMode }) => {
       >
         <BMIBar
           style={{
-            backgroundColor: BMIMode == 2 ? colors.green : colors.grey_4,
+            backgroundColor: BMIMode == 3 ? colors.green : colors.grey_4,
           }}
         />
         <BMINumber>23</BMINumber>
@@ -157,7 +157,7 @@ export const BMIBase = ({ BMIMode }) => {
       >
         <BMIBar
           style={{
-            backgroundColor: BMIMode == 3 ? colors.red : colors.grey_4,
+            backgroundColor: BMIMode == 4 ? colors.red : colors.grey_4,
             borderTopRightRadius: 8,
             borderBottomRightRadius: 8,
           }}
@@ -180,7 +180,7 @@ const CreateAccount_3 = ({ route, navigation }) => {
   const [snapPoints, setSnapPoints] = useState(["1%"]);
   const [modalShown, setModalShown] = useState(false);
 
-  const [BMIMode, setBMIMode] = useState(null);
+  const [BMIMode, setBMIMode] = useState(0);
   const [BMI, setBMI] = useState(0);
   const bottomModal = useRef();
 
@@ -246,14 +246,16 @@ const CreateAccount_3 = ({ route, navigation }) => {
     const heightInM = height / 100;
     const BMIValue = weight / (heightInM ^ 2);
     setBMI(BMIValue);
-    if (BMIValue < 18.5) {
+    if (BMIValue == 0) {
       setBMIMode(0);
-    } else if (BMIValue < 23) {
+    } else if (BMIValue < 18.5) {
       setBMIMode(1);
-    } else if (BMIValue < 25) {
+    } else if (BMIValue < 23) {
       setBMIMode(2);
-    } else {
+    } else if (BMIValue < 25) {
       setBMIMode(3);
+    } else {
+      setBMIMode(4);
     }
   }, [height, weight]);
 
@@ -311,18 +313,18 @@ const CreateAccount_3 = ({ route, navigation }) => {
                 <BMITitle
                   style={{
                     color:
-                      BMIMode == 0
+                      BMIMode == 1
                         ? colors.blue
-                        : BMIMode == 1
-                        ? colors.green
                         : BMIMode == 2
+                        ? colors.green
+                        : BMIMode == 3
                         ? colors.green
                         : colors.red,
                   }}
                 >
                   BMI {BMI.toFixed(1)}
                 </BMITitle>
-                <BMIText>{statusText[BMIMode]}</BMIText>
+                <BMIText>{statusText[BMIMode - 1]}</BMIText>
               </BMIMarkerTop>
               <BMIMarkerBottom>
                 <BMILine />
@@ -337,7 +339,7 @@ const CreateAccount_3 = ({ route, navigation }) => {
             selectableDatas={mode == 1 ? heights : weights}
             modalRef={bottomModal}
             snapPoints={snapPoints}
-            defaultVal={mode == 1 ? "170" : "60"}
+            defaultVal={mode == 1 ? 170 : 60}
             hideFunc={() => hideModal()}
             nextFunc={mode == 1 ? () => setMode(2) : () => hideModal()}
           />
