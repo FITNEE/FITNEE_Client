@@ -30,7 +30,7 @@ export default function App() {
   const [isDark, setIsDark] = useState(false);
   const toggleLogin = () => {
     if (loggedIn) {
-      AsyncStorage.removeItem("token");
+      AsyncStorage.removeItem("userId");
       setLoggedIn(false);
     } else {
       setLoggedIn(true);
@@ -38,9 +38,9 @@ export default function App() {
   };
 
   const preload = async () => {
-    await AsyncStorage.getItem("token").then((token) => {
-      console.log(token);
-      if (token) {
+    await AsyncStorage.getItem("userId").then((userId) => {
+      console.log(userId);
+      if (userId) {
         setLoggedIn(true);
       }
     });
