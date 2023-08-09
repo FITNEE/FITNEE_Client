@@ -4,6 +4,7 @@ import { useNavigationState } from "@react-navigation/native";
 import CreateRoutineHeader from "../components/CreateRoutineHeader";
 import { useRecoilState } from "recoil";
 import { CreateRoutineAtom } from "../recoil/CreateRoutineAtom";
+import UpdateExercise from "../components/UpdateExercise";
 
 export default function CreateRoutine_1({ navigation }) {
   const [home, SetHome] = useState(false);
@@ -58,6 +59,7 @@ export default function CreateRoutine_1({ navigation }) {
           <SpaceName>헬스장</SpaceName>
         </SpaceItem>
       </SpaceContainer>
+      <UpdateExercise />
       <NextButton isActive={select} onPress={nextButton} disabled={!select}>
         <ButtonText isActive={select}>다음</ButtonText>
       </NextButton>
