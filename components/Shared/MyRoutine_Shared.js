@@ -1,6 +1,9 @@
 import styled from "styled-components/native";
 import { colors } from "../../colors";
 import { ScreenWidth } from "../../Shared";
+import { WithLocalSvg } from "react-native-svg";
+import Edit from "../../assets/SVGs/Edit.svg";
+import Left from "../../assets/SVGs/Left.svg";
 
 const HeaderContainer = styled.View`
   width: ${ScreenWidth}px;
@@ -16,28 +19,37 @@ const Title = styled.Text`
 `;
 
 const ButtonText = styled.Text`
-  font-size: 15px;
-  font-weight: 400;
-  color: ${colors.grey_8};
+  font-size: 17px;
+  font-weight: 600;
+  color: ${colors.l_main};
 `;
 const Button = styled.TouchableOpacity`
   position: absolute;
   justify-content: center;
   align-items: center;
-  right: 12px;
+
   height: 56px;
   width: 56px;
 `;
 
-export const Header = ({ mode, parentFunction }) => {
+export const Header = ({ mode, parentFunction, onPress }) => {
   const handleSubmit = () => {
     parentFunction();
   };
   return (
     <HeaderContainer>
+      {mode && (
+        <Button style={{ left: 12 }} onPress={onPress}>
+          <WithLocalSvg width={24} height={24} asset={Left} />
+        </Button>
+      )}
       <Title>{mode ? "루틴커스텀" : "마이루틴"}</Title>
-      <Button onPress={handleSubmit}>
-        {mode ? <ButtonText>완료</ButtonText> : <ButtonText>설정</ButtonText>}
+      <Button style={{ right: 12 }} onPress={handleSubmit}>
+        {mode ? (
+          <ButtonText>완료</ButtonText>
+        ) : (
+          <WithLocalSvg width={24} height={24} asset={Edit} />
+        )}
       </Button>
     </HeaderContainer>
   );
@@ -87,8 +99,8 @@ export const ComponentTitle = ({ title, subTitle }) => {
   const _ComponentSubTitle = styled.Text`
     font-size: 13px;
     flex: 1;
-    color: ${colors.grey_6};
-    margin-top: 2px;
+    color: ${colors.grey_7};
+    margin-top: 4px;
     margin-left: 8px;
     font-weight: 300;
   `;
@@ -99,3 +111,18 @@ export const ComponentTitle = ({ title, subTitle }) => {
     </TextContainer>
   );
 };
+
+export const ContentContainer = styled.View`
+  flex: 1;
+  width: 100%;
+  align-items: center;
+  flex-direction: row;
+  justify-content: center;
+`;
+export const NoRoutineText = styled.Text`
+  font-size: 15px;
+  color: ${colors.grey_7};
+  font-weight: 400;
+  text-align: center;
+  width: 100%;
+`;

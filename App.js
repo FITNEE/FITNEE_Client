@@ -1,3 +1,4 @@
+/* eslint-disable */
 import AppLoading from "expo-app-loading";
 
 import OnBoardingNav from "./navigators/OnBoardingNav";
