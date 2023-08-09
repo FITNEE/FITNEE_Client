@@ -3,9 +3,20 @@ import styled from "styled-components/native";
 import { colors } from "../colors";
 import RoutineItem from "../components/RoutineItem";
 import Scroll from "../components/Scroll";
+import { useNavigationState, useRoute } from "@react-navigation/native";
+import CreateRoutineHeader from "../components/CreateRoutineHeader";
 
 export default function CreateRoutine_5({ navigation }) {
   const [routine, SetRoutine] = useState("");
+  const index = useNavigationState((state) => state.index);
+  useEffect(() => {
+    navigation.setOptions({
+      header: () => <CreateRoutineHeader title="루틴 등록" index={index} />,
+    });
+  }, []);
+  const route = useRoute();
+  const responseData = route.params?.responseData;
+
   const ROUTINE_DATA = [
     {
       id: 1,
@@ -27,6 +38,71 @@ export default function CreateRoutine_5({ navigation }) {
         {
           id: 2,
           day: "Day 2",
+          parts: "등, 어깨, 가슴",
+          exercises: [
+            { id: 1, name: "데드리프트", set: 3 },
+            { id: 2, name: "덤벨프레스", set: 3 },
+            { id: 3, name: "바벨 로우", set: 3 },
+            { id: 4, name: "사이드 레터럴 라이즈", set: 3 },
+            { id: 5, name: "레그프레스", set: 3 },
+            { id: 6, name: "크런치", set: 3 },
+          ],
+        },
+        {
+          id: 3,
+          day: "Day 3",
+          parts: "등, 어깨, 가슴",
+          exercises: [
+            { id: 1, name: "데드리프트", set: 3 },
+            { id: 2, name: "덤벨프레스", set: 3 },
+            { id: 3, name: "바벨 로우", set: 3 },
+            { id: 4, name: "사이드 레터럴 라이즈", set: 3 },
+            { id: 5, name: "레그프레스", set: 3 },
+            { id: 6, name: "크런치", set: 3 },
+          ],
+        },
+        {
+          id: 4,
+          day: "Day 4",
+          parts: "등, 어깨, 가슴",
+          exercises: [
+            { id: 1, name: "데드리프트", set: 3 },
+            { id: 2, name: "덤벨프레스", set: 3 },
+            { id: 3, name: "바벨 로우", set: 3 },
+            { id: 4, name: "사이드 레터럴 라이즈", set: 3 },
+            { id: 5, name: "레그프레스", set: 3 },
+            { id: 6, name: "크런치", set: 3 },
+          ],
+        },
+        {
+          id: 5,
+          day: "Day 5",
+          parts: "등, 어깨, 가슴",
+          exercises: [
+            { id: 1, name: "데드리프트", set: 3 },
+            { id: 2, name: "덤벨프레스", set: 3 },
+            { id: 3, name: "바벨 로우", set: 3 },
+            { id: 4, name: "사이드 레터럴 라이즈", set: 3 },
+            { id: 5, name: "레그프레스", set: 3 },
+            { id: 6, name: "크런치", set: 3 },
+          ],
+        },
+        {
+          id: 6,
+          day: "Day 6",
+          parts: "등, 어깨, 가슴",
+          exercises: [
+            { id: 1, name: "데드리프트", set: 3 },
+            { id: 2, name: "덤벨프레스", set: 3 },
+            { id: 3, name: "바벨 로우", set: 3 },
+            { id: 4, name: "사이드 레터럴 라이즈", set: 3 },
+            { id: 5, name: "레그프레스", set: 3 },
+            { id: 6, name: "크런치", set: 3 },
+          ],
+        },
+        {
+          id: 7,
+          day: "Day 7",
           parts: "등, 어깨, 가슴",
           exercises: [
             { id: 1, name: "데드리프트", set: 3 },
@@ -105,6 +181,7 @@ export default function CreateRoutine_5({ navigation }) {
     },
     // Add more routine data as needed
   ];
+
   return (
     <Container>
       <TitleContainer>
@@ -115,7 +192,7 @@ export default function CreateRoutine_5({ navigation }) {
         </SubTitle>
       </TitleContainer>
       <ScrollContainer>
-        <Scroll data={ROUTINE_DATA} />
+        <Scroll data={responseData} />
       </ScrollContainer>
       <NextButton>
         <ButtonText>이 루틴으로 결정</ButtonText>
@@ -129,23 +206,21 @@ const Container = styled.View`
   width: 100%;
   align-items: center;
   justify-content: space-around;
-  margin-top: 60px;
 `;
 const TitleContainer = styled.View`
   width: 90%;
-
   align-items: center;
 `;
 const Title = styled.Text`
-  font-size: 25px;
+  font-size: 24px;
   font-weight: bold;
 `;
 const SubTitle = styled.Text`
   font-size: 15px;
-  margin-top: 10px;
+  margin-top: 5px;
 `;
 const ScrollContainer = styled.View`
-  height: 520px;
+  height: 615px;
 `;
 
 const NextButton = styled.TouchableOpacity`

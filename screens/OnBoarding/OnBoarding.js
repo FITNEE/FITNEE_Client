@@ -42,10 +42,10 @@ const Line = styled.View`
   margin-top: 6px;
 `;
 const ORText = styled.Text`
-  color: ${colors.grey_5};
+  color: ${colors.grey_6};
   font-size: 13px;
   position: absolute;
-  background-color: #f3f3f3;
+  background-color: ${colors.grey_1};
   width: 40px;
   text-align: center;
   left: 40px;
