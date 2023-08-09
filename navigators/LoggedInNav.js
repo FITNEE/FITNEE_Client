@@ -50,7 +50,6 @@ export default function LoggedInNav() {
                 height={24}
                 asset={Tab_Home}
               />
-
               <IconText
                 style={{ color: focused ? colors.l_main : colors.grey_7 }}
               >
