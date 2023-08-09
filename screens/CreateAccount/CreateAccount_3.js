@@ -102,7 +102,6 @@ const BMIMarkerTop = styled.View`
 `;
 const BMITitle = styled.Text`
   font-size: 12px;
-  color: #9747ff;
 `;
 const BMIText = styled.Text`
   font-size: 12px;
@@ -110,7 +109,7 @@ const BMIText = styled.Text`
   color: white;
 `;
 
-export const BMIBase = () => {
+export const BMIBase = ({ BMIMode }) => {
   return (
     <BMIBarBase>
       <BMISection
@@ -120,7 +119,7 @@ export const BMIBase = () => {
       >
         <BMIBar
           style={{
-            backgroundColor: colors.grey_2,
+            backgroundColor: BMIMode == 0 ? colors.blue : colors.grey_2,
             borderTopLeftRadius: 8,
             borderBottomLeftRadius: 8,
           }}
@@ -134,7 +133,7 @@ export const BMIBase = () => {
       >
         <BMIBar
           style={{
-            backgroundColor: colors.grey_3,
+            backgroundColor: BMIMode == 1 ? colors.green : colors.grey_3,
           }}
         />
         <BMINumber>18.5</BMINumber>
@@ -146,7 +145,7 @@ export const BMIBase = () => {
       >
         <BMIBar
           style={{
-            backgroundColor: colors.grey_4,
+            backgroundColor: BMIMode == 2 ? colors.green : colors.grey_4,
           }}
         />
         <BMINumber>23</BMINumber>
@@ -158,7 +157,7 @@ export const BMIBase = () => {
       >
         <BMIBar
           style={{
-            backgroundColor: colors.grey_6,
+            backgroundColor: BMIMode == 3 ? colors.red : colors.grey_4,
             borderTopRightRadius: 8,
             borderBottomRightRadius: 8,
           }}
@@ -181,6 +180,7 @@ const CreateAccount_3 = ({ route, navigation }) => {
   const [snapPoints, setSnapPoints] = useState(["1%"]);
   const [modalShown, setModalShown] = useState(false);
 
+  const [BMIMode, setBMIMode] = useState(null);
   const [BMI, setBMI] = useState(0);
   const bottomModal = useRef();
 
@@ -211,19 +211,12 @@ const CreateAccount_3 = ({ route, navigation }) => {
     });
   };
 
-  const BMIStatusText = (bmi) => {
-    if (bmi > 45) {
-      return "과체중이에요";
-    } else if (bmi >= 25) {
-      return "비만이에요";
-    } else if (bmi >= 23) {
-      return "조금 비만이에요";
-    } else if (bmi >= 18.5) {
-      return "정상 체중이에요";
-    } else {
-      return "체중이 낮아요";
-    }
-  };
+  const statusText = [
+    "저체중입니다",
+    "정상 체중입니다",
+    "과체중입니다",
+    "운동이 꼭 필요해요",
+  ];
 
   const onPressBottomModal = () => bottomModal.current?.present();
 
@@ -251,11 +244,23 @@ const CreateAccount_3 = ({ route, navigation }) => {
 
   useEffect(() => {
     const heightInM = height / 100;
-    setBMI(weight / (heightInM ^ 2));
+    const BMIValue = weight / (heightInM ^ 2);
+    setBMI(BMIValue);
+    if (BMIValue < 18.5) {
+      setBMIMode(0);
+    } else if (BMIValue < 23) {
+      setBMIMode(1);
+    } else if (BMIValue < 25) {
+      setBMIMode(2);
+    } else {
+      setBMIMode(3);
+    }
   }, [height, weight]);
 
   const processedBMI =
-    BMI < 18.5
+    BMI == 0
+      ? -100
+      : BMI < 18.5
       ? ((BMI - 10) / 8.5) * 16
       : BMI < 23
       ? 16 + ((BMI - 18.5) / 4.5) * 32
@@ -303,15 +308,28 @@ const CreateAccount_3 = ({ route, navigation }) => {
           <BMIContainer>
             <Animated.View style={animatedStyle}>
               <BMIMarkerTop>
-                <BMITitle>BMI {BMI.toFixed(1)}</BMITitle>
-                <BMIText>{BMIStatusText(BMI.toFixed(1))}</BMIText>
+                <BMITitle
+                  style={{
+                    color:
+                      BMIMode == 0
+                        ? colors.blue
+                        : BMIMode == 1
+                        ? colors.green
+                        : BMIMode == 2
+                        ? colors.green
+                        : colors.red,
+                  }}
+                >
+                  BMI {BMI.toFixed(1)}
+                </BMITitle>
+                <BMIText>{statusText[BMIMode]}</BMIText>
               </BMIMarkerTop>
               <BMIMarkerBottom>
                 <BMILine />
                 <BMIPointer />
               </BMIMarkerBottom>
             </Animated.View>
-            <BMIBase />
+            <BMIBase BMIMode={BMIMode} />
           </BMIContainer>
           <Button enabled={height && weight} onPress={() => handleSubmit()} />
           <MyBottomSheet
