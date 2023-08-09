@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FlatList } from "react-native";
 import styled from "styled-components/native";
 import RoutineItem from "./RoutineItem";
@@ -23,9 +23,13 @@ export default Scroll = ({ data }) => {
     const pageIndex = Math.floor(contentOffset.x / layoutMeasurement.width);
     setCurrentPage(pageIndex);
   };
-  const renderItem = ({ item: routines }) => {
+  // useEffect(() => {
+  //   console.log("id : ", selectedID);
+  // }, [selectedID]);
+  const renderItem = ({ item: routines, index }) => {
     return (
       <RoutineContainer>
+        {console.log("id : ", selectedID)}
         <RoutineBox key={routines.id}>
           <RoutineTitleContainer>
             <RoutineTitle>{routines.title}</RoutineTitle>
@@ -36,7 +40,7 @@ export default Scroll = ({ data }) => {
                 key={id}
                 select={selectedID == id}
                 onPress={() => {
-                  setSelectedID(id);
+                  setSelectedID(id * index);
                 }}
                 day={routine.day}
                 parts={routine.parts}
@@ -66,7 +70,7 @@ export default Scroll = ({ data }) => {
           const width = event.nativeEvent.layoutMeasurement.width;
           const pageIndex = Math.round(offsetX / width);
           setCurrentPage(pageIndex);
-          setSelectedID("");
+          // setSelectedID("");
         }}
       />
       <PageIndicator totalPages={data.length} currentPage={currentPage} />
