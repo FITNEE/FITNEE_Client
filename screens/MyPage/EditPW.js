@@ -9,6 +9,7 @@ import { styled } from "styled-components/native";
 import { colors } from "../../colors";
 import { Button } from "../../Shared";
 import axios from "axios";
+import { Alert } from "react-native";
 
 const Container = styled.View`
   height: 100%;
@@ -22,11 +23,22 @@ const Input = styled.TextInput`
   width: 100%;
   height: 48px;
 `;
-const InputRed = styled.View`
+const InputRed1 = styled.View`
   width: 100%;
   border-radius: 10px;
   border: 1px;
   border-color: ${({ error }) => (error ? colors.red : "transparent")};
+`;
+const InputRed2 = styled.View`
+  width: 100%;
+  border-radius: 10px;
+  border: 1px;
+  border-color: ${({ error, prevCheck, contents, on }) =>
+    prevCheck && contents != "" && on
+      ? error
+        ? colors.red
+        : colors.green
+      : "transparent"};
 `;
 const StatusText = styled.Text`
   margin-left: 16px;
@@ -39,7 +51,7 @@ const StatusText = styled.Text`
   margin-bottom: 8px;
   margin-right: 8px;
   font-weight: 300;
-  color: ${colors.red};
+  color: ${({ error }) => (error ? colors.red : colors.green)};
 `;
 const InputContainer = styled.View`
   width: 100%;
@@ -47,20 +59,20 @@ const InputContainer = styled.View`
 `;
 
 export default function EditPW({ navigation }) {
-  const [PW, setPW] = useState("pjk"); // 값 받아오기
   const [rewrittenPW, setRewrittenPW] = useState("");
   const [newPW, setNewPW] = useState("");
   const [rewrittenNewPW, setRewrittenNewPW] = useState("");
   const [errorPW, setErrorPW] = useState(false);
   const [errorNewPW, setErrorNewPW] = useState(false);
   const [messageErrorPW, setMessageErrorPW] = useState("");
+  const [checking, setChecking] = useState(false);
+  const [click, setClick] = useState(false);
   const [visibleErrorNewPW, setVisibleErrorNewPW] = useState(false);
 
-  const checkPW = async (userPW) => {
+  const check = async (userPW) => {
     try {
       let url = "https://gpthealth.shop/";
       let detailAPI = `app/mypage/comparepwd`;
-      console.log(userPW);
       const response = await axios.post(url + detailAPI, {
         userPw: userPW,
       });
@@ -71,22 +83,30 @@ export default function EditPW({ navigation }) {
     }
   };
 
-  const check = () => {
-    checkPW(rewrittenPW).then((checkResult) => {
-      console.log(checkResult.isSuccess);
+  const checkPW = () => {
+    check(rewrittenPW).then((checkResult) => {
       setErrorPW(!checkResult.isSuccess);
+      checkResult.isSuccess && setChecking(true);
+      checkResult.isSuccess && this.secondInput.focus();
     });
-    checkPW(newPW).then((checkResult) => {
-      console.log(checkResult.isSuccess);
+  };
+
+  const checkNewPW = () => {
+    check(newPW).then((checkResult) => {
+      setClick(true);
       setErrorNewPW(checkResult.isSuccess);
-      checkResult.code === 706 &&
+      if (checkResult.code === 706) {
         setMessageErrorPW("기존 비밀번호와 동일합니다.");
-      checkResult.code === 707 && newPW.length < 4 && setErrorNewPW(true);
-      checkResult.code === 707 &&
-        newPW.length < 4 &&
+        setErrorNewPW(true);
+      } else if (newPW.length < 4) {
         setMessageErrorPW("4글자 이상");
-      !errorPW && !errorNewPW && setMessageErrorPW("");
-      !errorPW && !errorNewPW && setVisibleErrorNewPW(true);
+        setErrorNewPW(true);
+      } else {
+        setMessageErrorPW("사용 가능한 비밀번호입니다.");
+        setErrorNewPW(false);
+        setVisibleErrorNewPW(true);
+        this.thirdInput.focus();
+      }
     });
   };
 
@@ -104,9 +124,20 @@ export default function EditPW({ navigation }) {
     }
   };
 
+  const goToUserInfo = () => {
+    navigation.navigate("UserInfo");
+  };
   const handlePress = () => {
     updateUserPW(newPW).then((updateResult) => {
-      console.log(updateResult);
+      updateResult.code === 1000 &&
+        Alert.alert("비밀번호가 변경되었습니다.", "", [
+          ,
+          {
+            text: "확인",
+            onPress: goToUserInfo,
+            style: "default",
+          },
+        ]);
     });
   };
 
@@ -119,45 +150,65 @@ export default function EditPW({ navigation }) {
       >
         <Container>
           <InputContainer>
-            <InputRed error={errorPW}>
+            <InputRed1 error={errorPW}>
               <Input
                 placeholderTextColor={colors.grey_6}
-                autoFocus
                 placeholder="기존 비밀번호 확인"
+                style={{ color: checking ? colors.grey_2 : colors.black }}
+                autoFocus
+                ref={(input) => {
+                  this.firstInput = input;
+                }}
                 secureTextEntry={true}
                 returnKeyType="done"
                 blurOnSubmit={false}
                 onChangeText={(text) => setRewrittenPW(text)}
               />
-            </InputRed>
-            <StatusText>
+            </InputRed1>
+            <StatusText error={errorPW}>
               {errorPW ? "비밀번호가 일치하지 않습니다" : ""}
             </StatusText>
-            <InputRed error={errorNewPW}>
+            <InputRed2
+              error={errorNewPW}
+              prevCheck={checking}
+              contents={newPW}
+              on={click}
+            >
               <Input
                 placeholderTextColor={colors.grey_6}
                 placeholder="새 비밀번호"
+                ref={(input) => {
+                  this.secondInput = input;
+                }}
                 secureTextEntry={true}
                 returnKeyType="done"
                 blurOnSubmit={false}
                 onChangeText={(text) => setNewPW(text)}
               />
-            </InputRed>
-            <StatusText>{messageErrorPW}</StatusText>
-            <InputRed error={rewrittenNewPW != newPW}>
+            </InputRed2>
+            <StatusText error={errorNewPW}>{messageErrorPW}</StatusText>
+            <InputRed2
+              error={rewrittenNewPW != newPW}
+              prevCheck={visibleErrorNewPW}
+              contents={rewrittenNewPW}
+              on={click}
+            >
               <Input
                 placeholderTextColor={colors.grey_6}
                 onSubmitEditing={() => {
                   rewrittenNewPW == newPW && handlePress();
                 }}
                 placeholder="새 비밀번호 확인"
+                ref={(input) => {
+                  this.thirdInput = input;
+                }}
                 secureTextEntry={true}
                 returnKeyType="done"
                 blurOnSubmit={false}
                 onChangeText={(text) => setRewrittenNewPW(text)}
               />
-            </InputRed>
-            <StatusText>
+            </InputRed2>
+            <StatusText error={rewrittenNewPW != newPW}>
               {visibleErrorNewPW
                 ? rewrittenNewPW == newPW
                   ? "비밀번호가 일치합니다."
@@ -165,18 +216,24 @@ export default function EditPW({ navigation }) {
                 : ""}
             </StatusText>
           </InputContainer>
-          {visibleErrorNewPW ? (
+          {!checking ? (
+            <Button
+              onPress={() => checkPW()}
+              enabled={rewrittenPW != ""}
+              text={"확인"}
+            ></Button>
+          ) : visibleErrorNewPW ? (
             <Button
               enabled={
                 visibleErrorNewPW && !errorNewPW && rewrittenNewPW == newPW
               }
-              onPress={handlePress}
+              onPress={() => handlePress()}
               text={"새 비밀번호 저장"}
             />
           ) : (
             <Button
-              onPress={check}
-              enabled={rewrittenPW != "" && newPW != ""}
+              onPress={() => checkNewPW()}
+              enabled={newPW != ""}
               text={"확인"}
             ></Button>
           )}
