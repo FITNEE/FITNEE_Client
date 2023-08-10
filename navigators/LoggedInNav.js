@@ -14,6 +14,8 @@ import Tab_MyRoutine from "../assets/SVGs/Tab_MyRoutine.svg";
 import { colors } from "../colors";
 import { WithLocalSvg } from "react-native-svg";
 import { styled } from "styled-components/native";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { TabBarAtom } from "../recoil/MyPageAtom";
 
 const IconText = styled.Text`
   font-size: 10px;
@@ -23,7 +25,7 @@ const IconText = styled.Text`
 const Tabs = createBottomTabNavigator();
 
 export default function LoggedInNav() {
-  const { isTabVisible } = useContext(AppContext);
+  const isTabVisible = useRecoilValue(TabBarAtom);
 
   return (
     <Tabs.Navigator
@@ -158,9 +160,7 @@ export default function LoggedInNav() {
         }}
       >
         {() => <MyPageNav />}
-        
       </Tabs.Screen>
     </Tabs.Navigator>
-
   );
 }

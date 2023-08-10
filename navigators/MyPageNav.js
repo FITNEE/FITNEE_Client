@@ -5,10 +5,12 @@ import Setting from "../screens/MyPage/Setting";
 import UserInfo from "../screens/MyPage/UserInfo";
 import EditUserInfo from "../screens/MyPage/EditUserInfo";
 import { Image, Text, TouchableOpacity } from "react-native";
-import Back from "../assets/left_arrow.png";
 import LoggedInNav from "./LoggedInNav";
 import Login from "../screens/OnBoarding/Login";
 import EditPW from "../screens/MyPage/EditPW";
+import { WithLocalSvg } from "react-native-svg";
+import SettingIcon from "../assets/SVGs/Setting.svg";
+import Left from "../assets/SVGs/Left.svg";
 
 const Stack = createStackNavigator();
 
@@ -26,14 +28,12 @@ export default function MyPageNav() {
           headerTitle: "",
           headerRight: () => (
             <TouchableOpacity onPress={() => navigation.navigate("Setting")}>
-              <Image
-                style={{
-                  width: 24,
-                  height: 24,
-                  marginRight: 24,
-                  backgroundColor: "pink",
-                }}
-              ></Image>
+              <WithLocalSvg
+                style={{ marginRight: 24 }}
+                width={24}
+                height={24}
+                asset={SettingIcon}
+              />
             </TouchableOpacity>
           ),
         })}
@@ -45,10 +45,12 @@ export default function MyPageNav() {
           headerTitle: "앱 설정",
           headerLeft: () => (
             <TouchableOpacity onPress={() => navigation.goBack()}>
-              <Image
-                source={Back}
-                style={{ width: 24, height: 24, marginLeft: 24 }}
-              ></Image>
+              <WithLocalSvg
+                style={{ marginLeft: 24 }}
+                width={24}
+                height={24}
+                asset={Left}
+              />
             </TouchableOpacity>
           ),
         })}
@@ -60,10 +62,12 @@ export default function MyPageNav() {
           headerTitle: "계정 정보",
           headerLeft: () => (
             <TouchableOpacity onPress={() => navigation.goBack()}>
-              <Image
-                source={Back}
-                style={{ width: 24, height: 24, marginLeft: 24 }}
-              ></Image>
+              <WithLocalSvg
+                style={{ marginLeft: 24 }}
+                width={24}
+                height={24}
+                asset={Left}
+              />
             </TouchableOpacity>
           ),
           headerRight: false,
@@ -77,10 +81,12 @@ export default function MyPageNav() {
           headerTitle: "닉네임 변경",
           headerLeft: () => (
             <TouchableOpacity onPress={() => navigation.goBack()}>
-              <Image
-                source={Back}
-                style={{ width: 24, height: 24, marginLeft: 24 }}
-              ></Image>
+              <WithLocalSvg
+                style={{ marginLeft: 24 }}
+                width={24}
+                height={24}
+                asset={Left}
+              />
             </TouchableOpacity>
           ),
         })}
@@ -92,10 +98,12 @@ export default function MyPageNav() {
           headerTitle: "비밀번호 수정",
           headerLeft: () => (
             <TouchableOpacity onPress={() => navigation.goBack()}>
-              <Image
-                source={Back}
-                style={{ width: 24, height: 24, marginLeft: 24 }}
-              ></Image>
+              <WithLocalSvg
+                style={{ marginLeft: 24 }}
+                width={24}
+                height={24}
+                asset={Left}
+              />
             </TouchableOpacity>
           ),
         })}

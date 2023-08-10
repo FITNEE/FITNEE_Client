@@ -1,16 +1,16 @@
 import React, { useContext, useEffect, useLayoutEffect, useState } from "react";
 import { Text, SafeAreaView } from "react-native";
 import { styled } from "styled-components/native";
-import Mode from "../../components/Mode";
+import Mode from "../../components/myPage/Mode";
 import { colors } from "../../colors";
 import { AppContext } from "../../components/ContextProvider";
 import axios from "axios";
 import { useIsFocused, useNavigation } from "@react-navigation/native";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { IsDarkAtom, TabBarAtom } from "../../recoil/MyPageAtom";
+import { WithLocalSvg } from "react-native-svg";
+import Right from "../../assets/SVGs/Right.svg";
 
-const Container = styled.View`
-  background-color: #fff;
-  height: 100%;
-`;
 const Profile = styled.TouchableOpacity`
   width: 100%;
   flex-direction: row;
@@ -40,13 +40,6 @@ const Name = styled.Text`
   font-weight: 600;
   line-height: 25.5px;
 `;
-const EditIcon = styled.Image`
-  width: 24px;
-  height: 24px;
-  background-color: pink;
-  margin-right: 0px;
-`;
-
 const Bar = styled.View`
   height: 16px;
   background-color: #f3f3f3;
@@ -56,13 +49,6 @@ const ModeView = styled.View`
   flex-direction: row;
   align-items: center;
 `;
-
-const BlockText = styled.Text`
-  font-size: 17px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 25.5px;
-`;
 const BlockContent = styled.View`
   margin-left: auto;
   margin-right: 0;
@@ -70,11 +56,12 @@ const BlockContent = styled.View`
 
 export default function Setting({ navigation }) {
   const isFocused = useIsFocused();
-  const { isDark, setIsTabVisible } = useContext(AppContext);
+  const isDark = useRecoilValue(IsDarkAtom);
+  const [isTabVisible, setIsTabVisible] = useRecoilState(TabBarAtom);
 
   useEffect(() => {
-    setIsTabVisible(false);
-  });
+    isFocused && setIsTabVisible(false);
+  }, [isFocused, isTabVisible]);
 
   const { toggleLogin } = useContext(AppContext);
   const [userInfo, setUserInfo] = useState([
@@ -106,11 +93,33 @@ export default function Setting({ navigation }) {
 
   const getUserName = userInfo[0].userNickname;
 
+  const Container = styled.View`
+    background-color: ${isDark ? colors.d_background : colors.l_background};
+    height: 100%;
+  `;
+  const Bar = styled.View`
+    height: 16px;
+    background-color: ${isDark ? colors.black : colors.grey_1};
+  `;
+  const Name = styled.Text`
+    font-size: 17px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 25.5px;
+    color: ${isDark ? colors.white : colors.black};
+  `;
   const Block = styled.TouchableOpacity`
     padding: 19px 24px;
     flex-direction: row;
     align-items: center;
     background-color: ${isDark ? colors.d_background : colors.l_background};
+  `;
+  const BlockText = styled.Text`
+    font-size: 17px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 25.5px;
+    color: ${isDark ? colors.white : colors.black};
   `;
 
   return (
@@ -127,7 +136,7 @@ export default function Setting({ navigation }) {
               <Name>{getUserName}</Name>
             </ProfileContents>
           </ProfileInfo>
-          <EditIcon />
+          <WithLocalSvg width={20} height={20} asset={Right} />
         </Profile>
         <ModeView>
           <BlockText>다크화면 모드</BlockText>
