@@ -10,6 +10,7 @@ import { colors } from "../../colors";
 import { Button } from "../../Shared";
 import axios from "axios";
 import { Alert } from "react-native";
+import { PWToast, showPWToast } from "../../components/myPage/PWToast";
 
 const Container = styled.View`
   height: 100%;
@@ -129,15 +130,7 @@ export default function EditPW({ navigation }) {
   };
   const handlePress = () => {
     updateUserPW(newPW).then((updateResult) => {
-      updateResult.code === 1000 &&
-        Alert.alert("비밀번호가 변경되었습니다.", "", [
-          ,
-          {
-            text: "확인",
-            onPress: goToUserInfo,
-            style: "default",
-          },
-        ]);
+      updateResult.code === 1000 && goToUserInfo() & showPWToast();
     });
   };
 

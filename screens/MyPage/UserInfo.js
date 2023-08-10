@@ -6,6 +6,10 @@ import axios from "axios";
 import { Dimensions } from "react-native";
 import { ScreenWidth } from "../../Shared";
 import { useIsFocused } from "@react-navigation/native";
+import { WithLocalSvg } from "react-native-svg";
+import Right from "../../assets/SVGs/Right.svg";
+import { NickToast } from "../../components/myPage/NickToast";
+import { PWToast } from "../../components/myPage/PWToast";
 
 const Container = styled.View`
   background-color: #fff;
@@ -129,7 +133,12 @@ export default function UserInfo({ navigation }) {
           <BlockTitle>닉네임</BlockTitle>
           <NickContent>
             <NickText>{getUserName}</NickText>
-            <NickIcon />
+            <WithLocalSvg
+              style={{ marginLeft: 8 }}
+              width={20}
+              height={20}
+              asset={Right}
+            />
           </NickContent>
         </NickBlock>
         <Block>
@@ -155,6 +164,8 @@ export default function UserInfo({ navigation }) {
             <ClickText>회원 탈퇴하기</ClickText>
           </Click>
         </MiniBlock>
+        <NickToast />
+        <PWToast />
       </Container>
     </SafeAreaView>
   );
