@@ -148,12 +148,6 @@ export default function Dictionary_1( {navigation} ){
     const [recentKeywords, setRecentKeywords] = useState([])
     const [searchList, setSearchList] = useState([])
     
-    // 사용자가 키보드에서 검색 버튼 눌렀을 때
-    const onSubmitEditing = () => {
-        setIsSubmit(true)
-        setIsSearching(false)
-        postKeywords(search)
-    }
 
     // 사용자가 검색창에 onFocus 했을 때
     const onFocusInput = ()=>{
@@ -209,7 +203,7 @@ export default function Dictionary_1( {navigation} ){
          
 
     // 검색한 단어를 최근 검색 키워드에 저장하는 API  
-    const postKeywords = async (search) => {
+    const postKeywords = async () => {
         try {
             let url = "https://gpthealth.shop/"
             let detailAPI = "/app/dictionary/usersearch"
@@ -258,10 +252,20 @@ export default function Dictionary_1( {navigation} ){
     }
     // 최근검색어, 인기검색어 클릭시 검색List 화면으로 전환
     const onPressKeyword = (keyword) => {
-        postSearch(keyword).then((result)=>setSearchList(result))
         setSearch(keyword)
+        postSearch(keyword).then((result)=>setSearchList(result))
         setIsSubmit(true)
+
     }
+
+    // 사용자가 키보드에서 검색 버튼 눌렀을 때
+    const onSubmitEditing = () => {
+        setIsSubmit(true)
+        setIsSearching(false)
+    }
+    useEffect(()=>{
+        postKeywords()
+    }, [isSubmit])
 
     return(
         <SafeAreaView style={{backgroundColor: 'white', flex: 1}}>

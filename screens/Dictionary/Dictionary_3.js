@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect, useCallback, useMemo, useContext, createContext } from 'react'
 import styled from 'styled-components/native'
 import { colors } from '../../colors'
-import { Dimensions, Alert, TouchableWithoutFeedback, ScrollView, SafeAreaView } from 'react-native'
+import { Share, Dimensions, Alert, TouchableWithoutFeedback, ScrollView, SafeAreaView } from 'react-native'
 import WrappedText from 'react-native-wrapped-text'
 import BottomSheet, { BottomSheetScrollView, BottomSheetBackdrop } from "@gorhom/bottom-sheet";
 import { AppContext } from '../../components/ContextProvider';
@@ -203,23 +203,43 @@ export default function Dictionary_3({ navigation, route }){
           />
         ), []
     )
-    
-    useEffect(()=> {
-        setBubbleBool(true)
-        
-    }, [])
+    // 루틴에 추가하는 버튼 ()
+    const onPressAddRoutineBtn = ()=>{
+        setBubbleBool(false)
+    }
+
+    // RightTab에서 쓰이는 JoinBtnBool
     const parentSetJoinBtnBool = (newBool) => setJoinBtnBool(newBool)
 
+    const pressShareBtn = async () => {
+        try {
+            const result = await Share.share({
+            message:
+                `Fitnee에서 ${exerciseInfo.name} 정보를 확인해보세요!`,
+            });
+            if (result.action === Share.sharedAction) {
+            if (result.activityType) {
+                // shared with activity type of result.activityType
+            } else {
+                // shared
+            }
+            } else if (result.action === Share.dismissedAction) {
+            // dismissed
+            }
+        } catch (error) {
+            Alert.alert(error.message);
+        }
+    }
 
     return (
         <TouchableWithoutFeedback
-            onPress={()=> setBubbleBool(false)}
+            onPressIn={()=> setBubbleBool(false)}
         >
             <SafeAreaView style={{flex: 1, backgroundColor: `${colors.grey_1}`}}>
                 <Container>
                     <TopBtnContainer>
                         <TopBtn onPress={()=>navigation.goBack()}/>
-                        <TopBtn/>
+                        <TopBtn onPress={pressShareBtn}/>
                     </TopBtnContainer>
                     <ImageContainer>
                         <ExerciseImage resizeMode='contain'/>
@@ -239,8 +259,7 @@ export default function Dictionary_3({ navigation, route }){
                         snapPoints={snapPoints}
                         enablePanDownToClose={false}
                         keyboardBehavior='extend'
-                        onPress={()=> setBubbleBool(false)}
-                        backdropComponent={renderBackdrop}
+                        backdropComponent={renderBackdrop}                        
                     >
                         <DictionaryContainer>
                             <TitleContainer>
@@ -248,7 +267,7 @@ export default function Dictionary_3({ navigation, route }){
                                     <AreaText>{exerciseInfo.parts} | {exerciseInfo.muscle} | {exerciseInfo.equipment}</AreaText>
                                     <TitleWrapper><TitleText>{exerciseInfo.name}</TitleText></TitleWrapper>
                                 </NameContainer>
-                                <AddtoRoutineBtn/>
+                                <AddtoRoutineBtn onPress={onPressAddRoutineBtn}/>
                             </TitleContainer>
                             <TabContainer>
                                 <LeftTab 
