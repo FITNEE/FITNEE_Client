@@ -6,11 +6,8 @@ import LoggedInNav from "./navigators/LoggedInNav";
 import { AppContext } from "./components/ContextProvider";
 import { useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import CreateRoutineNav from "./navigation/CreateRoutineNav";
-
 import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
-
-import { RecoilRoot } from "recoil";
+import { RecoilRoot, useRecoilValue } from "recoil";
 
 const MyTheme = {
   ...DefaultTheme,
@@ -21,14 +18,23 @@ const MyTheme = {
 };
 
 export default function App() {
+  /*
+  const [DarkMode, setDarkMode] = useState(true);
+  const theme = {
+    dark: DarkMode,
+    colors: {
+      primary: DarkMode ? "white" : "black",
+      background: DarkMode ? colors.grey_9 : colors.white,
+      text: DarkMode ? colors.white : colors.black,
+    },
+  };
+  */
+
   const [loading, setLoading] = useState(true);
   const [loggedIn, setLoggedIn] = useState(false);
   const [token, setToken] = useState("");
 
   const onFinish = () => setLoading(false);
-
-  const [isDark, setIsDark] = useState(false);
-  const [isTabVisible, setIsTabVisible] = useState(true);
 
   const toggleLogin = () => {
     if (loggedIn) {
@@ -62,14 +68,10 @@ export default function App() {
     <RecoilRoot>
       <AppContext.Provider
         value={{
-          isDark,
-          setIsDark,
           toggleLogin,
           loggedIn,
           setToken,
           token,
-          isTabVisible,
-          setIsTabVisible,
         }}
       >
         <NavigationContainer>
