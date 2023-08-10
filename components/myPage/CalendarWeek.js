@@ -4,7 +4,7 @@ import {
   LocaleConfig,
   WeekCalendar,
 } from "react-native-calendars";
-import { colors } from "../colors";
+import { colors } from "../../colors";
 
 LocaleConfig.locales["ko"] = {
   monthNames: [

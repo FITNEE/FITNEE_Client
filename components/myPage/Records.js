@@ -3,9 +3,11 @@ import { Text, View } from "react-native";
 import PercentageCircle from "react-native-progress-circle";
 import { styled } from "styled-components/native";
 import CalendarView from "./CalendarView";
-import { colors } from "../colors";
-import COMMENTDATA from "../screens/MyPage/COMMENTDATA";
+import { colors } from "../../colors";
+import COMMENTDATA from "../../screens/MyPage/COMMENTDATA";
 import { Image } from "react-native";
+import { WithLocalSvg } from "react-native-svg";
+import Check from "../../assets/SVGs/Check.svg";
 
 const Container = styled.View`
   width: 100%;
@@ -102,7 +104,7 @@ export default function Records(props) {
   const exercise = COMMENTDATA.map((comment) => (
     <RecTextLine>
       <ListText>{comment.name}</ListText>
-      <Image style={{ width: 20, height: 20, backgroundColor: "pink" }}></Image>
+      <WithLocalSvg width={20} height={20} asset={Check} />
     </RecTextLine>
   ));
 

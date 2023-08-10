@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Dimensions, Text, View } from "react-native";
 import { LineChart } from "react-native-chart-kit";
 import { Rect, Text as TextSVG, Svg, Line } from "react-native-svg";
-import { colors } from "../colors";
+import { colors } from "../../colors";
 import { styled } from "styled-components/native";
 import WrappedText from "react-native-wrapped-text";
 

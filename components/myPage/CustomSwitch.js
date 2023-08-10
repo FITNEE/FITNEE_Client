@@ -1,13 +1,16 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { Text, View, TouchableOpacity, Animated, Easing } from "react-native";
-import { colors } from "../colors";
-import { AppContext } from "./ContextProvider";
+import { colors } from "../../colors";
+import { useRecoilState } from "recoil";
+import { IsDarkAtom } from "../../recoil/MyPageAtom";
 
 const CustomSwitch = ({ option_left, option_right }) => {
-  const { isDark, setIsDark } = useContext(AppContext);
+  const [isDark, setIsDark] = useRecoilState(IsDarkAtom);
 
-  const [animatedValue, setAnimatedValue] = useState(new Animated.Value(0));
+  const [animatedValue, setAnimatedValue] = useState(
+    new Animated.Value(isDark ? 0 : 28)
+  );
 
   useEffect(() => {
     Animated.timing(animatedValue, {
@@ -30,7 +33,7 @@ const CustomSwitch = ({ option_left, option_right }) => {
           activeOpacity: 0.5,
           height: 36,
           width: 64,
-          backgroundColor: isDark == 0 ? colors.grey_2 : colors.grey_4,
+          backgroundColor: isDark ? colors.d_main : colors.grey_2,
           borderRadius: 1000,
           flexDirection: "row",
           padding: 4,
@@ -40,7 +43,7 @@ const CustomSwitch = ({ option_left, option_right }) => {
           activeOpacity={0.5}
           onPress={() => updatedSwitchData(0)}
           style={{
-            backgroundColor: colors.white,
+            backgroundColor: isDark ? colors.grey_9 : colors.white,
             width: 28,
             height: 28,
             borderRadius: 25,
@@ -55,7 +58,7 @@ const CustomSwitch = ({ option_left, option_right }) => {
         >
           <Text
             style={{
-              color: colors.black,
+              color: isDark ? colors.white : colors.black,
               fontSize: 11,
               fontWeight: 600,
               lineHeight: 16.5,
