@@ -12,6 +12,7 @@ import { TouchableOpacity } from "react-native";
 import { Image } from "react-native";
 import Back from "../../assets/left_arrow.png";
 import { Alert } from "react-native";
+import { showNickToast } from "../../components/myPage/NickToast";
 
 const Container = styled.View`
   background-color: #fff;
@@ -150,7 +151,9 @@ export default function EditUserInfo({ navigation }) {
         alert("변경할 닉네임을 입력해주세요");
       } else {
         setCheck(true);
-        checkResult.result ? setError(true) : setError(false);
+        checkResult.result
+          ? setError(true)
+          : setError(false) & Keyboard.dismiss();
         checkResult.result ? setEnabled(false) : setEnabled(true);
       }
     });
@@ -188,6 +191,7 @@ export default function EditUserInfo({ navigation }) {
           onPress={() => {
             !error && updateUserInfo(newNickname);
             navigation.navigate("UserInfo");
+            showNickToast();
           }}
           style={{ marginRight: 24 }}
         >
