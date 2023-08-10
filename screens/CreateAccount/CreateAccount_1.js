@@ -28,10 +28,12 @@ const CreateAccount_1 = ({ route, navigation }) => {
   const [rewrittenPW, setRewrittenPW] = useState("");
   const [rewrite, setRewrite] = useState(false);
   const email = route.params.email;
+
   const rewritePW = () => {
     console.log("rewritePW");
     setRewrite(true);
   };
+
   const handlePress = () => {
     navigation.navigate("CreateAccount_2", {
       email,
