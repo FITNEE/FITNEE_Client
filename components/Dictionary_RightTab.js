@@ -4,6 +4,7 @@ import { Alert, TouchableWithoutFeedback, Keyboard, View } from "react-native";
 import {
   BottomSheetScrollView,
   BottomSheetTextInput,
+//   BottomSheetFlatList
 } from "@gorhom/bottom-sheet";
 import { colors } from "../colors";
 import WrappedText from "react-native-wrapped-text";
@@ -62,72 +63,63 @@ const TextInput = styled.TextInput`
 `;
 
 export default function Dictionary_RightTab(props) {
-  const { isDark } = useContext(AppContext);
-  const UserName = styled.Text`
-    color: ${isDark ? colors.d_main : colors.l_main};
-    font-size: 11px;
-    font-weight: 400;
-    margin-left: 8px;
-    margin-bottom: 5px;
-  `;
-  const SendBtn = styled.TouchableOpacity`
-    background-color: ${isDark ? colors.d_main : colors.l_main};
-    width: 32px;
-    height: 32px;
-    border-radius: 16px;
-  `;
-  const scrollviewRef = useRef(null);
-  const onPressMsgDeleteBtn = () => {
-    Alert.alert(
-      "채팅 삭제",
-      "채팅방에서 삭제되며\n채팅 내용은 복구되지 않습니다.",
-      [
-        { text: "취소" },
-        {
-            text: "삭제하기",
-            onPress: () => console.log("chat delete log"),
-            style: "destructive",
-        },
-      ]
-    );
-  };
-  const onSubmitChat = () => {
-    let temp = []
-    chat.length == 0? 
-        null
-        : 
-        (
-        postChat(),
-        setChat(""),
-        funcSetJoinBtnBool(true),
-        scrollviewRef.current.scrollToEnd({ animated: true }))
-  }
-  const onFocusInput = () => {
-    scrollviewRef.current.scrollToEnd({ animated: true })
-  }
+    const { isDark } = useContext(AppContext);
+    const UserName = styled.Text`
+        color: ${isDark ? colors.d_main : colors.l_main};
+        font-size: 11px;
+        font-weight: 400;
+        margin-left: 8px;
+        margin-bottom: 5px;
+    `
+    const SendBtn = styled.TouchableOpacity`
+        background-color: ${isDark ? colors.d_main : colors.l_main};
+        width: 32px;
+        height: 32px;
+        border-radius: 16px;
+    `
+    const scrollviewRef = useRef(null)
+   
+    const onSubmitChat = () => {
+        let temp = []
+        chat.length == 0? 
+            null
+            : 
+            (
+            postChat(),
+            setChat(""),
+            funcSetJoinBtnBool(true),
+            setChatUpdate(!chatUpdate),
+            scrollviewRef.current?.scrollToEnd({ animated: true })
+            )
+    }
+    const onFocusInput = () => {
+        scrollviewRef.current?.scrollToEnd({ animated: true })
+    }
 
-  const [msg, setMsg] = useState([])
-  const [chat, setChat] = useState("")
-  
+    const [msg, setMsg] = useState([])
+    const [chat, setChat] = useState("")
+    const [chatUpdate, setChatUpdate] = useState(false)
+    const [chatIdx, setChatIdx] = useState([])
 
-  // 참여하기 버튼
-  const { parentJoinBtnBool, parentSetJoinBtnBool, exerciseName } = props
-  const [childJoinBtnBool, setChildJoinBtnBool] = useState(parentJoinBtnBool)
-  useEffect(() => {
+    // 참여하기 버튼
+    const { parentJoinBtnBool, parentSetJoinBtnBool, exerciseName } = props
+    const [childJoinBtnBool, setChildJoinBtnBool] = useState(parentJoinBtnBool)
+    useEffect(() => {
     setChildJoinBtnBool(parentJoinBtnBool)
-  }, [parentJoinBtnBool])
-  const funcSetJoinBtnBool = (newBool) => {
+    }, [parentJoinBtnBool])
+    const funcSetJoinBtnBool = (newBool) => {
     setChildJoinBtnBool(newBool)
     parentSetJoinBtnBool(newBool)
-  }
+    }
 
-  const getChat = async () => {
+    // 채팅 불러오기
+    const getChat = async () => {
     try {
         let url = "https://gpthealth.shop/"
         let detailAPI = "/app/dictionary/exercisechat"
         const response = await axios.get(url + detailAPI, {
             params: {
-            name: "사이드 레터럴 레이즈",
+                name: "사이드 레터럴 레이즈",
             },
         })
         const result = response.data
@@ -135,20 +127,20 @@ export default function Dictionary_RightTab(props) {
     } catch (error) {
         console.error("Failed to fetch data:", error)
     }
-  }
-  const [myNickName, setMyNickName] = useState("")
-  useEffect(() => {
+    }
+    useEffect(() => {
     getChat().then((result) => {
-      setMsg(result.result.chattinginfo)
+        setMsg(result.result.chattinginfo)
     })
-  }, [parentJoinBtnBool])
+    }, [parentJoinBtnBool,chatUpdate])
+
+  //채팅 올리기
   const postChat = async () => {
     try {
         let url = "https://gpthealth.shop/"
         let detailAPI = "/app/dictionary/chatting"
         const response = await axios.post(url + detailAPI, {
             "name": exerciseName,
-            "userNickname": myNickName,
             "text": chat
         })
         const result = response.data
@@ -160,23 +152,61 @@ export default function Dictionary_RightTab(props) {
       console.error("Failed to fetch data:", error);
     }
 } 
-const getNickname = async () => {
-    try {
-        let url = "https://gpthealth.shop/"
-        let detailAPI = `app/mypage/userinfo`
-        const response = await axios.get(url + detailAPI);
-        const result = response.data
-        return result
-    } 
-    catch (error) {
-      console.error("Failed to fetch data:", error);
+
+    // 닉네임 알아오기
+    const [myNickName, setMyNickName] = useState("")
+    const getNickname = async () => {
+        try {
+            let url = "https://gpthealth.shop/"
+            let detailAPI = `app/mypage/userinfo`
+            const response = await axios.get(url + detailAPI);
+            const result = response.data
+            return result
+        } 
+        catch (error) {
+        console.error("Failed to fetch data:", error);
+        }
     }
-  }
-  useEffect(()=>{
+    useEffect(()=>{
     getNickname().then((result)=>{
         setMyNickName(result.result[0].userNickname)
     })
-  }, [])
+    }, [])
+
+    const deleteChat = async (idx) => {
+    try {
+        let url = "https://gpthealth.shop/"
+        let detailAPI = `app/dictionary/deleteChatt`
+        const response = await axios.patch(url + detailAPI, {
+            healthChattingIdx: idx
+        })
+        const result = response.data
+
+        if(result.isSuccess) console.log(`채팅 삭제 성공(idx: ${idx})`)
+        else console.log(`채팅 삭제 실패(idx: ${idx})`)
+        return result
+    } 
+    catch (error) {
+        console.error("Failed to fetch data:", error)
+    }
+    }
+    const onPressMsgDeleteBtn = (idx) => {
+        Alert.alert(
+        "채팅 삭제",
+        "채팅방에서 삭제되며\n채팅 내용은 복구되지 않습니다.",
+        [
+            { text: "취소" },
+            {
+                text: "삭제하기",
+                onPress: () => {
+                    deleteChat(idx)
+                    setChatUpdate(!chatUpdate)
+                },
+                style: "destructive",
+            },
+        ]
+        )
+    }
 
 
     return (
@@ -206,10 +236,10 @@ const getNickname = async () => {
                                 </MessageContainer>
                             </MessageWrapper>)
                         : 
-                            (<MyMessageWrapper>
-                                <MsgDeleteBtn onPress={onPressMsgDeleteBtn} />
-                                <MyMessageContainer>
-                                    <WrappedText
+                            (<MyMessageWrapper> 
+                                <MsgDeleteBtn onPress={()=>onPressMsgDeleteBtn(msg.healthChattingIdx)} />
+                                <MyMessageContainer >
+                                    <WrappedText 
                                         textStyle={{
                                             fontWeight: 400,
                                             fontSize: 13,
