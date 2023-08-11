@@ -25,7 +25,7 @@ const MessageContainer = styled.View`
   padding: 8px 16px;
   max-width: 200px;
 `;
-const MyMessageContainer = styled.View`
+const MyMessageContainer = styled.TouchableOpacity`
   background-color: ${colors.grey_1};
   border-radius: 12px 12px 0px 12px;
   padding: 8px 16px;
@@ -119,7 +119,7 @@ export default function Dictionary_RightTab(props) {
         let detailAPI = "/app/dictionary/exercisechat"
         const response = await axios.get(url + detailAPI, {
             params: {
-                name: "사이드 레터럴 레이즈",
+                name: exerciseName,
             },
         })
         const result = response.data
@@ -206,8 +206,16 @@ export default function Dictionary_RightTab(props) {
             },
         ]
         )
+        setDeleteBtnBool(false)
     }
 
+    const [selectedIdx, setSelectedIdx] = useState(-1)
+    const onLongPress = (i) => {
+        // Vibration.vibrate()
+        if(i==selectedIdx) setSelectedIdx(-1)
+        else setSelectedIdx(i)
+
+    }
 
     return (
       <>
@@ -237,8 +245,8 @@ export default function Dictionary_RightTab(props) {
                             </MessageWrapper>)
                         : 
                             (<MyMessageWrapper> 
-                                <MsgDeleteBtn onPress={()=>onPressMsgDeleteBtn(msg.healthChattingIdx)} />
-                                <MyMessageContainer >
+                                {selectedIdx===i && <MsgDeleteBtn onPress={()=>onPressMsgDeleteBtn(msg.healthChattingIdx)} />}
+                                <MyMessageContainer onLongPress={()=>onLongPress(i)}>
                                     <WrappedText 
                                         textStyle={{
                                             fontWeight: 400,
