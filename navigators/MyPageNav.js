@@ -11,6 +11,7 @@ import EditPW from "../screens/MyPage/EditPW";
 import { WithLocalSvg } from "react-native-svg";
 import SettingIcon from "../assets/SVGs/Setting.svg";
 import Left from "../assets/SVGs/Left.svg";
+import { colors } from "../colors";
 
 const Stack = createStackNavigator();
 
@@ -50,6 +51,7 @@ export default function MyPageNav() {
                 width={24}
                 height={24}
                 asset={Left}
+                color={colors.black}
               />
             </TouchableOpacity>
           ),
@@ -67,6 +69,7 @@ export default function MyPageNav() {
                 width={24}
                 height={24}
                 asset={Left}
+                color={colors.black}
               />
             </TouchableOpacity>
           ),
@@ -86,6 +89,7 @@ export default function MyPageNav() {
                 width={24}
                 height={24}
                 asset={Left}
+                color={colors.black}
               />
             </TouchableOpacity>
           ),
