@@ -53,6 +53,7 @@ const AnimationContainer = styled.View`
 
 const CreateAccount_4 = ({ route, navigation }) => {
   const [isLoading, setIsLoading] = useState(true);
+
   const postUser = async (data) => {
     try {
       let url = "https://gpthealth.shop/";
@@ -68,6 +69,7 @@ const CreateAccount_4 = ({ route, navigation }) => {
       console.error("Failed to fetch data:", error);
     }
   };
+
   const handlePress = () => {
     let data = {
       userId: route.params.email, //string
@@ -103,6 +105,7 @@ const CreateAccount_4 = ({ route, navigation }) => {
       }
     });
   };
+
   const { toggleLogin } = useContext(AppContext);
   useEffect(() => {
     handlePress();
