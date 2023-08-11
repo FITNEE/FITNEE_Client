@@ -74,6 +74,7 @@ export default function CalendarView(props) {
               width={20}
               height={20}
               asset={Left}
+              color={colors.grey_5}
             />
           );
         if (direction == "right")
@@ -83,6 +84,7 @@ export default function CalendarView(props) {
               width={20}
               height={20}
               asset={Right}
+              color={colors.grey_5}
             />
           );
       }}

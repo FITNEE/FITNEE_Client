@@ -138,6 +138,7 @@ export default function UserInfo({ navigation }) {
               width={20}
               height={20}
               asset={Right}
+              color={colors.grey_7}
             />
           </NickContent>
         </NickBlock>
