@@ -9,7 +9,7 @@ import Animated, {
 import { colors } from "../../colors";
 import { ComponentTitle } from "../Shared/MyRoutine_Shared";
 import { ScheduleChanger } from "../ScheduleChanger";
-import { ScreenHeight, ScreenWidth } from "../Shared";
+import { ScreenWidth } from "../Shared";
 
 import { WithLocalSvg } from "react-native-svg";
 import Trash from "../../assets/SVGs/Trash.svg";
@@ -100,7 +100,6 @@ const ExerciseItem_Custom = ({
             </DeleteButton>
           </SetContainer>
         ))}
-
         <AddButton onPress={() => editRoutine(id, "add", 0)}>
           <AddText>세트 추가</AddText>
         </AddButton>
@@ -109,11 +108,9 @@ const ExerciseItem_Custom = ({
   );
 };
 
-const ScreenBaseCustom = styled.View`
-  background-color: ${colors.black};
+const Blank = styled.View`
   width: 100%;
-  height: 100%;
-  flex: 1;
+  height: 40px;
 `;
 const ScrollPressable = styled.Pressable`
   width: ${ScreenWidth - 48}px;
@@ -131,38 +128,36 @@ export default List_Custom = ({
   const animatedStyle = useAnimatedStyle(() => {
     return {
       backgroundColor: colors.grey_1,
-      height: ScreenHeight,
+      flex: 1,
       opacity: withSpring(modalState != 0 ? 0.2 : 1),
     };
   }, [modalState]);
 
   return (
-    <ScrollView
-      style={{
-        width: "100%",
-        flex: 1,
-      }}
-    >
-      <ScreenBaseCustom>
-        <Animated.View style={animatedStyle}>
-          <ScrollPressable onPress={() => Keyboard.dismiss()}>
-            <ComponentTitle
-              title="요일 변경"
-              subTitle="루틴을 원하는 요일에 끌어다 놓을 수 있어요"
-            />
-            <ScheduleChanger
-              SCHEDULE={SCHEDULE}
-              days={days}
-              setNewSCHE={setNewSCHE}
-            />
-
-            <ComponentTitle
-              title="운동 편집"
-              subTitle="루틴을 원하는 요일에 끌어다 놓을 수 있어요"
-            />
-
-            {newRoutine ? (
-              newRoutine?.map((item, id) => (
+    <Animated.View style={animatedStyle}>
+      <ScrollView
+        style={{
+          width: "100%",
+          height: "100%",
+        }}
+      >
+        <ScrollPressable onPress={() => Keyboard.dismiss()}>
+          <ComponentTitle
+            title="요일 변경"
+            subTitle="루틴을 원하는 요일에 끌어다 놓을 수 있어요"
+          />
+          <ScheduleChanger
+            SCHEDULE={SCHEDULE}
+            days={days}
+            setNewSCHE={setNewSCHE}
+          />
+          <ComponentTitle
+            title="운동 편집"
+            subTitle="루틴을 원하는 요일에 끌어다 놓을 수 있어요"
+          />
+          {newRoutine ? (
+            <>
+              {newRoutine?.map((item, id) => (
                 <ExerciseItem_Custom
                   key={id}
                   id={id}
@@ -171,17 +166,18 @@ export default List_Custom = ({
                   editRoutine={editRoutine}
                   popMessage={() => popMessage(id)}
                 />
-              ))
-            ) : (
-              <ContentContainer>
-                <NoRoutineText style={{ marginTop: 160 }}>
-                  해당 요일에는 루틴이 없어요
-                </NoRoutineText>
-              </ContentContainer>
-            )}
-          </ScrollPressable>
-        </Animated.View>
-      </ScreenBaseCustom>
-    </ScrollView>
+              ))}
+              <Blank />
+            </>
+          ) : (
+            <ContentContainer>
+              <NoRoutineText style={{ marginTop: 160 }}>
+                해당 요일에는 루틴이 없어요
+              </NoRoutineText>
+            </ContentContainer>
+          )}
+        </ScrollPressable>
+      </ScrollView>
+    </Animated.View>
   );
 };

@@ -27,11 +27,9 @@ import {
   NoRoutineText,
 } from "../../components/Shared/MyRoutine_Shared";
 import { Button, ScreenWidth } from "../../Shared";
+import { IsDarkAtom, TabBarAtom } from "../../recoil/MyPageAtom";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 
-const ButtonContainer = styled.TouchableOpacity`
-  width: ${ScreenWidth - 48}px;
-  margin-left: 24px;
-`;
 const ScreenBase = styled.SafeAreaView`
   width: 100%;
   flex-direction: column;
@@ -136,7 +134,7 @@ const MyButton = styled.TouchableOpacity`
   width: 100%;
 `;
 
-export default MyRoutine = () => {
+export default MyRoutine = ({ navigation, route }) => {
   //커스텀 or 일반 보기모드 식별 위함
   const [mode, setMode] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -160,6 +158,7 @@ export default MyRoutine = () => {
 
   const [selectedId, setSelectedId] = useState(null);
 
+  const setIsTabVisible = useSetRecoilState(TabBarAtom);
   const extendModal = () => {
     console.log("modal Extended");
     //기존 스냅포인트 수치보다 키보드 절대높이인 28%를 더하여서 유동적인 bottomSheet면적에 대비
@@ -316,6 +315,10 @@ export default MyRoutine = () => {
     updateDatas();
   }, []);
 
+  useEffect(() => {
+    setIsTabVisible(!mode);
+  }, [mode]);
+
   return (
     <BottomSheetModalProvider>
       <ScreenBase>
@@ -343,7 +346,7 @@ export default MyRoutine = () => {
                 setNewSCHE={setNewSCHE}
               />
               <Button
-                onPress={() => console.log("hello")}
+                onPress={() => navigation.navigate("ExerciseSearch", {})}
                 text="운동 추가하기"
                 enabled={true}
                 mode="absolute"
