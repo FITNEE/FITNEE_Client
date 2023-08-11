@@ -10,6 +10,7 @@ import Tab_MyRoutine from "../assets/SVGs/Tab_MyRoutine.svg";
 import { colors } from "../colors";
 import { WithLocalSvg } from "react-native-svg";
 import { styled } from "styled-components/native";
+import DictionaryNav from './DictionaryNav'
 
 const IconText = styled.Text`
   font-size: 10px;
@@ -106,7 +107,7 @@ export default function LoggedInNav() {
         {() => <ExerciseNav />}
       </Tabs.Screen>
       <Tabs.Screen
-        name="ExerciseDictNav"
+        name="DictionaryNav"
         options={{
           tabBarIcon: ({ focused }) => (
             <>
@@ -125,7 +126,7 @@ export default function LoggedInNav() {
           ),
         }}
       >
-        {() => <ExerciseDictNav />}
+        {() => <DictionaryNav />}
       </Tabs.Screen>
       <Tabs.Screen
         name="MyPageNav"

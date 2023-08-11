@@ -257,15 +257,13 @@ export default function Dictionary_1( {navigation} ){
         setIsSubmit(true)
 
     }
-
     // 사용자가 키보드에서 검색 버튼 눌렀을 때
     const onSubmitEditing = () => {
         setIsSubmit(true)
         setIsSearching(false)
     }
-    useEffect(()=>{
-        postKeywords()
-    }, [isSubmit])
+    // 검색될때마다 키워드 기록
+    useEffect(()=>postKeywords(), [isSubmit])
 
     return(
         <SafeAreaView style={{backgroundColor: 'white', flex: 1}}>
