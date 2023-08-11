@@ -5,13 +5,16 @@ import { Rect, Text as TextSVG, Svg, Line } from "react-native-svg";
 import { colors } from "../../colors";
 import { styled } from "styled-components/native";
 import WrappedText from "react-native-wrapped-text";
+import { divide } from "react-native-reanimated";
 
-const Container = styled.ScrollView`
+const BoxContainer = styled.View`
   margin: 26px 24px 0px 24px;
   background-color: ${colors.grey_1};
   border-radius: 20px;
   padding: 16px;
+  padding-right: 0px;
 `;
+const Container = styled.ScrollView``;
 
 export default function TotalChart() {
   const [message, setMessage] = useState({
@@ -35,26 +38,55 @@ export default function TotalChart() {
       fonstWeight: 600,
       lineHeight: 16.5,
     },
+    propsForDots: {
+      r: "8",
+    },
   };
   const screenWidth = Dimensions.get("window").width;
 
   //dataArray 비율 바꾸고, 범위 비슷하도록... 값/max*1.2정도 // 값 받아올때는 값*max/1.2를 하고.... y값 받아올 수 있으면 message default값으로 넣어서 좋은디....
   // l_main 쪽은 kcal값을 받아오고.. green 쪽은 km 값을 받아오기!! => 단위도 변경해야함..
-  const DATA = {};
+
+  function divideArrayByMax(arr) {
+    if (arr.length === 0) {
+      return [];
+    }
+    const max = Math.max(...arr);
+    const dividedArray = arr.map((value) => value / max);
+    return dividedArray;
+  }
+
+  const KcalData = [4, 3, 7, 6, 2, 5, 6, 9];
+  const KcalMax = Math.max(KcalData);
+  const KmData = [2, 5, 6, 9, 4, 3, 7, 6];
+  const KmMax = Math.max(KmData);
+  const calorieData = KcalData.map((value) => value / KcalMax);
+  const distanceData = KmData.map((value) => value / KmMax);
+
+  //console.log(calorieData);
+  //console.log(distanceData);
+
   const data = {
     labels: ["7월 1주", "2주", "3주", "4주", "8월 1주", "2주", "3주", "4주"],
     datasets: [
       {
-        data: [4, 3, 7, 6, 2, 5, 6, 9],
+        data: calorieData,
         color: () => colors.l_main,
         strokeWidth: 4,
       },
       {
-        data: [2, 5, 6, 9, 4, 3, 7, 6],
+        data: distanceData,
         color: () => colors.green,
         strokeWidth: 4,
       },
+      {
+        data: [1],
+      },
+      {
+        data: [0],
+      },
     ],
+    legend: ["kcal", "km"],
   };
 
   const lastDataIndex = data.labels.length - 1;
@@ -84,84 +116,86 @@ export default function TotalChart() {
   */
 
   return (
-    <Container
-      horizontal
-      showsHorizontalScrollIndicator={false}
-      contentOffset={{ x: (data.labels.length * screenWidth) / 8, y: 0 }}
-    >
-      <LineChart
-        data={data}
-        width={(data.labels.length * screenWidth) / 4}
-        //width={screenWidth-48}
-        height={230}
-        chartConfig={chartConfig}
-        fromZero={true}
-        bezier
-        withHorizontalLabels={false}
-        withVerticalLines={false}
-        style={{
-          paddingRight: 0,
-        }}
-        decorator={() => {
-          return message.visible ? (
-            <View
-              style={{
-                position: "absolute",
-                width: 73,
-                height: 32,
-                top: message.y - 40,
-                left: message.x - 36,
-                backgroundColor: colors.black,
-                borderRadius: 20,
-                alignItems: "center",
-                justifyContent: "center",
-                flexDirection: "row",
-              }}
-            >
-              <Text
+    <BoxContainer>
+      <Container
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        contentOffset={{ x: (data.labels.length * screenWidth) / 8, y: 0 }}
+      >
+        <LineChart
+          data={data}
+          width={(data.labels.length * screenWidth) / 4}
+          //width={screenWidth-48}
+          height={230}
+          chartConfig={chartConfig}
+          fromZero={true}
+          bezier
+          withHorizontalLabels={false}
+          withVerticalLines={false}
+          style={{
+            paddingRight: 0,
+          }}
+          decorator={() => {
+            return message.visible ? (
+              <View
                 style={{
-                  fontSize: 11,
-                  fontWeight: 700,
-                  color: colors.white,
-                  textAlign: "center",
+                  position: "absolute",
+                  width: 62,
+                  height: 32,
+                  top: message.y - 10,
+                  left: message.x - 36,
+                  backgroundColor: colors.black,
+                  borderRadius: 12,
+                  alignItems: "center",
+                  justifyContent: "center",
+                  flexDirection: "row",
                 }}
               >
-                {message.value}
-              </Text>
-              {
                 <Text
                   style={{
                     fontSize: 11,
-                    fontWeight: 500,
+                    fontWeight: 700,
                     color: colors.white,
                     textAlign: "center",
                   }}
                 >
-                  {" kcal"}
+                  {message.value * 9}
                 </Text>
-              }
-            </View>
-          ) : null;
-        }}
-        onDataPointClick={(data) => {
-          let isSamePoint = message.x === data.x && message.y === data.y;
+                {
+                  <Text
+                    style={{
+                      fontSize: 11,
+                      fontWeight: 500,
+                      color: colors.white,
+                      textAlign: "center",
+                    }}
+                  >
+                    {" kcal"}
+                  </Text>
+                }
+              </View>
+            ) : null;
+          }}
+          onDataPointClick={(data) => {
+            let isSamePoint = message.x === data.x && message.y === data.y;
 
-          isSamePoint
-            ? setMessage((previousState) => {
-                return {
-                  ...previousState,
+            isSamePoint
+              ? setMessage((previousState) => {
+                  return {
+                    ...previousState,
+                    value: data.value,
+                    visible: !previousState.visible,
+                  };
+                })
+              : setMessage({
+                  x: data.x,
                   value: data.value,
-                  visible: !previousState.visible,
-                };
-              })
-            : setMessage({
-                x: data.x,
-                value: data.value,
-                y: data.y,
-                visible: true,
-              });
-        }}
-      />
-    </Container>
+                  y: data.y,
+                  visible: true,
+                });
+          }}
+        />
+      </Container>
+    </BoxContainer>
   );
 }
