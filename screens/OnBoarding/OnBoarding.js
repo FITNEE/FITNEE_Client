@@ -16,7 +16,6 @@ const TextContainer = styled.View`
   width: 100%;
   justify-content: center;
 `;
-
 const Input = styled.TextInput`
   margin-top: 76px;
   padding: 15px 7px;
@@ -25,7 +24,6 @@ const Input = styled.TextInput`
   border-radius: 10px;
   width: 100%;
 `;
-
 const BottomContainer = styled.View`
   align-items: center;
   width: 100%;
@@ -42,10 +40,10 @@ const Line = styled.View`
   margin-top: 6px;
 `;
 const ORText = styled.Text`
-  color: ${colors.grey_5};
+  color: ${colors.grey_6};
   font-size: 13px;
   position: absolute;
-  background-color: #f3f3f3;
+  background-color: ${colors.grey_1};
   width: 40px;
   text-align: center;
   left: 40px;
@@ -60,6 +58,14 @@ const SNSButton = styled.TouchableOpacity`
   width: 64px;
   background-color: white;
   height: 64px;
+`;
+const StatusText = styled.Text`
+  font-size: 12px;
+  width: 100%;
+  text-align: right;
+  margin-right: 8px;
+  font-weight: 300;
+  margin-top: 4px;
 `;
 const OnBoarding = ({ navigation }) => {
   const [email, setEmail] = useState("");
@@ -77,7 +83,7 @@ const OnBoarding = ({ navigation }) => {
       console.error("Failed to fetch data:", error);
     }
   };
-  const isUserId = email.indexOf("@") != -1 && email.length < 45;
+  const isUserId = email.indexOf("@") != -1 && email.length <= 20;
   const handleSubmit = () => {
     console.log("submitted");
     setIsLoading(true);
@@ -102,6 +108,9 @@ const OnBoarding = ({ navigation }) => {
       </TextContainer>
       <BottomContainer>
         <Input
+          style={
+            email.length > 20 && { borderWidth: 1, borderColor: colors.red }
+          }
           keyboardType="url"
           placeholderTextColor={colors.grey_5}
           onSubmitEditing={() => handleSubmit()}
@@ -110,6 +119,11 @@ const OnBoarding = ({ navigation }) => {
           blurOnSubmit={false}
           onChangeText={(text) => setEmail(text)}
         />
+        {email.length > 20 && (
+          <StatusText style={{ color: colors.red }}>
+            20자 이하로 설정해주세요.
+          </StatusText>
+        )}
         <ORContainer>
           <Line />
           <ORText>또는</ORText>

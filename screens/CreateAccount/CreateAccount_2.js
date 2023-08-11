@@ -3,10 +3,21 @@ import styled from "styled-components/native";
 import { colors } from "../../colors";
 import { Button, BackButton } from "../../Shared";
 //prettier-ignore
-import {Input,Title,ScreenLayout,SubText,NumberInput,MyBottomSheet} from "../../components/Shared/OnBoarding_Shared";
+import {Input,Title,ScreenLayout,SubText,NumberInput,MyBottomSheet, InputTitle} from "../../components/Shared/OnBoarding_Shared";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
-import { Pressable } from "react-native";
+import { Keyboard, Pressable } from "react-native";
+import { WithLocalSvg } from "react-native-svg";
+import Check from "../../assets/SVGs/Check.svg";
+import axios from "axios";
 
+const StatusText = styled.Text`
+  font-size: 12px;
+  width: 100%;
+  text-align: right;
+  margin-right: 8px;
+  font-weight: 300;
+  margin-top: 4px;
+`;
 const TextContainer = styled.View`
   margin-top: 124px;
   flex-direction: column;
@@ -24,14 +35,17 @@ const GenderContainer = styled.View`
   margin-top: 16px;
   flex-direction: row;
   justify-content: space-between;
+  margin-bottom: 16px;
 `;
 
 const GenderButton = styled.TouchableOpacity`
   background-color: ${colors.white};
+  flex-direction: row;
   border-radius: 12px;
   height: 56px;
+  align-items: center;
   padding: 16px;
-  justify-content: center;
+  justify-content: space-between;
   width: 48%;
 `;
 
@@ -44,6 +58,7 @@ const CreateAccount_2 = ({ route, navigation }) => {
   const [timerData, setTimerData] = useState([]);
   const bottomModal = useRef();
   const [modalShown, setModalShown] = useState(false);
+  const [status, setStatus] = useState(0);
   const [snapPoints, setSnapPoints] = useState(["1%"]);
   const email = route.params.email;
   const PW = route.params.PW;
@@ -58,12 +73,51 @@ const CreateAccount_2 = ({ route, navigation }) => {
     });
   };
 
+  const checkNick = async (nickname) => {
+    try {
+      let url = "https://gpthealth.shop/";
+      let detailAPI = "app/mypage/nickname";
+      const queryStr = `?userNickName=${nickname}`;
+      const response = await axios.get(url + detailAPI + queryStr);
+      const data = response.data;
+      return data;
+    } catch (error) {
+      console.error("Failed to fetch data:", error);
+    }
+  };
+
+  const handleNickName = (nick) => {
+    if (nick.length >= 4) {
+      checkNick(nick).then((res) => {
+        if (res.result == false) {
+          //사용가능 && 글자수 4글자 이상
+          setStatus(1);
+          setNickname(nick);
+        } else {
+          setStatus(2); //중복된 닉네임
+        }
+      });
+    } else if (nick.length == 0) {
+      //글자수 4글자 이하
+      setStatus(0);
+    } else {
+      //nickname이 비어있음
+      setStatus(3);
+    }
+  };
+
+  const statusTexts = [
+    "",
+    "사용 가능한 닉네임입니다.",
+    "중복된 닉네임입니다.",
+    "닉네임이 4글자 이상이여야합니다.",
+  ];
   const hideModal = () => {
     setSnapPoints(["1%"]);
     setModalShown(false);
   };
   const popModal = () => {
-    setSnapPoints(["34%"]);
+    setSnapPoints(["40%"]);
     setModalShown(true);
   };
   const onPressBottomModal = () => bottomModal.current?.present();
@@ -96,34 +150,59 @@ const CreateAccount_2 = ({ route, navigation }) => {
             </SubText>
           </TextContainer>
           <BottomContainer>
-            <SubText style={{ margin: 8, color: colors.grey_7 }}>
-              닉네임
-            </SubText>
+            <InputTitle>닉네임</InputTitle>
             <Input
+              style={
+                status != 1 &&
+                status != 0 && { borderWidth: 1, borderColor: colors.red }
+              }
               placeholderTextColor={colors.grey_5}
               autoFocus
-              onSubmitEditing={() => popModal()}
+              onSubmitEditing={() => Keyboard.dismiss()}
               placeholder="닉네임"
               returnKeyType="next"
               blurOnSubmit={false}
-              onChangeText={(text) => setNickname(text)}
+              onChangeText={(text) => handleNickName(text)}
             />
+            <StatusText
+              style={{ color: status != 1 ? colors.red : colors.green }}
+            >
+              {statusTexts[status]}
+            </StatusText>
             <GenderContainer>
               <GenderButton
-                style={gender == 2 && { backgroundColor: colors.l_sub_1 }}
+                style={
+                  gender == 2 && {
+                    backgroundColor: colors.l_sub_2,
+                    borderColor: colors.l_main,
+                    borderWidth: 1,
+                  }
+                }
                 onPress={() => setGender(2)}
               >
-                <GenderText style={gender == 0 && { color: colors.grey_8 }}>
+                <GenderText style={gender == 2 && { color: colors.grey_8 }}>
                   여성
                 </GenderText>
+                {gender == 2 && (
+                  <WithLocalSvg width={24} height={24} asset={Check} />
+                )}
               </GenderButton>
               <GenderButton
-                style={gender == 1 && { backgroundColor: colors.l_sub_1 }}
+                style={
+                  gender == 1 && {
+                    backgroundColor: colors.l_sub_2,
+                    borderColor: colors.l_main,
+                    borderWidth: 1,
+                  }
+                }
                 onPress={() => setGender(1)}
               >
-                <GenderText style={gender == 0 && { color: colors.grey_8 }}>
+                <GenderText style={gender == 1 && { color: colors.grey_8 }}>
                   남성
                 </GenderText>
+                {gender == 1 && (
+                  <WithLocalSvg width={24} height={24} asset={Check} />
+                )}
               </GenderButton>
             </GenderContainer>
             <NumberInput
@@ -134,7 +213,7 @@ const CreateAccount_2 = ({ route, navigation }) => {
             />
           </BottomContainer>
           <Button
-            enabled={birthYear && gender != null && nickname}
+            enabled={birthYear && gender != null && status == 1}
             onPress={() => handlePress()}
           />
           <MyBottomSheet

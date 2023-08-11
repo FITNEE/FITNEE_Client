@@ -90,7 +90,7 @@ const Login = ({ route, navigation }) => {
       <InputContainer>
         <PWStatusText>{statusText}</PWStatusText>
         <Input
-          style={statusText && { border: ` 1px ${colors.red} solid` }}
+          style={statusText && { borderWidth: 1, borderColor: colors.red }}
           placeholderTextColor={colors.grey_3}
           autoFocus
           onSubmitEditing={() => handlePress()}

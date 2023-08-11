@@ -1,23 +1,47 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components/native";
+import { useNavigationState } from "@react-navigation/native";
+import CreateRoutineHeader from "../components/CreateRoutineHeader";
+import { useRecoilState } from "recoil";
+import { CreateRoutineAtom } from "../recoil/CreateRoutineAtom";
 
 export default function CreateRoutine_3({ navigation }) {
   const [select, SetSelect] = useState(false);
   const [allPart, SetAllPart] = useState(false);
+  const [routine, setRoutine] = useRecoilState(CreateRoutineAtom);
   const [parts, setParts] = useState([
-    { id: 1, name: "가슴", selected: false },
-    { id: 2, name: "등", selected: false },
-    { id: 3, name: "어깨", selected: false },
-    { id: 4, name: "팔", selected: false },
-    { id: 5, name: "코어", selected: false },
-    { id: 6, name: "하체", selected: false },
+    { id: 1, name: "가슴", selected: false, ename: "chest" },
+    { id: 2, name: "등", selected: false, ename: "back" },
+    { id: 3, name: "어깨", selected: false, ename: "shoulder" },
+    { id: 4, name: "팔", selected: false, ename: "arm" },
+    { id: 5, name: "코어", selected: false, ename: "core" },
+    { id: 6, name: "하체", selected: false, ename: "lower body" },
   ]);
+  const index = useNavigationState((state) => state.index);
+  useEffect(() => {
+    navigation.setOptions({
+      header: () => <CreateRoutineHeader title="루틴 등록" index={index} />,
+    });
+  }, []);
+  useEffect(() => {
+    console.log("atom3 : ", routine);
+  }, [routine]);
   const onPartPress = (id) => {
     setParts((prevParts) =>
       prevParts.map((part) =>
         part.id === id ? { ...part, selected: !part.selected } : part
       )
     );
+  };
+  const nextButton = () => {
+    const selectedTargets = parts
+      .filter((part) => part.selected)
+      .map((part) => part.ename);
+    setRoutine((prev) => ({
+      ...prev,
+      targets: selectedTargets,
+    }));
+    navigation.push("CreateRoutine_4");
   };
   useEffect(() => {
     SetSelect(
@@ -41,9 +65,6 @@ export default function CreateRoutine_3({ navigation }) {
   }, [allPart]);
   return (
     <Container>
-      <StackBar>
-        <StackBarPin />
-      </StackBar>
       <TitleContainer>
         <Title>{`운동할 부위를
 모두 선택하세요`}</Title>
@@ -63,11 +84,7 @@ export default function CreateRoutine_3({ navigation }) {
       <AllButton isActive={allPart} onPress={AllPartPress}>
         <AllText>모든 부위를 운동할래요</AllText>
       </AllButton>
-      <NextButton
-        isActive={select}
-        disabled={!select}
-        onPress={() => navigation.push("CreateRoutine_4")}
-      >
+      <NextButton isActive={select} disabled={!select} onPress={nextButton}>
         <ButtonText isActive={select}>다음</ButtonText>
       </NextButton>
     </Container>
@@ -78,21 +95,9 @@ const Container = styled.View`
   flex: 1;
   width: 100%;
   align-items: center;
-  justify-content: space-between;
+  justify-content: space-evenly;
 `;
-const StackBar = styled.View`
-  width: 90%;
-  height: 10px;
-  background-color: #dddddd;
-  margin-top: 10px;
-  border-radius: 10px;
-`;
-const StackBarPin = styled.View`
-  width: 75%;
-  height: 100%;
-  background-color: #757575;
-  border-radius: 10px;
-`;
+
 const TitleContainer = styled.View`
   width: 90%;
   margin-bottom: 10px;
@@ -145,7 +150,7 @@ const NextButton = styled.TouchableOpacity`
   justify-content: center;
   background-color: ${(props) => (props.isActive ? "#BFBFBF" : "#DDDDDD")};
   border-radius: 10px;
-  margin-bottom: 45px;
+  margin-bottom: 20px;
 `;
 const ButtonText = styled.Text`
   color: ${(props) => (props.isActive ? "black" : "#757575")};

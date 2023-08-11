@@ -8,7 +8,7 @@ export const colors = {
 
   red: "#FF3F57",
   green: "#19CFA2",
-
+  blue: "#3478F6",
   white: "#FFFFFF",
 
   grey_1: "#F6F8FA",
@@ -26,5 +26,5 @@ export const colors = {
   l_background: "#FFFFFF",
   d_background: "#1A1E27",
   l_font: "#141414",
-  d_font: "#FFFFFF"
+  d_font: "#FFFFFF",
 };

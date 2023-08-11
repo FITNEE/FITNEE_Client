@@ -1,10 +1,24 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components/native";
+import { useNavigationState } from "@react-navigation/native";
+import CreateRoutineHeader from "../components/CreateRoutineHeader";
+import { useRecoilState } from "recoil";
+import { CreateRoutineAtom } from "../recoil/CreateRoutineAtom";
 
 export default function CreateRoutine_1({ navigation }) {
   const [home, SetHome] = useState(false);
   const [fitness, SetFitness] = useState(false);
   const [select, SetSelect] = useState(false);
+  const index = useNavigationState((state) => state.index);
+  const [routine, setRoutine] = useRecoilState(CreateRoutineAtom);
+  useEffect(() => {
+    navigation.setOptions({
+      header: () => <CreateRoutineHeader title="루틴 등록" index={index} />,
+    });
+  }, []);
+  useEffect(() => {
+    // console.log("atom : ", routine);
+  }, [routine]);
   const homePress = () => {
     SetHome(!home);
     if (fitness) {
@@ -17,14 +31,19 @@ export default function CreateRoutine_1({ navigation }) {
       SetHome(!home);
     }
   };
+  const nextButton = () => {
+    setRoutine((prev) => ({
+      ...prev,
+      place: home ? "home" : "gym",
+    }));
+    console.log("atom : ", routine);
+    navigation.push("CreateRoutine_2");
+  };
   useEffect(() => {
     SetSelect(home || fitness);
   }, [home, fitness]);
   return (
     <Container>
-      <StackBar>
-        <StackBarPin />
-      </StackBar>
       <TitleContainer>
         <Title>운동하는 곳을 선택해주세요</Title>
         <SubTitle>장소에 맞게 운동을 추천해 드릴게요</SubTitle>
@@ -39,11 +58,7 @@ export default function CreateRoutine_1({ navigation }) {
           <SpaceName>헬스장</SpaceName>
         </SpaceItem>
       </SpaceContainer>
-      <NextButton
-        isActive={select}
-        onPress={() => navigation.push("CreateRoutine_2")}
-        disabled={!select}
-      >
+      <NextButton isActive={select} onPress={nextButton} disabled={!select}>
         <ButtonText isActive={select}>다음</ButtonText>
       </NextButton>
     </Container>
@@ -54,20 +69,7 @@ const Container = styled.View`
   flex: 1;
   width: 100%;
   align-items: center;
-  justify-content: space-between;
-`;
-const StackBar = styled.View`
-  width: 90%;
-  height: 10px;
-  background-color: #dddddd;
-  margin-top: 10px;
-  border-radius: 10px;
-`;
-const StackBarPin = styled.View`
-  width: 25%;
-  height: 100%;
-  background-color: #757575;
-  border-radius: 10px;
+  justify-content: space-evenly;
 `;
 const TitleContainer = styled.View`
   width: 90%;
@@ -112,7 +114,6 @@ const NextButton = styled.TouchableOpacity`
   justify-content: center;
   background-color: ${(props) => (props.isActive ? "#BFBFBF" : "#DDDDDD")};
   border-radius: 10px;
-  margin-bottom: 45px;
 `;
 const ButtonText = styled.Text`
   color: ${(props) => (props.isActive ? "black" : "#757575")};
