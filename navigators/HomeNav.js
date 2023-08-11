@@ -1,6 +1,6 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
-import Home from "../screens/Home";
+import Home from "../screens/Home/Home";
 import CreateRoutineNav from "../navigation/CreateRoutineNav";
 import ExerciseCourseNav from "./ExerciseCourseNav";
 
@@ -15,8 +15,8 @@ export default function HomeNav() {
       }}
     >
       <Stack.Screen name="Home" component={Home} />
-      <Stack.Screen name="CreateRoutineNav" component={CreateRoutineNav} />
-      <Stack.Screen name="ExerciseCourseNav" component={ExerciseCourseNav} />
+      <Stack.Screen name="ExerciseCourse" component={ExerciseCourseNav} />
+      <Stack.Screen name="createRoutine" component={CreateRoutineNav} />
     </Stack.Navigator>
   );
 }

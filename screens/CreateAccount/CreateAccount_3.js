@@ -11,6 +11,7 @@ import { Pressable } from "react-native";
 import { WithLocalSvg } from "react-native-svg";
 import BMIImg from "../../assets/SVGs/BMI.svg";
 import Animated, {
+  runOnJS,
   useAnimatedStyle,
   withSpring,
 } from "react-native-reanimated";
@@ -36,7 +37,17 @@ const BottomContainer = styled.View`
   margin-top: 22px;
   width: 100%;
 `;
-
+const BMIBarBase = styled.View`
+  flex-direction: row;
+  width: 100%;
+`;
+const BMIBar = styled.View`
+  border: 1px solid ${colors.grey_1};
+  height: 18px;
+`;
+const BMISection = styled.View`
+  flex-direction: column;
+`;
 const BMIContainer = styled.View`
   position: absolute;
   bottom: 16%;
@@ -44,6 +55,15 @@ const BMIContainer = styled.View`
   align-items: center;
   justify-content: center;
   width: 100%;
+`;
+const BMINumber = styled.Text`
+  font-size: 10px;
+  font-weight: 400;
+`;
+const BMINumberContainer = styled.View`
+  width: 100%;
+  flex-direction: row;
+  justify-content: space-between;
 `;
 
 const BMILine = styled.View`
@@ -57,7 +77,7 @@ const PointRadius = 10;
 const TextBoxHeight = 56;
 const lineHeight = 19;
 
-const BMIMarkerContainer = styled.View`
+const BMIMarkerBottom = styled.View`
   position: absolute;
   top: ${-lineHeight}px;
 `;
@@ -69,7 +89,7 @@ const BMIPointer = styled.View`
   width: ${PointRadius * 2}px;
 `;
 
-const BMIView = styled.View`
+const BMIMarkerTop = styled.View`
   position: absolute;
   border-radius: 14px;
   width: 124px;
@@ -82,13 +102,74 @@ const BMIView = styled.View`
 `;
 const BMITitle = styled.Text`
   font-size: 12px;
-  color: #9747ff;
 `;
 const BMIText = styled.Text`
   font-size: 12px;
   margin-top: 4px;
   color: white;
 `;
+
+export const BMIBase = ({ BMIMode }) => {
+  return (
+    <BMIBarBase>
+      <BMISection
+        style={{
+          flex: 1,
+        }}
+      >
+        <BMIBar
+          style={{
+            backgroundColor: BMIMode == 1 ? colors.blue : colors.grey_2,
+            borderTopLeftRadius: 8,
+            borderBottomLeftRadius: 8,
+          }}
+        />
+        <BMINumber>10</BMINumber>
+      </BMISection>
+      <BMISection
+        style={{
+          flex: 2,
+        }}
+      >
+        <BMIBar
+          style={{
+            backgroundColor: BMIMode == 2 ? colors.green : colors.grey_3,
+          }}
+        />
+        <BMINumber>18.5</BMINumber>
+      </BMISection>
+      <BMISection
+        style={{
+          flex: 1,
+        }}
+      >
+        <BMIBar
+          style={{
+            backgroundColor: BMIMode == 3 ? colors.green : colors.grey_4,
+          }}
+        />
+        <BMINumber>23</BMINumber>
+      </BMISection>
+      <BMISection
+        style={{
+          flex: 2,
+        }}
+      >
+        <BMIBar
+          style={{
+            backgroundColor: BMIMode == 4 ? colors.red : colors.grey_4,
+            borderTopRightRadius: 8,
+            borderBottomRightRadius: 8,
+          }}
+        />
+        <BMINumberContainer>
+          <BMINumber>25</BMINumber>
+          <BMINumber>40</BMINumber>
+        </BMINumberContainer>
+      </BMISection>
+    </BMIBarBase>
+  );
+};
 
 const CreateAccount_3 = ({ route, navigation }) => {
   const [height, setHeight] = useState(0);
@@ -99,6 +180,7 @@ const CreateAccount_3 = ({ route, navigation }) => {
   const [snapPoints, setSnapPoints] = useState(["1%"]);
   const [modalShown, setModalShown] = useState(false);
 
+  const [BMIMode, setBMIMode] = useState(0);
   const [BMI, setBMI] = useState(0);
   const bottomModal = useRef();
 
@@ -129,37 +211,28 @@ const CreateAccount_3 = ({ route, navigation }) => {
     });
   };
 
-  const BMIStatusText = (bmi) => {
-    if (bmi > 45) {
-      return "과체중이에요";
-    } else if (bmi >= 25) {
-      return "비만이에요";
-    } else if (bmi >= 23) {
-      return "조금 비만이에요";
-    } else if (bmi >= 18.5) {
-      return "정상 체중이에요";
-    } else {
-      return "체중이 낮아요";
-    }
-  };
+  const statusText = [
+    "저체중입니다",
+    "정상 체중입니다",
+    "과체중입니다",
+    "운동이 꼭 필요해요",
+  ];
+
   const onPressBottomModal = () => bottomModal.current?.present();
 
   useEffect(() => {
     let data = [];
-    data.push("150 이하");
-    for (var i = 151; i < 190; i++) {
-      data.push(i.toString());
+    for (var i = 141; i < 200; i++) {
+      data.push(i);
     }
-    data.push("190 이상");
     setHeights(data);
     data = [];
-    data.push("40 이하");
-    for (var i = 41; i < 90; i++) {
-      data.push(i.toString());
+    for (var i = 31; i < 110; i++) {
+      data.push(i);
     }
-    data.push("90 이상");
     setWeights(data);
   }, []);
+
   useEffect(() => {
     onPressBottomModal();
     if (modalShown == true) {
@@ -168,15 +241,40 @@ const CreateAccount_3 = ({ route, navigation }) => {
       setSnapPoints(["1%"]);
     }
   }, [modalShown]);
+
   useEffect(() => {
     const heightInM = height / 100;
-    setBMI(weight / (heightInM ^ 2));
+    const BMIValue = weight / (heightInM ^ 2);
+    setBMI(BMIValue);
+    if (BMIValue == 0) {
+      setBMIMode(0);
+    } else if (BMIValue < 18.5) {
+      setBMIMode(1);
+    } else if (BMIValue < 23) {
+      setBMIMode(2);
+    } else if (BMIValue < 25) {
+      setBMIMode(3);
+    } else {
+      setBMIMode(4);
+    }
   }, [height, weight]);
+
+  const processedBMI =
+    BMI == 0
+      ? -100
+      : BMI < 18.5
+      ? ((BMI - 10) / 8.5) * 16
+      : BMI < 23
+      ? 16 + ((BMI - 18.5) / 4.5) * 32
+      : BMI < 25
+      ? 48 + ((BMI - 23) / 2) * 16
+      : 64 + ((BMI - 25) / 15) * 32;
+
   const animatedStyle = useAnimatedStyle(() => {
     return {
       width: "100%",
       zIndex: 99,
-      left: withSpring(`${(BMI - 15) * 4}%`),
+      left: withSpring(`${processedBMI}%`),
     };
   }, [modalShown]);
 
@@ -211,20 +309,29 @@ const CreateAccount_3 = ({ route, navigation }) => {
           </BottomContainer>
           <BMIContainer>
             <Animated.View style={animatedStyle}>
-              <BMIView>
-                <BMITitle>BMI {BMI.toFixed(1)}</BMITitle>
-                <BMIText>{BMIStatusText(BMI.toFixed(1))}</BMIText>
-              </BMIView>
-              <BMIMarkerContainer>
+              <BMIMarkerTop>
+                <BMITitle
+                  style={{
+                    color:
+                      BMIMode == 1
+                        ? colors.blue
+                        : BMIMode == 2
+                        ? colors.green
+                        : BMIMode == 3
+                        ? colors.green
+                        : colors.red,
+                  }}
+                >
+                  BMI {BMI.toFixed(1)}
+                </BMITitle>
+                <BMIText>{statusText[BMIMode - 1]}</BMIText>
+              </BMIMarkerTop>
+              <BMIMarkerBottom>
                 <BMILine />
                 <BMIPointer />
-              </BMIMarkerContainer>
+              </BMIMarkerBottom>
             </Animated.View>
-            <WithLocalSvg
-              width={ScreenWidth * 0.8}
-              height={40}
-              asset={BMIImg}
-            />
+            <BMIBase BMIMode={BMIMode} />
           </BMIContainer>
           <Button enabled={height && weight} onPress={() => handleSubmit()} />
           <MyBottomSheet
@@ -232,7 +339,7 @@ const CreateAccount_3 = ({ route, navigation }) => {
             selectableDatas={mode == 1 ? heights : weights}
             modalRef={bottomModal}
             snapPoints={snapPoints}
-            defaultVal={mode == 1 ? "170" : "60"}
+            defaultVal={mode == 1 ? 170 : 60}
             hideFunc={() => hideModal()}
             nextFunc={mode == 1 ? () => setMode(2) : () => hideModal()}
           />

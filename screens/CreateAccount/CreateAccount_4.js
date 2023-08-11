@@ -10,6 +10,7 @@ import LottieView from "lottie-react-native";
 import { AppContext } from "../../components/ContextProvider";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Alert } from "react-native";
 
 const ScreenLayout = styled.SafeAreaView`
   flex-direction: column;
@@ -77,17 +78,32 @@ const CreateAccount_4 = ({ route, navigation }) => {
       weight: route.params.weight,
       birthYear: route.params.birthYear,
     };
-    postUser(data)
-      .then((response) => {
-        console.log("postUser 실행결과:", response);
-        setToken(response.result.accessToken);
-        AsyncStorage.setItem("token", response.result.accessToken).then(
-          console.log("token set to AsyncStorage")
+    postUser(data).then((response) => {
+      console.log(response);
+      if (response.isSuccess) {
+        setIsLoading(false);
+        AsyncStorage.setItem("userId", response.result.userId).then(
+          console.log("userId set to AsyncStorage")
         );
-      })
-      .then(setIsLoading(false));
+      } else {
+        Alert.alert("회원가입 오류", response.message, [
+          {
+            text: "다시 회원가입하기",
+            onPress: () => {
+              navigation.navigate("OnBoarding", {});
+            },
+            style: "default",
+          },
+          {
+            text: "취소",
+            onPress: () => console.log("Cancel Pressed"),
+            style: "default",
+          },
+        ]);
+      }
+    });
   };
-  const { toggleLogin, setToken } = useContext(AppContext);
+  const { toggleLogin } = useContext(AppContext);
   useEffect(() => {
     handlePress();
   }, []);
