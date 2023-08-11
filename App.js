@@ -6,11 +6,8 @@ import LoggedInNav from "./navigators/LoggedInNav";
 import { AppContext } from "./components/ContextProvider";
 import { useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import CreateRoutineNav from "./navigation/CreateRoutineNav";
-
 import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
-
-import { RecoilRoot } from "recoil";
+import { RecoilRoot, useRecoilValue } from "recoil";
 
 const MyTheme = {
   ...DefaultTheme,
@@ -21,16 +18,27 @@ const MyTheme = {
 };
 
 export default function App() {
+  /*
+  const [DarkMode, setDarkMode] = useState(true);
+  const theme = {
+    dark: DarkMode,
+    colors: {
+      primary: DarkMode ? "white" : "black",
+      background: DarkMode ? colors.grey_9 : colors.white,
+      text: DarkMode ? colors.white : colors.black,
+    },
+  };
+  */
+
   const [loading, setLoading] = useState(true);
   const [loggedIn, setLoggedIn] = useState(false);
   const [token, setToken] = useState("");
 
   const onFinish = () => setLoading(false);
 
-  const [isDark, setIsDark] = useState(false);
   const toggleLogin = () => {
     if (loggedIn) {
-      AsyncStorage.removeItem("token");
+      AsyncStorage.removeItem("userId");
       setLoggedIn(false);
     } else {
       setLoggedIn(true);
@@ -38,9 +46,9 @@ export default function App() {
   };
 
   const preload = async () => {
-    await AsyncStorage.getItem("token").then((token) => {
-      console.log(token);
-      if (token) {
+    await AsyncStorage.getItem("userId").then((userId) => {
+      console.log(userId);
+      if (userId) {
         setLoggedIn(true);
       }
     });
@@ -59,17 +67,17 @@ export default function App() {
   return (
     <RecoilRoot>
       <AppContext.Provider
-        value={{ isDark, setIsDark, toggleLogin, loggedIn, setToken, token }}
+        value={{
+          toggleLogin,
+          loggedIn,
+          setToken,
+          token,
+        }}
       >
         <NavigationContainer>
           {loggedIn ? <LoggedInNav /> : <OnBoardingNav />}
         </NavigationContainer>
       </AppContext.Provider>
     </RecoilRoot>
-    // <RecoilRoot>
-    //   <NavigationContainer theme={MyTheme}>
-    //     <CreateRoutineNav />
-    //   </NavigationContainer>
-    // </RecoilRoot>
   );
 }

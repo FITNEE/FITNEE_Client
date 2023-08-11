@@ -1,11 +1,11 @@
 import React, { useContext, useState } from "react";
 import { SafeAreaView, Text, View } from "react-native";
-import { AppContext } from "../components/ContextProvider";
-import { Button } from "../Shared";
+import { AppContext } from "../../components/ContextProvider";
+import { Button } from "../../Shared";
 import { styled } from "styled-components/native";
-import { colors } from "../colors";
-import HomeRoutines from "../components/HomeRoutines";
-import NotHomeRoutine from "../components/NotHomeRoutine";
+import { colors } from "../../colors";
+import HomeRoutines from "../../components/HomeRoutines";
+import NotHomeRoutine from "../../components/NotHomeRoutine";
 
 const Top = styled.View`
   width: 100%;
@@ -41,7 +41,7 @@ const PremiumText = styled.Text`
 
 const Home = ({ navigation }) => {
   //const { toggleLogin } = useContext(AppContext);
-  const [showRoutine, SetShowRoutine] = useState(false);
+  const [showRoutine, SetShowRoutine] = useState(true);
 
   return (
     <SafeAreaView

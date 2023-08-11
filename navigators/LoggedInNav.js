@@ -2,6 +2,9 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import HomeNav from "./HomeNav";
 import MyRoutineNav from "./MyRoutineNav";
 import MyPageNav from "./MyPageNav";
+import DictionaryNav from "./DictionaryNav";
+import { AppContext } from "../components/ContextProvider";
+import { useContext } from "react";
 import Tab_Home from "../assets/SVGs/Tab_Home.svg";
 import Tab_ExerciseDict from "../assets/SVGs/Tab_ExerciseDict.svg";
 import Tab_Exercise from "../assets/SVGs/Tab_Exercise.svg";
@@ -10,7 +13,8 @@ import Tab_MyRoutine from "../assets/SVGs/Tab_MyRoutine.svg";
 import { colors } from "../colors";
 import { WithLocalSvg } from "react-native-svg";
 import { styled } from "styled-components/native";
-import DictionaryNav from "./DictionaryNav";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { TabBarAtom } from "../recoil/MyPageAtom";
 import ExerciseCourseNav from "./ExerciseCourseNav";
 
 const IconText = styled.Text`
@@ -21,12 +25,16 @@ const IconText = styled.Text`
 const Tabs = createBottomTabNavigator();
 
 export default function LoggedInNav() {
+  const isTabVisible = useRecoilValue(TabBarAtom);
+
   return (
     <Tabs.Navigator
       screenOptions={{
         headerShown: false,
         tabBarShowLabel: false,
         tabBarStyle: {
+          display: isTabVisible ? "flex" : "none",
+
           paddingTop: 10,
           height: 88,
           backgroundColor: "#ffffff",
@@ -52,7 +60,6 @@ export default function LoggedInNav() {
                 height={24}
                 asset={Tab_Home}
               />
-
               <IconText
                 style={{ color: focused ? colors.l_main : colors.grey_7 }}
               >
@@ -87,7 +94,7 @@ export default function LoggedInNav() {
         {() => <MyRoutineNav />}
       </Tabs.Screen>
       <Tabs.Screen
-        name="ExerciseNav"
+        name="ExerciseCourseNav"
         options={{
           tabBarIcon: ({ focused }) => (
             <>
@@ -109,7 +116,7 @@ export default function LoggedInNav() {
         {() => <ExerciseCourseNav />}
       </Tabs.Screen>
       <Tabs.Screen
-        name="ExerciseDictNav"
+        name="DictionaryNav"
         options={{
           tabBarIcon: ({ focused }) => (
             <>

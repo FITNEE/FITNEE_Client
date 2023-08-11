@@ -4,6 +4,7 @@ import { colors } from "../colors";
 import { Dimensions } from "react-native";
 import { View } from "react-native";
 import { FlatList } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 
 const windowWidth = Dimensions.get("window").width;
 
@@ -125,7 +126,7 @@ const ButtonText = styled.Text`
   color: ${colors.white};
 `;
 
-export default function HomeRoutines({ navigation }) {
+export default function HomeRoutines() {
   const ExerciseData = [
     { id: 1, name: "데드리프트" },
     { id: 2, name: "덤벨프레스" },
@@ -141,6 +142,11 @@ export default function HomeRoutines({ navigation }) {
       <ExerciseName>{item.name}</ExerciseName>
     </Card>
   );
+
+  const navigation = useNavigation();
+  const navigateToExercise = () => {
+    navigation.navigate("ExerciseCourse");
+  };
 
   return (
     <Container>
@@ -163,7 +169,7 @@ export default function HomeRoutines({ navigation }) {
         keyExtractor={(item) => item.id}
         showsHorizontalScrollIndicator={false}
       />
-      <Button onPress={() => navigation.push("ExerciseCourseNav")}>
+      <Button onPress={navigateToExercise}>
         <ButtonText>운동하러 가기</ButtonText>
       </Button>
     </Container>

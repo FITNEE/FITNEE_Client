@@ -1,4 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import styled from "styled-components/native";
 import {
   TextInput,
@@ -8,45 +14,41 @@ import {
   ScrollView,
   TouchableOpacity,
   SafeAreaView,
+  ActivityIndicator,
 } from "react-native";
 import { colors } from "../../colors";
+import { AppContext } from "../../components/ContextProvider";
+import Dictionary_AutoSearch from "../../components/Dictionary_AutoSearch";
+import Dictionary_List from "../../components/Dictionary_List";
+import axios from "axios";
 
 const Container = styled.View`
   flex: 1;
   width: 100%;
   background-color: white;
-  padding-top: 24px;
 `;
 
 const TopContainer = styled.View`
-  /* width: 100%;
-    height: 56px; */
-
   padding: 8px 24px;
-
-  justify-content: center;
-  align-items: center;
-
   border-bottom-width: 1px;
   border-bottom-color: ${colors.grey_1};
 `;
-
 const SearchContainer = styled.View`
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+`;
+const SearchInputContainer = styled.View`
   background-color: ${colors.grey_1};
-  /* width: 327px;
-    height: 40px; */
-
   border-radius: 12px;
-
   flex-direction: row;
   align-items: center;
-
   padding: 8px 12px;
 `;
 const Logo = styled.Image`
   width: 24px;
   height: 24px;
-  background-color: red;
+  background-color: ${colors.red};
 
   margin-right: 12px;
 `;
@@ -54,10 +56,31 @@ const SearchInput = styled.TextInput`
   font-size: 16px;
   font-weight: 400;
   color: ${colors.black};
-
-  width: 268px;
+  width: 240px;
 `;
+const DeleteAllBtn = styled.TouchableOpacity`
+  width: 24px;
+  height: 24px;
+  background-color: ${colors.red};
+  margin-left: 16px;
+`;
+const PartContainer = styled.ScrollView`
+  padding-top: 8px;
+  margin-top: 8px;
+  margin-right: -24px;
+`;
+const Part = styled.TouchableOpacity`
+  border-radius: 100px;
+  background-color: ${colors.grey_1};
 
+  padding: 8px 15px;
+  margin-right: 8px;
+`;
+const PartText = styled.Text`
+  font-weight: 600;
+  font-size: 14px;
+  color: ${colors.black};
+`;
 const BottomContainer = styled.View`
   padding: 40px 22px;
 `;
@@ -75,11 +98,9 @@ const RecentTitle = styled.Text`
   margin-bottom: 16px;
 `;
 const RecentKeywordContainer = styled.View`
-  display: inline-block;
   flex-direction: row;
   flex-wrap: wrap;
 `;
-
 const HotContainer = styled.View`
   height: 123px;
   width: 100%;
@@ -91,13 +112,11 @@ const HotTitle = styled.Text`
 
   margin-bottom: 16px;
 `;
-const HotKeywordContainer = styled.View`
-  display: inline-block;
+const PopularKeywordsContainer = styled.View`
   flex-direction: row;
   flex-wrap: wrap;
 `;
-
-const KeywordContainer = styled.View`
+const KeywordContainer = styled.TouchableOpacity`
   background-color: ${colors.grey_1};
   border-radius: 100px;
 
@@ -111,24 +130,6 @@ const Keyword = styled.Text`
   color: ${colors.grey_7};
 `;
 
-const AutoSearchContainer = styled.ScrollView`
-  width: 100%;
-  height: 100%;
-`;
-const AutoSearch = styled.TouchableOpacity`
-  padding: 24px 16px;
-
-  border-top-width: 1px;
-  border-top-color: ${colors.grey_1};
-`;
-const AutoSearchText = styled.Text`
-  font-weight: 500;
-  font-size: 15px;
-  color: ${colors.black};
-
-  display: inline;
-`;
-
 export default function Dictionary_1({ navigation }) {
   const [recentKeyword, setRecentKeyword] = useState([]);
   const [hotKeyword, setHotKeyword] = useState([
@@ -140,79 +141,145 @@ export default function Dictionary_1({ navigation }) {
     "사이드 레터럴 레이즈",
     "크런치",
   ]);
+
+  const PressedPart = styled.TouchableOpacity`
+    border-radius: 100px;
+    background-color: ${isDark ? colors.d_sub_2 : colors.l_sub_2};
+    padding: 8px 15px;
+    margin-right: 8px;
+  `;
+  const PressedPartText = styled.Text`
+    font-weight: 600;
+    font-size: 14px;
+    color: ${isDark ? colors.d_main : colors.l_main};
+  `;
+
+  const { isDark } = useContext(AppContext);
+
   const [search, setSearch] = useState("");
-  const [isSearching, setIsSearching] = useState(true);
+  const [isSearching, setIsSearching] = useState(false);
+  const [isSubmit, setIsSubmit] = useState(false);
+  const [part, setPart] = useState([
+    ["유산소", false],
+    ["어깨", false],
+    ["상체", false],
+    ["가슴", false],
+    ["등", false],
+    ["복근", false],
+    ["하체", false],
+    ["엉덩이", false],
+  ]);
+  const [popularKeywords, setPopularKeywords] = useState([]);
+  const [recentKeywords, setRecentKeywords] = useState([]);
+  const [searchList, setSearchList] = useState([]);
 
-  const [exerciseList, setExerciseList] = [
-    "레그프레스 머신",
-    "스미스 머신 스쿼트",
-    "레그익스텐션",
-    "레그컬",
-    "백 스쿼트",
-    "저처스쿼트",
-    "루마니안 데드리프트(하체&등)",
-    "고블릿 스쿼트",
-    "덤벨 런지",
-    "맨몸 스쿼트",
-    "맨몸 런지",
-    "삼두근 푸쉬다운 머신",
-    "바이셉 컬 머신",
-    "바벨 바이셉 컬",
-    "스컬 크러셔(라잉 트라이셉스 익스텐션)",
-    "해머 컬",
-    "덤벨 트라이셉스 킥백",
-    "팔굽혀펴기(삼두근 타겟팅)",
-    "딥스(삼두)",
-    "",
-    "숄더프레스 머신",
-    "래터럴 레이즈 머신",
-    "밀리터리 프레스(바벨 오버헤드 프레스)",
-    "바벨 업라이트 로우",
-    "덤벨 숄더 프레스",
-    "덤벨을 이용한 레터럴 레이즈",
-    "파이크 푸쉬업",
-    "와이드/디클라인 푸쉬업",
-    "체스트프레스 머신",
-    "펙 플라이 머신",
-    "벤치 프레스",
-    "인클라인/디클라인 벤치프레스",
-    "덤벨 벤치프레스",
-    "덤벨 플라이",
-    "푸쉬업",
-    "딥스(아랫가슴)",
-    "랫풀다운 머신",
-    "시티드로우 머신",
-    "바벨로우",
-    "데드리프트",
-    "원암 덤벨 로우",
-    "레니게이드 행",
-    "풀 업",
-    "y-t-i 레이즈",
-    "케이블 크런치",
-    "행잉 레그레이즈",
-    "바벨 롤아웃",
-    "스탠딩 바벨 트위스트",
-    "덤벨 러시안 트위스트",
-    "덤벨 사이드 벤드",
-    "윗몸일으키기",
-    "크런치(바이시클 크런치",
-    "플랭크(기본 플랭크",
-    "시티드 니업",
-    "레그레이즈(누워서)",
-  ];
-
-  const onChangeText = (payload) => setSearch(payload);
-  const onSubmitEditing = () => {
-    let temp = [...recentKeyword];
-    recentKeyword.length === 3 ? (temp = temp.slice(0, 2)) : null;
-    (temp = [search, ...temp]), setRecentKeyword(temp);
-
-    navigation.navigate("Dictionary_2");
+  // 사용자가 검색창에 onFocus 했을 때
+  const onFocusInput = () => {
+    setIsSubmit(false);
+    search.length == 0 ? null : setIsSearching(true);
   };
 
-  const convertPage = useEffect(() => {
+  // 검색List창에서 부위 버튼 toggle
+  const onPressPart = (i) => {
+    let temp = [...part];
+    temp[i][1] = !temp[i][1];
+    setPart(temp);
+  };
+  // 검색창 옆 X 버튼 눌렀을 때
+  const onDeleteInput = () => {
+    setSearch("");
+    setIsSearching(false); // 키워드들 보이게
+    setIsSubmit(false);
+  };
+
+  // 검색어(search)가 비어있으면 IsSearching = true / 아니면 false
+  useEffect(() => {
     search.length === 0 ? setIsSearching(false) : setIsSearching(true);
-  });
+  }, [search]);
+
+  // 최근 검색 키워드, 인기 키워드 받아오는 API
+  const getKeywords = async () => {
+    try {
+      let url = "https://gpthealth.shop/";
+      let detailAPI = "/app/dictionary";
+      const response = await axios.get(url + detailAPI);
+      const result = response.data;
+      return result.result;
+    } catch (error) {
+      console.error("Failed to fetch data:", error);
+    }
+  };
+  // getKeywords로 키워드들 받아와서 recetKeywords, popularKeywords에 저장
+  useEffect(() => {
+    getKeywords().then((result) => {
+      let temp = result.recentKeywords;
+      let temp2 = temp.map((keyword) => keyword.text);
+      setRecentKeywords(temp2);
+
+      temp = result.popularKeywords;
+      temp2 = temp.map((keyword) => keyword.text);
+      setPopularKeywords(temp2);
+    });
+  }, [isSearching, isSubmit]);
+
+  // 검색한 단어를 최근 검색 키워드에 저장하는 API
+  const postKeywords = async () => {
+    try {
+      let url = "https://gpthealth.shop/";
+      let detailAPI = "/app/dictionary/usersearch";
+      const response = await axios.post(url + detailAPI, null, {
+        params: {
+          search: search,
+        },
+      });
+      const result = response.data;
+
+      if (result.isSuccess)
+        console.log(`검색기록 저장 성공(검색어: ${search})`);
+      else console.log(`검색기록 저장 실패(검색어: ${search})`);
+    } catch (error) {
+      console.error("Failed to fetch data:", error);
+    }
+  };
+
+  // 검색어에 따라 일치하는 운동리스트 불러오는 API
+  const postSearch = async (text) => {
+    try {
+      let url = "https://gpthealth.shop/";
+      let detailAPI = "/app/dictionary/searchexercise";
+      const response = await axios.post(url + detailAPI, null, {
+        params: {
+          search: text,
+        },
+      });
+      const result = response.data;
+      return result.result;
+
+      if (result.isSuccess) console.log("검색리스트 불러오기 성공");
+      else console.log("검색리스트 불러오기 실패");
+    } catch (error) {
+      console.error("Failed to fetch data:", error);
+    }
+  };
+  // 검색어 변경될 때마다 search값 update
+  const onChangeText = (event) => {
+    const { eventCount, target, text } = event.nativeEvent;
+    setSearch(text);
+    postSearch(text).then((result) => setSearchList(result));
+  };
+  // 최근검색어, 인기검색어 클릭시 검색List 화면으로 전환
+  const onPressKeyword = (keyword) => {
+    setSearch(keyword);
+    postSearch(keyword).then((result) => setSearchList(result));
+    setIsSubmit(true);
+  };
+  // 사용자가 키보드에서 검색 버튼 눌렀을 때
+  const onSubmitEditing = () => {
+    setIsSubmit(true);
+    setIsSearching(false);
+  };
+  // 검색될때마다 키워드 기록
+  useEffect(() => postKeywords(), [isSubmit]);
 
   return (
     <SafeAreaView style={{ backgroundColor: "white", flex: 1 }}>
@@ -220,64 +287,74 @@ export default function Dictionary_1({ navigation }) {
         <Container>
           <TopContainer>
             <SearchContainer>
-              <Logo />
-              <SearchInput
-                placeholder="운동명, 부위 검색"
-                placeholderTextColor={colors.grey_4}
-                returnKeyType="search"
-                onChangeText={onChangeText}
-                value={search}
-                onSubmitEditing={onSubmitEditing}
-              ></SearchInput>
+              <SearchInputContainer onPress={isSubmit ? print : null}>
+                <Logo />
+                <SearchInput
+                  autoFocus={true}
+                  placeholder="운동명, 부위 검색"
+                  placeholderTextColor={colors.grey_4}
+                  returnKeyType="search"
+                  onChange={onChangeText}
+                  value={search}
+                  onSubmitEditing={onSubmitEditing}
+                  onFocus={onFocusInput}
+                ></SearchInput>
+              </SearchInputContainer>
+              <DeleteAllBtn onPress={onDeleteInput} />
             </SearchContainer>
+            {isSubmit && (
+              <PartContainer horizontal showsHorizontalScrollIndicator="false">
+                {part.map((part, i) =>
+                  part[1] == false ? (
+                    <Part onPress={() => onPressPart(i)}>
+                      <PartText>{part[0]}</PartText>
+                    </Part>
+                  ) : (
+                    <PressedPart onPress={() => onPressPart(i)}>
+                      <PressedPartText>{part[0]}</PressedPartText>
+                    </PressedPart>
+                  )
+                )}
+              </PartContainer>
+            )}
           </TopContainer>
-          {!isSearching && (
+          {!isSearching && !isSubmit && (
             <BottomContainer>
               <RecentContainer style={{ marginBottom: 56 }}>
                 <RecentTitle>최근 검색 키워드</RecentTitle>
                 <RecentKeywordContainer>
-                  {recentKeyword.length === 0
-                    ? null
-                    : recentKeyword.map((keyword) => (
-                        <KeywordContainer>
-                          <Keyword>{keyword}</Keyword>
-                        </KeywordContainer>
-                      ))}
+                  {recentKeywords.map((keyword) => (
+                    <KeywordContainer onPress={() => onPressKeyword(keyword)}>
+                      <Keyword>{keyword}</Keyword>
+                    </KeywordContainer>
+                  ))}
                 </RecentKeywordContainer>
               </RecentContainer>
               <HotContainer>
                 <HotTitle>인기 키워드</HotTitle>
-                <HotKeywordContainer>
-                  {hotKeyword.map((keyword) => (
-                    <KeywordContainer>
+                <PopularKeywordsContainer>
+                  {popularKeywords.map((keyword) => (
+                    <KeywordContainer onPress={() => onPressKeyword(keyword)}>
                       <Keyword>{keyword}</Keyword>
                     </KeywordContainer>
                   ))}
-                </HotKeywordContainer>
+                </PopularKeywordsContainer>
               </HotContainer>
             </BottomContainer>
           )}
-          {isSearching && (
-            <AutoSearchContainer>
-              <AutoSearch onPress={() => navigation.navigate("Detail")}>
-                <AutoSearchText style={{ color: "#9747FF" }}>
-                  사<AutoSearchText>이드 레터럴 라이즈</AutoSearchText>
-                </AutoSearchText>
-              </AutoSearch>
-              <AutoSearch>
-                <AutoSearchText>
-                  사이드
-                  <AutoSearchText style={{ color: "#9747FF" }}>
-                    {" "}
-                    레터럴{" "}
-                  </AutoSearchText>
-                  라이즈
-                </AutoSearchText>
-              </AutoSearch>
-              <AutoSearch>
-                <AutoSearchText>사이드 레터럴 라이즈</AutoSearchText>
-              </AutoSearch>
-            </AutoSearchContainer>
+          {isSearching && !isSubmit && (
+            <Dictionary_AutoSearch
+              navigation={navigation}
+              parentSearch={search}
+              parentSearchList={searchList}
+            />
+          )}
+          {isSubmit && (
+            <Dictionary_List
+              navigation={navigation}
+              searchList={searchList}
+              part={part}
+            />
           )}
         </Container>
       </TouchableWithoutFeedback>
