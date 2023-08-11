@@ -5,6 +5,7 @@ import CreateRoutineHeader from "../components/CreateRoutineHeader";
 import { useRecoilState } from "recoil";
 import { CreateRoutineAtom } from "../recoil/CreateRoutineAtom";
 import axios from "axios";
+import { colors } from "../colors";
 
 export default function CreateRoutine_4({ navigation }) {
   const [select, SetSelect] = useState(false);
@@ -155,6 +156,7 @@ const TitleContainer = styled.View`
 `;
 const Title = styled.Text`
   font-size: 20px;
+  font-weight: 600;
 `;
 const SubTitle = styled.Text`
   font-size: 12px;
@@ -197,11 +199,12 @@ const NextButton = styled.TouchableOpacity`
   height: 52px;
   align-items: center;
   justify-content: center;
-  background-color: ${(props) => (props.isActive ? "#BFBFBF" : "#DDDDDD")};
+  background-color: ${(props) =>
+    props.isActive ? colors.l_main : colors.grey_3};
   border-radius: 10px;
 `;
 const ButtonText = styled.Text`
-  color: ${(props) => (props.isActive ? "black" : "#757575")};
+  color: ${(props) => (props.isActive ? colors.white : colors.black)};
 `;
 const LoadingContainer = styled.View`
   flex: 1;

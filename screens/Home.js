@@ -41,7 +41,7 @@ const PremiumText = styled.Text`
 
 const Home = ({ navigation }) => {
   //const { toggleLogin } = useContext(AppContext);
-  const [showRoutine, SetShowRoutine] = useState(false);
+  const [showRoutine, SetShowRoutine] = useState(true);
 
   return (
     <SafeAreaView
@@ -59,7 +59,7 @@ const Home = ({ navigation }) => {
           <PremiumText>PREMIUM</PremiumText>
         </Premium>
       </Top>
-      {showRoutine && <HomeRoutines />}
+      {showRoutine && <HomeRoutines navigation={navigation} />}
       {!showRoutine && <NotHomeRoutine navigation={navigation} />}
     </SafeAreaView>
   );

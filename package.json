@@ -42,12 +42,9 @@
     "react-native-toggle-element": "^2.0.1",
     "react-native-wheel-pick": "^1.2.2",
     "react-native-wrapped-text": "^1.2.2",
+    "recoil": "^0.7.7",
     "styled-components": "^6.0.4",
-    "yarn": "^1.22.19",
-
-
-    "recoil": "^0.7.7"
-
+    "yarn": "^1.22.19"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
