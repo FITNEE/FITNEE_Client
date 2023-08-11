@@ -102,16 +102,15 @@ export default function Dictionary_RightTab(props) {
     const [chatIdx, setChatIdx] = useState([])
 
     // 참여하기 버튼
-    const { parentJoinBtnBool, parentSetJoinBtnBool, parentIsAllRead, exerciseName } = props
+    const { parentJoinBtnBool, parentSetJoinBtnBool, exerciseName } = props
     const [childJoinBtnBool, setChildJoinBtnBool] = useState(parentJoinBtnBool)
     useEffect(() => {
     setChildJoinBtnBool(parentJoinBtnBool)
     }, [parentJoinBtnBool])
     const funcSetJoinBtnBool = (newBool) => {
-        setChildJoinBtnBool(newBool)
-        parentSetJoinBtnBool(newBool)
+    setChildJoinBtnBool(newBool)
+    parentSetJoinBtnBool(newBool)
     }
-    const setIsAllRead = (newBool) => parentIsAllRead(newBool)
 
     // 채팅 불러오기
     const getChat = async () => {
@@ -132,28 +131,27 @@ export default function Dictionary_RightTab(props) {
     useEffect(() => {
     getChat().then((result) => {
         setMsg(result.result.chattinginfo)
-        // console.log(`healthchattingidx : ${msg.at(-1).healthChattingIdx}`)
     })
     }, [parentJoinBtnBool,chatUpdate])
 
-    //채팅 올리기
-    const postChat = async () => {
-        try {
-            let url = "https://gpthealth.shop/"
-            let detailAPI = "/app/dictionary/chatting"
-            const response = await axios.post(url + detailAPI, {
-                "name": exerciseName,
-                "text": chat
-            })
-            const result = response.data
-            if(result.result.isSuccess) 
-                console.log(`채팅 업로드 성공 (운동: ${exerciseName}, 닉네임: ${myNickName}, 내용: ${chat})`)
-            else console.log(`채팅 업로드 실패 (운동: ${exerciseName}, 닉네임: ${myNickName}, 내용: ${chat})`)
-        } 
-        catch (error) {                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
-        console.error("Failed to fetch data:", error);
-        }
+  //채팅 올리기
+  const postChat = async () => {
+    try {
+        let url = "https://gpthealth.shop/"
+        let detailAPI = "/app/dictionary/chatting"
+        const response = await axios.post(url + detailAPI, {
+            "name": exerciseName,
+            "text": chat
+        })
+        const result = response.data
+        if(result.result.isSuccess) 
+            console.log(`채팅 업로드 성공 (운동: ${exerciseName}, 닉네임: ${myNickName}, 내용: ${chat})`)
+        else console.log(`채팅 업로드 실패 (운동: ${exerciseName}, 닉네임: ${myNickName}, 내용: ${chat})`)
     } 
+    catch (error) {                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
+      console.error("Failed to fetch data:", error);
+    }
+} 
 
     // 닉네임 알아오기
     const [myNickName, setMyNickName] = useState("")
@@ -210,24 +208,6 @@ export default function Dictionary_RightTab(props) {
         )
     }
 
-    const getChatInfo = async (idx) => {
-        try {
-            let url = "https://gpthealth.shop/"
-            let detailAPI = `app/dictionary/readInfo`
-            const response = await axios.get(url + detailAPI, {
-                name: idx
-            })
-            const result = response.data
-            console.log(result)
-    
-            if(result.isSuccess) console.log(`마지막 채팅 저장 성공(idx: ${idx})`)
-            else console.log(`마지막 채팅 저장 실패(idx: ${idx})`)
-            return result
-        } 
-        catch (error) {
-            console.error("Failed to fetch data:", error)
-        }
-    }
 
     return (
       <>
