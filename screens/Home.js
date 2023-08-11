@@ -41,7 +41,7 @@ const PremiumText = styled.Text`
 
 const Home = ({ navigation }) => {
   //const { toggleLogin } = useContext(AppContext);
-  const [showRoutine, SetShowRoutine] = useState(true);
+  const [showRoutine, SetShowRoutine] = useState(false);
 
   return (
     <SafeAreaView

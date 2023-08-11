@@ -66,7 +66,7 @@ export default Scroll = ({ data }) => {
           const width = event.nativeEvent.layoutMeasurement.width;
           const pageIndex = Math.round(offsetX / width);
           setCurrentPage(pageIndex);
-          setSelectedID("");
+          // setSelectedID("");
         }}
       />
       <PageIndicator totalPages={data.length} currentPage={currentPage} />
