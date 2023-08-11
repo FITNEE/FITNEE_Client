@@ -1,30 +1,40 @@
-import React from 'react';
-import { createStackNavigator } from '@react-navigation/stack';
-import registerRoutine from '../screens/ExerciseCourseScreens/registerRoutine';
-import startExercise from '../screens/ExerciseCourseScreens/startExercise';
-import exerciseCourse from '../screens/ExerciseCourseScreens/exerciseCourse';
-import completeExercise from '../screens/ExerciseCourseScreens/completeExercise';
-import exerciseResult from '../screens/ExerciseCourseScreens/exerciseResult';
-import exerciseCourse_1 from '../screens/ExerciseCourseScreens/exerciseCourse_1';
-import exerciseCourse_2 from '../screens/ExerciseCourseScreens/exerciseCourse_2';
+import React from "react";
+import { createStackNavigator } from "@react-navigation/stack";
+import RegisterRoutine from "../screens/ExerciseCourseScreens/RegisterRoutine";
+import StartExercise from "../screens/ExerciseCourseScreens/StartExercise";
+import CompleteExercise from "../screens/ExerciseCourseScreens/CompleteExercise";
+import ExerciseResult from "../screens/ExerciseCourseScreens/ExerciseResult";
+import ExerciseCourse_1 from "../screens/ExerciseCourseScreens/ExerciseCourse_1";
+import ExerciseCourse_2 from "../screens/ExerciseCourseScreens/ExerciseCourse_2";
+import ExerciseCourse from "../screens/ExerciseCourseScreens/ExerciseCourse";
 
 const Stack = createStackNavigator();
 
 export default function ExerciseCourseNav() {
-	return (
-		<Stack.Navigator
-			screenOptions={{
-				headerBackTitleVisible: false,
-				headerShown: false,
-			}}
-		>
-			<Stack.Screen name='registerRoutine' component={registerRoutine} />
-			<Stack.Screen name='startExercise' component={startExercise} />
-			<Stack.Screen name='exerciseCourse' component={exerciseCourse} />
-			<Stack.Screen name='completeExercise' component={completeExercise} />
-			<Stack.Screen name='exerciseResult' component={exerciseResult} />
-			<Stack.Screen name='exerciseCourse_1' component={exerciseCourse_1} />
-			<Stack.Screen name='exerciseCourse_2' component={exerciseCourse_2} />
-		</Stack.Navigator>
-	);
+  return (
+    <Stack.Navigator
+      screenOptions={{
+        headerBackTitleVisible: false,
+        headerShown: false,
+      }}
+    >
+      <Stack.Screen name="RegisterRoutine" component={RegisterRoutine} />
+      <Stack.Screen name="StartExercise" component={StartExercise} />
+      <Stack.Screen name="ExerciseCourse" component={ExerciseCourse} />
+      <Stack.Screen name="CompleteExercise" component={CompleteExercise} />
+      <Stack.Screen name="ExerciseResult" component={ExerciseResult} />
+      <Stack.Screen
+        name="ExerciseCourse_1"
+        component={ExerciseCourse_1}
+        options={{
+          // 화면 전환 애니메이션 없음
+          transitionSpec: {
+            open: { animation: "timing", config: { duration: 0 } },
+            close: { animation: "timing", config: { duration: 0 } },
+          },
+        }}
+      />
+      <Stack.Screen name="ExerciseCourse_2" component={ExerciseCourse_2} />
+    </Stack.Navigator>
+  );
 }

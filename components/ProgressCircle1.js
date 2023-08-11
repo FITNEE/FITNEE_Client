@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Text } from "react-native";
 import PercentageCircle from "react-native-progress-circle";
 import { styled } from "styled-components/native";
+import { colors } from "../colors";
 
 const CircleBox = styled.View`
   justify-content: center;
@@ -9,7 +10,7 @@ const CircleBox = styled.View`
 `;
 
 const UnderCircle = styled.Text`
-  color: #000;
+  color: ${colors.black};
   text-align: center;
   font-size: 10px;
   font-style: normal;
@@ -20,14 +21,14 @@ const UnderCircle = styled.Text`
 `;
 
 const CircleText = styled.Text`
-  color: #000;
+  color: ${colors.black};
   font-size: 20px;
   font-style: normal;
   font-weight: 600;
 `;
 
 const CircleUnit = styled.Text`
-  color: #000;
+  color: ${colors.black};
   font-size: 10px;
   font-style: normal;
   font-weight: 600;
@@ -39,18 +40,72 @@ const CircleLine = styled.View`
   align-items: flex-end;
 `;
 
-export default function ProgressCircle({ num, unit, title }) {
+const Bubble = styled.View`
+  position: absolute;
+  background: ${colors.black};
+  width: 60px;
+  height: 32px;
+  padding: 0px;
+  border-radius: 12px;
+  z-index: 1;
+  align-items: center;
+  bottom: 124px;
+`;
+
+const BubbleArrow = styled.View`
+  position: relative;
+  border-style: solid;
+  border-width: 12px 8px 0px;
+  border-color: ${colors.black} transparent;
+  display: block;
+  width: 0;
+  z-index: 1;
+  top: 16px;
+`;
+
+const BubbleText = styled.Text`
+  color: ${colors.white};
+  font-size: 11px;
+  font-weight: 700;
+  top: 10px;
+`;
+
+export default function ProgressCircle({
+  num,
+  unit,
+  title,
+  bubbleOn,
+  bubbleText,
+}) {
   const percentage = (num / 60) * 100;
+
+  const [shouldRender, setShouldRender] = useState(true);
+  useEffect(() => {
+    if (bubbleOn === false) setShouldRender(false);
+    // 일정 시간(예: 5초) 후에 렌더링 여부를 false로 변경
+    const timer = setTimeout(() => {
+      setShouldRender(false);
+    }, 5000);
+    // 컴포넌트가 언마운트되면 타이머 클리어
+    return () => clearTimeout(timer);
+  }, []); // 빈 배열을 전달하여 컴포넌트가 마운트될 때만 실행
 
   return (
     <CircleBox>
+      {shouldRender ? (
+        <Bubble>
+          <BubbleText>{bubbleText}초</BubbleText>
+          <BubbleArrow />
+        </Bubble>
+      ) : null}
+
       <PercentageCircle
         percent={percentage}
         radius={40}
         borderWidth={2}
-        color="#9747FF"
-        shadowColor="#F3F3F3"
-        bgColor="#FFF"
+        color={colors.d_main}
+        shadowColor={colors.grey_1}
+        bgColor={colors.white}
       >
         <CircleLine>
           <CircleText>{num}</CircleText>

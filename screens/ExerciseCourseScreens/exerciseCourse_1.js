@@ -5,44 +5,22 @@ const { width, height } = Dimensions.get("window");
 import styled from "styled-components/native";
 import ExerciseCard from "../../components/ExerciseCard";
 import ExerciseButton from "../../components/ExerciseButton";
-import CurrentExplainLine from "../../components/CurrentExplainLine";
-import NextSet from "../../components/NextSet";
-import CurrentSet from "../../components/CurrentSet";
-import COMMENTDATA from "./commentData";
 import { colors } from "../../colors";
 import { CountdownCircleTimer } from "react-native-countdown-circle-timer";
 import { FlatList } from "react-native-gesture-handler";
-import { it } from "date-fns/locale";
+import Indicator from "../../components/Indicator";
+import { Alert } from "react-native";
+import { useRoute, StackActions } from "@react-navigation/native";
+import axios from "axios";
 
 const ExerciseCircle = styled.View`
   width: 307px;
   height: 307px;
   border-radius: 291px;
-  background: #f3f3f3;
-  margin-bottom: 24px;
+  background: ${colors.grey_1};
+  margin-bottom: 14px;
   justify-content: center;
   align-items: center;
-`;
-
-const FirstRec = styled.View`
-  width: 92px;
-  height: 6px;
-  background-color: ${colors.grey_7};
-  border-radius: 10px;
-`;
-
-const LastRec = styled.View`
-  width: 20px;
-  height: 6px;
-  border-radius: 0px 10px 10px 0px;
-  background-color: ${colors.grey_4};
-  margin-left: 4px;
-`;
-
-const SetBarLine = styled.View`
-  flex-direction: row;
-  justify-content: space-around;
-  margin-bottom: 36px;
 `;
 
 const TextBox = styled.View`
@@ -52,7 +30,7 @@ const TextBox = styled.View`
 `;
 
 const JustText = styled.Text`
-  color: #9747ff;
+  color: ${colors.d_main};
   text-align: center;
   font-size: 15px;
   font-weight: 400;
@@ -100,77 +78,187 @@ const Box2 = styled.View`
   width: 42px;
 `;
 
-export default function exerciseCourse_1({ navigation }) {
-  //운동 중 페이지. 나중에 운동 과정 페이지 하나에 다 넣을 예정
+const SkipExercrise = styled.TouchableOpacity`
+  width: 85px;
+  height: 20px;
+  position: relative;
+  margin-top: 16px;
+`;
 
-  const adviceData = [
-    { id: 1, content: "허리를 과도하게 안으로 넣지 마세요" },
-    { id: 2, content: "적절한 무게로 승모근에 무리가 가지 않도록 하세요." },
-    { id: 3, content: "안장과 바의 위치점을 올바르게 맞춰주세요." },
-  ];
+const SkipExercriseText = styled.Text`
+  color: ${colors.grey_8};
+  text-align: center;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 19.5px;
+  text-decoration-line: underline;
+`;
 
-  const timeData = [
-    // { id: 1, duration: '2' },
-    // { id: 2, duration: '5' },
-    // { id: 3, duration: '4' },
-    // { id: 4, duration: '2' },
-    // { id: 5, duration: '5' },
-    // { id: 6, duration: '2' },
-    // { id: 7, duration: '2' },
-  ];
+const StopExercise = styled.TouchableOpacity`
+  width: 24px;
+  height: 24px;
+  background-color: black;
+  position: absolute;
+  top: 20px;
+  right: 24px;
+`;
 
-  const setData = [
-    { id: 1, kg: "2", num: "1" },
-    { id: 2, kg: "5", num: "1" },
-    { id: 3, kg: "4", num: "1" },
-    { id: 4, kg: "2", num: "1" },
-    { id: 5, kg: "5", num: "1" },
-  ];
+export default function ExerciseCourse_1({ navigation }) {
+  const goToStartExercise = () => {
+    navigation.navigate("StartExercise");
+  };
 
-  const goToCompleteExercise = () => navigation.navigate("exerciseCourse_2");
+  const goToNextExercise = async () => {
+    //패치 작업 수행
+    await patchSkipData(
+      routineIdx,
+      dataList[listIndex].exerciseInfo.healthCategoryIdx
+    );
+
+    if (listIndex + 1 >= dataList.length) {
+      // 조건이 충족되면 원하는 화면(FinalScreen)으로 이동합니다.
+      navigation.dispatch(
+        StackActions.replace("CompleteExercise", {
+          dataList: dataList,
+          totalTime: realTotalTime,
+        })
+      );
+    } else {
+      navigation.dispatch(
+        StackActions.replace("ExerciseCourse", {
+          dataList: dataList,
+          listIndex: listIndex + 1,
+          routineIdx: routineIdx,
+          totalTime: realTotalTime,
+        })
+      );
+    }
+  };
+
+  const goToCompleteExercise = () => {
+    if (listIndex + 1 >= dataList.length) {
+      // 조건이 충족되면 원하는 화면(FinalScreen)으로 이동합니다.
+      navigation.dispatch(
+        StackActions.replace("CompleteExercise", {
+          dataList: dataList,
+          totalTime: totalTime + realTotalTime,
+          routineIdx: routineIdx,
+        })
+      );
+    } else {
+      navigation.dispatch(
+        StackActions.replace("ExerciseCourse_2", {
+          dataList: dataList,
+          listIndex: listIndex,
+          routineIdx: routineIdx,
+          totalTime: totalTime + realTotalTime,
+        })
+      );
+    }
+  };
   const [isPlaying, setIsPlaying] = useState(true);
-  const [advice, setAdvice] = useState("");
-  const [currentId, setCurrentId] = useState(1);
-  const [oneDuration, setOneDuration] = useState(timeData[0]?.duration);
-  const [i, setI] = useState(1);
+  const [currentId, setCurrentId] = useState(0);
+  //const [oneDuration, setOneDuration] = useState(setData[0]?.duration);
   const [key, setKey] = useState(0);
-  const [exerciseName, setExerciseName] = useState("사이드 레터럴 레이즈");
   const flatListRef = useRef();
   const [boxNumber, setBoxNumber] = useState(1);
+  const [indicatorNum, setIndicatorNum] = useState(1);
+  //시간 재는 용
+  const [timeInSeconds, setTimeInSeconds] = useState(0);
+  const [isTimerRunning, setIsTimerRunning] = useState(true);
+  const [totalTime, setTotalTime] = useState(0);
+
+  //data route
+  const route = useRoute();
+  const dataList = route.params.dataList;
+  const listIndex = route.params.listIndex;
+  const routineIdx = route.params.routineIdx;
+  const realTotalTime = route.params.totalTime;
+
+  let adviceData = dataList[listIndex].exerciseInfo.caution;
+
+  const [exerciseData, setExerciseData] = useState([]);
+  const [advice, setAdvice] = useState(adviceData[0]);
+
+  const patchSkipData = async (routineIdx, healthCategoryIdx) => {
+    try {
+      let url = "https://gpthealth.shop/";
+      let detailAPI = `/app/process?routineIdx=${routineIdx}&healthCategoryIdx=${healthCategoryIdx}`;
+
+      const response = await axios.patch(url + detailAPI, {
+        routineIdx: routineIdx,
+        healthCategoryIdx: healthCategoryIdx,
+      });
+      const result = response.data;
+      console.log(result);
+      return result;
+    } catch (error) {
+      console.error("Error", error);
+    }
+  };
+
+  const OpenConfirm = () => {
+    Alert.alert(
+      "현재 진행중인 운동루틴을 중단하시겠습니까?",
+      "현재까지 운동하신 내용은 저장되지 않습니다.",
+      [
+        { text: "취소", onPress: () => console.log("Cancel Stop") },
+        {
+          text: "운동 중단하기",
+          onPress: goToStartExercise,
+          style: "destructive",
+        },
+      ]
+    );
+  };
 
   useEffect(() => {
-    // 타이머가 종료될 때마다 key 값을 변경하여 CountdownCircleTimer 컴포넌트 리셋
-    setKey((prevKey) => prevKey + 1);
-  }, [oneDuration]);
+    const newExerciseData = [
+      ...dataList[listIndex].sets,
+      {
+        set: dataList[listIndex].sets.length,
+        rep: 0,
+        weight: 0,
+      },
+    ];
+    setExerciseData(newExerciseData);
+    //setExerciseData([...dataList[listIndex].sets]);
+    console.log(exerciseData);
+  }, []);
+  // useEffect(() => {
+  //   // 타이머가 종료될 때마다 key 값을 변경하여 CountdownCircleTimer 컴포넌트 리셋
+  //   setKey((prevKey) => prevKey + 1);
+  // }, [oneDuration]);
 
-  const handleComplete = () => {
-    //i 업데이트
-    const nextId = i + 1 > timeData.length ? setIsPlaying(false) : i + 1;
-    setI(nextId);
+  // duration을 받아서 카운트다운을 해주는 함수. duration이 바뀌면 리셋된다.
+  // const handleComplete = () => {
+  //   //i 업데이트
+  //   const nextId = i + 1 > setData.length ? setIsPlaying(false) : i + 1;
+  //   setI(nextId);
 
-    // 해당 id에 해당하는 데이터를 가져와 새로운 duration을 업데이트
-    const nextData = timeData.find((item) => item.id === nextId);
-    const newDuration = nextData?.duration || 0;
-    //const newDuration = timeData[nextId]?.duration || 0;
+  //   // 해당 id에 해당하는 데이터를 가져와 새로운 duration을 업데이트
+  //   const nextData = setData.find((item) => item.id === nextId);
+  //   const newDuration = nextData?.duration || 0;
+  //   //const newDuration = timeData[nextId]?.duration || 0;
 
-    //delay 동안 쉬도록
-    setIsPlaying(false);
-    setKey((prevKey) => prevKey + 1); //타이머 리셋
-    setTimeout(() => {
-      setIsPlaying(true);
-      setOneDuration(newDuration);
-    }, 2000);
-  };
+  //   //delay 동안 쉬도록
+  //   setIsPlaying(false);
+  //   setKey((prevKey) => prevKey + 1); //타이머 리셋
+  //   setTimeout(() => {
+  //     setIsPlaying(true);
+  //     setOneDuration(newDuration);
+  //   }, 300);
+  // };
 
   useEffect(() => {
     const interval = setInterval(() => {
       // 다음에 나올 Id를 currentId로 업데이트
-      const nextId = currentId + 1 > adviceData.length ? 1 : currentId + 1;
+      const nextId = currentId + 1 > adviceData.length - 1 ? 0 : currentId + 1;
       setCurrentId(nextId);
-
       // 해당 id에 해당하는 데이터를 가져와 advice를 업데이트
-      const data = adviceData.find((item) => item.id === nextId);
-      setAdvice(data.content);
+      // const data = adviceData.find((item) => item.id === nextId);
+      setAdvice(adviceData[nextId]);
     }, 3500); // 3.5초마다 데이터를 가져오도록 설정
 
     return () => clearInterval(interval);
@@ -180,32 +268,39 @@ export default function exerciseCourse_1({ navigation }) {
     let backgroundColor = "";
     let textColor = "";
 
-    if (item.id === setData.length) {
+    if (item.set === dataList[listIndex].totalSets) {
       backgroundColor = "rgba(0, 0, 0, 0)";
       textColor = "rgba(0, 0, 0, 0)";
     } else {
       backgroundColor =
-        item.id === boxNumber ? "#f3f3f3" : "rgba(243, 243, 243, 0.5)";
-      textColor = item.id === boxNumber ? "#000" : "rgba(0, 0, 0, 0.5)";
+        item.set + 1 === boxNumber
+          ? colors.grey_1
+          : "rgba(243, 243, 243, 0.50)";
+      textColor =
+        item.set + 1 === boxNumber ? colors.black : "rgba(0, 0, 0, 0.50)";
     }
 
     return (
       <Container style={{ backgroundColor: backgroundColor }}>
-        <CurrentText style={{ color: textColor }}>{item.id}</CurrentText>
+        <CurrentText style={{ color: textColor }}>{item.set + 1}</CurrentText>
         <TextLine>
           <CurrentUnit style={{ color: textColor }}>세트</CurrentUnit>
         </TextLine>
 
         <Box1 />
 
-        <CurrentText style={{ color: textColor }}>{item.kg}</CurrentText>
-        <TextLine>
-          <CurrentUnit style={{ color: textColor }}>kg</CurrentUnit>
-        </TextLine>
+        {item.weight !== "null" ? (
+          <CurrentText style={{ color: textColor }}>{item.weight}</CurrentText>
+        ) : null}
+        {item.weight !== "null" ? (
+          <TextLine>
+            <CurrentUnit style={{ color: textColor }}>kg</CurrentUnit>
+          </TextLine>
+        ) : null}
 
         <Box2 />
 
-        <CurrentText style={{ color: textColor }}>{item.num}</CurrentText>
+        <CurrentText style={{ color: textColor }}>{item.rep}</CurrentText>
         <TextLine>
           <CurrentUnit style={{ color: textColor }}>회</CurrentUnit>
         </TextLine>
@@ -214,91 +309,83 @@ export default function exerciseCourse_1({ navigation }) {
   };
 
   const scrollBox = () => {
-    const next = boxNumber - 1 > setData.length ? boxNumber : boxNumber + 1;
+    const next =
+      boxNumber + 1 >= dataList.totalSets ? boxNumber : boxNumber + 1;
+    const next2 =
+      indicatorNum >= dataList.totalSets ? indicatorNum : indicatorNum + 1;
+    if (boxNumber === dataList.totalSets - 1) setIsPlaying(false);
     setBoxNumber(next);
+    setIndicatorNum(next2);
+    setIsTimerRunning(false);
 
-    // const nextId = i + 1 > timeData.length ? setIsPlaying(false) : i + 1;
-    // setI(nextId);
+    setTotalTime((prevTotal) => prevTotal + timeInSeconds);
+    console.log(timeInSeconds, totalTime);
+    setTimeInSeconds(0);
 
-    // // 해당 id에 해당하는 데이터를 가져와 새로운 duration을 업데이트
-    // const nextData = timeData.find((item) => item.id === nextId);
-    // const newDuration = nextData?.duration || 0;
-    // //const newDuration = timeData[nextId]?.duration || 0;
-
-    // //delay 동안 쉬도록
-    // setIsPlaying(false);
-    // setKey((prevKey) => prevKey + 1); //타이머 리셋
-    // setTimeout(() => {
-    // 	setIsPlaying(true);
-    // 	setOneDuration(newDuration);
-    // }, 100);
+    //delay 동안 쉬도록
+    setIsPlaying(false);
+    setKey((prevKey) => prevKey + 1); //타이머 리셋
+    setIsTimerRunning(true); //타이머 켜기
+    setTimeout(() => {
+      setIsPlaying(true);
+    }, 300);
 
     this.flatListRef.scrollToIndex({ animated: true, index: boxNumber });
   };
 
-  const miniBar = ({ num }) => {
-    const Width = Math.ceil(92 / (num - 1)); // 랜덤 너비 설정
-    const backgroundColor = getRandomColor(); // 랜덤 배경색 설정
+  useEffect(() => {
+    let timerId;
 
-    return (
-      <View
-        style={{
-          width: Width,
-          height: 6,
-          borderRadius: 10,
-          backgroundColor,
-          marginVertical: 5,
-        }}
-      />
-    );
-  };
+    if (isTimerRunning) {
+      timerId = setInterval(() => {
+        setTimeInSeconds((prevTime) => prevTime - 1);
+      }, 1000);
+    }
 
-  const seperateBar = () => {
-    const num = 4;
-
-    const boxes = Array.from({ length: num }, (_, index) => index);
-
-    return (
-      <View>
-        {boxes.map((boxIndex) => (
-          <FirstRec key={boxIndex} />
-        ))}
-      </View>
-    );
-  };
+    return () => {
+      clearInterval(timerId);
+    };
+  }, [isTimerRunning]);
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "#DDD" }}>
-      <ExerciseCard exerciseName={exerciseName}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: colors.grey_2 }}>
+      <ExerciseCard
+        exerciseName={dataList[listIndex].exerciseInfo.exerciseName}
+      >
+        <StopExercise onPress={() => OpenConfirm()} />
         <ExerciseCircle>
           <CountdownCircleTimer
             key={key}
             isPlaying={isPlaying}
-            duration={oneDuration}
-            colors={"#757575"}
+            //duration={oneDuration}
+            duration={6}
+            colors={colors.l_main}
             size={315}
             strokeWidth={8}
-            trailColor={"#BFBFBF"}
-            onComplete={handleComplete}
-            //onComplete={() => ({ shouldRepeat: false, delay: 1 })}
+            trailColor={colors.grey_3}
+            //onComplete={handleComplete}
+            onComplete={() => ({ shouldRepeat: true })}
             updateInterval={0.001}
+            isGrowing={true}
+            rotation={"counterclockwise"}
           >
-            {({ remainingTime }) => <Text>{remainingTime}</Text>}
+            {/* {({ remainingTime }) => <Text>{remainingTime}</Text>} */}
           </CountdownCircleTimer>
         </ExerciseCircle>
 
-        <SetBarLine>
-          <FirstRec style={{ background: colors.grey_6 }} />
-          {/* <LastRec style={{ background: colors.grey_3 }} /> */}
-        </SetBarLine>
+        <Indicator
+          totalPages={dataList[listIndex].totalSets}
+          currentPage={indicatorNum - 1}
+        />
 
         <BoxList>
           <FlatList
+            //현재 하고 있는 세트와 다음 세트를 보여주는 리스트
             style={{}}
             initialScrollIndex={0}
-            data={setData}
+            data={exerciseData}
             renderItem={renderItem}
-            keyExtractor={(item) => item.id}
+            keyExtractor={(item) => item.set}
             showsVerticalScrollIndicator={false}
             ref={(ref) => {
               this.flatListRef = ref;
@@ -318,6 +405,10 @@ export default function exerciseCourse_1({ navigation }) {
           //onPress={timeToRest}
           onPress={scrollBox}
         />
+
+        <SkipExercrise onPress={goToNextExercise}>
+          <SkipExercriseText>이 운동 건너뛰기</SkipExercriseText>
+        </SkipExercrise>
       </ExerciseCard>
     </SafeAreaView>
   );
