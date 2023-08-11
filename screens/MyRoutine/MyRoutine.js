@@ -26,7 +26,12 @@ import {
   ContentContainer,
   NoRoutineText,
 } from "../../components/Shared/MyRoutine_Shared";
+import { Button, ScreenWidth } from "../../Shared";
 
+const ButtonContainer = styled.TouchableOpacity`
+  width: ${ScreenWidth - 48}px;
+  margin-left: 24px;
+`;
 const ScreenBase = styled.SafeAreaView`
   width: 100%;
   flex-direction: column;
@@ -120,6 +125,15 @@ const SubmitText = styled.Text`
 const SubmitButton = styled.TouchableOpacity`
   width: 56px;
   margin-left: 20px;
+`;
+const MyButton = styled.TouchableOpacity`
+  position: absolute;
+  bottom: 64px;
+  justify-content: center;
+  align-items: center;
+  height: 52px;
+  border-radius: 16px;
+  width: 100%;
 `;
 
 export default MyRoutine = () => {
@@ -319,14 +333,22 @@ export default MyRoutine = () => {
             />
           )}
           {mode ? (
-            <List_Custom
-              modalState={modalState}
-              SCHEDULE={SCHEDULE}
-              newRoutine={newRoutine}
-              editRoutine={editRoutine}
-              popMessage={popMessage}
-              setNewSCHE={setNewSCHE}
-            />
+            <>
+              <List_Custom
+                modalState={modalState}
+                SCHEDULE={SCHEDULE}
+                newRoutine={newRoutine}
+                editRoutine={editRoutine}
+                popMessage={popMessage}
+                setNewSCHE={setNewSCHE}
+              />
+              <Button
+                onPress={() => console.log("hello")}
+                text="운동 추가하기"
+                enabled={true}
+                mode="absolute"
+              />
+            </>
           ) : (
             <ContentBase>
               {isLoading ? (
