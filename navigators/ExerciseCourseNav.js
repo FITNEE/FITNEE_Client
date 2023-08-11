@@ -1,12 +1,12 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import RegisterRoutine from "../screens/ExerciseCourseScreens/RegisterRoutine";
-import StartExercise from "../screens/ExerciseCourseScreens/StartExercise";
 import CompleteExercise from "../screens/ExerciseCourseScreens/CompleteExercise";
 import ExerciseResult from "../screens/ExerciseCourseScreens/ExerciseResult";
 import ExerciseCourse_1 from "../screens/ExerciseCourseScreens/ExerciseCourse_1";
 import ExerciseCourse_2 from "../screens/ExerciseCourseScreens/ExerciseCourse_2";
 import ExerciseCourse from "../screens/ExerciseCourseScreens/ExerciseCourse";
+import StartExercise from "../screens/ExerciseCourseScreens/StartExercise";
 
 const Stack = createStackNavigator();
 
