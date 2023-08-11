@@ -1,368 +1,86 @@
 import React, { useEffect, useRef, useState } from "react";
+import { ActivityIndicator, Keyboard, Alert } from "react-native";
 import styled from "styled-components/native";
-import { FlatList, Keyboard, ScrollView } from "react-native";
-import { useSharedValue } from "react-native-reanimated";
 import {
-  ComponentTitle,
-  Header,
-} from "../../components/Shared/MyRoutine_Shared";
-import { colors } from "../../colors";
-import { ScreenWidth } from "../../Shared";
-import { listToObject } from "../../components/Shared/MyRoutine_Shared";
-import {
-  DayText,
-  ScheduleChanger,
-  TextContainer,
-} from "../../components/ScheduleChanger";
-
-import { ExerciseItem } from "../../components/ExerciseItem";
-import { ExerciseItem_Custom } from "../../components/ExerciseItem_Custom";
-import { Alert } from "react-native";
-import { BottomSheetModal } from "@gorhom/bottom-sheet";
-import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
+  BottomSheetModal,
+  BottomSheetModalProvider,
+} from "@gorhom/bottom-sheet";
 import axios from "axios";
+
+import { colors } from "../../colors";
+import { Header } from "../../components/Shared/MyRoutine_Shared";
+import {
+  pressBack,
+  processDayData,
+} from "../../components/myRoutine/Functions";
+import { MyToast, showToast } from "../../components/myRoutine/MyToast";
+import WeekCalendar from "../../components/myRoutine/WeekCalendar";
+import List_Custom from "../../components/myRoutine/List_Custom";
+import List_Normal from "../../components/myRoutine/List_Normal";
+import {
+  getRoutines,
+  getRoutine,
+  updateRoutine,
+} from "../../components/myRoutine/data";
+import {
+  ContentContainer,
+  NoRoutineText,
+} from "../../components/Shared/MyRoutine_Shared";
 
 const ScreenBase = styled.SafeAreaView`
   width: 100%;
+  flex-direction: column;
   flex: 1;
+  background-color: ${colors.white};
 `;
-
 const ContentBase = styled.View`
   flex-direction: column;
-  /* align-items: center; */
   justify-content: space-between;
   width: 100%;
   flex: 1;
 `;
-const ScrollPressable = styled.Pressable`
-  width: ${ScreenWidth - 48}px;
-  margin-left: 24px;
-`;
-const DayContainer = styled.View`
-  width: 35px;
-  height: 60px;
-  border-radius: 30px;
-  padding-top: 8px;
-  background-color: chartreuse;
-  justify-content: space-between;
-  align-items: center;
-`;
-const Circle = styled.View`
-  width: 24px;
-  height: 24px;
-  background-color: ${colors.grey_1};
-  margin-bottom: 5.5px;
-  border-radius: 12px;
-`;
-const ScheduleContainer = styled.View`
-  flex-direction: row;
-  padding: 24px;
+const ContentLayout = styled.View`
   width: 100%;
-  justify-content: space-between;
-  height: 100px;
-  align-items: center;
-  background-color: white;
+  flex-direction: column;
+  flex: 1;
+  background-color: #f6f8fa;
 `;
-
 const BottomSheetContainer = styled.TouchableOpacity`
   width: 100%;
   height: 100%;
 `;
-const MyRoutine = () => {
-  //prettier-ignore
-  const days = ["월", "화", "수", "목", "금", "토", "일"];
-  const [SCHEDULES, setSCHEDULES] = useState([]);
-  const [routineData, setRoutineData] = useState([]);
-  const [newArr, setNewArr] = useState([]);
-  const [editingID, setEditingID] = useState(null);
-  const [mode, setMode] = useState(false);
-  const bottomModal = useRef();
-  const [snapPoints, setSnapPoints] = useState(["1%"]);
-  const [modalShown, setModalShown] = useState(false);
-  const [selectedId, setSelectedId] = useState(null);
-
-  const extendModal = () => {
-    console.log("modal Extended");
-    setSnapPoints(["60%"]);
-  };
-
-  const positions = useSharedValue(listToObject(SCHEDULES));
-  // const today = date.getDay();
-  const today = 4;
-  const routine = [false, true, false, false, true, true, false];
-  const toggleMode = () => {
-    setMode(!mode);
-  };
-  const popMessage = (id) => {
-    Alert.alert("운동 편집", "", [
-      {
-        text: "상세옵션 편집",
-        onPress: () => {
-          //Modal을 띄우기 위해 필요한 유일한 조건
-          setModalShown(true);
-          setEditingID(id);
-          var arr = Array(routineData[id].content.length).fill({
-            rep: 0,
-            weight: 0,
-          });
-          setNewArr(arr);
-          console.log("newArr:", arr);
-        },
-        style: "default",
-      },
-      {
-        text: "선택 운동 삭제",
-        onPress: () => console.log("OK Pressed"),
-        style: "destructive",
-      },
-      {
-        text: "취소",
-        onPress: () => console.log("Cancel Pressed"),
-        style: "default",
-      },
-    ]);
-  };
-  const renderItem = ({ item, index }) => {
-    return (
-      <ExerciseItem
-        id={index}
-        content={item.content}
-        title={item.healthCategoryIdx}
-        selectedId={selectedId}
-        setSelectedId={setSelectedId}
-      />
-    );
-  };
-  const getRoutine = async () => {
-    try {
-      let url = "https://gpthealth.shop/";
-      let detailAPI = `app/routine/${6}`;
-      const response = await axios.get(url + detailAPI);
-      const result = response.data;
-      return result;
-    } catch (error) {
-      console.error("Failed to fetch data:", error);
-    }
-  };
-  //요일 별 루틴 여부 파악위함
-  const getRoutines = async () => {
-    try {
-      let url = "https://gpthealth.shop/";
-      let detailAPI = `app/routines`;
-      const response = await axios.get(url + detailAPI, {
-        params: {
-          userId: "pjk@naver.com",
-        },
-      });
-      const result = response.data;
-      return result;
-    } catch (error) {
-      console.error("Failed to fetch data:", error);
-    }
-  };
-  const onPressBottomModal = () => bottomModal.current?.present();
-  const handleBottomSubmit = (data) => {
-    //일단 ModalShown 변수를 false로 변경하여, 추후 Keyboard.dismiss()를 해도 keyboardDidhideListener
-    setModalShown(false);
-    Keyboard.dismiss();
-    // reset();
-  };
-
-  const editNewArr = (id, type, text) => {
-    let finalArr = newArr;
-    finalArr[id].type = text;
-  };
-  useEffect(() => {
-    if (modalShown == true) {
-      setSnapPoints(["34%"]);
-    } else {
-      setSnapPoints(["1%"]);
-    }
-    console.log(modalShown);
-  }, [modalShown]);
-
-  useEffect(() => {
-    onPressBottomModal();
-    // getRoutine().then((res) => setRoutineData(res.result));
-    // getRoutine().then((res) => console.log(res));
-    // getRoutines().then((res) => console.log(res.result));
-  }, []);
-  return (
-    <BottomSheetModalProvider>
-      <ScreenBase>
-        <Header mode={mode} parentFunction={toggleMode} />
-        {!mode && (
-          <ScheduleContainer>
-            <TextContainer>
-              {days.map((item, id) => (
-                <DayContainer
-                  id
-                  style={
-                    id == today
-                      ? { backgroundColor: colors.grey_7 }
-                      : { backgroundColor: colors.white }
-                  }
-                >
-                  <DayText
-                    style={
-                      id == today
-                        ? { color: colors.white }
-                        : { color: colors.black }
-                    }
-                  >
-                    {item}
-                  </DayText>
-                  {routine[id] == true && (
-                    <Circle
-                      style={
-                        id == today
-                          ? { backgroundColor: colors.white }
-                          : { backgroundColor: colors.grey_3 }
-                      }
-                    />
-                  )}
-                </DayContainer>
-              ))}
-            </TextContainer>
-          </ScheduleContainer>
-        )}
-        {mode ? (
-          <ScrollView
-            style={{
-              width: "100%",
-            }}
-          >
-            <ScrollPressable onPress={() => Keyboard.dismiss()}>
-              {/* <ScrollPressable> */}
-              <ComponentTitle
-                title="요일 변경"
-                subTitle="루틴을 원하는 요일에 끌어다 놓을 수 있어요"
-              />
-              <ScheduleChanger
-                SCHEDULES={SCHEDULES}
-                days={days}
-                positions={positions}
-                isCustom={mode}
-              />
-              <ComponentTitle
-                title="운동 편집"
-                subTitle="루틴을 원하는 요일에 끌어다 놓을 수 있어요"
-              />
-              {routineData?.map((item, id) => (
-                <ExerciseItem_Custom
-                  id
-                  content={item.content}
-                  title={item.healthCategoryIdx}
-                  popMessage={() => popMessage(id)}
-                />
-              ))}
-            </ScrollPressable>
-          </ScrollView>
-        ) : (
-          <ContentBase>
-            <FlatList
-              showsVerticalScrollIndicator
-              data={routineData}
-              keyExtractor={(data) => data.id}
-              renderItem={renderItem}
-            />
-          </ContentBase>
-        )}
-
-        <BottomSheetModal
-          ref={bottomModal}
-          index={0}
-          snapPoints={snapPoints}
-          enablePanDownToClose={false}
-          enableHandlePanningGesture={false}
-          enableContentPanningGesture={false}
-          handleHeight={0}
-          enableDismissOnClose
-          handleIndicatorStyle={{ height: 0 }}
-        >
-          <BottomSheetContainer>
-            <ExerciseContainer>
-              <TopContainer>
-                <ExerciseTitle>
-                  {routineData[editingID]?.healthCategoryIdx}
-                </ExerciseTitle>
-                <SubmitButton onPress={() => handleBottomSubmit()}>
-                  <SubmitText>완료</SubmitText>
-                </SubmitButton>
-              </TopContainer>
-              <ExtendedContainer>
-                {routineData[editingID]?.content.map((item, id) => (
-                  <SetContainer id>
-                    <ContentContainer>
-                      <SetsText>{id + 1}</SetsText>
-                      <EditBox
-                        keyboardType="numeric"
-                        selectTextOnFocus={item.weight != null}
-                        editable={item.weight != null}
-                        onFocus={() => extendModal()}
-                        onChangeText={(text) => editNewArr(id, "rep", text)}
-                        style={
-                          !item.weight && { backgroundColor: colors.grey_2 }
-                        }
-                      >
-                        <EditText>{item.weight ? item.weight : "-"}</EditText>
-                      </EditBox>
-                      <SetsText>kg</SetsText>
-                      <EditBox
-                        keyboardType="numeric"
-                        selectTextOnFocus={item.rep != null}
-                        editable={item.rep != null}
-                        onFocus={() => extendModal()}
-                        onChangeText={(text) => editNewArr(id, rep, text)}
-                        style={!item.rep && { backgroundColor: colors.grey_2 }}
-                      >
-                        <EditText>{item.rep}</EditText>
-                      </EditBox>
-                      <SetsText>회</SetsText>
-                    </ContentContainer>
-                  </SetContainer>
-                ))}
-              </ExtendedContainer>
-            </ExerciseContainer>
-          </BottomSheetContainer>
-        </BottomSheetModal>
-      </ScreenBase>
-    </BottomSheetModalProvider>
-  );
-};
-
-export default MyRoutine;
-
 const ExerciseContainer = styled.Pressable`
   padding: 24px;
   padding-top: 2px;
   flex-direction: column;
   background-color: ${colors.white};
 `;
-const ContentContainer = styled.View`
-  height: 100%;
-  width: 100%;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-`;
+
 const TopContainer = styled.View`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 16px;
+  height: 24px;
 `;
+
 const ExerciseTitle = styled.Text`
   font-size: 17px;
   margin-bottom: 6px;
   font-weight: 500;
+`;
+const IndicatorBase = styled.View`
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
 `;
 const SetContainer = styled.View`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
   padding: 12px 16px;
-  background-color: ${colors.grey_2};
+  background-color: ${colors.grey_1};
   height: 48px;
   border-radius: 8px;
   margin-top: 10px;
@@ -390,7 +108,7 @@ const EditBox = styled.TextInput`
   align-items: center;
   border-radius: 8px;
   width: 56px;
-  background-color: ${colors.grey_4};
+  background-color: ${colors.grey_2};
 `;
 
 const SubmitText = styled.Text`
@@ -403,3 +121,310 @@ const SubmitButton = styled.TouchableOpacity`
   width: 56px;
   margin-left: 20px;
 `;
+
+export default MyRoutine = () => {
+  //커스텀 or 일반 보기모드 식별 위함
+  const [mode, setMode] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  //요일별 운동 유무 및 각 요일 운동 idx 보관목적 ->custom하면서 변경될 수 있기에 useState로 저장
+  const [SCHEDULE, setSCHEDULE] = useState([]);
+
+  //각 요일에 대한 세부 루틴정보들 저장하기 위한 배열 useState
+  const [routineData, setRoutineData] = useState([]);
+
+  //커스텀모드에서 세부수정하고자 하는 운동종목 구분하기 위한 id값
+  const [editingID, setEditingID] = useState(null);
+  //요일 슬라이드로 변경되는 실시간 SCHEDULE배열 임시 저장하기 위한 함수
+  const [newRoutine, setNewRoutine] = useState([]);
+
+  const [newSCHE, setNewSCHE] = useState(null);
+  //이전 ID값과 변경 이후 ID값 매칭된거, 이거로 app/routine/calendar 호출하기
+  const [selectedDay, setSelectedDay] = useState((new Date().getDay() + 6) % 7);
+
+  const [snapPoints, setSnapPoints] = useState(["1%"]);
+  const [modalState, setModalState] = useState(0);
+
+  const [selectedId, setSelectedId] = useState(null);
+
+  const extendModal = () => {
+    console.log("modal Extended");
+    //기존 스냅포인트 수치보다 키보드 절대높이인 28%를 더하여서 유동적인 bottomSheet면적에 대비
+    if (modalState != 2) {
+      setSnapPoints([`${parseInt(snapPoints[0]) + 28}%`]);
+    }
+    setModalState(2);
+  };
+
+  const updateDatas = () => {
+    getRoutines().then((res) => {
+      if (res.result) {
+        setSCHEDULE(processDayData(res.result));
+        getRoutine(processDayData(res.result), selectedDay, setIsLoading).then(
+          (res) => {
+            if (res.code == 1000) {
+              setRoutineData(res.result);
+              setNewRoutine(res.result);
+            } else {
+              console.log("routine 데이터 받아오지 못함");
+            }
+          }
+        );
+      } else {
+        console.log("calender 데이터 받아오지 못함+routine데이터도 실패");
+      }
+    });
+  };
+
+  const toggleMode = () => {
+    if (mode) {
+      updateRoutine(SCHEDULE, selectedDay, newRoutine).then(
+        (res) => {
+          console.log("updateRoutine api 호출결과:", res);
+          updateDatas();
+          showToast();
+        } //눌렀을 때 mode가 true였을 때, 즉 커스텀모드에서 완료버튼을 눌렀을때.
+      );
+      if (newSCHE) {
+        //SCHEDULE의 변경이 있었을 경우,
+        let newSCHE_1 = JSON.parse(JSON.stringify(newSCHE));
+        let tempNewSCHE = Object.keys(newSCHE_1).reduce((acc, k) => {
+          let country = newSCHE_1[k];
+          acc[country] = [...(acc[country] || []), k];
+          return acc;
+        }, {});
+        //prettier-ignore
+        let data = {"monRoutineIdx": SCHEDULE[tempNewSCHE[0]].routineId,"tueRoutineIdx": SCHEDULE[tempNewSCHE[1]].routineId,"wedRoutineIdx": SCHEDULE[tempNewSCHE[2]].routineId,"thuRoutineIdx": SCHEDULE[tempNewSCHE[3]].routineId,"friRoutineIdx": SCHEDULE[tempNewSCHE[4]].routineId,"satRoutineIdx": SCHEDULE[tempNewSCHE[5]].routineId,"sunRoutineIdx": SCHEDULE[tempNewSCHE[6]].routineId,}; //0번째 153
+        updateRoutines(data).then((res) =>
+          console.log("updateRoutineSchedule api 호출결과:", res)
+        );
+        setNewSCHE(null);
+      }
+    }
+    setMode(!mode);
+  };
+  const popMessage = (id) => {
+    Alert.alert("운동 편집", "", [
+      {
+        text: "상세옵션 편집",
+        onPress: () => {
+          setModalState(1);
+          setSnapPoints([`${10 + 8 * newRoutine[id].content.length}%`]);
+          //확대하고자 하는 운동종목의 세트수에 따라 확장되는 정도를 유동적으로 제어하기 위함
+          setEditingID(id);
+        },
+        style: "default",
+      },
+      {
+        text: "선택 운동 삭제",
+        onPress: () => editRoutine(id, "deleteExercise", 1),
+        style: "destructive",
+      },
+      {
+        text: "취소",
+        onPress: () => console.log("Cancel Pressed"),
+        style: "default",
+      },
+    ]);
+  };
+  const handleBottomSubmit = () => {
+    //일단 ModalState 변수를 0으로 변경하여
+    setModalState(0);
+    Keyboard.dismiss();
+  };
+  const updateRoutines = async (data) => {
+    try {
+      let url = "https://gpthealth.shop/";
+      let detailAPI = "app/routine/calendar";
+      const response = await axios.put(url + detailAPI, data, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const result = response.data;
+      return result;
+    } catch (error) {
+      console.error("Failed to fetch data:", error);
+    }
+  };
+  const editRoutine = (id, type, value) => {
+    let newArr = JSON.parse(JSON.stringify(newRoutine));
+    if (type == "repeat") {
+      newArr[editingID].content[id].rep = value;
+    } else if (type == "weight") {
+      newArr[editingID].content[id].weight = value;
+    } else if (type == "deleteSet") {
+      if (newArr[id].content.length == 1) {
+        Alert.alert("최소 세트가 1개 있어야 해요", "", [
+          {
+            text: "확인",
+            style: "default",
+          },
+        ]);
+      } else {
+        newArr[id].content.splice(value, 1);
+      }
+    } else if (type == "deleteExercise") {
+      newArr.splice(id, 1);
+    } else {
+      newArr[id].content.push({
+        rep: newArr[id].content[newArr[id].content.length - 1].rep,
+        weight: newArr[id].content[newArr[id].content.length - 1].weight,
+      });
+    }
+    setNewRoutine(newArr);
+  };
+
+  useEffect(() => {
+    if (SCHEDULE[selectedDay] != undefined) {
+      getRoutine(SCHEDULE, selectedDay, setIsLoading).then((res) => {
+        console.log("selectedDay변경으로 실행된 getRoutine 실행결과:", res);
+        if (res.code == 1000) {
+          setRoutineData(res.result);
+          setNewRoutine(res.result);
+        } else {
+          console.log("요일 루틴 가져오기 실패");
+        }
+      });
+    }
+  }, [selectedDay]);
+
+  useEffect(() => {
+    if (modalState == 0) {
+      setSnapPoints(["1%"]);
+    }
+  }, [modalState]);
+
+  const bottomModal = useRef();
+  const onPressBottomModal = () => bottomModal.current?.present();
+
+  useEffect(() => {
+    onPressBottomModal();
+    updateDatas();
+  }, []);
+
+  return (
+    <BottomSheetModalProvider>
+      <ScreenBase>
+        <Header
+          mode={mode}
+          parentFunction={toggleMode}
+          onPress={() => pressBack(setMode)}
+        />
+        <ContentLayout>
+          {!mode && ( //루틴 요약내용을 확인할 수 있는 주간달력 컴퍼넌트
+            <WeekCalendar
+              setSelectedDay={setSelectedDay}
+              selectedDay={selectedDay}
+              SCHEDULE={SCHEDULE}
+            />
+          )}
+          {mode ? (
+            <List_Custom
+              modalState={modalState}
+              SCHEDULE={SCHEDULE}
+              newRoutine={newRoutine}
+              editRoutine={editRoutine}
+              popMessage={popMessage}
+              setNewSCHE={setNewSCHE}
+            />
+          ) : (
+            <ContentBase>
+              {isLoading ? (
+                <IndicatorBase>
+                  <ActivityIndicator size="large" color={colors.l_main} />
+                </IndicatorBase>
+              ) : routineData ? (
+                <List_Normal
+                  routineData={routineData}
+                  selectedId={selectedId}
+                  setSelectedId={setSelectedId}
+                />
+              ) : (
+                <ContentContainer>
+                  <NoRoutineText>해당 요일에는 루틴이 없어요</NoRoutineText>
+                </ContentContainer>
+              )}
+              <MyToast />
+            </ContentBase>
+          )}
+
+          <BottomSheetModal
+            ref={bottomModal}
+            index={0}
+            snapPoints={snapPoints}
+            enablePanDownToClose={false}
+            enableHandlePanningGesture={false}
+            enableContentPanningGesture={false}
+            handleHeight={0}
+            enableDismissOnClose
+            handleIndicatorStyle={{ height: 0 }}
+          >
+            <BottomSheetContainer>
+              <ExerciseContainer>
+                <TopContainer>
+                  <ExerciseTitle>
+                    {routineData /** 운동이 없는 요일을 선택했을 경우, Null값이 반환됨에 따라 
+                  null을 object로 만들수 없다는 오류를 피하기 위함 */ &&
+                      routineData[editingID]?.exerciseName}
+                  </ExerciseTitle>
+                  <SubmitButton onPress={() => handleBottomSubmit()}>
+                    <SubmitText>완료</SubmitText>
+                  </SubmitButton>
+                </TopContainer>
+                <ExtendedContainer>
+                  {newRoutine /** 운동이 없는 요일을 선택했을 경우, Null값이 반환됨에 따라 
+                  null을 object로 만들수 없다는 오류를 피하기 위함 */ &&
+                    newRoutine[editingID]?.content.map((item, id) => (
+                      <SetContainer key={id}>
+                        <ContentContainer key={id}>
+                          <SetsText>{id + 1}</SetsText>
+                          <EditBox
+                            keyboardType="numeric"
+                            selectTextOnFocus={item.weight != null}
+                            editable={item.weight != null}
+                            onFocus={() => extendModal()}
+                            onChangeText={(value) =>
+                              editRoutine(id, "weight", value)
+                            }
+                            style={
+                              !item.weight && {
+                                backgroundColor: colors.grey_2,
+                              }
+                            }
+                          >
+                            <EditText
+                              style={item.weight && { color: colors.l_main }}
+                            >
+                              {item.weight}
+                            </EditText>
+                          </EditBox>
+                          <SetsText>kg</SetsText>
+                          <EditBox
+                            keyboardType="numeric"
+                            selectTextOnFocus={item.rep != null}
+                            editable={item.rep != null}
+                            onFocus={() => extendModal()}
+                            onChangeText={(value) =>
+                              editRoutine(id, "repeat", value)
+                            }
+                            style={
+                              !item.rep && { backgroundColor: colors.grey_2 }
+                            }
+                          >
+                            <EditText style={{ color: colors.l_main }}>
+                              {item.rep}
+                            </EditText>
+                          </EditBox>
+                          <SetsText>회</SetsText>
+                        </ContentContainer>
+                      </SetContainer>
+                    ))}
+                </ExtendedContainer>
+              </ExerciseContainer>
+            </BottomSheetContainer>
+          </BottomSheetModal>
+        </ContentLayout>
+      </ScreenBase>
+    </BottomSheetModalProvider>
+  );
+};

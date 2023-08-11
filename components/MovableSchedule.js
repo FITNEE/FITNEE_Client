@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Platform, View, Text } from "react-native";
+import { Platform, Text } from "react-native";
 import Animated, {
   runOnJS,
   useAnimatedGestureHandler,
@@ -11,49 +11,22 @@ import Animated, {
 } from "react-native-reanimated";
 import { PanGestureHandler } from "react-native-gesture-handler";
 import * as Haptics from "expo-haptics";
-import { BlurView } from "expo-blur";
 import { clamp, objectMove } from "./Shared/MyRoutine_Shared";
 import { colors } from "../colors";
 import { ScreenWidth } from "../Shared";
+import { styled } from "styled-components/native";
 
 const SCHEDULE_W = (ScreenWidth - 60) / 7;
-export function Schedule({ part = "", valid }) {
-  return (
-    <View
-      style={{
-        flexDirection: "row",
-        alignItems: "center",
-        height: 64,
-        borderRadius: 4,
-        width: SCHEDULE_W,
-        justifyContent: "center",
-        backgroundColor: valid == true ? colors.l_sub_1 : colors.grey_2,
-      }}
-    >
-      <Text
-        style={{
-          fontSize: 13,
-          fontWeight: "400",
-          color: valid ? colors.black : colors.grey_6,
-        }}
-      >
-        {valid ? part : "휴식"}
-      </Text>
-    </View>
-  );
-}
 
 export const MovableSchedule = ({
   id,
-  day,
-  part,
+  routineId,
+  setNewSCHE,
   positions,
-  songsCount,
-  valid,
+  SCHEDULE,
 }) => {
   const [moving, setMoving] = useState(false);
   const left = useSharedValue(positions.value[id] * SCHEDULE_W);
-
   useAnimatedReaction(
     () => positions.value[id],
     (currentPosition, previousPosition) => {
@@ -82,7 +55,7 @@ export const MovableSchedule = ({
       const newPosition = clamp(
         Math.floor(positionX / SCHEDULE_W),
         0,
-        songsCount - 1
+        SCHEDULE.length - 1
       );
 
       if (newPosition !== positions.value[id]) {
@@ -99,7 +72,8 @@ export const MovableSchedule = ({
     },
     onFinish() {
       left.value = positions.value[id] * SCHEDULE_W;
-      console.log("변경된 positions 배열:", positions.value);
+      // runOnJS(setPositions)(positions);
+      runOnJS(setNewSCHE)(positions.value);
       runOnJS(setMoving)(false);
     },
   });
@@ -110,25 +84,56 @@ export const MovableSchedule = ({
       left: left.value,
       borderRadius: 12,
       zIndex: moving ? 1 : 0,
-      shadowColor: "black",
+      shadowColor: "#645B7E",
       shadowOffset: {
-        height: 0,
+        height: 3,
         width: 0,
       },
-      shadowOpacity: withSpring(moving ? 0.2 : 0),
-      shadowRadius: 10,
+      shadowOpacity: withSpring(moving ? 0.3 : 0),
+      shadowRadius: 8,
     };
   }, [moving]);
 
   return (
     <Animated.View style={animatedStyle}>
-      <BlurView intensity={moving ? 100 : 0} tint="light">
-        <PanGestureHandler onGestureEvent={gestureHandler}>
-          <Animated.View>
-            <Schedule valid={valid} day={day} part={part} />
-          </Animated.View>
-        </PanGestureHandler>
-      </BlurView>
+      <PanGestureHandler onGestureEvent={gestureHandler}>
+        <Animated.View>
+          <Schedule routineId={routineId} text={id} />
+        </Animated.View>
+      </PanGestureHandler>
     </Animated.View>
   );
 };
+
+const ScheduleContainer = styled.View`
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  height: 64px;
+  border-radius: 4px;
+  width: ${SCHEDULE_W}px;
+`;
+export function Schedule({ routineId }) {
+  return (
+    <ScheduleContainer
+      style={
+        routineId != 0 && {
+          borderWidth: 1,
+          borderStyle: "dashed",
+          borderColor: colors.l_main,
+          backgroundColor: colors.l_sub_2,
+        }
+      }
+    >
+      <Text
+        style={{
+          fontSize: routineId != 0 ? 15 : 12,
+          fontWeight: "400",
+          color: routineId != 0 ? colors.l_main : colors.grey_6,
+        }}
+      >
+        {routineId != 0 ? routineId : "휴식"}
+      </Text>
+    </ScheduleContainer>
+  );
+}

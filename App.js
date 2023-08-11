@@ -1,10 +1,24 @@
+/* eslint-disable */
 import AppLoading from "expo-app-loading";
-import { NavigationContainer } from "@react-navigation/native";
+
 import OnBoardingNav from "./navigators/OnBoardingNav";
 import LoggedInNav from "./navigators/LoggedInNav";
 import { AppContext } from "./components/ContextProvider";
 import { useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import CreateRoutineNav from "./navigation/CreateRoutineNav";
+
+import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
+
+import { RecoilRoot } from "recoil";
+
+const MyTheme = {
+  ...DefaultTheme,
+  colors: {
+    ...DefaultTheme.colors,
+    background: "#f3f3f3",
+  },
+};
 
 export default function App() {
   const [loading, setLoading] = useState(true);
@@ -16,7 +30,7 @@ export default function App() {
   const [isDark, setIsDark] = useState(false);
   const toggleLogin = () => {
     if (loggedIn) {
-      AsyncStorage.removeItem("token");
+      AsyncStorage.removeItem("userId");
       setLoggedIn(false);
     } else {
       setLoggedIn(true);
@@ -24,9 +38,9 @@ export default function App() {
   };
 
   const preload = async () => {
-    await AsyncStorage.getItem("token").then((token) => {
-      console.log(token);
-      if (token) {
+    await AsyncStorage.getItem("userId").then((userId) => {
+      console.log(userId);
+      if (userId) {
         setLoggedIn(true);
       }
     });
@@ -43,12 +57,19 @@ export default function App() {
   }
 
   return (
-    <AppContext.Provider
-      value={{ isDark, setIsDark, toggleLogin, loggedIn, setToken, token }}
-    >
-      <NavigationContainer>
-        {loggedIn ? <LoggedInNav /> : <OnBoardingNav />}
-      </NavigationContainer>
-    </AppContext.Provider>
+    <RecoilRoot>
+      <AppContext.Provider
+        value={{ isDark, setIsDark, toggleLogin, loggedIn, setToken, token }}
+      >
+        <NavigationContainer>
+          {loggedIn ? <LoggedInNav /> : <OnBoardingNav />}
+        </NavigationContainer>
+      </AppContext.Provider>
+    </RecoilRoot>
+    // <RecoilRoot>
+    //   <NavigationContainer theme={MyTheme}>
+    //     <CreateRoutineNav />
+    //   </NavigationContainer>
+    // </RecoilRoot>
   );
 }

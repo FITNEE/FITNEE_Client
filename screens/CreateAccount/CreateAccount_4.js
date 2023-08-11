@@ -1,12 +1,16 @@
 import React, { useContext, useEffect, useState } from "react";
 import styled from "styled-components/native";
 import { colors } from "../../colors";
-import { Title } from "../../components/Shared/OnBoarding_Shared";
+import {
+  ScreenContainer,
+  Title,
+} from "../../components/Shared/OnBoarding_Shared";
 import { Button } from "../../Shared";
 import LottieView from "lottie-react-native";
 import { AppContext } from "../../components/ContextProvider";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Alert } from "react-native";
 
 const ScreenLayout = styled.SafeAreaView`
   flex-direction: column;
@@ -15,7 +19,6 @@ const ScreenLayout = styled.SafeAreaView`
   width: 90%;
   margin-left: 5%;
   flex: 1;
-  background-color: #f3f3f3;
 `;
 const SubTitle = styled.Text`
   text-align: center;
@@ -53,7 +56,7 @@ const CreateAccount_4 = ({ route, navigation }) => {
   const postUser = async (data) => {
     try {
       let url = "https://gpthealth.shop/";
-      let detailAPI = "app/users";
+      let detailAPI = "app/user";
       const response = await axios.post(url + detailAPI, data, {
         headers: {
           "Content-Type": `application/json`,
@@ -75,16 +78,32 @@ const CreateAccount_4 = ({ route, navigation }) => {
       weight: route.params.weight,
       birthYear: route.params.birthYear,
     };
-    postUser(data)
-      .then((response) => {
-        setToken(response.result.accessToken);
-        AsyncStorage.setItem("token", response.result.accessToken).then(
-          console.log("token set to AsyncStorage")
+    postUser(data).then((response) => {
+      console.log(response);
+      if (response.isSuccess) {
+        setIsLoading(false);
+        AsyncStorage.setItem("userId", response.result.userId).then(
+          console.log("userId set to AsyncStorage")
         );
-      })
-      .then(setIsLoading(false));
+      } else {
+        Alert.alert("회원가입 오류", response.message, [
+          {
+            text: "다시 회원가입하기",
+            onPress: () => {
+              navigation.navigate("OnBoarding", {});
+            },
+            style: "default",
+          },
+          {
+            text: "취소",
+            onPress: () => console.log("Cancel Pressed"),
+            style: "default",
+          },
+        ]);
+      }
+    });
   };
-  const { toggleLogin, setToken } = useContext(AppContext);
+  const { toggleLogin } = useContext(AppContext);
   useEffect(() => {
     handlePress();
   }, []);
@@ -93,29 +112,31 @@ const CreateAccount_4 = ({ route, navigation }) => {
   };
 
   return (
-    <ScreenLayout>
-      <TextContainer>
-        <Title>
-          {isLoading ? "계정을 생성하는 중" : "계정 생성을 완료했어요!"}
-        </Title>
-        <SubTitle>
-          {isLoading
-            ? `잠시만 기다려 주세요
+    <ScreenContainer>
+      <ScreenLayout>
+        <TextContainer>
+          <Title>
+            {isLoading ? "계정을 생성하는 중" : "계정 생성을 완료했어요!"}
+          </Title>
+          <SubTitle>
+            {isLoading
+              ? `잠시만 기다려 주세요
             `
-            : `이제 인공지능이 만들어주는
+              : `이제 인공지능이 만들어주는
 운동루틴을 경험하러 가볼까요?`}
-        </SubTitle>
-      </TextContainer>
-      <AnimationContainer>
-        {isLoading ? <LottieView /> : <Test></Test>}
-      </AnimationContainer>
-      <Button
-        loading={isLoading}
-        enabled={!isLoading}
-        text="시작하기"
-        onPress={() => goBackHome()}
-      />
-    </ScreenLayout>
+          </SubTitle>
+        </TextContainer>
+        <AnimationContainer>
+          {isLoading ? <LottieView /> : <Test></Test>}
+        </AnimationContainer>
+        <Button
+          loading={isLoading}
+          enabled={!isLoading}
+          text="시작하기"
+          onPress={() => goBackHome()}
+        />
+      </ScreenLayout>
+    </ScreenContainer>
   );
 };
 
