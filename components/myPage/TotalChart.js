@@ -39,7 +39,7 @@ export default function TotalChart() {
       lineHeight: 16.5,
     },
     propsForDots: {
-      r: "8",
+      r: "5",
     },
   };
   const screenWidth = Dimensions.get("window").width;
@@ -57,9 +57,9 @@ export default function TotalChart() {
   }
 
   const KcalData = [4, 3, 7, 6, 2, 5, 6, 9];
-  const KcalMax = Math.max(KcalData);
+  const KcalMax = Math.max(...KcalData);
   const KmData = [2, 5, 6, 9, 4, 3, 7, 6];
-  const KmMax = Math.max(KmData);
+  const KmMax = Math.max(...KmData);
   const calorieData = KcalData.map((value) => value / KcalMax);
   const distanceData = KmData.map((value) => value / KmMax);
 
@@ -72,12 +72,12 @@ export default function TotalChart() {
       {
         data: calorieData,
         color: () => colors.l_main,
-        strokeWidth: 4,
+        strokeWidth: 2,
       },
       {
         data: distanceData,
         color: () => colors.green,
-        strokeWidth: 4,
+        strokeWidth: 2,
       },
       {
         data: [1],
@@ -86,7 +86,7 @@ export default function TotalChart() {
         data: [0],
       },
     ],
-    legend: ["kcal", "km"],
+    //legend: ["kcal", "km"],
   };
 
   const lastDataIndex = data.labels.length - 1;
