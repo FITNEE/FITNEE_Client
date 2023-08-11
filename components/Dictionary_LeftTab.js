@@ -128,7 +128,7 @@ export default function Dictionary_LeftTab(props){
                 null
                 :
                 exerciseDetail.exerciseinfo.map((exerciseinfo, i) => (
-                    <Process>
+                    <Process key={i}>
                         <ProcessNum>{`0${exerciseinfo.num}`}</ProcessNum>
                         <ProcessContent>
                             <ProcessName>{exerciseinfo.title}</ProcessName>

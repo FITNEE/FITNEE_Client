@@ -125,17 +125,6 @@ const Keyword = styled.Text`
 `
 
 export default function Dictionary_1({ navigation }) {
-  const [recentKeyword, setRecentKeyword] = useState([]);
-  const [hotKeyword, setHotKeyword] = useState([
-    "바벨",
-    "머신",
-    "프리웨이트",
-    "덤벨",
-    "데드리프트",
-    "사이드 레터럴 레이즈",
-    "크런치",
-  ]);
-
     const PressedPart = styled.TouchableOpacity`
     border-radius: 100px;
     background-color: ${ isDark ? colors.d_sub_2 : colors.l_sub_2};
@@ -147,7 +136,6 @@ export default function Dictionary_1({ navigation }) {
     font-size: 14px;
     color: ${ isDark ? colors.d_main : colors.l_main};
     `
-
     const { isDark } = useContext( AppContext );
 
     const [search, setSearch] = useState('')
@@ -177,7 +165,6 @@ export default function Dictionary_1({ navigation }) {
         setIsSearching(false) // 키워드들 보이게
         setIsSubmit(false)
     }
-
 
     // 검색어(search)가 비어있으면 IsSearching = true / 아니면 false
     useEffect(()=>{
@@ -266,7 +253,6 @@ export default function Dictionary_1({ navigation }) {
         setSearch(keyword)
         postSearch(keyword).then((result)=>setSearchList(result))
         setIsSubmit(true)
-
     }
 
     // 사용자가 키보드에서 검색 버튼 눌렀을 때
@@ -320,8 +306,8 @@ export default function Dictionary_1({ navigation }) {
                                 <RecentTitle>최근 검색 키워드</RecentTitle>
                                 <RecentKeywordContainer>
                                 {
-                                    recentKeywords.map((keyword) => (
-                                        <KeywordContainer onPress={()=>onPressKeyword(keyword)}>
+                                    recentKeywords.map((keyword, i) => (
+                                        <KeywordContainer onPress={()=>onPressKeyword(keyword)} key={i}>
                                             <Keyword>{keyword}</Keyword>
                                         </KeywordContainer>
                                     ))
@@ -332,7 +318,7 @@ export default function Dictionary_1({ navigation }) {
                                 <HotTitle>인기 키워드</HotTitle>
                                 <PopularKeywordsContainer>
                                 {
-                                    popularKeywords.map((keyword) => (
+                                    popularKeywords.map((keyword, i) => (
                                         <KeywordContainer onPress={()=>onPressKeyword(keyword)}>
                                             <Keyword>{keyword}</Keyword>
                                         </KeywordContainer>

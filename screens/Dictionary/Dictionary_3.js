@@ -184,9 +184,6 @@ export default function Dictionary_3({ navigation, route }){
     const [leftTabActivate, setLeftTabActivate ] = useState(true)
     const [notReadCount, setNoteradCount] = useState(0)
     const [isAllRead, setIsAllRead] = useState(true)
-    
-    const [bubbleBool, setBubbleBool] = useState(true) // 말풍선 나타내기
-    const [joinBtnBool, setJoinBtnBool] = useState(true) // 참여하기 버튼 나타내기
     const snapPoints = useMemo(()=> ['45%', '96%'], []) // modal이 가리는 화면%
 
     const onTabPress = (target) => {
@@ -208,29 +205,31 @@ export default function Dictionary_3({ navigation, route }){
         setBubbleBool(false)
     }
 
-    // RightTab에서 쓰이는 JoinBtnBool
+    // RightTab에서 쓰이는 JoinBtnBool, 읽지 않음 버튼
+    const [bubbleBool, setBubbleBool] = useState(true) // 말풍선 나타내기
+    const [joinBtnBool, setJoinBtnBool] = useState(true) // 참여하기 버튼 나타내기
     const parentSetJoinBtnBool = (newBool) => setJoinBtnBool(newBool)
+    const parentIsAllRead = (newBool) => setIsAllRead(newBool)
 
-    const pressShareBtn = async () => {
+    const putChatRead = async (idx) => {
         try {
-            const result = await Share.share({
-            message:
-                `Fitnee에서 ${exerciseInfo.name} 정보를 확인해보세요!`,
-            });
-            if (result.action === Share.sharedAction) {
-            if (result.activityType) {
-                // shared with activity type of result.activityType
-            } else {
-                // shared
-            }
-            } else if (result.action === Share.dismissedAction) {
-            // dismissed
-            }
-        } catch (error) {
-            Alert.alert(error.message);
+            let url = "https://gpthealth.shop/"
+            let detailAPI = `app/dictionary/chatRead`
+            const response = await axios.put(url + detailAPI, {
+                healthChattingIdx: idx
+            })
+            const result = response.data
+            console.log(result)
+    
+            if(result.isSuccess) console.log(`마지막 채팅 저장 성공(idx: ${idx})`)
+            else console.log(`마지막 채팅 저장 실패(idx: ${idx})`)
+            return result
+        } 
+        catch (error) {
+            console.error("Failed to fetch data:", error)
         }
     }
-
+    
     return (
         <TouchableWithoutFeedback
             onPressIn={()=> setBubbleBool(false)}
@@ -239,7 +238,6 @@ export default function Dictionary_3({ navigation, route }){
                 <Container>
                     <TopBtnContainer>
                         <TopBtn onPress={()=>navigation.goBack()}/>
-                        <TopBtn onPress={pressShareBtn}/>
                     </TopBtnContainer>
                     <ImageContainer>
                         <ExerciseImage resizeMode='contain'/>
@@ -293,6 +291,7 @@ export default function Dictionary_3({ navigation, route }){
                                     <Dictionary_RightTab 
                                         parentJoinBtnBool={joinBtnBool}
                                         parentSetJoinBtnBool={parentSetJoinBtnBool}
+                                        parentIsAllRead={parentIsAllRead}
                                         exerciseName = {exerciseInfo.name}
                                         />
                             } 
