@@ -44,8 +44,8 @@ const Logo = styled.Image`
     height: 24px;
     background-color: ${colors.red};
 
-    margin-right: 12px;
-`
+  margin-right: 12px;
+`;
 const SearchInput = styled.TextInput`
     font-size: 16px;
     font-weight: 400;
@@ -76,21 +76,21 @@ const PartText = styled.Text`
     color: ${colors.black};
 `
 const BottomContainer = styled.View`
-    padding: 40px 22px; 
-`
+  padding: 40px 22px;
+`;
 const RecentContainer = styled.View`
-    height: 50px;
-    width: 100%;
+  height: 50px;
+  width: 100%;
 
-    margin-bottom: 56px;
-`
+  margin-bottom: 56px;
+`;
 const RecentTitle = styled.Text`
-    font-weight: 600;
-    font-size: 16px;
-    color: ${colors.black};
+  font-weight: 600;
+  font-size: 16px;
+  color: ${colors.black};
 
-    margin-bottom: 16px;
-`
+  margin-bottom: 16px;
+`;
 const RecentKeywordContainer = styled.View`
     flex-direction: row;
     flex-wrap: wrap;
@@ -100,9 +100,9 @@ const HotContainer =  styled.View`
     width: 100%;
 `
 const HotTitle = styled.Text`
-    font-weight: 600;
-    font-size: 16px;
-    color: ${colors.black};          
+  font-weight: 600;
+  font-size: 16px;
+  color: ${colors.black};
 
     margin-bottom: 16px;
 `
@@ -114,17 +114,27 @@ const KeywordContainer = styled.TouchableOpacity`
     background-color: ${colors.grey_1};
     border-radius: 100px;
 
-    margin-right: 4px;
-    margin-bottom: 4px; 
-    padding: 10px 14px;
-`
+  margin-right: 4px;
+  margin-bottom: 4px;
+  padding: 10px 14px;
+`;
 const Keyword = styled.Text`
     font-weight: 600;
     font-size: 13px;
     color: ${colors.grey_7}; 
 `
 
-export default function Dictionary_1( {navigation} ){
+export default function Dictionary_1({ navigation }) {
+  const [recentKeyword, setRecentKeyword] = useState([]);
+  const [hotKeyword, setHotKeyword] = useState([
+    "바벨",
+    "머신",
+    "프리웨이트",
+    "덤벨",
+    "데드리프트",
+    "사이드 레터럴 레이즈",
+    "크런치",
+  ]);
 
     const PressedPart = styled.TouchableOpacity`
     border-radius: 100px;
@@ -138,7 +148,7 @@ export default function Dictionary_1( {navigation} ){
     color: ${ isDark ? colors.d_main : colors.l_main};
     `
 
-    const { isDark } = useContext( AppContext )
+    const { isDark } = useContext( AppContext );
 
     const [search, setSearch] = useState('')
     const [isSearching, setIsSearching] = useState(false)
@@ -167,6 +177,7 @@ export default function Dictionary_1( {navigation} ){
         setIsSearching(false) // 키워드들 보이게
         setIsSubmit(false)
     }
+
 
     // 검색어(search)가 비어있으면 IsSearching = true / 아니면 false
     useEffect(()=>{

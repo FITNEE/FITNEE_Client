@@ -25,6 +25,4 @@ export const colors = {
 
   l_background: "#FFFFFF",
   d_background: "#1A1E27",
-  l_font: "#141414",
-  d_font: "#FFFFFF",
 };
