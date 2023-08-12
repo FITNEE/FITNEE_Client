@@ -21,7 +21,7 @@ const ChoiceButton = styled.TouchableOpacity`
   padding-bottom: 2px;
 `;
 
-export default function MyPage() {
+export default function MyPage(props) {
   const isFocus = useIsFocused();
   const isDark = useRecoilValue(IsDarkAtom);
   const setIsTabVisible = useSetRecoilState(TabBarAtom);
@@ -50,6 +50,27 @@ export default function MyPage() {
   useEffect(() => {
     getMyPageData(month).then((dateResult) => {
       setDate(dateResult.result);
+    });
+  }, []);
+
+  const [checkedDate, setCheckedDate] = useState("20230812");
+
+  const getDate = async (checkedDate) => {
+    try {
+      let url = "https://gpthealth.shop/";
+      let detailAPI = `app/mypage/exercise?date=${checkedDate}`;
+      const response = await axios.get(url + detailAPI);
+      const checkResult = response.data;
+      return checkResult;
+    } catch (error) {
+      console.error("Failed to fetch data:", error);
+    }
+  };
+
+  useEffect(() => {
+    getDate(checkedDate).then((checkResult) => {
+      console.log(checkResult);
+      //setcheckedDate(checkResult.checklt);
     });
   }, []);
 
