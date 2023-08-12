@@ -4,23 +4,6 @@ import {colors} from '../colors'
 import { IsDarkAtom } from "../recoil/MyPageAtom"
 import { useRecoilValue } from "recoil"
 
-const AutoSearchContainer = styled.ScrollView`
-    width: 100%;
-    height: 100%;
-`
-const AutoSearch = styled.TouchableOpacity`
-    padding: 24px;
-    border-top-width: 1px;
-`
-const AutoSearchText = styled.Text`
-    font-weight: 500;
-    font-size: 15px;
-`
-const ColoredSearchText = styled.Text`
-    font-weight: 500;
-    font-size: 15px;
-`
-
 export default function Dictionary_AutoSearch(props){
     const isDark = useRecoilValue(IsDarkAtom) 
 
@@ -44,12 +27,13 @@ export default function Dictionary_AutoSearch(props){
                 searchList === undefined?
                 null
                 :
-                searchList.map((words)=>{
+                searchList.map((words, i)=>{
                     let splitedString = splitString(words.name)
                     return(
                         <AutoSearch 
                             onPress={()=> onPress(words)}
-                            style={{borderTopColor: isDark? `${colors.grey_8}`:`${colors.grey_2}`}}
+                            style={ i!=0? {borderTopColor: isDark? `${colors.grey_8}`:`${colors.grey_2}`}: {borderTopWidth: 0}}
+                            key={i}
                         >
                             <AutoSearchText style={{color: isDark? `${colors.grey_5}`:`${colors.black}`}}>
                             {
@@ -68,3 +52,20 @@ export default function Dictionary_AutoSearch(props){
         </AutoSearchContainer>
     )
 }
+
+const AutoSearchContainer = styled.ScrollView`
+    width: 100%;
+    height: 100%;
+`
+const AutoSearch = styled.TouchableOpacity`
+    padding: 24px;
+    border-top-width: 1px;
+`
+const AutoSearchText = styled.Text`
+    font-weight: 500;
+    font-size: 15px;
+`
+const ColoredSearchText = styled.Text`
+    font-weight: 500;
+    font-size: 15px;
+`

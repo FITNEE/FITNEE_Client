@@ -101,12 +101,12 @@ export default function Dictionary_List(props){
                         </ExerciseDetailContainer>
                     </ExerciseLeftContainer> 
                     <TouchableOpacity 
-                        onPress={filterList}>
+                        onPress={()=> onPress(exercise)} >
                         <WithLocalSvg
                             width={24}
                             height={24}
-                            color={colors.black}
-                            asset={RightIcon }
+                            color={isDark? colors.grey_3:colors.black} // dark 모드 색 임의로 넣어놈
+                            asset={RightIcon}
                     /></TouchableOpacity>
                 </ExerciseContainer>
             ))
