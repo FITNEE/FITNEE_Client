@@ -256,8 +256,8 @@ export default function Dictionary_RightTab(props) {
         </TouchableWithoutFeedback>
 
         {childJoinBtnBool ? null : (
-          <TextInputBG style={{backgroundColor: isDark? `${colors.grey_7}`:`${colors.grey_1}`}}>
-            <TextInputContainer style={{backgroundColor: isDark? `${colors.black}`:`${colors.grey_1}`}}>
+          <TextInputBG style={{backgroundColor: isDark? `#5D636C`:`#D1D3D9`}}>
+            <TextInputContainer style={{backgroundColor: isDark? `${colors.black}`:`${colors.white}`}}>
                 <BottomSheetTextInput
                     style={{
                         color: isDark? `${colors.white}`:`${colors.black}`,
@@ -265,9 +265,7 @@ export default function Dictionary_RightTab(props) {
                         marginLeft: 15,
                     }}
                     type="text"
-                    onChangeText={(text) => {
-                    setChat(text);
-                    }}
+                    onChangeText={(text) => setChat(text)}
                     value={chat}
                     onSubmitEditing={onSubmitChat}
                     autoFocus={true}
@@ -284,6 +282,8 @@ export default function Dictionary_RightTab(props) {
       </>
     )
 }
+
+{/*textinputbg 색 변경하기*/}
 
 const ChatContainer = styled.View`
   margin-left: 24px;
@@ -316,7 +316,6 @@ const MsgDeleteBtn = styled.TouchableOpacity`
   margin-right: 8px;
 `
 const TextInputBG = styled.View`
-  background-color: ${colors.grey_1};
   justify-content: center;
   align-items: center;
   padding: 9px 16px;

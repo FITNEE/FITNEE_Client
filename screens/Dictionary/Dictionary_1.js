@@ -8,7 +8,7 @@ import {
     ScrollView,
     TouchableOpacity,
     SafeAreaView,
-    ActivityIndicator
+    ActivityIndicator, StatusBar
     } from 'react-native';
 import { colors } from '../../colors'
 import Dictionary_AutoSearch from '../../components/Dictionary_AutoSearch'
@@ -137,11 +137,13 @@ export default function Dictionary_1({ navigation }) {
         setIsSubmit(true)
         setIsSearching(false)
     }
-    // useEffect(()=>{
-    //     postKeywords()
-    // }, [isSubmit])
+    useEffect(()=>{
+        postKeywords()
+    }, [isSubmit])
 
     return(
+        <>
+        <StatusBar barStyle={isDark? 'light-content': 'dark-content'}/>
         <SafeAreaView 
             style={{backgroundColor: isDark? `${colors.d_background}`:`${colors.l_background}`, flex: 1}}>
             <TouchableWithoutFeedback style={{flex:1}} onPress={Keyboard.dismiss}>
@@ -181,7 +183,6 @@ export default function Dictionary_1({ navigation }) {
                                         
                                 /></TouchableOpacity>
                             </SearchInputContainer>
-                            
                         </SearchContainer>
                         { isSubmit && <PartContainer 
                             horizontal 
@@ -260,7 +261,7 @@ export default function Dictionary_1({ navigation }) {
                     />}
                 </Container>
             </TouchableWithoutFeedback>
-        </SafeAreaView>
+        </SafeAreaView></>
     )
 } 
 

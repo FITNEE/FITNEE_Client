@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect, useCallback, useMemo, useContext, createContext } from 'react'
 import styled from 'styled-components/native'
 import { colors } from '../../colors'
-import { TouchableOpacity, Dimensions, TouchableWithoutFeedback, SafeAreaView } from 'react-native'
+import { StatusBar, TouchableOpacity, Dimensions, TouchableWithoutFeedback, SafeAreaView } from 'react-native'
 import WrappedText from 'react-native-wrapped-text'
 import BottomSheet, { BottomSheetScrollView, BottomSheetBackdrop } from "@gorhom/bottom-sheet";
 import Dictionary_LeftTab from '../../components/Dictionary_LeftTab'
@@ -72,20 +72,22 @@ export default function Dictionary_3({ navigation, route }){
             console.error("Failed to fetch data:", error)
         }
     }
-    // useEffect(()=>{
-    //     getReadInfo().then((result)=>{
-    //         if(result[0].hasUnreadChats == 0) {
-    //             setIsAllRead(true)
-    //             console.log(`안 읽은 채팅 없음`)
-    //         }
-    //         else {
-    //             setIsAllRead(false)
-    //             console.log(`안 읽은 채팅 있음`)
-    //         }
-    //     })
-    // }, [])
+    useEffect(()=>{
+        getReadInfo().then((result)=>{
+            if(result[0].hasUnreadChats == 0) {
+                setIsAllRead(true)
+                console.log(`안 읽은 채팅 없음`)
+            }
+            else {
+                setIsAllRead(false)
+                console.log(`안 읽은 채팅 있음`)
+            }
+        })
+    }, [])
     
     return (
+        <>
+        <StatusBar barStyle={isDark? 'light-content': 'dark-content'}/>
         <TouchableWithoutFeedback
             onPressIn={()=> setBubbleBool(false)}
         >
@@ -98,7 +100,7 @@ export default function Dictionary_3({ navigation, route }){
                             <WithLocalSvg
                                 width={24}
                                 height={24}
-                                color={colors.black}
+                                color={isDark? colors.grey_1: colors.black} // dark 모드 색 임의로 넣어놈
                                 asset={LeftIcon}
                         /></TouchableOpacity>
                     </TopBtnContainer>
@@ -142,7 +144,6 @@ export default function Dictionary_3({ navigation, route }){
                                     <WithLocalSvg
                                         width={40}
                                         height={40}
-                                        // color={colors.black}
                                         asset={AddIcon}
                                 /></TouchableOpacity>
                             </TitleContainer>
@@ -193,7 +194,7 @@ export default function Dictionary_3({ navigation, route }){
                     }
                 </Container>
             </SafeAreaView>
-        </TouchableWithoutFeedback>
+        </TouchableWithoutFeedback></>
     )
 } 
 
@@ -206,11 +207,6 @@ const TopBtnContainer = styled.View`
     justify-content: space-between;
     padding: 16px 24px;
     height: 56px;
-`
-const TopBtn = styled.TouchableOpacity`
-    width: 24px;
-    height: 24px;
-    background-color: ${colors.red};
 `
 const ImageContainer = styled.View`
     height: 326px;  
@@ -309,11 +305,10 @@ const TabText = styled.Text`
     padding: 10px 0px;
 `
 const NotReadDot = styled.View`
-    background-color: ${colors.red};
+    background-color: ${colors.error};
     width: 6px;
     height: 6px;
     border-radius: 3px;
-
     margin-top: 10px;
     margin-left: 3px;
 `
