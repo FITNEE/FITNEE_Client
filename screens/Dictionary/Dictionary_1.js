@@ -16,6 +16,9 @@ import Dictionary_List from '../../components/Dictionary_List'
 import axios from 'axios'
 import { IsDarkAtom } from "../../recoil/MyPageAtom"
 import { useRecoilValue } from "recoil"
+import { WithLocalSvg } from 'react-native-svg'
+import SearchIcon from '../../assets/SVGs/Search.svg'
+import DeleteIcon from '../../assets/SVGs/Delete.svg'
 
 export default function Dictionary_1({ navigation }) {
     const isDark = useRecoilValue(IsDarkAtom)
@@ -134,9 +137,9 @@ export default function Dictionary_1({ navigation }) {
         setIsSubmit(true)
         setIsSearching(false)
     }
-    useEffect(()=>{
-        postKeywords()
-    }, [isSubmit])
+    // useEffect(()=>{
+    //     postKeywords()
+    // }, [isSubmit])
 
     return(
         <SafeAreaView 
@@ -149,7 +152,12 @@ export default function Dictionary_1({ navigation }) {
                                 onPress={isSubmit? print: null}
                                 style={isDark? {backgroundColor: `${colors.black}`} : {backgroundColor: `${colors.grey_1}`}}
                             >
-                                <Logo/>
+                                <WithLocalSvg
+                                    style={{ marginRight: 12 }}
+                                    width={24}
+                                    height={24}
+                                    asset={SearchIcon}
+                                />
                                 <SearchInput
                                     keyboardAppearance= {isDark? 'dark':'light'}
                                     autoFocus={true}
@@ -163,8 +171,17 @@ export default function Dictionary_1({ navigation }) {
                                     style={isDark? {color: `${colors.grey_3}`} : {color: `${colors.black}`}}
                                     >
                                 </SearchInput>
+                                <TouchableOpacity 
+                                    style={{ marginLeft: 16}}
+                                    onPress={onDeleteInput}>
+                                    <WithLocalSvg
+                                        width={24}
+                                        height={24}
+                                        asset={DeleteIcon}
+                                        
+                                /></TouchableOpacity>
                             </SearchInputContainer>
-                            <DeleteAllBtn onPress={onDeleteInput}/>
+                            
                         </SearchContainer>
                         { isSubmit && <PartContainer 
                             horizontal 
@@ -176,7 +193,7 @@ export default function Dictionary_1({ navigation }) {
                                             onPress={()=> onPressPart(i)}
                                             style={{backgroundColor: isDark? `${colors.grey_8}`:`${colors.grey_1}`}}
                                         >
-                                            <PartText style={{color: isDark? `${colors.grey_4}`:`${colors.black}`}}>{part[0]}</PartText>
+                                            <PartText style={{color: isDark? `${colors.grey_4}`:`${colors.grey_6}`}}>{part[0]}</PartText>
                                         </Part>
                                         :
                                         <PressedPart 
@@ -251,12 +268,10 @@ export default function Dictionary_1({ navigation }) {
 const Container = styled.View`
     flex: 1;
     width: 100%;
-    /* background-color: white; */
 `
 const TopContainer = styled.View`
     padding: 8px 24px;
     border-bottom-width: 1px;
-    /* border-bottom-color: ${colors.grey_1}; */
 `
 const SearchContainer = styled.View`
     flex-direction: row;
@@ -264,22 +279,14 @@ const SearchContainer = styled.View`
     align-items: center; 
 `
 const SearchInputContainer = styled.View`
-    /* background-color: ${colors.grey_1}; */
     border-radius: 12px;
     flex-direction: row;
     align-items: center;
     padding: 8px 12px;
 `
-const Logo = styled.Image`
-    width: 24px;
-    height: 24px;
-    background-color: ${colors.red};
-    margin-right: 12px;
-`;
 const SearchInput = styled.TextInput`
     font-size: 16px;
     font-weight: 400;
-    /* color: ${colors.black}; */
     width: 240px;
 `
 const DeleteAllBtn = styled.TouchableOpacity`
@@ -295,9 +302,7 @@ const PartContainer = styled.ScrollView`
 `
 const Part = styled.TouchableOpacity`
     border-radius: 100px;
-    /* background-color: ${colors.grey_1}; */
- 
-    padding: 8px 15px;
+    padding: 10px 15px;
     margin-right: 8px;
 `
 const PartText = styled.Text`
