@@ -6,7 +6,7 @@ import {
   BottomSheetModalProvider,
 } from "@gorhom/bottom-sheet";
 import axios from "axios";
-
+import { useIsFocused } from "@react-navigation/native";
 import { colors } from "../../colors";
 import { Header } from "../../components/Shared/MyRoutine_Shared";
 import {
@@ -26,9 +26,9 @@ import {
   ContentContainer,
   NoRoutineText,
 } from "../../components/Shared/MyRoutine_Shared";
-import { Button, ScreenWidth } from "../../Shared";
+import { Button } from "../../Shared";
 import { IsDarkAtom, TabBarAtom } from "../../recoil/MyPageAtom";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { useSetRecoilState } from "recoil";
 
 const ScreenBase = styled.SafeAreaView`
   width: 100%;
@@ -168,6 +168,7 @@ export default MyRoutine = ({ navigation, route }) => {
     setModalState(2);
   };
 
+  const isFocus = useIsFocused();
   const updateDatas = () => {
     getRoutines().then((res) => {
       if (res.result) {
@@ -261,12 +262,13 @@ export default MyRoutine = ({ navigation, route }) => {
   };
   const editRoutine = (id, type, value) => {
     let newArr = JSON.parse(JSON.stringify(newRoutine));
+    console.log("newArr:", newArr);
     if (type == "repeat") {
       newArr[editingID].content[id].rep = value;
     } else if (type == "weight") {
       newArr[editingID].content[id].weight = value;
     } else if (type == "deleteSet") {
-      if (newArr[id].content.length == 1) {
+      if (newArr[id].content.length <= 1) {
         Alert.alert("최소 세트가 1개 있어야 해요", "", [
           {
             text: "확인",
@@ -278,6 +280,12 @@ export default MyRoutine = ({ navigation, route }) => {
       }
     } else if (type == "deleteExercise") {
       newArr.splice(id, 1);
+    } else if (type == "addExercise") {
+      let addedExercise = Object.assign(
+        { content: [{ rep: 15, weight: 40 }] },
+        ...value
+      );
+      newArr.push(addedExercise);
     } else {
       newArr[id].content.push({
         rep: newArr[id].content[newArr[id].content.length - 1].rep,
@@ -286,6 +294,12 @@ export default MyRoutine = ({ navigation, route }) => {
     }
     setNewRoutine(newArr);
   };
+  useEffect(() => {
+    if (route.params) {
+      setMode(true);
+      editRoutine(0, "addExercise", route.params.selectedItem);
+    }
+  }, [isFocus]);
 
   useEffect(() => {
     if (SCHEDULE[selectedDay] != undefined) {

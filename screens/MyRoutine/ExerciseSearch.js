@@ -5,11 +5,9 @@ import { colors } from "../../colors";
 import { AppContext } from "../../components/ContextProvider";
 import axios from "axios";
 import SearchList from "../../components/myRoutine/SearchList";
-
 import Search from "../../assets/SVGs/Search.svg";
 import { WithLocalSvg } from "react-native-svg";
 import { Button } from "../../Shared";
-import { SubText } from "../../components/Shared/OnBoarding_Shared";
 
 const Container = styled.View`
   flex: 1;
@@ -59,7 +57,7 @@ const KeywordsContainer = styled.View`
   padding: 22px;
 `;
 const BottomContainer = styled.View`
-  background-color: ${colors.white};
+  justify-content: space-between;
   border: 1px ${colors.grey_3} solid;
   padding: 0px 24px;
 `;
@@ -92,10 +90,6 @@ const PopularKeywordsContainer = styled.View`
   flex-direction: row;
   flex-wrap: wrap;
 `;
-const ItemContainer = styled.View`
-  width: 48px;
-  height: 32px;
-`;
 const KeywordContainer = styled.TouchableOpacity`
   background-color: ${colors.grey_1};
   border-radius: 100px;
@@ -108,12 +102,27 @@ const Keyword = styled.Text`
   font-size: 13px;
   color: ${colors.grey_7};
 `;
-const SelectedListContainer = styled.View`
-  flex-direction: row;
+
+const SelectedListContainer = styled.ScrollView`
   height: 48px;
   width: 100%;
-  /* background-color: chartreuse; */
-  margin: 8px 0px;
+  margin-bottom: 8px;
+`;
+const ItemContainer = styled.View`
+  flex-direction: row;
+  align-items: center;
+  margin-right: 8px;
+`;
+const DeleteButton = styled.TouchableOpacity`
+  width: 24px;
+  height: 24px;
+  background-color: ${colors.red};
+`;
+const SelectedItemText = styled.Text`
+  font-weight: 500;
+  font-size: 13px;
+  margin-left: 4px;
+  color: ${colors.grey_7};
 `;
 export default function ExerciseSearch({ navigation }) {
   const { isDark } = useContext(AppContext);
@@ -132,7 +141,7 @@ export default function ExerciseSearch({ navigation }) {
   const [popularKeywords, setPopularKeywords] = useState([]);
   const [recentKeywords, setRecentKeywords] = useState([]);
   const [searchList, setSearchList] = useState([]);
-  const [selectedItem, setSelectedItem] = useState(["asdfasdfe", "dasdfasdf"]);
+  const [selectedItem, setSelectedItem] = useState([]);
 
   // 사용자가 검색창에 onFocus 했을 때
   const onFocusInput = () => {
@@ -144,6 +153,16 @@ export default function ExerciseSearch({ navigation }) {
     let temp = [...part];
     temp[i][1] = !temp[i][1];
     setPart(temp);
+  };
+  const editSelectedList = (mode, id, arr) => {
+    let newArr = JSON.parse(JSON.stringify(selectedItem));
+    if (mode == "add") {
+      newArr.push(arr);
+    } else {
+      newArr.splice(id, 1);
+    }
+    setSelectedItem(newArr);
+    console.log(newArr);
   };
   // 검색창 옆 X 버튼 눌렀을 때
   const onDeleteInput = () => {
@@ -206,7 +225,6 @@ export default function ExerciseSearch({ navigation }) {
   const onPressKeyword = (keyword) => {
     setSearch(keyword);
     postSearch(keyword).then((result) => setSearchList(result));
-    setIsSubmit(true);
   };
   // 사용자가 키보드에서 검색 버튼 눌렀을 때
   const onSubmitEditing = () => {
@@ -262,23 +280,28 @@ export default function ExerciseSearch({ navigation }) {
           )}
           {isSearching && (
             <SearchList
-              navigation={navigation}
-              parentSearch={search}
               parentSearchList={searchList}
+              editSelectedList={editSelectedList}
             />
           )}
         </Container>
       </TouchableWithoutFeedback>
       <BottomContainer>
-        <SelectedListContainer>
-          {selectedItem.map((item, index) => {
-            <ItemContainer key={index}>
-              <SubText>asdfa</SubText>
-            </ItemContainer>;
-          })}
+        <SelectedListContainer
+          horizontal
+          showsHorizontalScrollIndicator={false}
+        >
+          {selectedItem?.map((item, id) => (
+            <ItemContainer key={id}>
+              <DeleteButton
+                onPress={() => editSelectedList("delete", id, "none")}
+              />
+              <SelectedItemText>{item.exerciseName}</SelectedItemText>
+            </ItemContainer>
+          ))}
         </SelectedListContainer>
         <Button
-          onPress={() => console.log("pressed")}
+          onPress={() => navigation.navigate("MyRoutine", { selectedItem })}
           text="다음"
           enabled={true}
         />

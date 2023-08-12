@@ -44,7 +44,7 @@ const CheckButton = styled.TouchableOpacity`
   height: 40px;
 `;
 
-export default function SearchList({ parentSearchList }) {
+export default function SearchList({ parentSearchList, editSelectedList }) {
   return (
     <ListContainer>
       {parentSearchList?.map((words, index) => {
@@ -57,7 +57,15 @@ export default function SearchList({ parentSearchList }) {
                 {words.parts} | {words.equipment}
               </SubText>
             </TextContainer>
-            <CheckButton>
+            <CheckButton
+              onPress={() =>
+                editSelectedList("add", index, {
+                  exerciseName: words.name,
+                  exerciseParts: words.parts,
+                  healthCategoryIdx: words.healthCategoryIdx,
+                })
+              }
+            >
               <WithLocalSvg width={24} height={24} asset={Check} />
             </CheckButton>
           </ResultContainer>
