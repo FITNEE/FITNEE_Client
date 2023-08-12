@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect, useCallback, useMemo, useContext, createContext } from 'react'
 import styled from 'styled-components/native'
 import { colors } from '../../colors'
-import { Share, Dimensions, Alert, TouchableWithoutFeedback, ScrollView, SafeAreaView } from 'react-native'
+import { TouchableOpacity, Dimensions, TouchableWithoutFeedback, SafeAreaView } from 'react-native'
 import WrappedText from 'react-native-wrapped-text'
 import BottomSheet, { BottomSheetScrollView, BottomSheetBackdrop } from "@gorhom/bottom-sheet";
 import Dictionary_LeftTab from '../../components/Dictionary_LeftTab'
@@ -9,6 +9,9 @@ import Dictionary_RightTab from '../../components/Dictionary_RightTab'
 import axios from 'axios'
 import { IsDarkAtom } from "../../recoil/MyPageAtom"
 import { useRecoilValue } from "recoil"
+import { WithLocalSvg } from 'react-native-svg'
+import LeftIcon from '../../assets/SVGs/Left.svg'
+import AddIcon from '../../assets/SVGs/Add.svg'
 
 export default function Dictionary_3({ navigation, route }){
     const isDark = useRecoilValue(IsDarkAtom)
@@ -90,7 +93,14 @@ export default function Dictionary_3({ navigation, route }){
                 style={{backgroundColor: isDark? `${colors.black}`:`${colors.grey_1}`, flex: 1}}>
                 <Container>
                     <TopBtnContainer>
-                        <TopBtn onPress={()=>navigation.goBack()}/>
+                        <TouchableOpacity 
+                            onPress={()=>navigation.goBack()}>
+                            <WithLocalSvg
+                                width={24}
+                                height={24}
+                                color={colors.black}
+                                asset={LeftIcon}
+                        /></TouchableOpacity>
                     </TopBtnContainer>
                     <ImageContainer>
                         <ExerciseImage resizeMode='contain'/>
@@ -127,7 +137,14 @@ export default function Dictionary_3({ navigation, route }){
                                         </TitleText>
                                     </TitleWrapper>
                                 </NameContainer>
-                                <AddtoRoutineBtn onPress={onPressAddRoutineBtn}/>
+                                <TouchableOpacity 
+                                    onPress={onPressAddRoutineBtn}>
+                                    <WithLocalSvg
+                                        width={40}
+                                        height={40}
+                                        // color={colors.black}
+                                        asset={AddIcon}
+                                /></TouchableOpacity>
                             </TitleContainer>
                             <TabContainer style={{borderBottomColor: isDark? `${colors.grey_8}`:`${colors.grey_1}`}}> 
                                 <LeftTab 
@@ -229,12 +246,6 @@ const TitleText = styled.Text`
     font-weight: 600;
     font-size: 24px;
     padding-top: 8px;
-`
-const AddtoRoutineBtn = styled.TouchableOpacity`
-    background-color: ${colors.red};
-    height: 40px;
-    width: 40px;
-    border-radius: 20px;
 `
 const Bubble = styled.View`
     position: absolute;

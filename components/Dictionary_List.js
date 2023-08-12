@@ -1,8 +1,11 @@
 import React, {useEffect, useState} from 'react'
 import styled from 'styled-components/native'
-import {colors} from '../colors'
+import { colors } from '../colors'
 import { IsDarkAtom } from "../recoil/MyPageAtom"
 import { useRecoilValue } from "recoil"
+import { WithLocalSvg } from 'react-native-svg'
+import RightIcon from '../assets/SVGs/Right.svg'
+import { TouchableOpacity } from 'react-native'
 
 const ListContainer = styled.ScrollView`
 `
@@ -89,15 +92,22 @@ export default function Dictionary_List(props){
                             style={{backgroundColor: isDark? `${colors.black}`:`${colors.grey_1}`}}
                         />
                         <ExerciseDetailContainer>
-                            <ExerciseName style={{color: isDark? `${colors.grey_3 }`:`${colors.grey_4}`}}>
+                            <ExerciseName style={{color: isDark? `${colors.grey_3 }`:`${colors.black}`}}>
                                 {exercise.name}
                             </ExerciseName>
-                            <ExerciseArea style={{color: isDark? `${colors.grey_3}`:`${colors.grey_4}`}}>
+                            <ExerciseArea style={{color: isDark? `${colors.grey_3}`:`${colors.grey_7}`}}>
                                 {exercise.parts} | {exercise.muscle} | {exercise.equipment}
                             </ExerciseArea>                        
                         </ExerciseDetailContainer>
-                    </ExerciseLeftContainer>
-                    <AddtoBtn onPress={filterList}/>
+                    </ExerciseLeftContainer> 
+                    <TouchableOpacity 
+                        onPress={filterList}>
+                        <WithLocalSvg
+                            width={24}
+                            height={24}
+                            color={colors.black}
+                            asset={RightIcon }
+                    /></TouchableOpacity>
                 </ExerciseContainer>
             ))
         }
