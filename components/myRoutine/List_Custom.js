@@ -76,6 +76,7 @@ const AddText = styled.Text`
 const ExerciseItem_Custom = ({
   id,
   content,
+  modalState,
   title,
   popMessage,
   editRoutine,
@@ -125,59 +126,50 @@ export default List_Custom = ({
   popMessage,
   setNewSCHE,
 }) => {
-  const animatedStyle = useAnimatedStyle(() => {
-    return {
-      backgroundColor: colors.grey_1,
-      flex: 1,
-      opacity: withSpring(modalState != 0 ? 0.2 : 1),
-    };
-  }, [modalState]);
-
   return (
-    <Animated.View style={animatedStyle}>
-      <ScrollView
-        style={{
-          width: "100%",
-          height: "100%",
-        }}
-      >
-        <ScrollPressable onPress={() => Keyboard.dismiss()}>
-          <ComponentTitle
-            title="요일 변경"
-            subTitle="루틴을 원하는 요일에 끌어다 놓을 수 있어요"
-          />
-          <ScheduleChanger
-            SCHEDULE={SCHEDULE}
-            days={days}
-            setNewSCHE={setNewSCHE}
-          />
-          <ComponentTitle
-            title="운동 편집"
-            subTitle="루틴을 원하는 요일에 끌어다 놓을 수 있어요"
-          />
-          {newRoutine ? (
-            <>
-              {newRoutine?.map((item, id) => (
-                <ExerciseItem_Custom
-                  key={id}
-                  id={id}
-                  content={item.content}
-                  title={item.exerciseName}
-                  editRoutine={editRoutine}
-                  popMessage={() => popMessage(id)}
-                />
-              ))}
-              <Blank />
-            </>
-          ) : (
-            <ContentContainer>
-              <NoRoutineText style={{ marginTop: 160 }}>
-                해당 요일에는 루틴이 없어요
-              </NoRoutineText>
-            </ContentContainer>
-          )}
-        </ScrollPressable>
-      </ScrollView>
-    </Animated.View>
+    <ScrollView
+      style={{
+        backgroundColor: colors.grey_1,
+        width: "100%",
+        height: "100%",
+      }}
+    >
+      <ScrollPressable onPress={() => Keyboard.dismiss()}>
+        <ComponentTitle
+          title="요일 변경"
+          subTitle="루틴을 원하는 요일에 끌어다 놓을 수 있어요"
+        />
+        <ScheduleChanger
+          SCHEDULE={SCHEDULE}
+          days={days}
+          setNewSCHE={setNewSCHE}
+        />
+        <ComponentTitle
+          title="운동 편집"
+          subTitle="루틴을 원하는 요일에 끌어다 놓을 수 있어요"
+        />
+        {newRoutine ? (
+          <>
+            {newRoutine?.map((item, id) => (
+              <ExerciseItem_Custom
+                key={id}
+                id={id}
+                content={item.content}
+                title={item.exerciseName}
+                editRoutine={editRoutine}
+                popMessage={() => popMessage(id)}
+              />
+            ))}
+            <Blank />
+          </>
+        ) : (
+          <ContentContainer>
+            <NoRoutineText style={{ marginTop: 160 }}>
+              해당 요일에는 루틴이 없어요
+            </NoRoutineText>
+          </ContentContainer>
+        )}
+      </ScrollPressable>
+    </ScrollView>
   );
 };
