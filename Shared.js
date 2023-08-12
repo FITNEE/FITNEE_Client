@@ -2,6 +2,8 @@ import styled from "styled-components/native";
 import { colors } from "./colors";
 import { ActivityIndicator, Dimensions } from "react-native";
 import Back from "./assets/left_arrow.png";
+import { useRecoilValue } from "recoil";
+import { IsDarkAtom } from "./recoil/MyPageAtom";
 
 export const ScreenWidth = Dimensions.get("screen").width;
 export const ScreenHeight = Dimensions.get("screen").height;
@@ -48,6 +50,8 @@ export const Button = ({
   text = "확인",
   loading = false,
 }) => {
+  const isDark = useRecoilValue(IsDarkAtom);
+
   return (
     <MyButton
       disabled={!enabled}
@@ -55,16 +59,20 @@ export const Button = ({
       style={
         enabled
           ? {
-              backgroundColor: colors.l_main,
+              backgroundColor: isDark ? colors.d_main : colors.l_main,
             }
-          : { backgroundColor: colors.grey_3 }
+          : { backgroundColor: isDark ? colors.grey_7 : colors.grey_3 }
       }
     >
       {loading ? (
-        <ActivityIndicator color={colors.grey_7} />
+        <ActivityIndicator color={isDark ? colors.grey_3 : colors.grey_7} />
       ) : (
         <ButtonText
-          style={enabled ? { color: colors.white } : { color: colors.grey_7 }}
+          style={
+            enabled
+              ? { color: isDark ? colors.black : colors.white }
+              : { color: isDark ? colors.grey_3 : colors.grey_7 }
+          }
         >
           {text}
         </ButtonText>

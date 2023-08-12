@@ -3,6 +3,9 @@ import { Text, View } from "react-native";
 import PercentageCircle from "react-native-progress-circle";
 import { styled } from "styled-components/native";
 import TotalChart from "./TotalChart";
+import { useRecoilValue } from "recoil";
+import { IsDarkAtom } from "../../recoil/MyPageAtom";
+import { colors } from "../../colors";
 
 const Container = styled.View`
   width: 100%;
@@ -10,12 +13,6 @@ const Container = styled.View`
 `;
 const Exercise = styled.View`
   padding-top: 32px;
-`;
-const Title = styled.Text`
-  font-size: 17px;
-  font-weight: 600;
-  line-height: 25.5px;
-  margin: 0px 24px 16px 24px;
 `;
 const Block = styled.View`
   padding: 8px 24px;
@@ -33,24 +30,36 @@ const BlockContent = styled.View``;
 const Data = styled.View`
   flex-direction: row;
 `;
-const CircleText = styled.Text`
-  font-size: 24px;
-  font-weight: 600;
-  line-height: 33.6px;
-`;
-const CircleMiniText = styled.Text`
-  font-size: 13px;
-  font-weight: 400;
-  line-height: 19.5px;
-  padding-top: 8px;
-`;
-const CircleTitle = styled.Text`
-  font-size: 13px;
-  font-weight: 400;
-  line-height: 19.5px;
-`;
 
 export default function Analysis() {
+  const isDark = useRecoilValue(IsDarkAtom);
+  const Title = styled.Text`
+    font-size: 17px;
+    font-weight: 600;
+    line-height: 25.5px;
+    margin: 0px 24px 16px 24px;
+    color: ${isDark ? colors.white : colors.black};
+  `;
+  const CircleText = styled.Text`
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 33.6px;
+    color: ${isDark ? colors.white : colors.black};
+  `;
+  const CircleMiniText = styled.Text`
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 19.5px;
+    padding-top: 8px;
+    color: ${isDark ? colors.white : colors.black};
+  `;
+  const CircleTitle = styled.Text`
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 19.5px;
+    color: ${isDark ? colors.white : colors.black};
+  `;
+
   const calorie = useState("1280");
   const kilometer = useState("244");
   const hour = useState("43");

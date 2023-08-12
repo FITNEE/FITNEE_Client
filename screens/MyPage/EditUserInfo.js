@@ -10,12 +10,16 @@ import { colors } from "../../colors";
 import axios from "axios";
 import { TouchableOpacity } from "react-native";
 import { Image } from "react-native";
-import Back from "../../assets/left_arrow.png";
+import Left from "../../assets/SVGs/Left.svg";
 import { Alert } from "react-native";
 import { showNickToast } from "../../components/myPage/NickToast";
+import { useRecoilValue } from "recoil";
+import { IsDarkAtom } from "../../recoil/MyPageAtom";
+import { WithLocalSvg } from "react-native-svg";
 
 const Container = styled.View`
-  background-color: #fff;
+  background-color: ${({ DarkMode }) =>
+    DarkMode ? colors.grey_9 : colors.white};
   height: 100%;
   padding: 0px 24px;
   align-items: center;
@@ -31,9 +35,26 @@ const ProfileImage = styled.TouchableOpacity`
   background-color: ${colors.grey_2};
   border-radius: 88px;
 `;
+const InputRed = styled.View`
+  width: 240px;
+  height: 48px;
+  border-radius: 8px;
+  margin-bottom: 3px;
+  border: 1px;
+  border-color: ${({ DarkMode, check, error }) =>
+    check
+      ? error
+        ? colors.red
+        : colors.green
+      : DarkMode
+      ? colors.black
+      : colors.grey_2};
+`;
 const InputBlock = styled.TextInput`
   width: 238px;
-  background-color: ${colors.grey_1};
+  background-color: ${({ DarkMode }) =>
+    DarkMode ? colors.black : colors.grey_1};
+  color: ${({ DarkMode }) => (DarkMode ? colors.white : colors.black)};
   padding: 0px 16px;
   height: 46px;
   border-radius: 8px;
@@ -41,51 +62,50 @@ const InputBlock = styled.TextInput`
   font-style: normal;
   font-weight: 400;
 `;
-const InputRed = styled.View`
-  width: 240px;
-  height: 48px;
-  border-radius: 8px;
-  margin-bottom: 3px;
-  border: 1px;
-  border-color: ${({ check, error }) =>
-    check ? (error ? colors.red : colors.green) : colors.grey_2};
-`;
+
 const InputContainer = styled.View`
   flex-direction: row;
   width: 100%;
 `;
-const StatusText = styled.Text`
-  margin-left: 40px;
-  font-size: 11px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 16.5px;
-  width: 100%;
-  margin-bottom: 20px;
-  margin-right: 8px;
-  font-weight: 300;
-  color: ${({ check, error }) =>
-    check ? (error ? colors.red : colors.green) : colors.grey_2};
-`;
-
-const CheckButton = styled.TouchableOpacity`
-  width: 79px;
-  height: 48px;
-  border-radius: 8px;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid ${colors.l_main};
-  margin-left: 8px;
-`;
-const CheckButtonText = styled.Text`
-  font-size: 15px;
-  font-style: normal;
-  font-weight: 600;
-  line-height: 22.5px;
-  color: ${colors.l_main};
-`;
 
 export default function EditUserInfo({ navigation }) {
+  const isDark = useRecoilValue(IsDarkAtom);
+  const StatusText = styled.Text`
+    margin-left: 40px;
+    font-size: 11px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 16.5px;
+    width: 100%;
+    margin-bottom: 20px;
+    margin-right: 8px;
+    font-weight: 300;
+    color: ${({ check, error }) =>
+      check
+        ? error
+          ? colors.red
+          : colors.green
+        : isDark
+        ? colors.grey_8
+        : colors.grey_2};
+  `;
+  const CheckButton = styled.TouchableOpacity`
+    width: 79px;
+    height: 48px;
+    border-radius: 8px;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid ${isDark ? colors.d_main : colors.l_main};
+    margin-left: 8px;
+  `;
+  const CheckButtonText = styled.Text`
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 22.5px;
+    color: ${isDark ? colors.d_main : colors.l_main};
+  `;
+
   const [check, setCheck] = useState(false);
   const [error, setError] = useState(true);
   const [userInfo, setUserInfo] = useState([
@@ -179,10 +199,13 @@ export default function EditUserInfo({ navigation }) {
             ]);
           }}
         >
-          <Image
-            source={Back}
-            style={{ width: 24, height: 24, marginLeft: 24 }}
-          ></Image>
+          <WithLocalSvg
+            style={{ marginLeft: 24 }}
+            width={24}
+            height={24}
+            asset={Left}
+            color={isDark ? colors.white : colors.black}
+          />
         </TouchableOpacity>
       ),
       headerRight: () => (
@@ -199,7 +222,13 @@ export default function EditUserInfo({ navigation }) {
             style={{
               fontSize: 17,
               fontWeight: 600,
-              color: enabled ? colors.l_main : colors.grey_2,
+              color: enabled
+                ? isDark
+                  ? colors.d_main
+                  : colors.l_main
+                : isDark
+                ? colors.grey_7
+                : colors.grey_2,
             }}
           >
             저장
@@ -216,17 +245,19 @@ export default function EditUserInfo({ navigation }) {
           Keyboard.dismiss();
         }}
       >
-        <Container>
+        <Container DarkMode={isDark}>
           <Profile>
             <ProfileImage></ProfileImage>
           </Profile>
           <InputContainer>
-            <InputRed error={error} check={check}>
+            <InputRed DarkMode={isDark} error={error} check={check}>
               <InputBlock
                 editable
                 autoFocus
                 onChangeText={(text) => setNewNickname(text)}
                 placeholder={getUserName}
+                placeholderTextColor={isDark ? colors.grey_8 : colors.grey_6}
+                DarkMode={isDark}
               />
             </InputRed>
             <CheckButton enabled onPress={change}>

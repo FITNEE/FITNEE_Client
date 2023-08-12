@@ -14,7 +14,6 @@ import Tab_MyRoutine from "../assets/SVGs/Tab_MyRoutine.svg";
 import { colors } from "../colors";
 import { WithLocalSvg } from "react-native-svg";
 import { styled } from "styled-components/native";
-import DictionaryNav from './DictionaryNav'
 import { useRecoilState, useRecoilValue } from "recoil";
 import { TabBarAtom } from "../recoil/MyPageAtom";
 
