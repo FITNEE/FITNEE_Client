@@ -7,6 +7,7 @@ import BottomSheet, { BottomSheetScrollView, BottomSheetBackdrop } from "@gorhom
 import { AppContext } from '../../components/ContextProvider';
 import Dictionary_LeftTab from '../../components/Dictionary_LeftTab'
 import Dictionary_RightTab from '../../components/Dictionary_RightTab'
+import axios from 'axios'
 
 const SCREEN_WIDTH = Dimensions.get('screen').width
 const Container = styled.View`
@@ -181,11 +182,11 @@ export default function Dictionary_3({ navigation, route }){
     const rightTab = useRef()
     const bottomModal = useRef()
 
-    const [leftTabActivate, setLeftTabActivate ] = useState(true)
-    const [notReadCount, setNoteradCount] = useState(0)
-    const [isAllRead, setIsAllRead] = useState(true)
+
     const snapPoints = useMemo(()=> ['45%', '96%'], []) // modal이 가리는 화면%
 
+    // LeftTab 누르면 leftTabActivate = true
+    const [leftTabActivate, setLeftTabActivate ] = useState(true)
     const onTabPress = (target) => {
         setBubbleBool(false)
         target===leftTab? 
@@ -200,35 +201,53 @@ export default function Dictionary_3({ navigation, route }){
           />
         ), []
     )
-    // 루틴에 추가하는 버튼 ()
+    // 루틴 추가 말풍선
     const onPressAddRoutineBtn = ()=>{
         setBubbleBool(false)
+
+        const exerciseName = exerciseInfo.name
+        const exercisePart = exerciseInfo.parts
+        const categoryIdx = exerciseInfo.healthCategoryIdx
+        console.log(`${exerciseName},${exercisePart},${categoryIdx}`)
+        // navigation.navigate("MyRoutine",{exerciseName,exercisePart,categoryIdx})
     }
 
     // RightTab에서 쓰이는 JoinBtnBool, 읽지 않음 버튼
     const [bubbleBool, setBubbleBool] = useState(true) // 말풍선 나타내기
     const [joinBtnBool, setJoinBtnBool] = useState(true) // 참여하기 버튼 나타내기
+    
     const parentSetJoinBtnBool = (newBool) => setJoinBtnBool(newBool)
-    const parentIsAllRead = (newBool) => setIsAllRead(newBool)
+    const [isAllRead, setIsAllRead] = useState(true)
 
-    const putChatRead = async (idx) => {
+
+
+    const getReadInfo = async () => {
         try {
             let url = "https://gpthealth.shop/"
-            let detailAPI = `app/dictionary/chatRead`
-            const response = await axios.put(url + detailAPI, {
-                healthChattingIdx: idx
+            let detailAPI = "/app/dictionary/readInfo"
+            const response = await axios.get(url + detailAPI, {
+                params: {
+                    name: exerciseInfo.name,
+                },
             })
             const result = response.data
-            console.log(result)
-    
-            if(result.isSuccess) console.log(`마지막 채팅 저장 성공(idx: ${idx})`)
-            else console.log(`마지막 채팅 저장 실패(idx: ${idx})`)
-            return result
-        } 
-        catch (error) {
+            return result.result
+        } catch (error) {
             console.error("Failed to fetch data:", error)
         }
     }
+    useEffect(()=>{
+        getReadInfo().then((result)=>{
+            if(result[0].hasUnreadChats == 0) {
+                setIsAllRead(true)
+                console.log(`안 읽은 채팅 없음`)
+            }
+            else {
+                setIsAllRead(false)
+                console.log(`안 읽은 채팅 있음`)
+            }
+        })
+    }, [])
     
     return (
         <TouchableWithoutFeedback
@@ -278,7 +297,7 @@ export default function Dictionary_3({ navigation, route }){
                                     ref={rightTab} 
                                     style={leftTabActivate? null: {borderBottomColor: `${ isDark ? colors.d_main : colors.l_main}`}} 
                                     onPressIn={()=>onTabPress(rightTab)}>
-                                        <TabText style={leftTabActivate? null: {fontWeight: 600}}>채팅 42개</TabText>
+                                        <TabText style={leftTabActivate? null: {fontWeight: 600}}>채팅</TabText>
                                         { isAllRead? null : <NotReadDot/> }
                                 </RightTab>
                             </TabContainer>
@@ -291,7 +310,6 @@ export default function Dictionary_3({ navigation, route }){
                                     <Dictionary_RightTab 
                                         parentJoinBtnBool={joinBtnBool}
                                         parentSetJoinBtnBool={parentSetJoinBtnBool}
-                                        parentIsAllRead={parentIsAllRead}
                                         exerciseName = {exerciseInfo.name}
                                         />
                             } 

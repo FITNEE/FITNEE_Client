@@ -89,6 +89,7 @@ export default function Dictionary_RightTab(props) {
             setChat(""),
             funcSetJoinBtnBool(true),
             setChatUpdate(!chatUpdate),
+            // putChatRead()
             scrollviewRef.current?.scrollToEnd({ animated: true })
             )
     }
@@ -114,44 +115,52 @@ export default function Dictionary_RightTab(props) {
 
     // 채팅 불러오기
     const getChat = async () => {
-    try {
-        let url = "https://gpthealth.shop/"
-        let detailAPI = "/app/dictionary/exercisechat"
-        const response = await axios.get(url + detailAPI, {
-            params: {
-                name: exerciseName,
-            },
-        })
-        const result = response.data
-        return result
-    } catch (error) {
-        console.error("Failed to fetch data:", error)
-    }
+        try {
+            let url = "https://gpthealth.shop/"
+            let detailAPI = "/app/dictionary/exercisechat"
+            const response = await axios.get(url + detailAPI, {
+                params: {
+                    name: exerciseName,
+                },
+            })
+            const result = response.data
+
+            if(result.result.isSuccess) 
+            console.log(`채팅 불러오기 성공 (운동이름 : ${exerciseName})`)
+            else console.log(`채팅 불러오기 성공 (운동이름 : ${exerciseName})`)
+    
+            return result.result
+        } catch (error) {
+            console.error("Failed to fetch data:", error)
+        }
     }
     useEffect(() => {
-    getChat().then((result) => {
-        setMsg(result.result.chattinginfo)
-    })
+        getChat().then((result) => {
+            setMsg(result.chattinginfo)
+
+            const lastIdx = result.chattinginfo.at(-1).healthChattingIdx
+            // putChatRead(lastIdx)
+        })
     }, [parentJoinBtnBool,chatUpdate])
 
-  //채팅 올리기
-  const postChat = async () => {
-    try {
-        let url = "https://gpthealth.shop/"
-        let detailAPI = "/app/dictionary/chatting"
-        const response = await axios.post(url + detailAPI, {
-            "name": exerciseName,
-            "text": chat
-        })
-        const result = response.data
-        if(result.result.isSuccess) 
-            console.log(`채팅 업로드 성공 (운동: ${exerciseName}, 닉네임: ${myNickName}, 내용: ${chat})`)
-        else console.log(`채팅 업로드 실패 (운동: ${exerciseName}, 닉네임: ${myNickName}, 내용: ${chat})`)
+    //채팅 보내기
+    const postChat = async () => {
+        try {
+            let url = "https://gpthealth.shop/"
+            let detailAPI = "/app/dictionary/chatting"
+            const response = await axios.post(url + detailAPI, {
+                "name": exerciseName,
+                "text": chat
+            })
+            const result = response.data
+            if(result.result.isSuccess) 
+                console.log(`채팅 업로드 성공 (운동: ${exerciseName}, 닉네임: ${myNickName}, 내용: ${chat})`)
+            else console.log(`채팅 업로드 실패 (운동: ${exerciseName}, 닉네임: ${myNickName}, 내용: ${chat})`)
+        } 
+        catch (error) {                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
+            console.error("Failed to fetch data:", error);
+        }
     } 
-    catch (error) {                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
-      console.error("Failed to fetch data:", error);
-    }
-} 
 
     // 닉네임 알아오기
     const [myNickName, setMyNickName] = useState("")
@@ -173,6 +182,8 @@ export default function Dictionary_RightTab(props) {
     })
     }, [])
 
+
+    // 채팅 삭제 
     const deleteChat = async (idx) => {
     try {
         let url = "https://gpthealth.shop/"
@@ -190,6 +201,8 @@ export default function Dictionary_RightTab(props) {
         console.error("Failed to fetch data:", error)
     }
     }
+
+    // 채팅 삭제 버튼
     const onPressMsgDeleteBtn = (idx) => {
         Alert.alert(
         "채팅 삭제",
@@ -206,15 +219,37 @@ export default function Dictionary_RightTab(props) {
             },
         ]
         )
-        setDeleteBtnBool(false)
+        setSelectedIdx(-1)
+    }
+    
+
+    // 어디까지 읽었는지 저장
+    const putChatRead = async (idx) => {
+        try {
+            let url = "https://gpthealth.shop/"
+            let detailAPI = "/app/dictionary/chatRead"
+            const response = await axios.put(url + detailAPI, {
+                healthChattingIdx: 40,
+            })
+            const result = response.data   
+            console.log(result)
+    
+            return result.result
+        } catch (error) {
+            console.error("Failed to fetch data:", error)
+        }
     }
 
+    // 삭제하려는 메시지의 msg 배열에서의 index값
     const [selectedIdx, setSelectedIdx] = useState(-1)
+
+    //메시지를 꾹 눌렀을 때 메시지 삭제 버튼 토글
     const onLongPress = (i) => {
         // Vibration.vibrate()
         if(i==selectedIdx) setSelectedIdx(-1)
         else setSelectedIdx(i)
 
+        {/* 햅틱 효과 넣고 싶다 아님 띠용 이펙트 */}
     }
 
     return (
