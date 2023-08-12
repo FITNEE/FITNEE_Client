@@ -28,7 +28,6 @@ export default function Dictionary_1({ navigation }) {
     const [recentKeywords, setRecentKeywords] = useState([])
     const [searchList, setSearchList] = useState([])
     
-
     // 사용자가 검색창에 onFocus 했을 때
     const onFocusInput = ()=>{
         setIsSubmit(false)
@@ -152,6 +151,7 @@ export default function Dictionary_1({ navigation }) {
                             >
                                 <Logo/>
                                 <SearchInput
+                                    keyboardAppearance= {isDark? 'dark':'light'}
                                     autoFocus={true}
                                     placeholder='운동명, 부위 검색'
                                     placeholderTextColor={colors.grey_4}
