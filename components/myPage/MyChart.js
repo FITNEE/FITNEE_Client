@@ -6,37 +6,38 @@ import { colors } from "../../colors";
 import { styled } from "styled-components/native";
 import WrappedText from "react-native-wrapped-text";
 import { divide } from "react-native-reanimated";
-import { useRecoilValue } from "recoil";
-import { IsDarkAtom } from "../../recoil/MyPageAtom";
+import PureChart from "react-native-pure-chart";
 
+const BoxContainer = styled.View`
+  margin: 26px 24px 0px 24px;
+  background-color: ${colors.grey_1};
+  border-radius: 20px;
+  padding: 16px;
+  padding-right: 0px;
+`;
 const Container = styled.ScrollView``;
 
-export default function TotalChart() {
-  const isDark = useRecoilValue(IsDarkAtom);
-  const BoxContainer = styled.View`
-    margin: 26px 24px 0px 24px;
-    background-color: ${isDark ? colors.grey_7 : colors.grey_1};
-    border-radius: 20px;
-    padding: 16px;
-    padding-right: 0px;
-  `;
+export default function MyChart() {
+  const screenWidth = Dimensions.get("window").width;
 
-  const [message, setMessage] = useState({
+  /*
+    const [message, setMessage] = useState({
     x: 0,
     y: 0,
     visible: false,
     value: 0,
   });
+  
 
   const chartConfig = {
     color: () => colors.grey_2,
-    labelColor: () => (isDark ? colors.white : colors.black),
+    labelColor: () => colors.black,
     useShadowColorFromDataset: true,
     fillShadowGradientFromOpacity: 0.3,
     fillShadowGradientToOpacity: 0,
 
-    backgroundGradientFrom: isDark ? colors.grey_7 : colors.grey_1,
-    backgroundGradientTo: isDark ? colors.grey_7 : colors.grey_1,
+    backgroundGradientFrom: colors.grey_1,
+    backgroundGradientTo: colors.grey_1,
     propsForLabels: {
       fontSize: 11,
       fonstWeight: 600,
@@ -74,6 +75,7 @@ export default function TotalChart() {
     labels: ["7월 1주", "2주", "3주", "4주", "8월 1주", "2주", "3주", "4주"],
     datasets: [
       {
+        seriesName: 
         data: calorieData,
         color: () => colors.l_main,
         strokeWidth: 2,
@@ -85,11 +87,9 @@ export default function TotalChart() {
       },
       {
         data: [1],
-        color: () => "separent",
       },
       {
         data: [0],
-        color: () => "separent",
       },
     ],
     //legend: ["kcal", "km"],
@@ -101,7 +101,7 @@ export default function TotalChart() {
   const maxValue = Math.max(valueDataset0, valueDataset1);
   const isDataset0Larger = maxValue === valueDataset0;
 
-  /*
+  
   const getDataPointPositions = () => {
     return data.datasets[0].data.map((value, index) => ({
       x: (index * screenWidth) / (data.labels.length - 1),
@@ -120,86 +120,57 @@ export default function TotalChart() {
     value: lastDataPoint.value,
   });
   */
+  var data = [
+    {
+      seriesName: "calorie",
+      data: [
+        { x: "7월 1주", y: 30 },
+        { x: "2주", y: 50 },
+        { x: "3주", y: 30 },
+        { x: "4주", y: 40 },
+        { x: "8월 1주", y: 20 },
+        { x: "2주", y: 30 },
+        { x: "3주", y: 60 },
+        { x: "4주", y: 30 },
+      ],
+      color: colors.l_main,
+    },
+    {
+      seriesName: "distance",
+      data: [
+        { x: "7월 1주", y: 50 },
+        { x: "2주", y: 20 },
+        { x: "3주", y: 60 },
+        { x: "4주", y: 70 },
+        { x: "8월 1주", y: 90 },
+        { x: "2주", y: 20 },
+        { x: "3주", y: 30 },
+        { x: "4주", y: 60 },
+      ],
+      color: colors.green,
+    },
+  ];
 
   return (
     <BoxContainer>
       <Container
         horizontal
         showsHorizontalScrollIndicator={false}
-        contentOffset={{ x: (data.labels.length * screenWidth) / 8, y: 0 }}
+        contentOffset={{ x: (data.length * screenWidth) / 8, y: 0 }}
       >
-        <LineChart
+        <PureChart
+          type={"line"}
           data={data}
-          width={(data.labels.length * screenWidth) / 4}
-          //width={screenWidth-48}
-          height={230}
-          chartConfig={chartConfig}
-          fromZero={true}
-          bezier
-          withHorizontalLabels={false}
-          withVerticalLines={false}
-          withHorizontalLines={true}
-          style={{
-            paddingRight: 0,
-          }}
-          decorator={() => {
-            return message.visible ? (
-              <View
-                style={{
-                  position: "absolute",
-                  width: 62,
-                  height: 32,
-                  top: message.y - 30,
-                  left: message.x - 36,
-                  backgroundColor: isDark ? colors.white : colors.black,
-                  borderRadius: 12,
-                  alignItems: "center",
-                  justifyContent: "center",
-                  flexDirection: "row",
-                }}
-              >
-                <Text
-                  style={{
-                    fontSize: 11,
-                    fontWeight: 700,
-                    color: isDark ? colors.black : colors.white,
-                    textAlign: "center",
-                  }}
-                >
-                  {message.value * KcalMax}
-                </Text>
-                {
-                  <Text
-                    style={{
-                      fontSize: 11,
-                      fontWeight: 500,
-                      color: isDark ? colors.black : colors.white,
-                      textAlign: "center",
-                    }}
-                  >
-                    {" kcal"}
-                  </Text>
-                }
-              </View>
-            ) : null;
-          }}
-          onDataPointClick={(data) => {
-            let isSamePoint = message.x === data.x && message.y === data.y;
-
-            isSamePoint
-              ? setMessage((previousState) => {
-                  return {
-                    ...previousState,
-                    value: data.value,
-                    visible: !previousState.visible,
-                  };
-                })
-              : setMessage({
-                  x: data.x,
-                  value: data.value,
-                  y: data.y,
-                  visible: true,
-                });
+          width={"100%"}
+          height={200}
+          xAxisColor={colors.grey_5}
+          yAxisColor={"transparent"}
+          xAxisGridLineColor={"transparent"}
+          yAxisGridLineColor={colors.grey_2}
+          labelColor={colors.black}
+          customValueRenderer={(index, point) => {
+            if (index % 2 === 0) return null;
+            return <Text style={{ textAlign: "center" }}>{point.y}</Text>;
           }}
         />
       </Container>

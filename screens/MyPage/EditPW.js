@@ -11,16 +11,21 @@ import { Button } from "../../Shared";
 import axios from "axios";
 import { Alert } from "react-native";
 import { PWToast, showPWToast } from "../../components/myPage/PWToast";
+import { useRecoilValue } from "recoil";
+import { IsDarkAtom } from "../../recoil/MyPageAtom";
 
 const Container = styled.View`
   height: 100%;
-  background-color: ${colors.white};
+  background-color: ${({ DarkMode }) =>
+    DarkMode ? colors.grey_9 : colors.white};
   padding: 32px 24px 0px 24px;
 `;
 const Input = styled.TextInput`
   padding: 15px 16px;
   border-radius: 10px;
-  background-color: ${colors.grey_1};
+  background-color: ${({ DarkMode }) =>
+    DarkMode ? colors.black : colors.grey_1};
+  color: ${({ DarkMode }) => (DarkMode ? colors.white : colors.black)};
   width: 100%;
   height: 48px;
 `;
@@ -60,6 +65,8 @@ const InputContainer = styled.View`
 `;
 
 export default function EditPW({ navigation }) {
+  const isDark = useRecoilValue(IsDarkAtom);
+
   const [rewrittenPW, setRewrittenPW] = useState("");
   const [newPW, setNewPW] = useState("");
   const [rewrittenNewPW, setRewrittenNewPW] = useState("");
@@ -141,13 +148,22 @@ export default function EditPW({ navigation }) {
           Keyboard.dismiss();
         }}
       >
-        <Container>
+        <Container DarkMode={isDark}>
           <InputContainer>
             <InputRed1 error={errorPW}>
               <Input
-                placeholderTextColor={colors.grey_6}
+                DarkMode={isDark}
+                placeholderTextColor={isDark ? colors.grey_8 : colors.grey_6}
                 placeholder="기존 비밀번호 확인"
-                style={{ color: checking ? colors.grey_2 : colors.black }}
+                style={{
+                  color: checking
+                    ? isDark
+                      ? colors.grey_7
+                      : colors.grey_2
+                    : isDark
+                    ? colors.white
+                    : colors.black,
+                }}
                 autoFocus
                 ref={(input) => {
                   this.firstInput = input;
@@ -168,7 +184,8 @@ export default function EditPW({ navigation }) {
               on={click}
             >
               <Input
-                placeholderTextColor={colors.grey_6}
+                DarkMode={isDark}
+                placeholderTextColor={isDark ? colors.grey_8 : colors.grey_6}
                 placeholder="새 비밀번호"
                 ref={(input) => {
                   this.secondInput = input;
@@ -187,7 +204,8 @@ export default function EditPW({ navigation }) {
               on={click}
             >
               <Input
-                placeholderTextColor={colors.grey_6}
+                DarkMode={isDark}
+                placeholderTextColor={isDark ? colors.grey_8 : colors.grey_6}
                 onSubmitEditing={() => {
                   rewrittenNewPW == newPW && handlePress();
                 }}

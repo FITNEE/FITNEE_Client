@@ -12,13 +12,19 @@ import { WithLocalSvg } from "react-native-svg";
 import SettingIcon from "../assets/SVGs/Setting.svg";
 import Left from "../assets/SVGs/Left.svg";
 import { colors } from "../colors";
+import { useRecoilValue } from "recoil";
+import { IsDarkAtom } from "../recoil/MyPageAtom";
 
 const Stack = createStackNavigator();
 
 export default function MyPageNav() {
+  const isDark = useRecoilValue(IsDarkAtom);
+
   return (
     <Stack.Navigator
       screenOptions={{
+        headerStyle: { backgroundColor: isDark ? colors.grey_9 : colors.white },
+        headerTintColor: isDark ? colors.white : colors.black,
         headerShadowVisible: false,
       }}
     >
@@ -34,6 +40,7 @@ export default function MyPageNav() {
                 width={24}
                 height={24}
                 asset={SettingIcon}
+                color={isDark ? colors.white : colors.black}
               />
             </TouchableOpacity>
           ),
@@ -51,7 +58,7 @@ export default function MyPageNav() {
                 width={24}
                 height={24}
                 asset={Left}
-                color={colors.black}
+                color={isDark ? colors.white : colors.black}
               />
             </TouchableOpacity>
           ),
@@ -69,7 +76,7 @@ export default function MyPageNav() {
                 width={24}
                 height={24}
                 asset={Left}
-                color={colors.black}
+                color={isDark ? colors.white : colors.black}
               />
             </TouchableOpacity>
           ),
@@ -89,7 +96,7 @@ export default function MyPageNav() {
                 width={24}
                 height={24}
                 asset={Left}
-                color={colors.black}
+                color={isDark ? colors.white : colors.black}
               />
             </TouchableOpacity>
           ),
@@ -107,6 +114,7 @@ export default function MyPageNav() {
                 width={24}
                 height={24}
                 asset={Left}
+                color={isDark ? colors.white : colors.black}
               />
             </TouchableOpacity>
           ),

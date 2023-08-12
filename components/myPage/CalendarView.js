@@ -6,6 +6,8 @@ import { format } from "date-fns";
 import { WithLocalSvg } from "react-native-svg";
 import Left from "../../assets/SVGs/Left.svg";
 import Right from "../../assets/SVGs/Right.svg";
+import { useRecoilValue } from "recoil";
+import { IsDarkAtom } from "../../recoil/MyPageAtom";
 
 LocaleConfig.locales["ko"] = {
   monthNames: [
@@ -50,6 +52,7 @@ LocaleConfig.locales["ko"] = {
 LocaleConfig.defaultLocale = "ko";
 
 export default function CalendarView(props) {
+  const isDark = useRecoilValue(IsDarkAtom);
   const windowWidth = Dimensions.get("window").width;
   const today = format(new Date(), "yyyy-MM-dd");
   const days = props.exerciseDays.map((day) =>
@@ -92,31 +95,32 @@ export default function CalendarView(props) {
         ...exerciseDay,
         [today]: {
           selected: true,
-          selectedColor: colors.grey_2,
-          selectedTextColor: colors.black,
+          selectedColor: isDark ? colors.grey_7 : colors.grey_2,
+          selectedTextColor: isDark ? colors.white : colors.grey_9,
         },
         [selectedDate]: {
           ...exerciseDay[selectedDate],
           selected: true,
-          selectedColor: colors.l_main,
-          selectedTextColor: colors.white,
+          selectedColor: isDark ? colors.d_main : colors.l_main,
+          selectedTextColor: isDark ? colors.grey_9 : colors.white,
         },
       }}
       theme={{
         locale: "ko",
+        calendarBackground: isDark ? colors.grey_9 : colors.white,
         textDayFontSize: 13,
         textDayFontWeight: 400,
-        textDayStyle: { color: colors.grey_4 },
-        textSectionTitleColor: colors.grey_7,
+        textDayStyle: { color: isDark ? colors.grey_5 : colors.grey_4 },
+        textSectionTitleColor: isDark ? colors.grey_2 : colors.grey_7,
         "stylesheet.calendar.header": {
           monthText: {
             fontSize: 15,
             fontWeight: 600,
-            color: colors.black,
+            color: isDark ? colors.white : colors.black,
             margin: 24,
           },
         },
-        selectedDayTextColor: colors.black,
+        selectedDayTextColor: isDark ? colors.white : colors.grey_9,
         selectedDayBackgroundColor: "transparent",
       }}
       onDayPress={(pressDay) => {
