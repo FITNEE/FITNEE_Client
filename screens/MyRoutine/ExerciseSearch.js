@@ -8,17 +8,17 @@ import SearchList from "../../components/myRoutine/SearchList";
 import Search from "../../assets/SVGs/Search.svg";
 import { WithLocalSvg } from "react-native-svg";
 import { Button } from "../../Shared";
+import { useRecoilValue } from "recoil";
+import { IsDarkAtom } from "../../recoil/MyPageAtom";
 
 const Container = styled.View`
   flex: 1;
   width: 100%;
-  background-color: white;
 `;
 
 const TopContainer = styled.View`
   padding: 8px 24px;
   border-bottom-width: 1px;
-  border-bottom-color: ${colors.grey_1};
 `;
 const SearchContainer = styled.View`
   flex-direction: row;
@@ -27,7 +27,6 @@ const SearchContainer = styled.View`
   align-items: center;
 `;
 const SearchInputContainer = styled.View`
-  background-color: ${colors.grey_1};
   border-radius: 12px;
   flex-direction: row;
   align-items: center;
@@ -58,7 +57,7 @@ const KeywordsContainer = styled.View`
 `;
 const BottomContainer = styled.View`
   justify-content: space-between;
-  border: 1px ${colors.grey_3} solid;
+  border: 1px solid;
   padding: 0px 24px;
 `;
 const RecentContainer = styled.View`
@@ -69,7 +68,6 @@ const RecentContainer = styled.View`
 const RecentTitle = styled.Text`
   font-weight: 600;
   font-size: 16px;
-  color: ${colors.black};
   margin-bottom: 16px;
 `;
 const RecentKeywordContainer = styled.View`
@@ -80,18 +78,11 @@ const HotContainer = styled.View`
   height: 123px;
   width: 100%;
 `;
-const HotTitle = styled.Text`
-  font-weight: 600;
-  font-size: 16px;
-  color: ${colors.black};
-  margin-bottom: 16px;
-`;
 const PopularKeywordsContainer = styled.View`
   flex-direction: row;
   flex-wrap: wrap;
 `;
 const KeywordContainer = styled.TouchableOpacity`
-  background-color: ${colors.grey_1};
   border-radius: 100px;
   margin-right: 4px;
   margin-bottom: 4px;
@@ -125,7 +116,7 @@ const SelectedItemText = styled.Text`
   color: ${colors.grey_7};
 `;
 export default function ExerciseSearch({ navigation }) {
-  const { isDark } = useContext(AppContext);
+  const isDark = useRecoilValue(IsDarkAtom);
   const [search, setSearch] = useState("");
   const [isSearching, setIsSearching] = useState(false);
   const [part, setPart] = useState([
@@ -232,12 +223,29 @@ export default function ExerciseSearch({ navigation }) {
   };
   // 검색될때마다 키워드 기록
   return (
-    <SafeAreaView style={{ backgroundColor: "white", flex: 1 }}>
+    <SafeAreaView
+      style={{
+        backgroundColor: isDark ? colors.grey_9 : colors.white,
+        flex: 1,
+      }}
+    >
       <TouchableWithoutFeedback style={{ flex: 1 }} onPress={Keyboard.dismiss}>
-        <Container>
-          <TopContainer>
+        <Container
+          style={{
+            backgroundColor: isDark ? colors.grey_9 : colors.white,
+          }}
+        >
+          <TopContainer
+            style={{
+              borderBottomColor: isDark ? colors.grey_8 : colors.grey_1,
+            }}
+          >
             <SearchContainer>
-              <SearchInputContainer>
+              <SearchInputContainer
+                style={{
+                  backgroundColor: isDark ? colors.black : colors.grey_1,
+                }}
+              >
                 <WithLocalSvg width={24} height={24} asset={Search} />
                 <SearchInput
                   autoFocus={true}
@@ -256,20 +264,42 @@ export default function ExerciseSearch({ navigation }) {
           {!isSearching && (
             <KeywordsContainer>
               <RecentContainer style={{ marginBottom: 56 }}>
-                <RecentTitle>최근 검색 키워드</RecentTitle>
+                <RecentTitle
+                  style={{
+                    color: isDark ? colors.white : colors.black,
+                  }}
+                >
+                  최근 검색 키워드
+                </RecentTitle>
                 <RecentKeywordContainer>
                   {recentKeywords.map((keyword) => (
-                    <KeywordContainer onPress={() => onPressKeyword(keyword)}>
+                    <KeywordContainer
+                      style={{
+                        backgroundColor: isDark ? colors.black : colors.grey_1,
+                      }}
+                      onPress={() => onPressKeyword(keyword)}
+                    >
                       <Keyword>{keyword}</Keyword>
                     </KeywordContainer>
                   ))}
                 </RecentKeywordContainer>
               </RecentContainer>
               <HotContainer>
-                <HotTitle>인기 키워드</HotTitle>
+                <RecentTitle
+                  style={{
+                    color: isDark ? colors.white : colors.black,
+                  }}
+                >
+                  인기 키워드
+                </RecentTitle>
                 <PopularKeywordsContainer>
                   {popularKeywords.map((keyword) => (
-                    <KeywordContainer onPress={() => onPressKeyword(keyword)}>
+                    <KeywordContainer
+                      style={{
+                        backgroundColor: isDark ? colors.black : colors.grey_1,
+                      }}
+                      onPress={() => onPressKeyword(keyword)}
+                    >
                       <Keyword>{keyword}</Keyword>
                     </KeywordContainer>
                   ))}
@@ -285,7 +315,9 @@ export default function ExerciseSearch({ navigation }) {
           )}
         </Container>
       </TouchableWithoutFeedback>
-      <BottomContainer>
+      <BottomContainer
+        style={{ borderTopColor: isDark ? colors.grey_8 : colors.grey_1 }}
+      >
         <SelectedListContainer
           horizontal
           showsHorizontalScrollIndicator={false}

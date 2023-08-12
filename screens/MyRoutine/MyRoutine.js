@@ -61,7 +61,7 @@ const SetContainer = styled.View`
   justify-content: space-between;
   align-items: center;
   padding: 12px 16px;
-  background-color: ${colors.grey_1};
+
   height: 48px;
   border-radius: 8px;
   margin-top: 10px;
@@ -89,7 +89,6 @@ const EditBox = styled.TextInput`
   align-items: center;
   border-radius: 8px;
   width: 56px;
-  background-color: ${colors.grey_2};
 `;
 
 const SubmitText = styled.Text`
@@ -124,8 +123,7 @@ export default MyRoutine = ({ navigation, route }) => {
 
   const setIsTabVisible = useSetRecoilState(TabBarAtom);
 
-  // const isDark = useRecoilValue(IsDarkAtom);
-  let isDark = false;
+  const isDark = useRecoilValue(IsDarkAtom);
 
   //가장 밑단에서 backgroundColor 제공
   const ScreenBase = styled.SafeAreaView`
@@ -394,7 +392,9 @@ export default MyRoutine = ({ navigation, route }) => {
             style={{ backgroundColor: isDark ? colors.grey_8 : colors.white }}
           >
             <BottomSheetHeader>
-              <ExerciseTitle>
+              <ExerciseTitle
+                style={{ color: isDark ? colors.white : colors.black }}
+              >
                 {routineData /** 운동이 없는 요일을 선택했을 경우, Null값이 반환됨에 따라 
                   null을 object로 만들수 없다는 오류를 피하기 위함 */ &&
                   routineData[editingID]?.exerciseName}
@@ -407,21 +407,32 @@ export default MyRoutine = ({ navigation, route }) => {
               {newRoutine /** 운동이 없는 요일을 선택했을 경우, Null값이 반환됨에 따라 
                   null을 object로 만들수 없다는 오류를 피하기 위함 */ &&
                 newRoutine[editingID]?.content.map((item, id) => (
-                  <SetContainer key={id}>
+                  <SetContainer
+                    style={{
+                      backgroundColor: isDark ? colors.grey_7 : colors.grey_1,
+                    }}
+                    key={id}
+                  >
                     <ContentContainer key={id}>
-                      <SetsText>{id + 1}</SetsText>
+                      <SetsText style={isDark && { color: colors.white }}>
+                        {id + 1}
+                      </SetsText>
                       <EditBox
+                        style={{
+                          backgroundColor: isDark
+                            ? !item.weight
+                              ? colors.black
+                              : colors.black
+                            : !item.weight
+                            ? colors.white
+                            : colors.grey_2,
+                        }}
                         keyboardType="numeric"
                         selectTextOnFocus={item.weight != null}
                         editable={item.weight != null}
                         onFocus={() => extendModal()}
                         onChangeText={(value) =>
                           editRoutine(id, "weight", value)
-                        }
-                        style={
-                          !item.weight && {
-                            backgroundColor: colors.grey_2,
-                          }
                         }
                       >
                         <EditText
@@ -430,8 +441,19 @@ export default MyRoutine = ({ navigation, route }) => {
                           {item.weight}
                         </EditText>
                       </EditBox>
-                      <SetsText>kg</SetsText>
+                      <SetsText style={isDark && { color: colors.white }}>
+                        kg
+                      </SetsText>
                       <EditBox
+                        style={{
+                          backgroundColor: isDark
+                            ? !item.weight
+                              ? colors.black
+                              : colors.black
+                            : !item.weight
+                            ? colors.white
+                            : colors.grey_2,
+                        }}
                         keyboardType="numeric"
                         selectTextOnFocus={item.rep != null}
                         editable={item.rep != null}
@@ -439,13 +461,14 @@ export default MyRoutine = ({ navigation, route }) => {
                         onChangeText={(value) =>
                           editRoutine(id, "repeat", value)
                         }
-                        style={!item.rep && { backgroundColor: colors.grey_2 }}
                       >
                         <EditText style={{ color: colors.l_main }}>
                           {item.rep}
                         </EditText>
                       </EditBox>
-                      <SetsText>회</SetsText>
+                      <SetsText style={isDark && { color: colors.white }}>
+                        회
+                      </SetsText>
                     </ContentContainer>
                   </SetContainer>
                 ))}
