@@ -11,9 +11,9 @@ import Animated, {
 } from "react-native-reanimated";
 import { PanGestureHandler } from "react-native-gesture-handler";
 import * as Haptics from "expo-haptics";
-import { clamp, objectMove } from "./Shared/MyRoutine_Shared";
-import { colors } from "../colors";
-import { ScreenWidth } from "../Shared";
+import { clamp, objectMove } from "../Shared/MyRoutine_Shared";
+import { colors } from "../../colors";
+import { ScreenWidth } from "../../Shared";
 import { styled } from "styled-components/native";
 
 const SCHEDULE_W = (ScreenWidth - 60) / 7;
@@ -72,7 +72,6 @@ export const MovableSchedule = ({
     },
     onFinish() {
       left.value = positions.value[id] * SCHEDULE_W;
-      // runOnJS(setPositions)(positions);
       runOnJS(setNewSCHE)(positions.value);
       runOnJS(setMoving)(false);
     },
@@ -113,6 +112,7 @@ const ScheduleContainer = styled.View`
   border-radius: 4px;
   width: ${SCHEDULE_W}px;
 `;
+
 export function Schedule({ routineId }) {
   return (
     <ScheduleContainer

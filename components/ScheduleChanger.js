@@ -1,6 +1,5 @@
-import { MovableSchedule } from "../components/MovableSchedule";
+import { MovableSchedule } from "./myRoutine/MovableSchedule";
 import styled from "styled-components/native";
-import { useEffect, useState } from "react";
 import { useSharedValue } from "react-native-reanimated";
 import { listToObject } from "./Shared/MyRoutine_Shared";
 
