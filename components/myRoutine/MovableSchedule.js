@@ -24,6 +24,7 @@ export const MovableSchedule = ({
   setNewSCHE,
   positions,
   SCHEDULE,
+  isDark,
 }) => {
   const [moving, setMoving] = useState(false);
   const left = useSharedValue(positions.value[id] * SCHEDULE_W);
@@ -97,7 +98,7 @@ export const MovableSchedule = ({
     <Animated.View style={animatedStyle}>
       <PanGestureHandler onGestureEvent={gestureHandler}>
         <Animated.View>
-          <Schedule routineId={routineId} text={id} />
+          <Schedule routineId={routineId} isDark={isDark} />
         </Animated.View>
       </PanGestureHandler>
     </Animated.View>
@@ -113,7 +114,7 @@ const ScheduleContainer = styled.View`
   width: ${SCHEDULE_W}px;
 `;
 
-export function Schedule({ routineId }) {
+export function Schedule({ routineId, isDark }) {
   return (
     <ScheduleContainer
       style={
@@ -121,7 +122,7 @@ export function Schedule({ routineId }) {
           borderWidth: 1,
           borderStyle: "dashed",
           borderColor: colors.l_main,
-          backgroundColor: colors.l_sub_2,
+          backgroundColor: isDark ? colors.grey_9 : colors.l_sub_2,
         }
       }
     >

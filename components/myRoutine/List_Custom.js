@@ -2,10 +2,6 @@ import React from "react";
 import styled from "styled-components/native";
 import { days } from "./data";
 import { Keyboard, ScrollView } from "react-native";
-import Animated, {
-  useAnimatedStyle,
-  withSpring,
-} from "react-native-reanimated";
 import { colors } from "../../colors";
 import { ComponentTitle } from "../Shared/MyRoutine_Shared";
 import { ScheduleChanger } from "../ScheduleChanger";
@@ -21,7 +17,6 @@ const SetContainer = styled.View`
   align-items: center;
   padding-top: 12px;
   padding: 12px 16px;
-  background-color: ${colors.grey_1};
   width: 100%;
   border-radius: 8px;
   margin-top: 4px;
@@ -31,13 +26,17 @@ const ExerciseTitle = styled.Text`
   margin: 8px;
   font-weight: 500;
 `;
-const SetsText = styled.Text`
-  font-size: 17px;
-  color: ${colors.grey_8};
-  font-weight: 400;
-`;
-const ExtendedContainer = styled.View`
+
+const BottomContainer = styled.View`
   width: 100%;
+`;
+const Blank = styled.View`
+  width: 100%;
+  height: 40px;
+`;
+const ScrollPressable = styled.Pressable`
+  width: ${ScreenWidth - 48}px;
+  margin-left: 24px;
 `;
 const TextContainer = styled.View`
   flex: 1;
@@ -50,7 +49,6 @@ const ExerciseContainer = styled.Pressable`
   border-radius: 12px;
   width: ${ScreenWidth - 48}px;
   margin-top: 16px;
-  background-color: ${colors.white};
 `;
 const DeleteButton = styled.TouchableOpacity`
   height: 24px;
@@ -60,7 +58,6 @@ const DeleteButton = styled.TouchableOpacity`
 const AddButton = styled.TouchableOpacity`
   justify-content: center;
   align-items: center;
-  background-color: ${colors.l_sub_2};
   width: 100%;
   border-radius: 8px;
   margin-top: 4px;
@@ -76,17 +73,32 @@ const AddText = styled.Text`
 const ExerciseItem_Custom = ({
   id,
   content,
-  modalState,
   title,
   popMessage,
   editRoutine,
+  isDark,
 }) => {
+  const SetsText = styled.Text`
+    font-size: 17px;
+    color: ${isDark ? colors.grey_4 : colors.grey_8};
+    font-weight: 400;
+  `;
   return (
-    <ExerciseContainer onLongPress={() => popMessage()}>
-      <ExerciseTitle>{title}</ExerciseTitle>
-      <ExtendedContainer id>
+    <ExerciseContainer
+      style={{ backgroundColor: isDark ? colors.grey_8 : colors.white }}
+      onLongPress={() => popMessage()}
+    >
+      <ExerciseTitle style={{ color: isDark ? colors.white : colors.black }}>
+        {title}
+      </ExerciseTitle>
+      <BottomContainer id>
         {content.map((item, contentId) => (
-          <SetContainer key={contentId}>
+          <SetContainer
+            style={{
+              backgroundColor: isDark ? colors.grey_9 : colors.grey_1,
+            }}
+            key={contentId}
+          >
             <TextContainer>
               <SetsText>{contentId + 1}</SetsText>
               <SetsText>
@@ -101,35 +113,29 @@ const ExerciseItem_Custom = ({
             </DeleteButton>
           </SetContainer>
         ))}
-        <AddButton onPress={() => editRoutine(id, "add", 0)}>
+        <AddButton
+          style={{ backgroundColor: isDark ? colors.d_sub_2 : colors.l_sub_2 }}
+          onPress={() => editRoutine(id, "add", 0)}
+        >
           <AddText>세트 추가</AddText>
         </AddButton>
-      </ExtendedContainer>
+      </BottomContainer>
     </ExerciseContainer>
   );
 };
 
-const Blank = styled.View`
-  width: 100%;
-  height: 40px;
-`;
-const ScrollPressable = styled.Pressable`
-  width: ${ScreenWidth - 48}px;
-  margin-left: 24px;
-`;
-
 export default List_Custom = ({
-  modalState,
   SCHEDULE,
   newRoutine,
   editRoutine,
   popMessage,
   setNewSCHE,
+  isDark,
 }) => {
   return (
     <ScrollView
       style={{
-        backgroundColor: colors.grey_1,
+        backgroundColor: isDark ? colors.grey_9 : colors.grey_1,
         width: "100%",
         height: "100%",
       }}
@@ -138,15 +144,18 @@ export default List_Custom = ({
         <ComponentTitle
           title="요일 변경"
           subTitle="루틴을 원하는 요일에 끌어다 놓을 수 있어요"
+          isDark={isDark}
         />
         <ScheduleChanger
           SCHEDULE={SCHEDULE}
           days={days}
           setNewSCHE={setNewSCHE}
+          isDark={isDark}
         />
         <ComponentTitle
           title="운동 편집"
           subTitle="루틴을 원하는 요일에 끌어다 놓을 수 있어요"
+          isDark={isDark}
         />
         {newRoutine ? (
           <>
@@ -157,6 +166,7 @@ export default List_Custom = ({
                 content={item.content}
                 title={item.exerciseName}
                 editRoutine={editRoutine}
+                isDark={isDark}
                 popMessage={() => popMessage(id)}
               />
             ))}

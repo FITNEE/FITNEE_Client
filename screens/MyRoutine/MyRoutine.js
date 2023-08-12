@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { ActivityIndicator, Keyboard, Alert } from "react-native";
+import { ActivityIndicator, Keyboard, Alert, View } from "react-native";
 import styled from "styled-components/native";
 import BottomSheet, {
   BottomSheetModalProvider,
@@ -30,41 +30,21 @@ import { Button } from "../../Shared";
 import { IsDarkAtom, TabBarAtom } from "../../recoil/MyPageAtom";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 
-//가장 밑단에서 backgroundColor 제공
-const ScreenBase = styled.SafeAreaView`
-  width: 100%;
-  flex-direction: column;
-  flex: 1;
-  background-color: ${colors.white};
-`;
-//평시모드에서 column, spaceBetween 속성부여역할로 헤더,푸터 제외한 모든 요소 감쌈
-const ContentBase = styled.View`
-  flex-direction: column;
-  justify-content: space-between;
-  width: 100%;
-  flex: 1;
-  background-color: #f6f8fa;
-`;
-
-const BottomSheetContainer = styled.TouchableOpacity`
+const BottomSheetBase = styled.Pressable`
   width: 100%;
   height: 100%;
-`;
-const ExerciseContainer = styled.Pressable`
   padding: 24px;
-  padding-top: 2px;
-  flex-direction: column;
-  background-color: ${colors.white};
-`;
 
-const TopContainer = styled.View`
+  border-radius: 24px;
+  flex-direction: column;
+`;
+const BottomSheetHeader = styled.View`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 16px;
   height: 24px;
 `;
-
 const ExerciseTitle = styled.Text`
   font-size: 17px;
   margin-bottom: 6px;
@@ -125,38 +105,47 @@ const SubmitButton = styled.TouchableOpacity`
 
 export default MyRoutine = ({ navigation, route }) => {
   //커스텀 or 일반 보기모드 식별 위함
-
   const [mode, setMode] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   //요일별 운동 유무 및 각 요일 운동 idx 보관목적 ->custom하면서 변경될 수 있기에 useState로 저장
   const [SCHEDULE, setSCHEDULE] = useState([]);
-
   //각 요일에 대한 세부 루틴정보들 저장하기 위한 배열 useState
   const [routineData, setRoutineData] = useState([]);
-
   //커스텀모드에서 세부수정하고자 하는 운동종목 구분하기 위한 id값
   const [editingID, setEditingID] = useState(null);
+  //DropDown 누른 운동 구분하기위함.
+  const [selectedId, setSelectedId] = useState(null);
   //요일 슬라이드로 변경되는 실시간 SCHEDULE배열 임시 저장하기 위한 함수
   const [newRoutine, setNewRoutine] = useState([]);
-
   const [newSCHE, setNewSCHE] = useState(null);
   //이전 ID값과 변경 이후 ID값 매칭된거, 이거로 app/routine/calendar 호출하기
   const [selectedDay, setSelectedDay] = useState((new Date().getDay() + 6) % 7);
-
   const [snapPoints, setSnapPoints] = useState(["1%"]);
-  const [modalState, setModalState] = useState(0);
-
-  const [selectedId, setSelectedId] = useState(null);
 
   const setIsTabVisible = useSetRecoilState(TabBarAtom);
-  const isDark = useRecoilValue(IsDarkAtom);
-  const extendModal = () => {
-    console.log("modal Extended");
-    if (modalState != 2) {
-      bottomModal.current.snapToIndex(1);
-    }
-    setModalState(2);
-  };
+
+  // const isDark = useRecoilValue(IsDarkAtom);
+  let isDark = false;
+
+  //가장 밑단에서 backgroundColor 제공
+  const ScreenBase = styled.SafeAreaView`
+    width: 100%;
+    flex-direction: column;
+    flex: 1;
+    background-color: ${isDark
+      ? mode
+        ? colors.grey_9
+        : colors.black
+      : colors.white};
+  `;
+  //평시모드에서 column, spaceBetween 속성부여역할로 헤더,푸터 제외한 모든 요소 감쌈
+  const ContentBase = styled.View`
+    flex-direction: column;
+    justify-content: space-between;
+    width: 100%;
+    flex: 1;
+    background-color: ${isDark ? colors.black : colors.grey_1};
+  `;
 
   const isFocus = useIsFocused();
   const updateDatas = () => {
@@ -208,14 +197,14 @@ export default MyRoutine = ({ navigation, route }) => {
   };
   const popMessage = (id) => {
     setSnapPoints([
-      `${10 + 8 * newRoutine[id].content.length}%`,
-      `${42 + 8 * newRoutine[id].content.length}`,
+      `${14 + 8 * newRoutine[id].content.length}%`,
+      `${46 + 8 * newRoutine[id].content.length}`,
     ]);
     Alert.alert("운동 편집", "", [
       {
         text: "상세옵션 편집",
         onPress: () => {
-          bottomModal.current.snapToIndex(0);
+          bottomModal.current?.snapToIndex(0);
           //확대하고자 하는 운동종목의 세트수에 따라 확장되는 정도를 유동적으로 제어하기 위함
           setEditingID(id);
         },
@@ -232,10 +221,6 @@ export default MyRoutine = ({ navigation, route }) => {
         style: "default",
       },
     ]);
-  };
-  const handleBottomSubmit = () => {
-    Keyboard.dismiss();
-    handleClosePress();
   };
   const updateRoutines = async (data) => {
     try {
@@ -254,7 +239,6 @@ export default MyRoutine = ({ navigation, route }) => {
   };
   const editRoutine = (id, type, value) => {
     let newArr = JSON.parse(JSON.stringify(newRoutine));
-    console.log("newArr:", newArr);
     if (type == "repeat") {
       newArr[editingID].content[id].rep = value;
     } else if (type == "weight") {
@@ -304,10 +288,15 @@ export default MyRoutine = ({ navigation, route }) => {
     }
   }, [isFocus]);
 
+  const extendModal = () => {
+    console.log("modal Extended");
+    bottomModal.current.snapToIndex(1);
+  };
+
   const handleClosePress = () => {
-    setModalState(0);
     console.log("handleClosePress");
     bottomModal.current.close();
+    Keyboard.dismiss();
   };
 
   useEffect(() => {
@@ -324,12 +313,6 @@ export default MyRoutine = ({ navigation, route }) => {
     }
   }, [selectedDay]);
 
-  useEffect(() => {
-    if (modalState == 0) {
-      setSnapPoints(["1%"]);
-    }
-  }, [modalState]);
-
   const bottomModal = useRef();
 
   useEffect(() => {
@@ -344,14 +327,15 @@ export default MyRoutine = ({ navigation, route }) => {
     <BottomSheetModalProvider>
       <ScreenBase>
         <Header
+          isDark={isDark}
           mode={mode}
-          parentFunction={toggleMode}
+          toggleMode={toggleMode}
           onPress={() => pressBack(setMode)}
         />
         {mode ? (
           <>
             <List_Custom
-              modalState={modalState}
+              isDark={isDark}
               SCHEDULE={SCHEDULE}
               newRoutine={newRoutine}
               editRoutine={editRoutine}
@@ -371,6 +355,7 @@ export default MyRoutine = ({ navigation, route }) => {
               setSelectedDay={setSelectedDay}
               selectedDay={selectedDay}
               SCHEDULE={SCHEDULE}
+              isDark={isDark}
             />
             {isLoading ? (
               <IndicatorBase>
@@ -381,6 +366,7 @@ export default MyRoutine = ({ navigation, route }) => {
                 routineData={routineData}
                 selectedId={selectedId}
                 setSelectedId={setSelectedId}
+                isDark={isDark}
               />
             ) : (
               <ContentContainer>
@@ -395,76 +381,76 @@ export default MyRoutine = ({ navigation, route }) => {
           ref={bottomModal}
           index={-1}
           backdropComponent={renderBackdrop}
+          backgroundComponent={() => {
+            <View />;
+          }}
           snapPoints={snapPoints}
           enablePanDownToClose={false}
           enableHandlePanningGesture={false}
           enableContentPanningGesture={false}
           enableDismissOnClose
-          handleIndicatorStyle={{ height: 0 }}
         >
-          <BottomSheetContainer>
-            <ExerciseContainer>
-              <TopContainer>
-                <ExerciseTitle>
-                  {routineData /** 운동이 없는 요일을 선택했을 경우, Null값이 반환됨에 따라 
+          <BottomSheetBase
+            style={{ backgroundColor: isDark ? colors.grey_8 : colors.white }}
+          >
+            <BottomSheetHeader>
+              <ExerciseTitle>
+                {routineData /** 운동이 없는 요일을 선택했을 경우, Null값이 반환됨에 따라 
                   null을 object로 만들수 없다는 오류를 피하기 위함 */ &&
-                    routineData[editingID]?.exerciseName}
-                </ExerciseTitle>
-                <SubmitButton onPress={() => handleBottomSubmit()}>
-                  <SubmitText>완료</SubmitText>
-                </SubmitButton>
-              </TopContainer>
-              <ExtendedContainer>
-                {newRoutine /** 운동이 없는 요일을 선택했을 경우, Null값이 반환됨에 따라 
+                  routineData[editingID]?.exerciseName}
+              </ExerciseTitle>
+              <SubmitButton onPress={() => handleClosePress()}>
+                <SubmitText>완료</SubmitText>
+              </SubmitButton>
+            </BottomSheetHeader>
+            <ExtendedContainer>
+              {newRoutine /** 운동이 없는 요일을 선택했을 경우, Null값이 반환됨에 따라 
                   null을 object로 만들수 없다는 오류를 피하기 위함 */ &&
-                  newRoutine[editingID]?.content.map((item, id) => (
-                    <SetContainer key={id}>
-                      <ContentContainer key={id}>
-                        <SetsText>{id + 1}</SetsText>
-                        <EditBox
-                          keyboardType="numeric"
-                          selectTextOnFocus={item.weight != null}
-                          editable={item.weight != null}
-                          onFocus={() => extendModal()}
-                          onChangeText={(value) =>
-                            editRoutine(id, "weight", value)
+                newRoutine[editingID]?.content.map((item, id) => (
+                  <SetContainer key={id}>
+                    <ContentContainer key={id}>
+                      <SetsText>{id + 1}</SetsText>
+                      <EditBox
+                        keyboardType="numeric"
+                        selectTextOnFocus={item.weight != null}
+                        editable={item.weight != null}
+                        onFocus={() => extendModal()}
+                        onChangeText={(value) =>
+                          editRoutine(id, "weight", value)
+                        }
+                        style={
+                          !item.weight && {
+                            backgroundColor: colors.grey_2,
                           }
-                          style={
-                            !item.weight && {
-                              backgroundColor: colors.grey_2,
-                            }
-                          }
+                        }
+                      >
+                        <EditText
+                          style={item.weight && { color: colors.l_main }}
                         >
-                          <EditText
-                            style={item.weight && { color: colors.l_main }}
-                          >
-                            {item.weight}
-                          </EditText>
-                        </EditBox>
-                        <SetsText>kg</SetsText>
-                        <EditBox
-                          keyboardType="numeric"
-                          selectTextOnFocus={item.rep != null}
-                          editable={item.rep != null}
-                          onFocus={() => extendModal()}
-                          onChangeText={(value) =>
-                            editRoutine(id, "repeat", value)
-                          }
-                          style={
-                            !item.rep && { backgroundColor: colors.grey_2 }
-                          }
-                        >
-                          <EditText style={{ color: colors.l_main }}>
-                            {item.rep}
-                          </EditText>
-                        </EditBox>
-                        <SetsText>회</SetsText>
-                      </ContentContainer>
-                    </SetContainer>
-                  ))}
-              </ExtendedContainer>
-            </ExerciseContainer>
-          </BottomSheetContainer>
+                          {item.weight}
+                        </EditText>
+                      </EditBox>
+                      <SetsText>kg</SetsText>
+                      <EditBox
+                        keyboardType="numeric"
+                        selectTextOnFocus={item.rep != null}
+                        editable={item.rep != null}
+                        onFocus={() => extendModal()}
+                        onChangeText={(value) =>
+                          editRoutine(id, "repeat", value)
+                        }
+                        style={!item.rep && { backgroundColor: colors.grey_2 }}
+                      >
+                        <EditText style={{ color: colors.l_main }}>
+                          {item.rep}
+                        </EditText>
+                      </EditBox>
+                      <SetsText>회</SetsText>
+                    </ContentContainer>
+                  </SetContainer>
+                ))}
+            </ExtendedContainer>
+          </BottomSheetBase>
         </BottomSheet>
       </ScreenBase>
     </BottomSheetModalProvider>

@@ -2,6 +2,7 @@ import { MovableSchedule } from "./myRoutine/MovableSchedule";
 import styled from "styled-components/native";
 import { useSharedValue } from "react-native-reanimated";
 import { listToObject } from "./Shared/MyRoutine_Shared";
+import { colors } from "../colors";
 
 export const TextContainer = styled.View`
   flex-direction: row;
@@ -12,22 +13,20 @@ export const TextContainer = styled.View`
 export const DayText = styled.Text`
   width: 45px;
   text-align: center;
-  font-size: 16px;
-  font-weight: 300;
+  font-size: 13px;
+  font-weight: 400;
 `;
 const DaysContainer = styled.View`
   padding: 6px;
   border-radius: 12px;
   margin-top: 8px;
-  background-color: white;
 `;
 const ScheduleContainer = styled.SafeAreaView`
   margin-top: 12px;
   height: 64px;
   width: 100%;
-  background-color: #f6f8fa;
 `;
-export const ScheduleChanger = ({ SCHEDULE, days, setNewSCHE }) => {
+export const ScheduleChanger = ({ SCHEDULE, days, setNewSCHE, isDark }) => {
   /**여기다가 positions 값은 별도로 빼놓아야한다. 이유는 잘 모르겠음.*/
   const positions = useSharedValue(listToObject(SCHEDULE));
 
@@ -42,23 +41,33 @@ export const ScheduleChanger = ({ SCHEDULE, days, setNewSCHE }) => {
   //   setNewSCHE(newArr);
   // }, [tempSche]);
   return (
-    <DaysContainer>
+    <DaysContainer
+      style={{ backgroundColor: isDark ? colors.grey_8 : colors.white }}
+    >
       <TextContainer>
         {days.map(
           (
             item,
             index //각 위치에 해당하는 요일들을 렌더링하기 위해서 요일들을 정적으로 렌더링
           ) => (
-            <DayText key={index}>{item}</DayText>
+            <DayText
+              style={{ color: isDark ? colors.white : colors.black }}
+              key={index}
+            >
+              {item}
+            </DayText>
           )
         )}
       </TextContainer>
-      <ScheduleContainer>
+      <ScheduleContainer
+        style={{ backgroundColor: isDark ? colors.grey_9 : colors.grey_1 }}
+      >
         {SCHEDULE.map(
           (
             sche //동적으로 변경되는 SCHDULES 데이터를 기반으로 MoveableSchedule 렌더
           ) => (
             <MovableSchedule
+              isDark={isDark}
               id={sche.id}
               key={sche.id}
               positions={positions}
