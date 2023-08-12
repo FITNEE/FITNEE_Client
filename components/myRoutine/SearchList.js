@@ -49,7 +49,16 @@ export default function SearchList({ parentSearchList, editSelectedList }) {
     <ListContainer>
       {parentSearchList?.map((words, index) => {
         return (
-          <ResultContainer key={index} onPress={() => console.log("pressed")}>
+          <ResultContainer
+            key={index}
+            onPress={() =>
+              editSelectedList("add", index, {
+                exerciseName: words.name,
+                exerciseParts: words.parts,
+                healthCategoryIdx: words.healthCategoryIdx,
+              })
+            }
+          >
             <IconContainer />
             <TextContainer>
               <Title>{words.name}</Title>
@@ -57,15 +66,7 @@ export default function SearchList({ parentSearchList, editSelectedList }) {
                 {words.parts} | {words.equipment}
               </SubText>
             </TextContainer>
-            <CheckButton
-              onPress={() =>
-                editSelectedList("add", index, {
-                  exerciseName: words.name,
-                  exerciseParts: words.parts,
-                  healthCategoryIdx: words.healthCategoryIdx,
-                })
-              }
-            >
+            <CheckButton>
               <WithLocalSvg width={24} height={24} asset={Check} />
             </CheckButton>
           </ResultContainer>

@@ -162,7 +162,6 @@ export default function ExerciseSearch({ navigation }) {
       newArr.splice(id, 1);
     }
     setSelectedItem(newArr);
-    console.log(newArr);
   };
   // 검색창 옆 X 버튼 눌렀을 때
   const onDeleteInput = () => {
