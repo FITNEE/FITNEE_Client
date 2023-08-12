@@ -7,6 +7,11 @@ import { ScrollView } from "react-native-gesture-handler";
 import { BackButton } from "../../Shared";
 import { colors } from "../../colors";
 import axios from "axios";
+import { useRecoilState, useRecoilValueLoadable } from "recoil";
+import {
+  HasRoutineAtom,
+  hasRoutineSelector,
+} from "../../recoil/ExerciseCourseRecoil";
 
 const Container = styled.View`
   flex: 1;
@@ -131,6 +136,8 @@ export default function StartExercise({ navigation }) {
 
   const now = new Date();
   let day = Week[now.getDay()];
+  const [showRoutine, setShowRoutine] = useRecoilState(HasRoutineAtom);
+  const hasRoutineLoadable = useRecoilValueLoadable(hasRoutineSelector);
 
   const goToExerciseCourse = () =>
     navigation.navigate("ExerciseCourse", {
@@ -166,7 +173,7 @@ export default function StartExercise({ navigation }) {
       setDataList(response.result.routineDetails);
       setCircleList(response.result);
     });
-  }, []);
+  }, [hasRoutineLoadable, navigation]);
 
   const routineIdx = circleList?.routineIdx;
 
