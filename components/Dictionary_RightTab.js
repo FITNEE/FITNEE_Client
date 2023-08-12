@@ -8,62 +8,14 @@ import {
 } from "@gorhom/bottom-sheet";
 import { colors } from "../colors";
 import WrappedText from "react-native-wrapped-text";
-import { AppContext } from "./ContextProvider";
 import axios from "axios";
+import { IsDarkAtom } from "../recoil/MyPageAtom"
+import { useRecoilValue } from "recoil"
 
-const ChatContainer = styled.View`
-  margin-left: 24px;
-  margin-bottom: 16px;
-  margin-right: 24px;
-`;
-const MessageWrapper = styled.View`
-  align-items: flex-start;
-`;
-const MessageContainer = styled.View`
-  background-color: ${colors.grey_1};
-  border-radius: 12px 12px 12px 0px;
-  padding: 8px 16px;
-  max-width: 200px;
-`;
-const MyMessageContainer = styled.TouchableOpacity`
-  background-color: ${colors.grey_1};
-  border-radius: 12px 12px 0px 12px;
-  padding: 8px 16px;
-  max-width: 200px;
-`;
-const MyMessageWrapper = styled.View`
-  justify-content: flex-end;
-  align-items: center;
-  flex-direction: row;
-`;
-const MsgDeleteBtn = styled.TouchableOpacity`
-  width: 24px;
-  height: 24px;
-  border-radius: 12px;
-  background-color: ${colors.red};
-  margin-right: 8px;
-`;
-const TextInputBG = styled.View`
-  background-color: ${colors.grey_1};
-  justify-content: center;
-  align-items: center;
-  padding: 9px 16px;
-`;
-const TextInputContainer = styled.View`
-  background-color: white;
-  border-radius: 50px;
-  width: 100%;
-  flex-direction: row;
-  padding: 6px;
-`;
-const TextInput = styled.TextInput`
-  color: ${colors.black};
-  width: 300px;
-  margin-left: 15px;
-`;
+
 
 export default function Dictionary_RightTab(props) {
-    const { isDark } = useContext(AppContext);
+    const isDark = useRecoilValue(IsDarkAtom)
     const UserName = styled.Text`
         color: ${isDark ? colors.d_main : colors.l_main};
         font-size: 11px;
@@ -221,7 +173,6 @@ export default function Dictionary_RightTab(props) {
         )
         setSelectedIdx(-1)
     }
-    
 
     // 어디까지 읽었는지 저장
     const putChatRead = async (idx) => {
@@ -265,12 +216,12 @@ export default function Dictionary_RightTab(props) {
                         {msg.userNickname != myNickName ? 
                             (<MessageWrapper>
                                 <UserName>{msg.userNickname}</UserName>
-                                <MessageContainer>
+                                <MessageContainer style={{backgroundColor: isDark? `${colors.grey_8}`:`${colors.grey_1}`}}>
                                     <WrappedText
                                     textStyle={{
                                         fontWeight: 400,
                                         fontSize: 13,
-                                        color: `${colors.black}`,
+                                        color: isDark? `${colors.white}`:`${colors.black}`,
                                         lineHeight: 17,
                                     }}
                                     >
@@ -281,12 +232,15 @@ export default function Dictionary_RightTab(props) {
                         : 
                             (<MyMessageWrapper> 
                                 {selectedIdx===i && <MsgDeleteBtn onPress={()=>onPressMsgDeleteBtn(msg.healthChattingIdx)} />}
-                                <MyMessageContainer onLongPress={()=>onLongPress(i)}>
+                                <MyMessageContainer 
+                                    onLongPress={()=>onLongPress(i)}
+                                    style={{backgroundColor: isDark? `${colors.grey_8}`:`${colors.grey_1}`}}
+                                >
                                     <WrappedText 
                                         textStyle={{
                                             fontWeight: 400,
                                             fontSize: 13,
-                                            color: `${colors.black}`,
+                                            color: isDark? `${colors.white}`:`${colors.black}`,
                                             lineHeight: 17,
                                         }}
                                         containerStyle={{ alignItems: "left" }}
@@ -302,27 +256,74 @@ export default function Dictionary_RightTab(props) {
         </TouchableWithoutFeedback>
 
         {childJoinBtnBool ? null : (
-          <TextInputBG>
-            <TextInputContainer>
-              <BottomSheetTextInput
-                style={{
-                  color: `${colors.black}`,
-                  width: 300,
-                  marginLeft: 15,
-                }}
-                type="text"
-                onChangeText={(text) => {
-                  setChat(text);
-                }}
-                value={chat}
-                onSubmitEditing={onSubmitChat}
-                autoFocus={true}
-                onFocus={onFocusInput}
-              />
-              <SendBtn onPress={onSubmitChat} />
+          <TextInputBG style={{backgroundColor: isDark? `${colors.grey_7}`:`${colors.grey_1}`}}>
+            <TextInputContainer style={{backgroundColor: isDark? `${colors.black}`:`${colors.grey_1}`}}>
+                <BottomSheetTextInput
+                    style={{
+                        color: isDark? `${colors.white}`:`${colors.black}`,
+                        width: 300,
+                        marginLeft: 15,
+                    }}
+                    type="text"
+                    onChangeText={(text) => {
+                    setChat(text);
+                    }}
+                    value={chat}
+                    onSubmitEditing={onSubmitChat}
+                    autoFocus={true}
+                    onFocus={onFocusInput}
+                    keyboardAppearance= {isDark? 'dark':'light'}
+                />
+                <SendBtn 
+                    onPress={onSubmitChat} 
+                    style={{backgroundColor: isDark? `${colors.d_main}`:`${colors.l_main}`}}
+                />
             </TextInputContainer>
           </TextInputBG>
         )}
       </>
     )
 }
+
+const ChatContainer = styled.View`
+  margin-left: 24px;
+  margin-bottom: 16px;
+  margin-right: 24px;
+`
+const MessageWrapper = styled.View`
+  align-items: flex-start;
+`
+const MessageContainer = styled.View`
+  border-radius: 12px 12px 12px 0px;
+  padding: 8px 16px;
+  max-width: 200px;
+`
+const MyMessageContainer = styled.TouchableOpacity`
+  border-radius: 12px 12px 0px 12px;
+  padding: 8px 16px;
+  max-width: 200px;
+`
+const MyMessageWrapper = styled.View`
+  justify-content: flex-end;
+  align-items: center;
+  flex-direction: row;
+`
+const MsgDeleteBtn = styled.TouchableOpacity`
+  width: 24px;
+  height: 24px;
+  border-radius: 12px;
+  background-color: ${colors.red};
+  margin-right: 8px;
+`
+const TextInputBG = styled.View`
+  background-color: ${colors.grey_1};
+  justify-content: center;
+  align-items: center;
+  padding: 9px 16px;
+`
+const TextInputContainer = styled.View`
+  border-radius: 50px;
+  width: 100%;
+  flex-direction: row;
+  padding: 6px;
+`
