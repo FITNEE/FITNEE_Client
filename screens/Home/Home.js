@@ -6,6 +6,8 @@ import { styled } from "styled-components/native";
 import { colors } from "../../colors";
 import HomeRoutines from "../../components/HomeRoutines";
 import NotHomeRoutine from "../../components/NotHomeRoutine";
+import { useSetRecoilState } from "recoil";
+import { TabBarAtom } from "../../recoil/MyPageAtom";
 
 const Top = styled.View`
   width: 100%;
@@ -40,7 +42,9 @@ const PremiumText = styled.Text`
 `;
 
 const Home = ({ navigation }) => {
-  //const { toggleLogin } = useContext(AppContext);
+  const setIsTabVisible = useSetRecoilState(TabBarAtom);
+  setIsTabVisible(true);
+
   const [showRoutine, SetShowRoutine] = useState(true);
 
   return (
