@@ -125,6 +125,27 @@ export default function ExerciseResult({ navigation }) {
   const [captureUri, setCaptureUri] = useState(null);
   const [sharing, setSharing] = useState(false); // 공유 진행 중 여부를 상태로 관리
 
+  // useEffect(() => {
+  //   // on mount
+  //   const fileName = "Your-File-Name.jpg";
+  //   const path =
+  //     Platform.OS === "android"
+  //       ? `${RNFS.DocumentDirectoryPath}/${fileName}`
+  //       : `${RNFS.LibraryDirectoryPath}/${fileName}`;
+  //   const options = {
+  //     format: "jpg",
+  //     quality: 0.9,
+  //     path,
+  //   };
+  //   ref.current
+  //     .capture(options)
+  //     .then((uri) => {
+  //       console.log("do something with ", uri);
+  //       setCaptureUri(uri); // 캡쳐가 완료되면 uri를 상태로 설정
+  //     })
+  //     .catch((error) => console.error("Error with capture: ", error));
+  // }, []);
+
   useEffect(() => {
     // on mount
     ref.current.capture().then((uri) => {
@@ -162,7 +183,7 @@ export default function ExerciseResult({ navigation }) {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "#FFF" }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: colors.white }}>
       <ScrollView>
         <ViewShot
           ref={ref}

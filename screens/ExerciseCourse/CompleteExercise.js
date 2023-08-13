@@ -111,7 +111,6 @@ export default function CompleteExercise({ navigation }) {
 
   const route = useRoute();
   const dataList = route.params.dataList;
-  const listIndex = route.params.listIndex;
   const routineIdx = route.params.routineIdx;
   const totalTime = route.params.totalTime * -1;
 
@@ -136,18 +135,16 @@ export default function CompleteExercise({ navigation }) {
   const now = new Date();
   let day = Week[now.getDay()];
   const [resultData, setResultData] = useState([]);
-  const [resultData2, setResultData2] = useState([]);
   const [detailData, setDetailData] = useState([]);
 
-  const getResultData = async (routineIdx, day) => {
+  const getResultData = async (routineIdx) => {
     try {
       let url = "https://gpthealth.shop/";
-      let detailAPI = `/app/process/end`;
+      let detailAPI = `/app/process/end?routineIdx=${routineIdx}`;
 
       const response = await axios.get(url + detailAPI, {
         params: {
           routineIdx: routineIdx,
-          dayOfWeek: day,
         },
       });
       const result = response.data;
@@ -159,11 +156,10 @@ export default function CompleteExercise({ navigation }) {
   };
 
   useEffect(() => {
-    getResultData(routineIdx, day).then((response) => {
-      setResultData(response.result.updateRoutine);
-      setResultData2(response.result);
+    getResultData(routineIdx).then((response) => {
+      setResultData(response.result);
       setDetailData(response.result.getComparison);
-      //setResultList(response.result.updateRoutine.routineDetails);
+      console.log(detailData);
     });
   }, []);
 
@@ -176,7 +172,7 @@ export default function CompleteExercise({ navigation }) {
           <ExerciseExplainText>중량 정보를 업데이트 했어요</ExerciseExplainText>
         ) : (
           <ExerciseExplainText>
-            루틴을 연속 {resultData2.countHealth}회 완료했어요
+            한달동안 루틴을 {resultData.monthCountHealth}회 완료했어요
           </ExerciseExplainText>
         )}
 
@@ -189,14 +185,14 @@ export default function CompleteExercise({ navigation }) {
             bubbleText={Math.ceil(detailData.exerciseTimeChange)}
           />
           <GrayCircle
-            num={resultData2.totalCalories}
+            num={resultData.todayTotalWeight}
             unit="kg"
             title="오늘 든 무게"
             bubbleOn={true}
             bubbleText={detailData.weightChange}
           />
           <GrayCircle
-            num={resultData2.totalWeight}
+            num={resultData.todayTotalCalories}
             unit="kcal"
             title="소모 칼로리"
             bubbleOn={false}
@@ -205,13 +201,13 @@ export default function CompleteExercise({ navigation }) {
 
         <ExerciseRec>
           <ScrollView>
-            {/* {resultData.map((result) => (
-              <RecTextLine key={result.exerciseInfo.healthCategoryIdx}>
-                <RecText1>{result.exerciseInfo.exerciseName}</RecText1>
+            {dataList.map((item) => (
+              <RecTextLine key={item.exerciseInfo.healthCategoryIdx}>
+                <RecText1>{item.exerciseInfo.exerciseName}</RecText1>
 
                 <WithLocalSvg asset={Check} width={20} height={20} />
               </RecTextLine>
-            ))} */}
+            ))}
           </ScrollView>
         </ExerciseRec>
 
