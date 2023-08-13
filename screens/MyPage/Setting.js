@@ -136,10 +136,10 @@ export default function Setting({ navigation }) {
               <Name>{getUserName}</Name>
             </ProfileContents>
           </ProfileInfo>
-          <WithLocalSvg
+          <Right
             width={20}
             height={20}
-            asset={Right}
+            // asset={Right}
             color={colors.grey_7}
           />
         </Profile>

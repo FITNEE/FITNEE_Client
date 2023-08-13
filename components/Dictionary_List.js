@@ -50,7 +50,10 @@ export default function Dictionary_List(props){
     const { navigation, searchList, part } = props
 
     // 검색리스트의 아이템 터치시 사전상세페이지로 이동, exercise = {equipment, muscle, name, parts}
-    const onPress = (exercise) => navigation.navigate('Dictionary_3', {exercise})
+    const onPress = (exercise) => {
+        setColor(!color)
+        // navigation.navigate('Dictionary_3', {exercise})
+    }
     
     // 부위toggle버튼 클릭시 해당되는 운동들만 보여줌
     const [filteredList, setFilteredList] = useState(searchList)
@@ -70,6 +73,8 @@ export default function Dictionary_List(props){
     useEffect(()=>{
         filterList()
     }, [part, searchList])
+
+    const [color, setColor] = useState(false)
 
 
     return(
@@ -102,11 +107,11 @@ export default function Dictionary_List(props){
                     </ExerciseLeftContainer> 
                     <TouchableOpacity 
                         onPress={()=> onPress(exercise)} >
-                        <WithLocalSvg
+                        <RightIcon
                             width={24}
                             height={24}
-                            color={isDark? colors.grey_3:colors.black} // dark 모드 색 임의로 넣어놈
-                            asset={RightIcon}
+                            // color={isDark? colors.grey_3:colors.black} // dark 모드 색 임의로 넣어놈
+                            color={color? 'red': 'black'}
                     /></TouchableOpacity>
                 </ExerciseContainer>
             ))
