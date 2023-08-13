@@ -75,7 +75,7 @@ export default function Dictionary_LeftTab(props){
                         <CautionImage/>
                         <CautionTitle style={{color: isDark? `${colors.white}`:`${colors.black}`}}>이 부분은 특히 주의해주세요!</CautionTitle>
                     </CautionTitleContainer>
-                    <CautionContentContainer style={{backgroundColor: isDark? `${colors.grey_8}`:`${colors.grey_1}`}}>  
+                    <CautionContentContainer  >  
                          <CautionDetailContainer>
                             <CautionDot style={{backgroundColor: isDark? `${colors.d_main}`:`${colors.l_main}`}}/>
                             <CautionDetail style={{color: isDark? `${colors.white}`:`${colors.black}`}}>{exerciseDetail?.exercisecaution[0].caution1}</CautionDetail>

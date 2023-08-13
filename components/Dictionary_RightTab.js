@@ -41,7 +41,7 @@ export default function Dictionary_RightTab(props) {
             setChat(""),
             funcSetJoinBtnBool(true),
             setChatUpdate(!chatUpdate),
-            // putChatRead()
+            putChatRead(),
             scrollviewRef.current?.scrollToEnd({ animated: true })
             )
     }
@@ -78,7 +78,7 @@ export default function Dictionary_RightTab(props) {
             const result = response.data
 
             if(result.result.isSuccess) 
-            console.log(`채팅 불러오기 성공 (운동이름 : ${exerciseName})`)
+                console.log(`채팅 불러오기 성공 (운동이름 : ${exerciseName})`)
             else console.log(`채팅 불러오기 성공 (운동이름 : ${exerciseName})`)
     
             return result.result
@@ -91,7 +91,7 @@ export default function Dictionary_RightTab(props) {
             setMsg(result.chattinginfo)
 
             const lastIdx = result.chattinginfo.at(-1).healthChattingIdx
-            // putChatRead(lastIdx)
+            putChatRead(lastIdx)
         })
     }, [parentJoinBtnBool,chatUpdate])
 
@@ -180,10 +180,13 @@ export default function Dictionary_RightTab(props) {
             let url = "https://gpthealth.shop/"
             let detailAPI = "/app/dictionary/chatRead"
             const response = await axios.put(url + detailAPI, {
-                healthChattingIdx: 40,
+                "healthChattingIdx" : idx
             })
             const result = response.data   
-            console.log(result)
+            
+            if(result.isSuccess) 
+                console.log(`어디까지 읽었는지 저장 성공 (idx : ${idx})`)
+            else console.log(`어디까지 읽었는지 저장 실패 (idx : ${idx})`)
     
             return result.result
         } catch (error) {
@@ -256,13 +259,14 @@ export default function Dictionary_RightTab(props) {
         </TouchableWithoutFeedback>
 
         {childJoinBtnBool ? null : (
-          <TextInputBG style={{backgroundColor: isDark? `#5D636C`:`#D1D3D9`}}>
+          <TextInputBG style={{backgroundColor: isDark? `#303235`:`#D1D3D9`}}>
             <TextInputContainer style={{backgroundColor: isDark? `${colors.black}`:`${colors.white}`}}>
                 <BottomSheetTextInput
                     style={{
                         color: isDark? `${colors.white}`:`${colors.black}`,
                         width: 300,
                         marginLeft: 15,
+                        fontSize: 17
                     }}
                     type="text"
                     onChangeText={(text) => setChat(text)}
@@ -315,7 +319,7 @@ const MsgDeleteBtn = styled.TouchableOpacity`
   background-color: ${colors.red};
   margin-right: 8px;
 `
-const TextInputBG = styled.View`
+const TextInputBG = styled.View` 
   justify-content: center;
   align-items: center;
   padding: 9px 16px;
