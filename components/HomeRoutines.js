@@ -127,8 +127,8 @@ const ButtonText = styled.Text`
   color: ${colors.white};
 `;
 
-export default function HomeRoutines() {
-  const [data, setData] = useState("");
+export default function HomeRoutines({ data }) {
+  // const [data, setData] = useState("");
   const ExerciseData = [
     { id: 1, name: "데드리프트" },
     { id: 2, name: "덤벨프레스" },
@@ -138,23 +138,6 @@ export default function HomeRoutines() {
     { id: 6, name: "크런치" },
   ];
 
-  const fetchData = async () => {
-    try {
-      const response = await axios.get(
-        "https://gpthealth.shop/app/routine/today"
-      );
-      console.log("Response : ", response.data);
-      setData(response.data.result);
-    } catch (error) {
-      console.error("Error:", error);
-    }
-  };
-  useEffect(() => {
-    console.log("data: ", data);
-  });
-  useEffect(() => {
-    fetchData();
-  }, []);
   const postSearch = async (text) => {
     try {
       let url = "https://gpthealth.shop/";
@@ -175,9 +158,9 @@ export default function HomeRoutines() {
     postSearch(name);
   };
   const renderItem = ({ item }) => (
-    <Card onPress={() => itemPress(item.name)}>
+    <Card onPress={() => itemPress(item)}>
       <ExerciseView />
-      <ExerciseName>{item.name}</ExerciseName>
+      <ExerciseName>{item}</ExerciseName>
     </Card>
   );
 
@@ -188,25 +171,27 @@ export default function HomeRoutines() {
 
   return (
     <Container>
-      {data ? (
+      {data.exerciseCount ? (
         <>
           <TitleBlock>
             <NameText>{data.userNickName} 님</NameText>
             <Title>오늘 예정된 운동 루틴이에요</Title>
-            <DayText>{"2023. 07. 03 (월)"}</DayText>
+            <DayText>{data.todayStrKo}</DayText>
           </TitleBlock>
           <SectionBlock>
             <CircleIcon />
             <Section>
-              <SectionText>{"하체, 코어"}</SectionText>
-              <NumText>{ExerciseData.length}개의 운동</NumText>
+              {data.exerciseParts.map((part, id) => (
+                <SectionText key={id}>{part}</SectionText>
+              ))}
+              <NumText>{data.exerciseCount}개의 운동</NumText>
             </Section>
           </SectionBlock>
           <Cards
             horizontal={true}
-            data={ExerciseData}
+            data={data.exerciseNames}
             renderItem={renderItem}
-            keyExtractor={(item) => item.id}
+            // keyExtractor={(item) => item.id}
             showsHorizontalScrollIndicator={false}
           />
           <Button onPress={navigateToExercise}>
