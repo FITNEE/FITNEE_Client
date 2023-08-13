@@ -108,8 +108,7 @@ export default function Dictionary_List(props) {
                         <RightIcon
                             width={24}
                             height={24}
-                            // color={isDark? colors.grey_3:colors.black} // dark 모드 색 임의로 넣어놈
-                            color={color? 'red': 'black'}
+                            color={isDark? colors.grey_3:colors.black} // dark 모드 색 임의로 넣어놈
                     /></TouchableOpacity>
                 </ExerciseContainer>
             ))
