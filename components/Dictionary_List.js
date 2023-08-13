@@ -75,62 +75,44 @@ export default function Dictionary_List(props) {
     filterList();
   }, [part, searchList]);
 
-  return (
-    <ListContainer
-      showsVerticalScrollIndicator="false"
-      style={{
-        backgroundColor: isDark
-          ? `${colors.d_background}`
-          : `${colors.l_background}`,
-      }}
-    >
-      {filteredList === undefined
-        ? null
-        : filteredList?.map((exercise, i) => (
-            <ExerciseContainer
-              key={i}
-              onPress={() => onPress(exercise)}
-              style={{
-                backgroundColor: isDark
-                  ? `${colors.d_background}`
-                  : `${colors.l_background}`,
-              }}
-            >
-              <ExerciseLeftContainer>
-                <ExerciseImg
-                  style={{
-                    backgroundColor: isDark
-                      ? `${colors.black}`
-                      : `${colors.grey_1}`,
-                  }}
-                />
-                <ExerciseDetailContainer>
-                  <ExerciseName
-                    style={{
-                      color: isDark ? `${colors.grey_3}` : `${colors.black}`,
-                    }}
-                  >
-                    {exercise.name}
-                  </ExerciseName>
-                  <ExerciseArea
-                    style={{
-                      color: isDark ? `${colors.grey_3}` : `${colors.grey_7}`,
-                    }}
-                  >
-                    {exercise.parts} | {exercise.muscle} | {exercise.equipment}
-                  </ExerciseArea>
-                </ExerciseDetailContainer>
-              </ExerciseLeftContainer>
-              <TouchableOpacity onPress={() => onPress(exercise)}>
-                <WithLocalSvg
-                  width={24}
-                  height={24}
-                  color={isDark ? colors.grey_3 : colors.black} // dark 모드 색 임의로 넣어놈
-                  asset={RightIcon}
-                />
-              </TouchableOpacity>
-            </ExerciseContainer>
-          ))}
-    </ListContainer>
-  );
+    return(
+        <ListContainer 
+            showsVerticalScrollIndicator='false'
+            style={{backgroundColor: isDark? `${colors.d_background}`:`${colors.l_background}`}}
+        >
+        {
+            filteredList === undefined?
+            null
+            :
+            filteredList?.map((exercise, i) => (
+                <ExerciseContainer 
+                    key={i} 
+                    onPress={()=> onPress(exercise)}
+                    style={{backgroundColor: isDark? `${colors.d_background}`:`${colors.l_background}`}}
+                >
+                    <ExerciseLeftContainer>
+                        <ExerciseImg
+                            style={{backgroundColor: isDark? `${colors.black}`:`${colors.grey_1}`}}
+                        />
+                        <ExerciseDetailContainer>
+                            <ExerciseName style={{color: isDark? `${colors.grey_3 }`:`${colors.black}`}}>
+                                {exercise.name}
+                            </ExerciseName>
+                            <ExerciseArea style={{color: isDark? `${colors.grey_3}`:`${colors.grey_7}`}}>
+                                {exercise.parts} | {exercise.muscle} | {exercise.equipment}
+                            </ExerciseArea>                        
+                        </ExerciseDetailContainer>
+                    </ExerciseLeftContainer> 
+                    <TouchableOpacity 
+                        onPress={()=> onPress(exercise)} >
+                        <RightIcon
+                            width={24}
+                            height={24}
+                            color={isDark? colors.grey_3:colors.black} // dark 모드 색 임의로 넣어놈
+                    /></TouchableOpacity>
+                </ExerciseContainer>
+            ))
+        }
+        </ListContainer>
+    )
 }

@@ -203,6 +203,23 @@ export default function ExerciseCourse_2({ navigation }) {
     );
   };
 
+  const pushReplace = async (healthCategoryIdx, name) => {
+    let replacedData = [...dataList];
+
+    replacedData[listIndex + 1].exerciseInfo.healthCategoryIdx =
+      healthCategoryIdx;
+    replacedData[listIndex + 1].exerciseInfo.exerciseName = name;
+
+    navigation.dispatch(
+      StackActions.replace("ExerciseCourse", {
+        dataList: replacedData,
+        listIndex: listIndex + 1,
+        routineIdx: routineIdx,
+        totalTime: totalTime,
+      })
+    );
+  };
+
   const [isPlaying, setIsPlaying] = React.useState(true);
   const [duration, setDuration] = React.useState(30);
 
@@ -268,21 +285,6 @@ export default function ExerciseCourse_2({ navigation }) {
       return result;
     } catch (error) {
       console.error("Error", error);
-    }
-  };
-
-  const postReplaceData = async (routineIdx) => {
-    try {
-      let url = "https://gpthealth.shop/";
-      let detailAPI = `app/process/${routineIdx}`;
-      const response = axios.post(url + detailAPI, {
-        healthCategoryIdx: 0,
-        dayOfWeek: "string",
-      });
-
-      return response;
-    } catch (error) {
-      console.error("Failed to fetch data:", error);
     }
   };
 
@@ -357,7 +359,11 @@ export default function ExerciseCourse_2({ navigation }) {
                       </ReplaceText2>
                     </ReplaceTextView>
                   </ReplaceView2>
-                  <ReplaceButton2>
+                  <ReplaceButton2
+                    onPress={() => {
+                      pushReplace(item.healthCategoryIdx, item.name);
+                    }}
+                  >
                     <ReplaceButtonText>대체하기</ReplaceButtonText>
                   </ReplaceButton2>
                 </ReplaceView>

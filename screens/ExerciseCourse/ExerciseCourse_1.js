@@ -12,6 +12,7 @@ import Indicator from "../../components/Indicator";
 import { Alert } from "react-native";
 import { useRoute, StackActions } from "@react-navigation/native";
 import axios from "axios";
+import { monthsInQuarter } from "date-fns";
 
 const ExerciseCircle = styled.View`
   width: 307px;
@@ -135,10 +136,17 @@ export default function ExerciseCourse_1({ navigation }) {
 
   const goToNextExercise = async () => {
     //패치 작업 수행
-    await patchSkipData(
-      routineIdx,
-      dataList[listIndex].exerciseInfo.healthCategoryIdx
-    );
+    // await patchSkipData(
+    //   routineIdx,
+    //   dataList[listIndex].exerciseInfo.healthCategoryIdx
+    // );
+
+    //스킵
+    let modifiedDataList = [...dataList];
+    modifiedDataList[listIndex] = {
+      ...modifiedDataList[listIndex],
+      skip: 1,
+    };
 
     if (listIndex + 1 >= dataList.length) {
       //await postTotalTime(routineIdx, totalTime + realTotalTime);
@@ -146,14 +154,14 @@ export default function ExerciseCourse_1({ navigation }) {
       // 조건이 충족되면 원하는 화면(FinalScreen)으로 이동합니다.
       navigation.dispatch(
         StackActions.replace("CompleteExercise", {
-          dataList: dataList,
+          dataList: modifiedDataList,
           totalTime: realTotalTime,
         })
       );
     } else {
       navigation.dispatch(
         StackActions.replace("ExerciseCourse", {
-          dataList: dataList,
+          dataList: modifiedDataList,
           listIndex: listIndex + 1,
           routineIdx: routineIdx,
           totalTime: realTotalTime,
@@ -164,7 +172,7 @@ export default function ExerciseCourse_1({ navigation }) {
 
   const goToCompleteExercise = async () => {
     if (listIndex + 1 >= dataList.length) {
-      //await postTotalTime(routineIdx, totalTime + realTotalTime);
+      //await postTotalTime(routineIdx, totalTime);
       // 조건이 충족되면 원하는 화면(FinalScreen)으로 이동합니다.
       navigation.dispatch(
         StackActions.replace("CompleteExercise", {
@@ -185,37 +193,32 @@ export default function ExerciseCourse_1({ navigation }) {
     }
   };
 
-  const patchSkipData = async (routineIdx, healthCategoryIdx) => {
+  // const patchSkipData = async (routineIdx, healthCategoryIdx) => {
+  //   try {
+  //     let url = "https://gpthealth.shop/";
+  //     let detailAPI = `/app/process?routineIdx=${routineIdx}&healthCategoryIdx=${healthCategoryIdx}`;
+
+  //     const response = await axios.patch(url + detailAPI, {
+  //       routineIdx: routineIdx,
+  //       healthCategoryIdx: healthCategoryIdx,
+  //     });
+  //     const result = response.data;
+  //     console.log(result);
+  //     return result;
+  //   } catch (error) {
+  //     console.error("Error", error);
+  //   }
+  // };
+
+  const postTotalData = async (routineIdx, totalTime) => {
     try {
       let url = "https://gpthealth.shop/";
-      let detailAPI = `/app/process?routineIdx=${routineIdx}&healthCategoryIdx=${healthCategoryIdx}`;
+      let detailAPI = `/app/process/end`;
 
-      const response = await axios.patch(url + detailAPI, {
+      const response = await axios.post(url + detailAPI, {
         routineIdx: routineIdx,
-        healthCategoryIdx: healthCategoryIdx,
+        totalExerciseTime: totalTime,
       });
-      const result = response.data;
-      console.log(result);
-      return result;
-    } catch (error) {
-      console.error("Error", error);
-    }
-  };
-
-  const postTotalTime = async (routineIdx, totalTime) => {
-    try {
-      let url = "https://gpthealth.shop/";
-      let detailAPI = `/app/process/end?routineIdx=${routineIdx}`;
-
-      const response = await axios.post(
-        url + detailAPI,
-        {
-          totalExerciseTime: totalTime,
-        },
-        {
-          params: { routineIdx: routineIdx },
-        }
-      );
 
       const result = response.data;
       console.log(result);
@@ -250,7 +253,6 @@ export default function ExerciseCourse_1({ navigation }) {
       },
     ];
     setExerciseData(newExerciseData);
-    //setExerciseData([...dataList[listIndex].sets]);
     console.log(exerciseData);
   }, []);
   // useEffect(() => {
