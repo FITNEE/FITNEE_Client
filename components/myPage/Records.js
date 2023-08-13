@@ -99,7 +99,7 @@ export default function Records(props) {
 
   const [now, setNow] = useState(new Date());
   const exerciseDays = props.exerciseDays;
-  const month = now.getMonth() + 1;
+  const month = props.month;
   const date = now.getDate();
 
   const [totalExercise, setTotalExercise] = useState([]);
