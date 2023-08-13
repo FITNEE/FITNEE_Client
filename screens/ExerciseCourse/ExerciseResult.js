@@ -120,7 +120,7 @@ export default function ExerciseResult({ navigation }) {
   const day = Week[now.getDay()];
   let formatDate = format(now, "yyyy. MM. dd");
 
-  const goToHome = () => navigation.navigate("RegisterRoutine");
+  const goToHome = () => navigation.navigate("HomeNav");
   const ref = useRef();
   const [captureUri, setCaptureUri] = useState(null);
   const [sharing, setSharing] = useState(false); // 공유 진행 중 여부를 상태로 관리

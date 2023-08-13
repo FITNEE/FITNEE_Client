@@ -7,7 +7,9 @@ import { ScrollView } from "react-native-gesture-handler";
 import { AppContext } from "../../components/ContextProvider";
 import { colors } from "../../colors";
 import { Alert, Share, View, Button } from "react-native";
+import { WithLocalSvg } from "react-native-svg";
 import { useRoute } from "@react-navigation/native";
+import Check from "../../assets/SVGs/Check.svg";
 import axios from "axios";
 
 const Container = styled.View`
@@ -98,12 +100,13 @@ const RecTextLine = styled.View`
   flex-direction: row;
   width: 279px;
   margin-bottom: 4px;
+  justify-content: space-between;
 `;
 
 export default function CompleteExercise({ navigation }) {
   const { isDark } = useContext(AppContext);
 
-  const goToHome = () => navigation.navigate("RegisterRoutine");
+  const goToHome = () => navigation.navigate("HomeNav");
   const goToResult = () => navigation.navigate("ExerciseResult");
 
   const route = useRoute();
@@ -112,10 +115,10 @@ export default function CompleteExercise({ navigation }) {
   const routineIdx = route.params.routineIdx;
   const totalTime = route.params.totalTime * -1;
 
-  console.log(listIndex);
-  console.log(dataList);
-  console.log(routineIdx);
-  console.log(totalTime);
+  // console.log(listIndex);
+  // console.log(dataList);
+  // console.log(routineIdx);
+  // console.log(totalTime);
 
   const [shouldRender, setShouldRender] = useState(true);
   useEffect(() => {
@@ -135,7 +138,6 @@ export default function CompleteExercise({ navigation }) {
   const [resultData, setResultData] = useState([]);
   const [resultData2, setResultData2] = useState([]);
   const [detailData, setDetailData] = useState([]);
-  const [resultList, setResultList] = useState([]);
 
   const getResultData = async (routineIdx, day) => {
     try {
@@ -161,7 +163,7 @@ export default function CompleteExercise({ navigation }) {
       setResultData(response.result.updateRoutine);
       setResultData2(response.result);
       setDetailData(response.result.getComparison);
-      setResultList(response.result.updateRoutine.routineDetails);
+      //setResultList(response.result.updateRoutine.routineDetails);
     });
   }, []);
 
@@ -184,17 +186,17 @@ export default function CompleteExercise({ navigation }) {
             unit="분"
             title="소요시간"
             bubbleOn={true}
-            bubbleText={detailData.exerciseTimeChange}
+            bubbleText={Math.ceil(detailData.exerciseTimeChange)}
           />
           <GrayCircle
-            num={resultData.totalCalories}
+            num={resultData2.totalCalories}
             unit="kg"
             title="오늘 든 무게"
             bubbleOn={true}
             bubbleText={detailData.weightChange}
           />
           <GrayCircle
-            num={resultData.totalWeight}
+            num={resultData2.totalWeight}
             unit="kcal"
             title="소모 칼로리"
             bubbleOn={false}
@@ -203,11 +205,11 @@ export default function CompleteExercise({ navigation }) {
 
         <ExerciseRec>
           <ScrollView>
-            {resultList.map((result) => (
+            {resultData.map((result) => (
               <RecTextLine key={result.exerciseInfo.healthCategoryIdx}>
                 <RecText1>{result.exerciseInfo.exerciseName}</RecText1>
-                {/* <RecText2 />
-      <RecText3/> */}
+
+                <WithLocalSvg asset={Check} width={20} height={20} />
               </RecTextLine>
             ))}
           </ScrollView>

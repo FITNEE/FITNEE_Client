@@ -1,12 +1,11 @@
 import React, {
-  View,
   useCallback,
   useEffect,
   useMemo,
   useRef,
   useState,
 } from "react";
-import { SafeAreaView, Text, TouchableOpacity } from "react-native";
+import { SafeAreaView, View, Text, TouchableOpacity } from "react-native";
 import { TextInput, Dimensions, Animated, StyleSheet } from "react-native";
 const { width, height } = Dimensions.get("window");
 import styled from "styled-components/native";
@@ -15,6 +14,8 @@ import ExerciseButton from "../../components/ExerciseButton";
 import CurrentExplainLine from "../../components/CurrentExplainLine";
 import CurrentSet from "../../components/CurrentSet";
 import { colors } from "../../colors";
+import { CountdownCircleTimer } from "react-native-countdown-circle-timer";
+import NextSet from "../../components/NextSet";
 import {
   BottomSheetModal,
   BottomSheetModalProvider,
@@ -28,6 +29,9 @@ const ExerciseCircle = styled.View`
   height: 307px;
   border-radius: 291px;
   background: ${colors.grey_1};
+  margin-bottom: 24px;
+  justify-content: center;
+  align-items: center;
 `;
 
 const ReplaceButton = styled.TouchableOpacity`
@@ -37,7 +41,6 @@ const ReplaceButton = styled.TouchableOpacity`
   gap: 8px;
   border-radius: 100px;
   background: ${colors.grey_3};
-  margin-top: 18px;
   margin-bottom: 12px;
   margin-right: 242.5px;
 `;
@@ -51,13 +54,47 @@ const ReplaceButtonText = styled.Text`
   line-height: 19.5px;
 `;
 
-const CurrentExplain = styled.View`
-  width: 327px;
-  height: 108px;
-  border-radius: 12px;
-  background: ${colors.grey_1};
-  padding: 24px;
+const StartButton = styled.TouchableOpacity`
+  padding: 8px 12px;
+  height: 36px;
   justify-content: center;
+  align-items: center;
+  gap: 8px;
+  border-radius: 100px;
+  background: ${colors.l_main};
+  width: 99px;
+`;
+
+const StartButtonText = styled.Text`
+  color: ${colors.white};
+  text-align: center;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 19.5px;
+`;
+
+const NextView = styled.View`
+  position: absolute;
+  flex-direction: row;
+  bottom: 0;
+  width: 100%;
+  height: 70px;
+  background-color: ${colors.black};
+  border-radius: 20px 20px 0px 0px;
+  justify-content: space-between;
+  padding: 22px 24px 0px 24px;
+  z-index: 0;
+`;
+
+const NextText = styled.Text`
+  color: ${colors.white};
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 22.5px;
+  width: 230px;
+  height: 24px;
 `;
 
 const ModalTitle = styled.Text`
@@ -88,7 +125,7 @@ const SeperateLine = styled.View`
 
 const ReplaceView = styled.View`
   height: 92px;
-  width: 375px;
+  width: 100%;
   padding: 24px;
   align-items: center;
   background-color: ${colors.white};
@@ -146,46 +183,79 @@ const BottomSheetBack = styled.View`
   height: 100%;
 `;
 
-export default function ExerciseCourse({ navigation }) {
+export default function ExerciseCourse_2({ navigation }) {
+  //휴식페이지. 나중에 운동 과정 페이지 하나에 다 넣을 예정
+
   const goToCompleteExercise = () => {
+    setIsPlaying(false);
+    navigation.navigate("CompleteExercise");
+  };
+
+  const goToNextExercise = () => {
+    setIsPlaying(false);
     navigation.dispatch(
-      StackActions.replace("ExerciseCourse_1", {
+      StackActions.replace("ExerciseCourse", {
         dataList: dataList,
-        listIndex: listIndex,
+        listIndex: listIndex + 1,
+        totalTime: totalTime + restTime,
         routineIdx: routineIdx,
-        totalTime: totalTime,
       })
     );
   };
 
-  const inputRef = useRef();
-  //opacity를 위해
-  const timerAnimation = useRef(new Animated.Value(0)).current;
-  //타이머 숫자를 위해
-  const textInputAnimation = useRef(new Animated.Value(3)).current;
-  const zIndexAnimation = useRef(new Animated.Value(0)).current;
-  const bottomSheetRef = useRef(null);
-  const snapPoints = useMemo(() => ["65%"], []);
+  const [isPlaying, setIsPlaying] = React.useState(true);
+  const [duration, setDuration] = React.useState(30);
+
+  //data route
   const route = useRoute();
   const dataList = route.params.dataList;
   const listIndex = route.params.listIndex;
   const routineIdx = route.params.routineIdx;
   const totalTime = route.params.totalTime;
-  console.log("l", listIndex);
-  console.log("t", totalTime);
+
+  const [restTime, setRestTime] = useState(0);
+
+  const children = ({ remainingTime }) => {
+    const minutes = Math.floor(remainingTime / 60);
+    min = minutes < 10 ? "0" + minutes : minutes;
+    const seconds = remainingTime % 60;
+    sec = seconds < 10 ? "0" + seconds : seconds;
+
+    return `${min}:${sec}`;
+  };
+
+  const RestTime = ({ remainingTime }) => {
+    return setRestTime(-1 * (30 - remainingTime));
+  };
+
+  const bottomSheetRef = useRef(null);
+  const snapPoints = useMemo(() => ["65%"], []);
+
+  const handleClosePress = () => bottomSheetRef.current.close();
+
+  const handleModal = () => {
+    bottomSheetRef.current?.present();
+  };
+
+  const renderBackdrop = useCallback(
+    (props) => (
+      <BottomSheetBackdrop
+        {...props}
+        disappearsOnIndex={-1}
+        appearsOnIndex={0}
+      />
+    ),
+    []
+  );
 
   const [replaceList, setReplaceList] = useState([]);
-  const Week = new Array("sun", "mon", "tue", "wed", "thu", "fri", "sat");
-
-  const now = new Date();
-  let day = Week[now.getDay()];
-  let healthCategoryIdx = dataList[listIndex].exerciseInfo.healthCategoryIdx;
-  // let healthCategoryIdx = 14;
+  let healthCategoryIdx =
+    dataList[listIndex + 1].exerciseInfo.healthCategoryIdx;
 
   const getReplaceData = async (routineIdx, healthCategoryIdx) => {
     try {
       let url = "https://gpthealth.shop/";
-      let detailAPI = `/app/process/replace/`;
+      let detailAPI = `/app/process/replace`;
 
       const response = await axios.get(url + detailAPI, {
         params: {
@@ -223,155 +293,41 @@ export default function ExerciseCourse({ navigation }) {
     });
   }, []);
 
-  const handleModal = () => {
-    bottomSheetRef.current?.present();
-  };
-
-  const renderBackdrop = useCallback(
-    (props) => (
-      <BottomSheetBackdrop
-        {...props}
-        disappearsOnIndex={-1}
-        appearsOnIndex={0}
-        pressBehavior="close"
-      />
-    ),
-    []
-  );
-
-  useEffect(() => {
-    const listener = textInputAnimation.addListener(({ value }) => {
-      inputRef?.current?.setNativeProps({
-        text: Math.ceil(value).toString(),
-      });
-    });
-
-    return () => {
-      textInputAnimation.removeListener(listener);
-      textInputAnimation.removeAllListeners();
-    };
-  });
-  const animation = React.useCallback(() => {
-    Animated.sequence([
-      Animated.parallel([
-        //숫자가 duration동안 3에서 1로
-        Animated.timing(textInputAnimation, {
-          toValue: 1,
-          duration: 2000,
-          useNativeDriver: true,
-        }),
-
-        Animated.timing(zIndexAnimation, {
-          toValue: 1,
-          duration: 0,
-          useNativeDriver: true,
-        }),
-
-        //배경이 3초동안 불투명. 불투명해지는데 걸리는 시간이 duration
-        Animated.timing(timerAnimation, {
-          toValue: 1,
-          duration: 150,
-          useNativeDriver: true,
-        }),
-      ]),
-
-      //1이 더 오래 보이게
-      Animated.delay("300"),
-
-      Animated.parallel([
-        Animated.timing(timerAnimation, {
-          toValue: 0,
-          duration: 0,
-          useNativeDriver: true,
-        }),
-
-        Animated.timing(zIndexAnimation, {
-          toValue: 0,
-          duration: 0,
-          useNativeDriver: true,
-        }),
-
-        Animated.timing(textInputAnimation, {
-          toValue: 3,
-          duration: 0,
-          useNativeDriver: true,
-        }),
-      ]),
-      //배경이 사라진다. 투명해지는데 걸리는 시간이 duration
-    ]).start(goToCompleteExercise);
-  }, []);
-
-  const styles = StyleSheet.create({
-    text: {
-      color: colors.white,
-      textAlign: "center",
-      fontSize: 80,
-      fontWeight: "600",
-    },
-  });
-
-  const adviceList = dataList[listIndex].exerciseInfo.caution.map((item) => (
-    <CurrentExplainLine expl={item} />
-  ));
-
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.grey_2 }}>
-      <ExerciseCard
-        exerciseName={dataList[listIndex].exerciseInfo.exerciseName}
-      >
-        <BottomSheetModalProvider>
-          <ExerciseCircle></ExerciseCircle>
+      <BottomSheetModalProvider>
+        <ExerciseCard exerciseName="휴식 시간">
+          <ExerciseCircle>
+            <CountdownCircleTimer
+              isPlaying={isPlaying}
+              duration={duration}
+              colors={colors.d_main}
+              size={315}
+              strokeWidth={8}
+              trailColor={colors.grey_3}
+              onComplete={goToNextExercise}
+              updateInterval={0.001}
+              rotation={"counterclockwise"}
+            >
+              {({ remainingTime }) => (
+                RestTime({ remainingTime }),
+                (
+                  <Text style={{ color: colors.black, fontSize: 56 }}>
+                    {children({ remainingTime })}
+                  </Text>
+                )
+              )}
+            </CountdownCircleTimer>
+          </ExerciseCircle>
 
-          <Animated.View
-            style={[
-              StyleSheet.absoluteFillObject,
-              {
-                justifyContent: "center",
-                width,
-                height,
-                opacity: timerAnimation,
-                backgroundColor: "rgba(38, 38, 38, 0.40)",
-                zIndex: zIndexAnimation,
-              },
-            ]}
-          />
-
-          <Animated.View
-            style={{
-              position: "absolute",
-              justifyContent: "center",
-              alignItems: "center",
-              height: "92%",
-              opacity: timerAnimation,
-              zIndex: zIndexAnimation,
-            }}
-          >
-            <TextInput
-              ref={inputRef}
-              style={styles.text}
-              defaultValue={"3"}
-              Opacity={"1"}
-              editable={false}
-            />
-          </Animated.View>
-
-          <ReplaceButton disabled={false} onPress={handleModal}>
+          <ReplaceButton onPress={handleModal}>
             <ReplaceButtonText>운동 대체하기</ReplaceButtonText>
           </ReplaceButton>
 
-          <CurrentSet
-            set={dataList[listIndex].sets[0].set + 1}
-            kg={dataList[listIndex].sets[0].weight}
-            num={dataList[listIndex].sets[0].rep}
-          />
-
-          <CurrentExplain>{adviceList}</CurrentExplain>
-
-          <ExerciseButton //운동 시작 버튼
-            text="운동 시작"
-            disabled={false}
-            onPress={animation}
-            //onPress={goToCompleteExercise}
+          <NextSet
+            set="1"
+            kg={dataList[listIndex + 1].sets[0].weight}
+            num={dataList[listIndex + 1].sets[0].rep}
           />
 
           <BottomSheetModal
@@ -408,8 +364,16 @@ export default function ExerciseCourse({ navigation }) {
               ))}
             </BottomSheetBack>
           </BottomSheetModal>
-        </BottomSheetModalProvider>
-      </ExerciseCard>
+        </ExerciseCard>
+        <NextView>
+          <NextText>
+            {dataList[listIndex + 1].exerciseInfo.exerciseName}
+          </NextText>
+          <StartButton onPress={goToNextExercise}>
+            <StartButtonText>바로 시작하기</StartButtonText>
+          </StartButton>
+        </NextView>
+      </BottomSheetModalProvider>
     </SafeAreaView>
   );
 }
