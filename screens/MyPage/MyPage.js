@@ -53,9 +53,15 @@ export default function MyPage(props) {
     });
   }, []);
 
-  const [checkedDate, setCheckedDate] = useState("20230812");
+  const todayFormat = now.toISOString().substring(0, 10).replace(/-/g, "");
+  const [checkedDate, setCheckedDate] = useState(todayFormat);
+  const [exerciseInfo, setExerciseInfo] = useState([]);
+  const [totalCalories, setTotalCalories] = useState();
+  const [totalWeight, setTotalWeight] = useState();
+  const [totalTime, setTotalTime] = useState();
+  const [totalDist, setTotalDist] = useState();
 
-  const getDate = async (checkedDate) => {
+  const getDayHealth = async (checkedDate) => {
     try {
       let url = "https://gpthealth.shop/";
       let detailAPI = `app/mypage/exercise?date=${checkedDate}`;
@@ -68,9 +74,49 @@ export default function MyPage(props) {
   };
 
   useEffect(() => {
-    getDate(checkedDate).then((checkResult) => {
+    getDayHealth(checkedDate).then((checkResult) => {
+      checkResult.code == 709 &&
+        setExerciseInfo([
+          {
+            exerciseInfo: {
+              exerciseName: "",
+              healthCategoryIdx: 0,
+              weight: 0,
+            },
+            order: 1,
+          },
+        ]) &
+          setTotalCalories(0) &
+          setTotalWeight(0) &
+          setTotalTime(0) &
+          setTotalDist(0);
+      checkResult.code == 1000 &&
+        setExerciseInfo(checkResult.result.exercise) &
+          setTotalCalories(checkResult.result.totalCalories) &
+          setTotalWeight(checkResult.result.totalWeight) &
+          setTotalTime(checkResult.result.totalTime) &
+          setTotalDist(checkResult.result.totalDist);
       console.log(checkResult);
-      //setcheckedDate(checkResult.checklt);
+    });
+  }, []);
+  const [weekData, setWeekData] = useState();
+
+  const getWeekHealth = async () => {
+    try {
+      let url = "https://gpthealth.shop/";
+      let detailAPI = `app/mypage/record`;
+      const response = await axios.get(url + detailAPI);
+      const weekResult = response.data;
+      return weekResult;
+    } catch (error) {
+      console.error("Failed to fetch data:", error);
+    }
+  };
+
+  useEffect(() => {
+    getWeekHealth().then((weekResult) => {
+      setWeekData(weekResult.result);
+      console.log(weekResult.result);
     });
   }, []);
 
@@ -120,7 +166,7 @@ export default function MyPage(props) {
           </ChoiceButton>
         </Choice>
         {showRecords && <Records exerciseDays={date} month={month} />}
-        {!showRecords && <Analysis />}
+        {!showRecords && <Analysis weekData={weekData} />}
       </Container>
     </SafeAreaView>
   );

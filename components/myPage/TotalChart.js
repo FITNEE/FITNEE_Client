@@ -16,14 +16,14 @@ import { IsDarkAtom } from "../../recoil/MyPageAtom";
 
 const Container = styled.ScrollView``;
 
-export default function TotalChart() {
+export default function TotalChart(props) {
   const isDark = useRecoilValue(IsDarkAtom);
   const BoxContainer = styled.View`
     margin: 26px 24px 0px 24px;
     background-color: ${isDark ? colors.grey_7 : colors.grey_1};
     border-radius: 20px;
     padding: 16px;
-    padding-right: 0px;
+    //padding-right: 0px;
   `;
 
   const [message, setMessage] = useState({
@@ -45,7 +45,7 @@ export default function TotalChart() {
     propsForLabels: {
       fontSize: 11,
       fonstWeight: 600,
-      lineHeight: 16.5,
+      lineHeight: 30,
     },
     propsForBackgroundLines: {
       strokeWidth: 1,
@@ -58,6 +58,69 @@ export default function TotalChart() {
   };
   const screenWidth = Dimensions.get("window").width;
 
+  const weekData = props.weekData;
+  const KcalData = weekData.map((result) => result.weeklyCalories);
+  const TimeData = weekData.map((result) => result.weeklyExerciseTime);
+  const LabelData = weekData.map((result) => result.weekNumber);
+  const KmData = weekData.map((result) => result.weeklyDistance);
+
+  const totalTime = [];
+  let sum = 0;
+  for (let i = 0; i < TimeData.length; i++) {
+    sum += TimeData[i];
+    totalTime.push(sum);
+  }
+
+  const LabelArray = [];
+  for (let i = 0; i < LabelData.length; i++) {
+    if (LabelData[i].length > 7) {
+      if (LabelData[i].includes("1째 주")) {
+        LabelArray.push(`5주   /   ${LabelData[i].subString(0, 2)}월 1주`);
+      } else {
+        LabelArray.push(`${LabelData[i].split("")[4]}주`);
+      }
+    } else {
+      if (LabelData[i].includes("1째 주")) {
+        LabelArray.push(`5주   /   ${LabelData[i].split("")[0]}월 1주`);
+      } else {
+        LabelArray.push(`${LabelData[i].split("")[3]}주`);
+      }
+    }
+  }
+
+  const KcalMax = Math.max(...KcalData);
+  const KmMax = Math.max(...KmData);
+  const calorieData = KcalData.map((value) => value / KcalMax);
+  const distanceData = KmData.map((value) => value / KmMax);
+  const realMax = Math.max(KmMax, KcalMax);
+  const [maxData, setMaxData] = useState();
+  const dataLength = KcalData.length;
+
+  const data = {
+    labels: LabelArray,
+    datasets: [
+      {
+        data: calorieData,
+        color: () => colors.l_main,
+        strokeWidth: 2,
+      },
+      {
+        data: distanceData,
+        color: () => colors.green,
+        strokeWidth: 2,
+      },
+      {
+        data: [1.2],
+        color: () => "transparent",
+      },
+      {
+        data: [0],
+        color: () => "transparent",
+      },
+    ],
+    //legend: ["kcal", "km"],
+  };
+  /*
   const KcalData = [200, 500, 600, 900, 400, 300, 700, 1100];
   const KcalMax = Math.max(...KcalData);
   const KmData = [4, 3, 7, 6, 2, 5, 6, 6];
@@ -92,10 +155,20 @@ export default function TotalChart() {
     ],
     //legend: ["kcal", "km"],
   };
+  */
+  const formatXLabel = (value) => {
+    for (var i = 0; i < data.labels.length; i++) {
+      if (value == data.labels[i]) {
+        return `${value}\n${totalTime[i]}`;
+      }
+    }
+  };
 
   const [unit, setUnit] = useState("kcal");
   const [render, setRender] = useState(
-    (data.labels.length * screenWidth) / data.labels.length
+    data.labels.length > 4
+      ? (data.labels.length * screenWidth) / data.labels.length
+      : 0
   );
 
   return (
@@ -123,6 +196,7 @@ export default function TotalChart() {
           withHorizontalLabels={false}
           withVerticalLines={false}
           withHorizontalLines={true}
+          //formatXLabel={formatXLabel}
           style={{
             paddingRight: 0,
           }}
@@ -135,15 +209,19 @@ export default function TotalChart() {
                   r={3}
                   fill={isDark ? colors.grey_7 : colors.white}
                 />
-                <Line
-                  x1={message.x}
-                  x2={message.x}
-                  y1={message.y + 5}
-                  y2={189}
-                  stroke={isDark ? colors.white : colors.black}
-                  strokeWidth={2}
-                  strokeDasharray={3}
-                ></Line>
+                {message.value != 0 ? (
+                  <Line
+                    x1={message.x}
+                    x2={message.x}
+                    y1={message.y + 5}
+                    y2={189}
+                    stroke={isDark ? colors.white : colors.black}
+                    strokeWidth={2}
+                    strokeDasharray={3}
+                  ></Line>
+                ) : (
+                  ""
+                )}
                 <View
                   style={{
                     position: "absolute",
@@ -192,7 +270,7 @@ export default function TotalChart() {
               ? setMaxData(KcalMax)
               : setMaxData(KmMax);
             data.dataset.data.length > 3
-              ? setRender(data.x - screenWidth + 94)
+              ? setRender(data.x - screenWidth + 111)
               : "";
             let isSamePoint = message.x === data.x && message.y === data.y;
             isSamePoint

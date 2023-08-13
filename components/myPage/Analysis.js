@@ -31,7 +31,7 @@ const Data = styled.View`
   flex-direction: row;
 `;
 
-export default function Analysis() {
+export default function Analysis(props) {
   const isDark = useRecoilValue(IsDarkAtom);
   const Title = styled.Text`
     font-size: 17px;
@@ -60,13 +60,17 @@ export default function Analysis() {
     color: ${isDark ? colors.white : colors.black};
   `;
 
-  const calorie = useState("1280");
-  const kilometer = useState("244");
-  const hour = useState("43");
+  const weekData = props.weekData;
+
+  const weekIndex = weekData.length - 1;
+  console.log(weekIndex);
+  const calorie = weekData[weekIndex].weeklyCalories;
+  const hour = weekData[weekIndex].weeklyExerciseTime;
+  const kilometer = weekData[weekIndex].weeklyDistance;
 
   return (
     <Container>
-      <TotalChart />
+      <TotalChart weekData={weekData} />
       <Exercise>
         <Title>운동 현황</Title>
         <Block>
