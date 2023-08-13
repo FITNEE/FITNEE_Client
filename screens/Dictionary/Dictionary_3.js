@@ -103,11 +103,10 @@ export default function Dictionary_3({ navigation, route }){
                     <TopBtnContainer>
                         <TouchableOpacity 
                             onPress={()=>navigation.goBack()}>
-                            <WithLocalSvg
+                            <LeftIcon
                                 width={24}
                                 height={24}
                                 color={isDark? colors.grey_1: colors.black} // dark 모드 색 임의로 넣어놈
-                                asset={LeftIcon}
                         /></TouchableOpacity>
                     </TopBtnContainer>
                     <ImageContainer>
@@ -147,10 +146,9 @@ export default function Dictionary_3({ navigation, route }){
                                 </NameContainer>
                                 <TouchableOpacity 
                                     onPress={onPressAddRoutineBtn}>
-                                    <WithLocalSvg
+                                    <AddIcon
                                         width={40}
                                         height={40}
-                                        asset={AddIcon}
                                 /></TouchableOpacity>
                             </TitleContainer>
                             <TabContainer style={{borderBottomColor: isDark? `${colors.grey_8}`:`${colors.grey_1}`}}> 
