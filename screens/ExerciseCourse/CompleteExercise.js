@@ -205,13 +205,13 @@ export default function CompleteExercise({ navigation }) {
 
         <ExerciseRec>
           <ScrollView>
-            {resultData.map((result) => (
+            {/* {resultData.map((result) => (
               <RecTextLine key={result.exerciseInfo.healthCategoryIdx}>
                 <RecText1>{result.exerciseInfo.exerciseName}</RecText1>
 
                 <WithLocalSvg asset={Check} width={20} height={20} />
               </RecTextLine>
-            ))}
+            ))} */}
           </ScrollView>
         </ExerciseRec>
 

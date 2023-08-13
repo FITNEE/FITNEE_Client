@@ -9,6 +9,7 @@ import { colors } from "../../colors";
 import axios from "axios";
 import {
   useRecoilState,
+  useRecoilValue,
   useRecoilValueLoadable,
   useSetRecoilState,
 } from "recoil";
@@ -18,15 +19,7 @@ import {
 } from "../../recoil/ExerciseCourseRecoil";
 import { useIsFocused } from "@react-navigation/native";
 import { processDayData } from "../../components/myRoutine/Functions";
-import { TabBarAtom } from "../../recoil/MyPageAtom";
-
-const Container = styled.View`
-  flex: 1;
-  align-items: center;
-  justify-content: center;
-  padding: 0px 23.5px;
-  background: ${colors.white};
-`;
+import { TabBarAtom, IsDarkAtom } from "../../recoil/MyPageAtom";
 
 const ExerciseText = styled.Text`
   font-weight: 600;
@@ -159,10 +152,19 @@ const ExerciseCircle = styled.View`
 export default function StartExercise({ navigation }) {
   const isFocused = useIsFocused();
   const [isTabVisible, setIsTabVisible] = useRecoilState(TabBarAtom);
+  const isDark = useRecoilValue(IsDarkAtom);
 
   useEffect(() => {
     isFocused && setIsTabVisible(false);
   }, [isFocused, isTabVisible]);
+
+  const Container = styled.View`
+    flex: 1;
+    align-items: center;
+    justify-content: center;
+    padding: 0px 23.5px;
+    background: ${isDark ? colors.d_background : colors.white};
+  `;
 
   const Week = new Array("sun", "mon", "tue", "wed", "thu", "fri", "sat");
 
@@ -242,7 +244,12 @@ export default function StartExercise({ navigation }) {
 
   function LoadingIndicator() {
     return (
-      <SafeAreaView style={{ flex: 1, backgroundColor: colors.grey_1 }}>
+      <SafeAreaView
+        style={{
+          flex: 1,
+          backgroundColor: isDark ? colors.d_background : colors.grey_1,
+        }}
+      >
         <Container2>
           <ExerciseCircle />
         </Container2>
@@ -262,7 +269,12 @@ export default function StartExercise({ navigation }) {
     ));
 
     return (
-      <SafeAreaView style={{ flex: 1, backgroundColor: colors.white }}>
+      <SafeAreaView
+        style={{
+          flex: 1,
+          backgroundColor: isDark ? colors.d_background : colors.white,
+        }}
+      >
         <Container>
           <BackButton onPress={() => navigation.goBack()} />
           <ExerciseText>운동을 시작해 볼까요?</ExerciseText>
