@@ -180,7 +180,6 @@ export default function ExerciseCourse({ navigation }) {
   const now = new Date();
   let day = Week[now.getDay()];
   let healthCategoryIdx = dataList[listIndex].exerciseInfo.healthCategoryIdx;
-  // let healthCategoryIdx = 14;
 
   const getReplaceData = async (routineIdx, healthCategoryIdx) => {
     try {
