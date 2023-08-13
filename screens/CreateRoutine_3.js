@@ -53,17 +53,24 @@ export default function CreateRoutine_3({ navigation }) {
         parts[4].selected ||
         parts[5].selected
     );
+    SetAllPart(
+      parts[0].selected &&
+        parts[1].selected &&
+        parts[2].selected &&
+        parts[3].selected &&
+        parts[4].selected &&
+        parts[5].selected
+    );
   }, [parts]);
   const AllPartPress = () => {
     SetAllPart(!allPart);
-  };
-  useEffect(() => {
     setParts((prevParts) =>
       prevParts.map((part) =>
-        allPart ? { ...part, selected: true } : { ...part, selected: false }
+        !allPart ? { ...part, selected: true } : { ...part, selected: false }
       )
     );
-  }, [allPart]);
+  };
+
   return (
     <Container>
       <TitleContainer>
@@ -76,13 +83,31 @@ export default function CreateRoutine_3({ navigation }) {
             key={part.id}
             onPress={() => onPartPress(part.id)}
             style={{
-              backgroundColor: part.selected ? colors.l_sub_2 : colors.white,
+              backgroundColor: allPart
+                ? colors.l_sub_2
+                : part.selected
+                ? colors.l_main
+                : colors.white,
               borderWidth: 1, // borderColor를 덮어쓰는 방법으로 borderWidth를 설정해줍니다.
-              borderColor: part.selected ? colors.l_main : colors.white,
+              borderColor: allPart
+                ? colors.l_main
+                : part.selected
+                ? colors.l_main
+                : colors.white,
             }}
           >
             <PartImage />
-            <PartName>{part.name}</PartName>
+            <PartName
+              style={{
+                color: allPart
+                  ? colors.l_main
+                  : part.selected
+                  ? colors.white
+                  : colors.black,
+              }}
+            >
+              {part.name}
+            </PartName>
           </PartItem>
         ))}
       </PartContainer>

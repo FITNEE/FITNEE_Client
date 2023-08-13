@@ -86,13 +86,9 @@ const Home = ({ navigation }) => {
           <PremiumText>PREMIUM</PremiumText>
         </Premium>
       </Top>
-      {data.isSuccess ? (
-        <HomeRoutines data={data.result} />
-      ) : (
-        <NotHomeRoutine />
-      )}
+      {false ? <HomeRoutines data={data.result} /> : <NotHomeRoutine />}
     </SafeAreaView>
   );
 };
-
+//data.isSuccess
 export default Home;
