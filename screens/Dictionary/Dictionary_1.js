@@ -30,7 +30,7 @@ export default function Dictionary_1({ navigation }) {
     const [popularKeywords, setPopularKeywords] = useState([])
     const [recentKeywords, setRecentKeywords] = useState([])
     const [searchList, setSearchList] = useState([])
-    
+
     // 사용자가 검색창에 onFocus 했을 때
     const onFocusInput = ()=>{
         setIsSubmit(false)
@@ -154,11 +154,11 @@ export default function Dictionary_1({ navigation }) {
                                 onPress={isSubmit? print: null}
                                 style={isDark? {backgroundColor: `${colors.black}`} : {backgroundColor: `${colors.grey_1}`}}
                             >
-                                <WithLocalSvg
+                                <SearchIcon
                                     style={{ marginRight: 12 }}
                                     width={24}
                                     height={24}
-                                    asset={SearchIcon}
+                                    color={isDark? colors.white: colors.black}
                                 />
                                 <SearchInput
                                     keyboardAppearance= {isDark? 'dark':'light'}
@@ -176,11 +176,9 @@ export default function Dictionary_1({ navigation }) {
                                 <TouchableOpacity 
                                     style={{ marginLeft: 16}}
                                     onPress={onDeleteInput}>
-                                    <WithLocalSvg
+                                    <DeleteIcon
                                         width={24}
                                         height={24}
-                                        asset={DeleteIcon}
-                                        
                                 /></TouchableOpacity>
                             </SearchInputContainer>
                         </SearchContainer>
@@ -203,7 +201,6 @@ export default function Dictionary_1({ navigation }) {
                                         >
                                             <PressedPartText style={{color: isDark? `${colors.d_main}`:`${colors.l_main}`}}>{part[0]}</PressedPartText>
                                         </PressedPart>
-
                                 ))
                             }
                         </PartContainer>}

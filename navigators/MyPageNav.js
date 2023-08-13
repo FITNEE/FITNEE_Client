@@ -29,11 +29,10 @@ export default function MyPageNav() {
           headerTitle: "",
           headerRight: () => (
             <TouchableOpacity onPress={() => navigation.navigate("Setting")}>
-              <WithLocalSvg
+              <SettingIcon
                 style={{ marginRight: 24 }}
                 width={24}
                 height={24}
-                asset={SettingIcon}
               />
             </TouchableOpacity>
           ),
@@ -46,11 +45,10 @@ export default function MyPageNav() {
           headerTitle: "앱 설정",
           headerLeft: () => (
             <TouchableOpacity onPress={() => navigation.goBack()}>
-              <WithLocalSvg
+              <Left
                 style={{ marginLeft: 24 }}
                 width={24}
                 height={24}
-                asset={Left}
                 color={colors.black}
               />
             </TouchableOpacity>
