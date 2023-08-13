@@ -1,23 +1,25 @@
 import React, {useEffect, useState} from 'react'
 import styled from 'styled-components/native'
-import {colors} from '../colors'
+import { colors } from '../colors'
+import { IsDarkAtom } from "../recoil/MyPageAtom"
+import { useRecoilValue } from "recoil"
+import { WithLocalSvg } from 'react-native-svg'
+import RightIcon from '../assets/SVGs/Right.svg'
+import { TouchableOpacity } from 'react-native'
 
 const ListContainer = styled.ScrollView`
-    background-color: ${colors.grey_1};
 `
 const ExerciseContainer = styled.TouchableOpacity`
     padding: 16px 24px;
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-    background-color: white;
 `
 const ExerciseLeftContainer = styled.View`
     flex-direction: row;
     align-items: center;
 `
 const ExerciseImg = styled.Image`
-    background-color: ${colors.grey_1};
     width: 60px;
     height: 60px;
     border-radius: 30px;
@@ -28,8 +30,6 @@ const ExerciseDetailContainer = styled.View`
 const ExerciseName = styled.Text`
     font-weight: 600;
     font-size: 17px;
-    color: ${colors.black};
-
     margin-bottom: 5px;
 `
 const ExerciseArea = styled.Text`
@@ -44,6 +44,7 @@ const AddtoBtn = styled.TouchableOpacity`
 `
 
 export default function Dictionary_List(props){
+    const isDark = useRecoilValue(IsDarkAtom)
 
     //props
     const { navigation, searchList, part } = props
@@ -64,8 +65,7 @@ export default function Dictionary_List(props){
         else{
             const tempList = searchList.filter(item => selectedParts.includes(item.parts))
             setFilteredList(tempList)
-        }
-        
+        } 
     }
     useEffect(()=>{
         filterList()
@@ -73,21 +73,41 @@ export default function Dictionary_List(props){
 
 
     return(
-        <ListContainer showsVerticalScrollIndicator='false'>
+        <ListContainer 
+            showsVerticalScrollIndicator='false'
+            style={{backgroundColor: isDark? `${colors.d_background}`:`${colors.l_background}`}}
+        >
         {
             filteredList === undefined?
             null
             :
             filteredList?.map((exercise, i) => (
-                <ExerciseContainer key={i} onPress={()=> onPress(exercise)}>
+                <ExerciseContainer 
+                    key={i} 
+                    onPress={()=> onPress(exercise)}
+                    style={{backgroundColor: isDark? `${colors.d_background}`:`${colors.l_background}`}}
+                >
                     <ExerciseLeftContainer>
-                        <ExerciseImg></ExerciseImg>
+                        <ExerciseImg
+                            style={{backgroundColor: isDark? `${colors.black}`:`${colors.grey_1}`}}
+                        />
                         <ExerciseDetailContainer>
-                            <ExerciseName>{exercise.name}</ExerciseName>
-                            <ExerciseArea>{exercise.parts} | {exercise.muscle} | {exercise.equipment}</ExerciseArea>                        
+                            <ExerciseName style={{color: isDark? `${colors.grey_3 }`:`${colors.black}`}}>
+                                {exercise.name}
+                            </ExerciseName>
+                            <ExerciseArea style={{color: isDark? `${colors.grey_3}`:`${colors.grey_7}`}}>
+                                {exercise.parts} | {exercise.muscle} | {exercise.equipment}
+                            </ExerciseArea>                        
                         </ExerciseDetailContainer>
-                    </ExerciseLeftContainer>
-                    <AddtoBtn onPress={filterList}/>
+                    </ExerciseLeftContainer> 
+                    <TouchableOpacity 
+                        onPress={()=> onPress(exercise)} >
+                        <WithLocalSvg
+                            width={24}
+                            height={24}
+                            color={isDark? colors.grey_3:colors.black} // dark 모드 색 임의로 넣어놈
+                            asset={RightIcon}
+                    /></TouchableOpacity>
                 </ExerciseContainer>
             ))
         }

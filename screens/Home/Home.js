@@ -43,7 +43,7 @@ const PremiumText = styled.Text`
 `;
 
 const Home = ({ navigation }) => {
-  const [showRoutine, SetShowRoutine] = useState(true);
+  const [showRoutine, SetShowRoutine] = useState(false);
   const isFocus = useIsFocused();
   const setIsTabVisible = useSetRecoilState(TabBarAtom);
   useEffect(() => {
