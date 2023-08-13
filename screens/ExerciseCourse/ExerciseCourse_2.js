@@ -125,7 +125,7 @@ const SeperateLine = styled.View`
 
 const ReplaceView = styled.View`
   height: 92px;
-  width: 375px;
+  width: 100%;
   padding: 24px;
   align-items: center;
   background-color: ${colors.white};

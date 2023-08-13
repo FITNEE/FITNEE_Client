@@ -88,7 +88,7 @@ const SeperateLine = styled.View`
 
 const ReplaceView = styled.View`
   height: 92px;
-  width: 375px;
+  width: 100%;
   padding: 24px;
   align-items: center;
   background-color: ${colors.white};
@@ -171,8 +171,8 @@ export default function ExerciseCourse({ navigation }) {
   const listIndex = route.params.listIndex;
   const routineIdx = route.params.routineIdx;
   const totalTime = route.params.totalTime;
-  console.log("l", listIndex);
-  console.log("t", totalTime);
+  console.log("index:", listIndex);
+  console.log("time:", totalTime);
 
   const [replaceList, setReplaceList] = useState([]);
   const Week = new Array("sun", "mon", "tue", "wed", "thu", "fri", "sat");

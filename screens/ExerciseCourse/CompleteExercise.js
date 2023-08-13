@@ -106,7 +106,7 @@ const RecTextLine = styled.View`
 export default function CompleteExercise({ navigation }) {
   const { isDark } = useContext(AppContext);
 
-  const goToHome = () => navigation.navigate("RegisterRoutine");
+  const goToHome = () => navigation.navigate("HomeNav");
   const goToResult = () => navigation.navigate("ExerciseResult");
 
   const route = useRoute();
