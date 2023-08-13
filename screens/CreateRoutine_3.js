@@ -88,7 +88,7 @@ export default function CreateRoutine_3({ navigation }) {
                 : part.selected
                 ? colors.l_main
                 : colors.white,
-              borderWidth: 1, // borderColor를 덮어쓰는 방법으로 borderWidth를 설정해줍니다.
+              borderWidth: 1,
               borderColor: allPart
                 ? colors.l_main
                 : part.selected
@@ -165,7 +165,7 @@ const AllButton = styled.TouchableOpacity`
   width: 147px;
   height: 40px;
   background-color: ${(props) =>
-    props.isActive ? colors.l_sub_2 : colors.grey_3};
+    props.isActive ? colors.l_main : colors.grey_3};
   margin-bottom: 120px;
   border-radius: 100px;
   align-items: center;
@@ -175,8 +175,8 @@ const AllButton = styled.TouchableOpacity`
 `;
 const AllText = styled.Text`
   font-size: 13px;
-  font-weight: bold;
-  color: ${(props) => (props.isActive ? colors.l_main : colors.black)};
+  font-weight: 600;
+  color: ${(props) => (props.isActive ? colors.white : colors.black)};
 `;
 const NextButton = styled.TouchableOpacity`
   width: 327px;
