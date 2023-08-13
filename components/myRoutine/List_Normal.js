@@ -28,11 +28,6 @@ const ExerciseSubText = styled.Text`
   margin-top: 4px;
   color: ${colors.l_main};
 `;
-const SetsText = styled.Text`
-  font-size: 17px;
-  color: ${colors.grey_8};
-  font-weight: 400;
-`;
 const DropDown = styled.TouchableOpacity`
   width: 40px;
   justify-content: center;
@@ -47,7 +42,6 @@ const ExerciseImg = styled.View`
   width: 60px;
   margin-right: 16px;
   height: 60px;
-  background-color: ${colors.grey_1};
   border-radius: 30px;
 `;
 const ExerciseContainer = styled.View`
@@ -57,7 +51,6 @@ const ExerciseContainer = styled.View`
   width: ${ScreenWidth - 48}px;
   margin-left: 24px;
   margin-top: 8px;
-  background-color: ${colors.white};
 `;
 const DefaultContainer = styled.View`
   justify-content: space-between;
@@ -65,14 +58,32 @@ const DefaultContainer = styled.View`
   flex-direction: row;
 `;
 
-export default List_Normal = ({ routineData, selectedId, setSelectedId }) => {
+export default List_Normal = ({
+  routineData,
+  selectedId,
+  setSelectedId,
+  isDark,
+}) => {
+  const SetsText = styled.Text`
+    font-size: 17px;
+    color: ${isDark ? colors.white : colors.grey_8};
+    font-weight: 400;
+  `;
   const renderItem = ({ item, index }) => {
     return (
-      <ExerciseContainer>
+      <ExerciseContainer
+        style={{ backgroundColor: isDark ? colors.grey_9 : colors.white }}
+      >
         <DefaultContainer>
-          <ExerciseImg />
+          <ExerciseImg
+            style={{ backgroundColor: isDark ? colors.black : colors.grey_1 }}
+          />
           <ExerciseTextContainer>
-            <ExerciseTitle>{item.exerciseName}</ExerciseTitle>
+            <ExerciseTitle
+              style={{ color: isDark ? colors.white : colors.black }}
+            >
+              {item.exerciseName}
+            </ExerciseTitle>
             <ExerciseSubText>
               {item.exerciseParts} | {item.content.length}세트
             </ExerciseSubText>
@@ -83,10 +94,10 @@ export default List_Normal = ({ routineData, selectedId, setSelectedId }) => {
             }}
           >
             <WithLocalSvg
-              // style={focused ? { color: '#0351ea' } : { color: '#747474' }}
               width={24}
               height={24}
               asset={selectedId == index ? ToggleUp : ToggleDown}
+              color={isDark ? colors.white : colors.black}
             />
           </DropDown>
         </DefaultContainer>

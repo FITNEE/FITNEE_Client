@@ -47,7 +47,6 @@ export default function App() {
 
   const preload = async () => {
     await AsyncStorage.getItem("userId").then((userId) => {
-      console.log(userId);
       if (userId) {
         setLoggedIn(true);
       }

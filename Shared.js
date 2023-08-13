@@ -47,18 +47,23 @@ export const Button = ({
   onPress,
   text = "확인",
   loading = false,
+  mode = "normal",
 }) => {
   return (
     <MyButton
       disabled={!enabled}
       onPress={onPress}
-      style={
+      style={[
         enabled
           ? {
               backgroundColor: colors.l_main,
             }
-          : { backgroundColor: colors.grey_3 }
-      }
+          : { backgroundColor: colors.grey_3 },
+        mode == "absolute" && {
+          width: ScreenWidth - 48,
+          marginLeft: 24,
+        },
+      ]}
     >
       {loading ? (
         <ActivityIndicator color={colors.grey_7} />
