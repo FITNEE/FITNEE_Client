@@ -171,36 +171,38 @@ export default function HomeRoutines({ data }) {
 
   return (
     <Container>
-      {data.exerciseCount ? (
-        <>
-          <TitleBlock>
-            <NameText>{data.userNickName} 님</NameText>
-            <Title>오늘 예정된 운동 루틴이에요</Title>
-            <DayText>{data.todayStrKo}</DayText>
-          </TitleBlock>
-          <SectionBlock>
-            <CircleIcon />
-            <Section>
-              {data.exerciseParts.map((part, id) => (
-                <SectionText key={id}>{part}</SectionText>
-              ))}
-              <NumText>{data.exerciseCount}개의 운동</NumText>
-            </Section>
-          </SectionBlock>
-          <Cards
-            horizontal={true}
-            data={data.exerciseNames}
-            renderItem={renderItem}
-            // keyExtractor={(item) => item.id}
-            showsHorizontalScrollIndicator={false}
-          />
-          <Button onPress={navigateToExercise}>
-            <ButtonText>운동하러 가기</ButtonText>
-          </Button>
-        </>
-      ) : (
-        <Title>오늘 예정된 운동 루틴이 없어요..</Title>
-      )}
+      <TitleBlock>
+        <NameText>{data.userNickName} 님</NameText>
+        {data.isToday ? (
+          <Title>오늘 예정된 운동 루틴이에요</Title>
+        ) : (
+          <Title>다음에 예정된 운동루틴이에요</Title>
+        )}
+
+        <DayText>{data.todayStrKo}</DayText>
+      </TitleBlock>
+      <SectionBlock>
+        <CircleIcon />
+        <Section>
+          {data.exerciseParts.map((part, id) => (
+            <SectionText key={id}>{part}</SectionText>
+          ))}
+          <NumText>{data.exerciseCount}개의 운동</NumText>
+        </Section>
+      </SectionBlock>
+      <Cards
+        horizontal={true}
+        data={data.exerciseNames}
+        renderItem={renderItem}
+        // keyExtractor={(item) => item.id}
+        showsHorizontalScrollIndicator={false}
+      />
+      {data.isToday ? (
+        <Button onPress={navigateToExercise}>
+          <ButtonText>운동하러 가기</ButtonText>
+        </Button>
+      ) : null}
     </Container>
+    //data.isToday
   );
 }
