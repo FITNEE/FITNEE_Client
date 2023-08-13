@@ -21,6 +21,7 @@ export const getRoutine = async (mySCHEDULE, selectedDay, setIsLoading) => {
     //후가공한 SCHEDULE 배열에서의 IDX값을 그대로 가져와 query스트링으로 추가
     let detailAPI = `app/routine/${mySCHEDULE[selectedDay].routineId}`;
     const response = await axios.get(url + detailAPI);
+    console.log(response.data);
     const result = response.data;
     setIsLoading(false);
     return result;

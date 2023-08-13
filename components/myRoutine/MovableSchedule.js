@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Platform, Text } from "react-native";
 import Animated, {
   runOnJS,
@@ -20,12 +20,13 @@ const SCHEDULE_W = (ScreenWidth - 60) / 7;
 
 export const MovableSchedule = ({
   id,
+  isDark,
   routineId,
-  setNewSCHE,
   positions,
   SCHEDULE,
-  isDark,
+  updateNewSche,
 }) => {
+  const [tempSche, setTempSche] = useState(null);
   const [moving, setMoving] = useState(false);
   const left = useSharedValue(positions.value[id] * SCHEDULE_W);
   useAnimatedReaction(
@@ -73,11 +74,15 @@ export const MovableSchedule = ({
     },
     onFinish() {
       left.value = positions.value[id] * SCHEDULE_W;
-      runOnJS(setNewSCHE)(positions.value);
       runOnJS(setMoving)(false);
+      runOnJS(setTempSche)(positions.value);
     },
   });
 
+  useEffect(() => {
+    console.log("moveableSchedule실행");
+    updateNewSche(tempSche);
+  }, [tempSche]);
   const animatedStyle = useAnimatedStyle(() => {
     return {
       position: "absolute",
