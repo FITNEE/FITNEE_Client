@@ -13,8 +13,8 @@ import Tab_MyRoutine from "../assets/SVGs/Tab_MyRoutine.svg";
 import { colors } from "../colors";
 import { WithLocalSvg } from "react-native-svg";
 import { styled } from "styled-components/native";
-import { useRecoilState, useRecoilValue } from "recoil";
-import { TabBarAtom } from "../recoil/MyPageAtom";
+import { useRecoilValue } from "recoil";
+import { IsDarkAtom, TabBarAtom } from "../recoil/MyPageAtom";
 import ExerciseCourseNav from "./ExerciseCourseNav";
 
 const IconText = styled.Text`
@@ -26,6 +26,7 @@ const Tabs = createBottomTabNavigator();
 
 export default function LoggedInNav() {
   const isTabVisible = useRecoilValue(TabBarAtom);
+  const isDark = useRecoilValue(IsDarkAtom);
 
   return (
     <Tabs.Navigator
@@ -37,7 +38,7 @@ export default function LoggedInNav() {
 
           paddingTop: 10,
           height: 88,
-          backgroundColor: "#ffffff",
+          backgroundColor: isDark ? colors.grey_9 : colors.white,
           borderTopColor: "rgba(255,255,255,0.3)",
           shadowOpacity: 0.25,
           shadowOffset: {

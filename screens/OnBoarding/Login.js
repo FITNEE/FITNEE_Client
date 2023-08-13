@@ -68,10 +68,9 @@ const Login = ({ route, navigation }) => {
       console.log(response);
       //로그인 성공 시,
       if (response.code == 1000) {
-        AsyncStorage.setItem("token", response.result.accessToken).then(
-          console.log("token set to AsyncStorage")
+        AsyncStorage.setItem("userId", email).then(
+          console.log("userId set to AsyncStorage")
         );
-        setToken(response.result.accessToken);
         toggleLogin();
       } else {
         setStatusText(response.message);

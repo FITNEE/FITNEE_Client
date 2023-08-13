@@ -43,7 +43,6 @@ const PremiumText = styled.Text`
 `;
 
 const Home = ({ navigation }) => {
-  //const { toggleLogin } = useContext(AppContext);
   const [showRoutine, SetShowRoutine] = useState(true);
   const isFocus = useIsFocused();
   const setIsTabVisible = useSetRecoilState(TabBarAtom);
