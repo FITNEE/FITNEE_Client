@@ -47,7 +47,7 @@ export default function Dictionary_3({ navigation, route }){
         const exercisePart = exerciseInfo.parts
         const categoryIdx = exerciseInfo.healthCategoryIdx
         console.log(`${exerciseName},${exercisePart},${categoryIdx}`)
-        // navigation.navigate("MyRoutine",{exerciseName,exercisePart,categoryIdx})
+        navigation.navigate("MyRoutineNav",{exerciseName,exercisePart,categoryIdx})
     }
 
     // RightTab에서 쓰이는 JoinBtnBool, 읽지 않음 버튼
