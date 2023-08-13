@@ -41,6 +41,7 @@
     "react-native-svg": "13.4.0",
     "react-native-toast-message": "^2.1.6",
     "react-native-toggle-element": "^2.0.1",
+    "react-native-view-shot": "^3.7.0",
     "react-native-wheel-pick": "^1.2.2",
     "react-native-wrapped-text": "^1.2.2",
     "recoil": "^0.7.7",
