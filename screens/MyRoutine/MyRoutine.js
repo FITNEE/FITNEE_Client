@@ -1,10 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { ActivityIndicator, Keyboard, Alert, View } from "react-native";
 import styled from "styled-components/native";
-import BottomSheet, {
-  BottomSheetModalProvider,
-  BottomSheetBackdrop,
-} from "@gorhom/bottom-sheet";
+import BottomSheet from "@gorhom/bottom-sheet";
 import axios from "axios";
 import { useIsFocused } from "@react-navigation/native";
 import { colors } from "../../colors";
@@ -29,83 +26,21 @@ import {
 import { Button } from "../../Shared";
 import { IsDarkAtom, TabBarAtom } from "../../recoil/MyPageAtom";
 import { useRecoilValue, useSetRecoilState } from "recoil";
+import { BottomSheetContent } from "../../components/myRoutine/BottomSheetContent";
 
-const BottomSheetBase = styled.Pressable`
-  width: 100%;
-  height: 100%;
-  padding: 24px;
-  border-radius: 24px;
-  flex-direction: column;
-`;
-const BottomSheetHeader = styled.View`
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 16px;
-  height: 24px;
-`;
-const ExerciseTitle = styled.Text`
-  font-size: 17px;
-  margin-bottom: 6px;
-  font-weight: 500;
-`;
 const IndicatorBase = styled.View`
   width: 100%;
   height: 100%;
   justify-content: center;
   align-items: center;
 `;
-const SetContainer = styled.View`
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  padding: 12px 16px;
-
-  height: 48px;
-  border-radius: 8px;
-  margin-top: 10px;
-`;
-const ExtendedContainer = styled.View`
-  width: 100%;
-`;
-const SetsText = styled.Text`
-  font-size: 17px;
-  flex: 1;
-  color: ${colors.grey_8};
-  font-weight: 400;
-`;
-const EditText = styled.Text`
-  font-size: 17px;
-  flex: 1;
-  color: ${colors.grey_8};
-  text-align: center;
-  font-weight: 400;
-`;
-const EditBox = styled.TextInput`
-  height: 32px;
-  margin-right: 8px;
-  flex-direction: row;
-  align-items: center;
-  border-radius: 8px;
-  width: 56px;
-`;
-
-const SubmitText = styled.Text`
-  font-size: 17px;
-  color: ${colors.l_main};
-  text-align: center;
-  font-weight: 700;
-`;
-const SubmitButton = styled.TouchableOpacity`
-  width: 56px;
-  margin-left: 20px;
-`;
-
 export default MyRoutine = ({ navigation, route }) => {
   //커스텀 or 일반 보기모드 식별 위함
   const [mode, setMode] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+
   //요일별 운동 유무 및 각 요일 운동 idx 보관목적 ->custom하면서 변경될 수 있기에 useState로 저장
+  const [isLoading, setIsLoading] = useState(false);
+
   const [SCHEDULE, setSCHEDULE] = useState([]);
   //각 요일에 대한 세부 루틴정보들 저장하기 위한 배열 useState
   const [routineData, setRoutineData] = useState([]);
@@ -115,16 +50,21 @@ export default MyRoutine = ({ navigation, route }) => {
   const [selectedId, setSelectedId] = useState(null);
   //요일 슬라이드로 변경되는 실시간 SCHEDULE배열 임시 저장하기 위한 함수
   const [newRoutine, setNewRoutine] = useState([]);
-  const [tempRoutine, setTempRoutine] = useState([]);
-  const [newSCHE, setNewSCHE] = useState(null);
+
+  const [newSCHE, setNewSCHE] = useState([]);
   //이전 ID값과 변경 이후 ID값 매칭된거, 이거로 app/routine/calendar 호출하기
   const [selectedDay, setSelectedDay] = useState((new Date().getDay() + 6) % 7);
   const [snapPoints, setSnapPoints] = useState(["1%"]);
 
+  const [modalState, setModalState] = useState(0);
   const setIsTabVisible = useSetRecoilState(TabBarAtom);
 
   const isDark = useRecoilValue(IsDarkAtom);
+  const updateNewSche = (tempSche) => {
+    tempSche && setNewSCHE(tempSche);
 
+    console.log("updateNewSche 실행됨:", newSCHE);
+  };
   //가장 밑단에서 backgroundColor 제공
   const ScreenBase = styled.SafeAreaView`
     width: 100%;
@@ -148,13 +88,14 @@ export default MyRoutine = ({ navigation, route }) => {
   const isFocus = useIsFocused();
   const updateDatas = () => {
     getRoutines().then((res) => {
+      console.log("res:", res);
       if (res.result) {
         setSCHEDULE(processDayData(res.result));
         getRoutine(processDayData(res.result), selectedDay, setIsLoading).then(
           (res) => {
             if (res.code == 1000) {
-              setRoutineData(res.result);
-              setNewRoutine(res.result);
+              setRoutineData(res.result.routineDetails);
+              setNewRoutine(res.result.routineDetails);
             } else {
               console.log("routine 데이터 받아오지 못함");
             }
@@ -191,7 +132,7 @@ export default MyRoutine = ({ navigation, route }) => {
           friRoutineIdx: SCHEDULE[tempNewSCHE[4]].routineId,
           satRoutineIdx: SCHEDULE[tempNewSCHE[5]].routineId,
           sunRoutineIdx: SCHEDULE[tempNewSCHE[6]].routineId,
-        }; //0번째 153
+        };
         updateRoutines(data).then((res) =>
           console.log("updateRoutineSchedule api 호출결과:", res)
         );
@@ -201,16 +142,19 @@ export default MyRoutine = ({ navigation, route }) => {
     setMode(!mode);
   };
   const popMessage = (id) => {
+    setEditingID(id);
     // setSnapPoints([
     //   `${14 + 8 * newRoutine[id].content.length}%`,
     //   `${46 + 8 * newRoutine[id].content.length}`,
     // ]);
-    setEditingID(id);
     Alert.alert("운동 편집", "", [
       {
         text: "상세옵션 편집",
         onPress: () => {
-          bottomModal.current?.snapToIndex(0);
+          // setModalState(1);
+          // setSnapPoints([`${10 + 8 * newRoutine[id].content.length}%`]);
+          bottomModal.current?.expand();
+          // bottomModal.current?.snapToIndex(0);
           //확대하고자 하는 운동종목의 세트수에 따라 확장되는 정도를 유동적으로 제어하기 위함
         },
         style: "default",
@@ -242,19 +186,13 @@ export default MyRoutine = ({ navigation, route }) => {
       console.error("Failed to fetch data:", error);
     }
   };
-  const editTempRoutine = (id, type, value) => {
+  const editRoutine = (id, type, value) => {
     let newArr = JSON.parse(JSON.stringify(newRoutine));
     if (type == "repeat") {
       newArr[editingID].content[id].rep = value;
     } else if (type == "weight") {
       newArr[editingID].content[id].weight = value;
-    }
-    console.log("tempNewArr:", newArr[editingID].content);
-    setTempRoutine(newArr);
-  };
-  const editRoutine = (id, type, value) => {
-    let newArr = JSON.parse(JSON.stringify(newRoutine));
-    if (type == "deleteSet") {
+    } else if (type == "deleteSet") {
       if (newArr[id].content.length <= 1) {
         Alert.alert("최소 세트가 1개 있어야 해요", "", [
           {
@@ -279,19 +217,19 @@ export default MyRoutine = ({ navigation, route }) => {
         weight: newArr[id].content[newArr[id].content.length - 1].weight,
       });
     }
-    // setNewRoutine(newArr);
+    setNewRoutine(newArr);
   };
-  const renderBackdrop = useCallback(
-    (props) => (
-      <BottomSheetBackdrop
-        {...props}
-        pressBehavior="none"
-        appearsOnIndex={0}
-        disappearsOnIndex={-1}
-      />
-    ),
-    []
-  );
+  // const renderBackdrop = useCallback(
+  //   (props) => (
+  //     <BottomSheetBackdrop
+  //       {...props}
+  //       pressBehavior="none"
+  //       appearsOnIndex={0}
+  //       disappearsOnIndex={-1}
+  //     />
+  //   ),
+  //   []
+  // );
   useEffect(() => {
     if (route.params) {
       setMode(true);
@@ -301,11 +239,17 @@ export default MyRoutine = ({ navigation, route }) => {
 
   const extendModal = () => {
     console.log("modal Extended");
-    bottomModal.current.snapToIndex(1);
+    // bottomModal.current.snapToIndex(1);
+    if (modalState != 2) {
+      // setSnapPoints([`${parseInt(snapPoints[0]) + 28}%`]);
+    }
+    // setModalState(2);
   };
 
-  const handleClosePress = () => {
+  const handleClosePress = (tempArr) => {
     console.log("handleClosePress");
+    setNewRoutine(tempArr);
+    setModalState(0);
     bottomModal.current.close();
     Keyboard.dismiss();
   };
@@ -313,10 +257,13 @@ export default MyRoutine = ({ navigation, route }) => {
   useEffect(() => {
     if (SCHEDULE[selectedDay] != undefined) {
       getRoutine(SCHEDULE, selectedDay, setIsLoading).then((res) => {
-        console.log("selectedDay변경으로 실행된 getRoutine 실행결과:", res);
+        console.log(
+          "selectedDay변경으로 실행된 getRoutine 실행결과:",
+          res.result
+        );
         if (res.code == 1000) {
-          setRoutineData(res.result);
-          setNewRoutine(res.result);
+          setRoutineData(res.result.routineDetails);
+          setNewRoutine(res.result.routineDetails);
         } else {
           console.log("요일 루틴 가져오기 실패");
         }
@@ -324,7 +271,13 @@ export default MyRoutine = ({ navigation, route }) => {
     }
   }, [selectedDay]);
 
-  const bottomModal = useRef();
+  // useEffect(() => {
+  //   if (modalState == 0) {
+  //     // setSnapPoints(["1%"]);
+  //   }
+  // }, [modalState]);
+
+  const bottomModal = useRef(null);
 
   useEffect(() => {
     updateDatas();
@@ -335,160 +288,79 @@ export default MyRoutine = ({ navigation, route }) => {
   }, [mode]);
 
   return (
-    <BottomSheetModalProvider>
-      <ScreenBase>
-        <Header
-          isDark={isDark}
-          mode={mode}
-          toggleMode={toggleMode}
-          onPress={() => pressBack(setMode)}
-        />
-        {mode ? (
-          <>
-            <List_Custom
+    <ScreenBase>
+      <Header
+        isDark={isDark}
+        mode={mode}
+        toggleMode={toggleMode}
+        onPress={() => pressBack(setMode)}
+      />
+      {mode ? (
+        <>
+          <List_Custom
+            isDark={isDark}
+            SCHEDULE={SCHEDULE}
+            newRoutine={newRoutine}
+            editRoutine={editRoutine}
+            popMessage={popMessage}
+            updateNewSche={updateNewSche}
+          />
+          <Button
+            onPress={() => navigation.navigate("ExerciseSearch", {})}
+            text="운동 추가하기"
+            enabled={true}
+            mode="absolute"
+          />
+        </>
+      ) : (
+        <ContentBase>
+          <WeekCalendar //루틴 요약내용을 확인할 수 있는 주간달력 컴퍼넌트
+            setSelectedDay={setSelectedDay}
+            selectedDay={selectedDay}
+            SCHEDULE={SCHEDULE}
+            isDark={isDark}
+          />
+          {isLoading ? (
+            <IndicatorBase>
+              <ActivityIndicator size="large" color={colors.l_main} />
+            </IndicatorBase>
+          ) : routineData ? (
+            <List_Normal
+              routineData={routineData}
+              selectedId={selectedId}
+              setSelectedId={setSelectedId}
               isDark={isDark}
-              SCHEDULE={SCHEDULE}
-              newRoutine={newRoutine}
-              editRoutine={editRoutine}
-              popMessage={popMessage}
-              setNewSCHE={setNewSCHE}
             />
-            <Button
-              onPress={() => navigation.navigate("ExerciseSearch", {})}
-              text="운동 추가하기"
-              enabled={true}
-              mode="absolute"
-            />
-          </>
-        ) : (
-          <ContentBase>
-            <WeekCalendar //루틴 요약내용을 확인할 수 있는 주간달력 컴퍼넌트
-              setSelectedDay={setSelectedDay}
-              selectedDay={selectedDay}
-              SCHEDULE={SCHEDULE}
-              isDark={isDark}
-            />
-            {isLoading ? (
-              <IndicatorBase>
-                <ActivityIndicator size="large" color={colors.l_main} />
-              </IndicatorBase>
-            ) : routineData ? (
-              <List_Normal
-                routineData={routineData}
-                selectedId={selectedId}
-                setSelectedId={setSelectedId}
-                isDark={isDark}
-              />
-            ) : (
-              <ContentContainer>
-                <NoRoutineText>해당 요일에는 루틴이 없어요</NoRoutineText>
-              </ContentContainer>
-            )}
-            <MyToast />
-          </ContentBase>
-        )}
+          ) : (
+            <ContentContainer>
+              <NoRoutineText>해당 요일에는 루틴이 없어요</NoRoutineText>
+            </ContentContainer>
+          )}
+          <MyToast />
+        </ContentBase>
+      )}
 
-        <BottomSheet
-          ref={bottomModal}
-          index={-1}
-          backdropComponent={renderBackdrop}
-          backgroundComponent={() => {
-            <View />;
-          }}
-          snapPoints={snapPoints}
-          enablePanDownToClose={false}
-          enableHandlePanningGesture={false}
-          enableContentPanningGesture={false}
-          enableDismissOnClose
-        >
-          <BottomSheetBase
-            style={{ backgroundColor: isDark ? colors.grey_8 : colors.white }}
-          >
-            <BottomSheetHeader>
-              <ExerciseTitle
-                style={{ color: isDark ? colors.white : colors.black }}
-              >
-                {routineData /** 운동이 없는 요일을 선택했을 경우, Null값이 반환됨에 따라 
-                  null을 object로 만들수 없다는 오류를 피하기 위함 */ &&
-                  routineData[editingID]?.exerciseName}
-              </ExerciseTitle>
-              <SubmitButton onPress={() => handleClosePress()}>
-                <SubmitText>완료</SubmitText>
-              </SubmitButton>
-            </BottomSheetHeader>
-            <ExtendedContainer>
-              {newRoutine /** 운동이 없는 요일을 선택했을 경우, Null값이 반환됨에 따라 
-                  null을 object로 만들수 없다는 오류를 피하기 위함 */ &&
-                newRoutine[editingID]?.content.map((item, id) => (
-                  <SetContainer
-                    style={{
-                      backgroundColor: isDark ? colors.grey_7 : colors.grey_1,
-                    }}
-                    key={id}
-                  >
-                    <ContentContainer key={id}>
-                      <SetsText style={isDark && { color: colors.white }}>
-                        {id + 1}
-                      </SetsText>
-                      <EditBox
-                        style={{
-                          backgroundColor: isDark
-                            ? !item.weight
-                              ? colors.black
-                              : colors.black
-                            : !item.weight
-                            ? colors.white
-                            : colors.grey_2,
-                        }}
-                        keyboardType="numeric"
-                        selectTextOnFocus={item.weight != null}
-                        editable={item.weight != null}
-                        onFocus={() => extendModal()}
-                        onChangeText={(value) =>
-                          editTempRoutine(id, "weight", value)
-                        }
-                      >
-                        <EditText
-                          style={item.weight && { color: colors.l_main }}
-                        >
-                          {item.weight}
-                        </EditText>
-                      </EditBox>
-                      <SetsText style={isDark && { color: colors.white }}>
-                        kg
-                      </SetsText>
-                      <EditBox
-                        style={{
-                          backgroundColor: isDark
-                            ? !item.weight
-                              ? colors.black
-                              : colors.black
-                            : !item.weight
-                            ? colors.white
-                            : colors.grey_2,
-                        }}
-                        keyboardType="numeric"
-                        selectTextOnFocus={item.rep != null}
-                        editable={item.rep != null}
-                        onFocus={() => extendModal()}
-                        onChangeText={(value) =>
-                          editTempRoutine(id, "repeat", value)
-                        }
-                      >
-                        <EditText style={{ color: colors.l_main }}>
-                          {item.rep}
-                        </EditText>
-                      </EditBox>
-                      <SetsText style={isDark && { color: colors.white }}>
-                        회
-                      </SetsText>
-                    </ContentContainer>
-                  </SetContainer>
-                ))}
-            </ExtendedContainer>
-          </BottomSheetBase>
-        </BottomSheet>
-      </ScreenBase>
-    </BottomSheetModalProvider>
+      <BottomSheet
+        ref={bottomModal}
+        index={-1}
+        snapPoints={["50%"]}
+        enablePanDownToClose={false}
+        enableHandlePanningGesture={false}
+        enableContentPanningGesture={false}
+        handleHeight={0}
+        enableDismissOnClose
+        handleIndicatorStyle={{ height: 0 }}
+      >
+        <BottomSheetContent
+          isDark={isDark}
+          handleClosePress={handleClosePress}
+          routineData={routineData}
+          newRoutine={newRoutine}
+          editingID={editingID}
+          extendModal={extendModal}
+          setNewRoutine={setNewRoutine}
+        />
+      </BottomSheet>
+    </ScreenBase>
   );
 };

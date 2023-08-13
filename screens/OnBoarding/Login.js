@@ -42,7 +42,7 @@ const Login = ({ route, navigation }) => {
   const [PW, setPW] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [statusText, setStatusText] = useState("");
-  const { toggleLogin, setToken } = useContext(AppContext);
+  const { toggleLogin } = useContext(AppContext);
   const email = route.params.email;
   const postLogin = async (email, PW) => {
     try {

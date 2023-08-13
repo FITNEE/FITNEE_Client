@@ -6,7 +6,6 @@ import { colors } from "../../colors";
 import { ComponentTitle } from "../Shared/MyRoutine_Shared";
 import { ScheduleChanger } from "../ScheduleChanger";
 import { ScreenWidth } from "../Shared";
-
 import { WithLocalSvg } from "react-native-svg";
 import Trash from "../../assets/SVGs/Trash.svg";
 import { ContentContainer, NoRoutineText } from "../Shared/MyRoutine_Shared";
@@ -129,7 +128,7 @@ export default List_Custom = ({
   newRoutine,
   editRoutine,
   popMessage,
-  setNewSCHE,
+  updateNewSche,
   isDark,
 }) => {
   return (
@@ -149,8 +148,9 @@ export default List_Custom = ({
         <ScheduleChanger
           SCHEDULE={SCHEDULE}
           days={days}
-          setNewSCHE={setNewSCHE}
+          // setNewSCHE={setNewSCHE}
           isDark={isDark}
+          updateNewSche={updateNewSche}
         />
         <ComponentTitle
           title="운동 편집"
