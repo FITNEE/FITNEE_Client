@@ -155,9 +155,27 @@ export default function HomeRoutines() {
   useEffect(() => {
     fetchData();
   }, []);
-
+  const postSearch = async (text) => {
+    try {
+      let url = "https://gpthealth.shop/";
+      let detailAPI = "/app/dictionary/searchexercise";
+      const response = await axios.post(url + detailAPI, null, {
+        params: {
+          search: text,
+        },
+      });
+      const exercise = response.data.result[0];
+      console.log("exercise :", exercise);
+      navigation.navigate("Dictionary_3", { exercise });
+    } catch (error) {
+      console.error("Failed to fetch data:", error);
+    }
+  };
+  const itemPress = (name) => {
+    postSearch(name);
+  };
   const renderItem = ({ item }) => (
-    <Card>
+    <Card onPress={() => itemPress(item.name)}>
       <ExerciseView />
       <ExerciseName>{item.name}</ExerciseName>
     </Card>
