@@ -184,9 +184,7 @@ export default function HomeRoutines({ data }) {
       <SectionBlock>
         <CircleIcon />
         <Section>
-          {data.exerciseParts.map((part, id) => (
-            <SectionText key={id}>{part}</SectionText>
-          ))}
+          <SectionText>{data.exerciseParts}</SectionText>
           <NumText>{data.exerciseCount}개의 운동</NumText>
         </Section>
       </SectionBlock>
