@@ -33,7 +33,6 @@ export default function MyPageNav() {
                 style={{ marginRight: 24 }}
                 width={24}
                 height={24}
-                // asset={SettingIcon}
               />
             </TouchableOpacity>
           ),
@@ -50,7 +49,6 @@ export default function MyPageNav() {
                 style={{ marginLeft: 24 }}
                 width={24}
                 height={24}
-                // asset={Left}
                 color={colors.black}
               />
             </TouchableOpacity>
