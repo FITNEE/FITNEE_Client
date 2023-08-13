@@ -6,9 +6,9 @@ import { styled } from "styled-components/native";
 import { colors } from "../../colors";
 import HomeRoutines from "../../components/HomeRoutines";
 import NotHomeRoutine from "../../components/NotHomeRoutine";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { TabBarAtom, IsDarkAtom } from "../../recoil/MyPageAtom";
 import { useIsFocused } from "@react-navigation/native";
-import { useSetRecoilState } from "recoil";
-import { TabBarAtom } from "../../recoil/MyPageAtom";
 
 const Top = styled.View`
   width: 100%;
@@ -43,12 +43,16 @@ const PremiumText = styled.Text`
 `;
 
 const Home = ({ navigation }) => {
-  const [showRoutine, SetShowRoutine] = useState(false);
   const isFocus = useIsFocused();
-  const setIsTabVisible = useSetRecoilState(TabBarAtom);
+  const [isTabVisible, setIsTabVisible] = useRecoilState(TabBarAtom);
+
   useEffect(() => {
     isFocus && setIsTabVisible(true);
   }, [isFocus]);
+
+  //const { toggleLogin } = useContext(AppContext);
+  const [showRoutine, SetShowRoutine] = useState(true);
+
   return (
     <SafeAreaView
       style={{

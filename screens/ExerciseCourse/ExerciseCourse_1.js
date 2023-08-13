@@ -109,54 +109,6 @@ export default function ExerciseCourse_1({ navigation }) {
     navigation.navigate("StartExercise");
   };
 
-  const goToNextExercise = async () => {
-    //패치 작업 수행
-    await patchSkipData(
-      routineIdx,
-      dataList[listIndex].exerciseInfo.healthCategoryIdx
-    );
-
-    if (listIndex + 1 >= dataList.length) {
-      // 조건이 충족되면 원하는 화면(FinalScreen)으로 이동합니다.
-      navigation.dispatch(
-        StackActions.replace("CompleteExercise", {
-          dataList: dataList,
-          totalTime: realTotalTime,
-        })
-      );
-    } else {
-      navigation.dispatch(
-        StackActions.replace("ExerciseCourse", {
-          dataList: dataList,
-          listIndex: listIndex + 1,
-          routineIdx: routineIdx,
-          totalTime: realTotalTime,
-        })
-      );
-    }
-  };
-
-  const goToCompleteExercise = () => {
-    if (listIndex + 1 >= dataList.length) {
-      // 조건이 충족되면 원하는 화면(FinalScreen)으로 이동합니다.
-      navigation.dispatch(
-        StackActions.replace("CompleteExercise", {
-          dataList: dataList,
-          totalTime: totalTime + realTotalTime,
-          routineIdx: routineIdx,
-        })
-      );
-    } else {
-      navigation.dispatch(
-        StackActions.replace("ExerciseCourse_2", {
-          dataList: dataList,
-          listIndex: listIndex,
-          routineIdx: routineIdx,
-          totalTime: totalTime + realTotalTime,
-        })
-      );
-    }
-  };
   const [isPlaying, setIsPlaying] = useState(true);
   const [currentId, setCurrentId] = useState(0);
   //const [oneDuration, setOneDuration] = useState(setData[0]?.duration);
@@ -181,6 +133,58 @@ export default function ExerciseCourse_1({ navigation }) {
   const [exerciseData, setExerciseData] = useState([]);
   const [advice, setAdvice] = useState(adviceData[0]);
 
+  const goToNextExercise = async () => {
+    //패치 작업 수행
+    await patchSkipData(
+      routineIdx,
+      dataList[listIndex].exerciseInfo.healthCategoryIdx
+    );
+
+    if (listIndex + 1 >= dataList.length) {
+      //await postTotalTime(routineIdx, totalTime + realTotalTime);
+
+      // 조건이 충족되면 원하는 화면(FinalScreen)으로 이동합니다.
+      navigation.dispatch(
+        StackActions.replace("CompleteExercise", {
+          dataList: dataList,
+          totalTime: realTotalTime,
+        })
+      );
+    } else {
+      navigation.dispatch(
+        StackActions.replace("ExerciseCourse", {
+          dataList: dataList,
+          listIndex: listIndex + 1,
+          routineIdx: routineIdx,
+          totalTime: realTotalTime,
+        })
+      );
+    }
+  };
+
+  const goToCompleteExercise = async () => {
+    if (listIndex + 1 >= dataList.length) {
+      //await postTotalTime(routineIdx, totalTime + realTotalTime);
+      // 조건이 충족되면 원하는 화면(FinalScreen)으로 이동합니다.
+      navigation.dispatch(
+        StackActions.replace("CompleteExercise", {
+          dataList: dataList,
+          totalTime: totalTime + realTotalTime,
+          routineIdx: routineIdx,
+        })
+      );
+    } else {
+      navigation.dispatch(
+        StackActions.replace("ExerciseCourse_2", {
+          dataList: dataList,
+          listIndex: listIndex,
+          routineIdx: routineIdx,
+          totalTime: totalTime + realTotalTime,
+        })
+      );
+    }
+  };
+
   const patchSkipData = async (routineIdx, healthCategoryIdx) => {
     try {
       let url = "https://gpthealth.shop/";
@@ -190,6 +194,29 @@ export default function ExerciseCourse_1({ navigation }) {
         routineIdx: routineIdx,
         healthCategoryIdx: healthCategoryIdx,
       });
+      const result = response.data;
+      console.log(result);
+      return result;
+    } catch (error) {
+      console.error("Error", error);
+    }
+  };
+
+  const postTotalTime = async (routineIdx, totalTime) => {
+    try {
+      let url = "https://gpthealth.shop/";
+      let detailAPI = `/app/process/end?routineIdx=${routineIdx}`;
+
+      const response = await axios.post(
+        url + detailAPI,
+        {
+          totalExerciseTime: totalTime,
+        },
+        {
+          params: { routineIdx: routineIdx },
+        }
+      );
+
       const result = response.data;
       console.log(result);
       return result;
