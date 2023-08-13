@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { SafeAreaView, Text, View } from "react-native";
 import { AppContext } from "../../components/ContextProvider";
 import { Button } from "../../Shared";
@@ -6,6 +6,9 @@ import { styled } from "styled-components/native";
 import { colors } from "../../colors";
 import HomeRoutines from "../../components/HomeRoutines";
 import NotHomeRoutine from "../../components/NotHomeRoutine";
+import { useIsFocused } from "@react-navigation/native";
+import { useSetRecoilState } from "recoil";
+import { TabBarAtom } from "../../recoil/MyPageAtom";
 
 const Top = styled.View`
   width: 100%;
@@ -42,7 +45,11 @@ const PremiumText = styled.Text`
 const Home = ({ navigation }) => {
   //const { toggleLogin } = useContext(AppContext);
   const [showRoutine, SetShowRoutine] = useState(true);
-
+  const isFocus = useIsFocused();
+  const setIsTabVisible = useSetRecoilState(TabBarAtom);
+  useEffect(() => {
+    isFocus && setIsTabVisible(true);
+  }, [isFocus]);
   return (
     <SafeAreaView
       style={{
