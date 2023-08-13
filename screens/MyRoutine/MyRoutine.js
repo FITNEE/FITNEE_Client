@@ -34,7 +34,6 @@ const BottomSheetBase = styled.Pressable`
   width: 100%;
   height: 100%;
   padding: 24px;
-
   border-radius: 24px;
   flex-direction: column;
 `;
@@ -116,6 +115,7 @@ export default MyRoutine = ({ navigation, route }) => {
   const [selectedId, setSelectedId] = useState(null);
   //요일 슬라이드로 변경되는 실시간 SCHEDULE배열 임시 저장하기 위한 함수
   const [newRoutine, setNewRoutine] = useState([]);
+  const [tempRoutine, setTempRoutine] = useState([]);
   const [newSCHE, setNewSCHE] = useState(null);
   //이전 ID값과 변경 이후 ID값 매칭된거, 이거로 app/routine/calendar 호출하기
   const [selectedDay, setSelectedDay] = useState((new Date().getDay() + 6) % 7);
@@ -183,8 +183,15 @@ export default MyRoutine = ({ navigation, route }) => {
           acc[country] = [...(acc[country] || []), k];
           return acc;
         }, {});
-        //prettier-ignore
-        let data = {"monRoutineIdx": SCHEDULE[tempNewSCHE[0]].routineId,"tueRoutineIdx": SCHEDULE[tempNewSCHE[1]].routineId,"wedRoutineIdx": SCHEDULE[tempNewSCHE[2]].routineId,"thuRoutineIdx": SCHEDULE[tempNewSCHE[3]].routineId,"friRoutineIdx": SCHEDULE[tempNewSCHE[4]].routineId,"satRoutineIdx": SCHEDULE[tempNewSCHE[5]].routineId,"sunRoutineIdx": SCHEDULE[tempNewSCHE[6]].routineId,}; //0번째 153
+        let data = {
+          monRoutineIdx: SCHEDULE[tempNewSCHE[0]].routineId,
+          tueRoutineIdx: SCHEDULE[tempNewSCHE[1]].routineId,
+          wedRoutineIdx: SCHEDULE[tempNewSCHE[2]].routineId,
+          thuRoutineIdx: SCHEDULE[tempNewSCHE[3]].routineId,
+          friRoutineIdx: SCHEDULE[tempNewSCHE[4]].routineId,
+          satRoutineIdx: SCHEDULE[tempNewSCHE[5]].routineId,
+          sunRoutineIdx: SCHEDULE[tempNewSCHE[6]].routineId,
+        }; //0번째 153
         updateRoutines(data).then((res) =>
           console.log("updateRoutineSchedule api 호출결과:", res)
         );
@@ -194,17 +201,17 @@ export default MyRoutine = ({ navigation, route }) => {
     setMode(!mode);
   };
   const popMessage = (id) => {
-    setSnapPoints([
-      `${14 + 8 * newRoutine[id].content.length}%`,
-      `${46 + 8 * newRoutine[id].content.length}`,
-    ]);
+    // setSnapPoints([
+    //   `${14 + 8 * newRoutine[id].content.length}%`,
+    //   `${46 + 8 * newRoutine[id].content.length}`,
+    // ]);
+    setEditingID(id);
     Alert.alert("운동 편집", "", [
       {
         text: "상세옵션 편집",
         onPress: () => {
           bottomModal.current?.snapToIndex(0);
           //확대하고자 하는 운동종목의 세트수에 따라 확장되는 정도를 유동적으로 제어하기 위함
-          setEditingID(id);
         },
         style: "default",
       },
@@ -235,13 +242,19 @@ export default MyRoutine = ({ navigation, route }) => {
       console.error("Failed to fetch data:", error);
     }
   };
-  const editRoutine = (id, type, value) => {
+  const editTempRoutine = (id, type, value) => {
     let newArr = JSON.parse(JSON.stringify(newRoutine));
     if (type == "repeat") {
       newArr[editingID].content[id].rep = value;
     } else if (type == "weight") {
       newArr[editingID].content[id].weight = value;
-    } else if (type == "deleteSet") {
+    }
+    console.log("tempNewArr:", newArr[editingID].content);
+    setTempRoutine(newArr);
+  };
+  const editRoutine = (id, type, value) => {
+    let newArr = JSON.parse(JSON.stringify(newRoutine));
+    if (type == "deleteSet") {
       if (newArr[id].content.length <= 1) {
         Alert.alert("최소 세트가 1개 있어야 해요", "", [
           {
@@ -266,7 +279,7 @@ export default MyRoutine = ({ navigation, route }) => {
         weight: newArr[id].content[newArr[id].content.length - 1].weight,
       });
     }
-    setNewRoutine(newArr);
+    // setNewRoutine(newArr);
   };
   const renderBackdrop = useCallback(
     (props) => (
@@ -432,7 +445,7 @@ export default MyRoutine = ({ navigation, route }) => {
                         editable={item.weight != null}
                         onFocus={() => extendModal()}
                         onChangeText={(value) =>
-                          editRoutine(id, "weight", value)
+                          editTempRoutine(id, "weight", value)
                         }
                       >
                         <EditText
@@ -459,7 +472,7 @@ export default MyRoutine = ({ navigation, route }) => {
                         editable={item.rep != null}
                         onFocus={() => extendModal()}
                         onChangeText={(value) =>
-                          editRoutine(id, "repeat", value)
+                          editTempRoutine(id, "repeat", value)
                         }
                       >
                         <EditText style={{ color: colors.l_main }}>
