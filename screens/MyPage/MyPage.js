@@ -8,6 +8,7 @@ import axios from "axios";
 import { useIsFocused } from "@react-navigation/native";
 import { IsDarkAtom, TabBarAtom } from "../../recoil/MyPageAtom";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { getDay } from "date-fns";
 
 const Choice = styled.View`
   margin-top: 10px;
@@ -21,7 +22,7 @@ const ChoiceButton = styled.TouchableOpacity`
   padding-bottom: 2px;
 `;
 
-export default function MyPage(props) {
+export default function MyPage() {
   const isFocus = useIsFocused();
   const isDark = useRecoilValue(IsDarkAtom);
   const setIsTabVisible = useSetRecoilState(TabBarAtom);
@@ -30,9 +31,42 @@ export default function MyPage(props) {
     isFocus && setIsTabVisible(true);
   }, [isFocus]);
 
-  const [date, setDate] = useState([]);
+  const now = new Date();
 
-  const [now, setNow] = useState(new Date());
+  const todayFormat = now.toISOString().substring(0, 10).replace(/-/g, "");
+  const [checkedDate, setCheckedDate] = useState(todayFormat);
+  const [checkedTotalData, setCheckedTotalData] = useState([]);
+
+  const getDayHealth = async (checkedDate) => {
+    try {
+      let url = "https://gpthealth.shop/";
+      let detailAPI = `app/mypage/exercise?date=${checkedDate}`;
+      const response = await axios.get(url + detailAPI);
+      const checkResult = response.data;
+      return checkResult;
+    } catch (error) {
+      console.error("Failed to fetch data:", error);
+    }
+  };
+  /*
+  useEffect(() => {
+    getDayHealth(todayFormat).then((checkResult) => {
+      checkResult.code == 709 &&
+        setCheckedTotalData({
+          exercise: [],
+          totalCalories: 0,
+          totalDist: 0,
+          totalTime: 0,
+          totalWeight: 0,
+        });
+      checkResult.code == 1000 && setCheckedTotalData(checkResult.result);
+      console.log(checkResult);
+      console.log(checkedTotalData);
+    });
+  }, []);
+  */
+
+  const [date, setDate] = useState([]);
   const [month, setMonth] = useState(now.getMonth() + 1);
 
   const getMyPageData = async (month) => {
@@ -51,54 +85,8 @@ export default function MyPage(props) {
     getMyPageData(month).then((dateResult) => {
       setDate(dateResult.result);
     });
-  }, []);
+  }, [month]);
 
-  const todayFormat = now.toISOString().substring(0, 10).replace(/-/g, "");
-  const [checkedDate, setCheckedDate] = useState(todayFormat);
-  const [exerciseInfo, setExerciseInfo] = useState([]);
-  const [totalCalories, setTotalCalories] = useState();
-  const [totalWeight, setTotalWeight] = useState();
-  const [totalTime, setTotalTime] = useState();
-  const [totalDist, setTotalDist] = useState();
-
-  const getDayHealth = async (checkedDate) => {
-    try {
-      let url = "https://gpthealth.shop/";
-      let detailAPI = `app/mypage/exercise?date=${checkedDate}`;
-      const response = await axios.get(url + detailAPI);
-      const checkResult = response.data;
-      return checkResult;
-    } catch (error) {
-      console.error("Failed to fetch data:", error);
-    }
-  };
-
-  useEffect(() => {
-    getDayHealth(checkedDate).then((checkResult) => {
-      checkResult.code == 709 &&
-        setExerciseInfo([
-          {
-            exerciseInfo: {
-              exerciseName: "",
-              healthCategoryIdx: 0,
-              weight: 0,
-            },
-            order: 1,
-          },
-        ]) &
-          setTotalCalories(0) &
-          setTotalWeight(0) &
-          setTotalTime(0) &
-          setTotalDist(0);
-      checkResult.code == 1000 &&
-        setExerciseInfo(checkResult.result.exercise) &
-          setTotalCalories(checkResult.result.totalCalories) &
-          setTotalWeight(checkResult.result.totalWeight) &
-          setTotalTime(checkResult.result.totalTime) &
-          setTotalDist(checkResult.result.totalDist);
-      console.log(checkResult);
-    });
-  }, []);
   const [weekData, setWeekData] = useState();
 
   const getWeekHealth = async () => {
@@ -116,7 +104,7 @@ export default function MyPage(props) {
   useEffect(() => {
     getWeekHealth().then((weekResult) => {
       setWeekData(weekResult.result);
-      console.log(weekResult.result);
+      //console.log(weekResult.result);
     });
   }, []);
 
@@ -165,7 +153,15 @@ export default function MyPage(props) {
             </ChoiceText>
           </ChoiceButton>
         </Choice>
-        {showRecords && <Records exerciseDays={date} month={month} />}
+        {showRecords && (
+          <Records
+            exerciseDays={date}
+            month={month}
+            //checkedFunction={checkDayLoad}
+            getDayHealth={getDayHealth}
+            todayData={checkedTotalData}
+          />
+        )}
         {!showRecords && <Analysis weekData={weekData} />}
       </Container>
     </SafeAreaView>

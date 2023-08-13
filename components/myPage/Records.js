@@ -99,23 +99,44 @@ export default function Records(props) {
 
   const [now, setNow] = useState(new Date());
   const exerciseDays = props.exerciseDays;
-  const month = props.month;
+  const month = now.getMonth() + 1;
   const date = now.getDate();
 
-  // now date에 해당하는 값 가져오기
-  const [minute, setMinute] = useState(31);
-  const kilogram = useState(3300);
-  const calorie = useState(400);
+  const [totalExercise, setTotalExercise] = useState([]);
+  const [totalCalories, setTotalCalories] = useState(0);
+  const [totalWeight, setTotalWeight] = useState(0);
+  const [totalTime, setTotalTime] = useState(0);
+  const [totalDist, setTotalDist] = useState(0);
 
-  const percentage = (minute / 60) * 100;
+  useEffect(() => {
+    props
+      .getDayHealth(now.toISOString().substring(0, 10).replace(/-/g, ""))
+      .then((checkResult) => {
+        checkResult.code == 709 &&
+          setTotalExercise([]) &
+            setTotalCalories(0) &
+            setTotalWeight(0) &
+            setTotalTime(0) &
+            setTotalDist(0);
+        checkResult.code == 1000 &&
+          setTotalExercise(checkResult.result.exercise) &
+            setTotalCalories(checkResult.result.totalCalories) &
+            setTotalWeight(checkResult.result.totalWeight) &
+            setTotalTime(checkResult.result.totalTime) &
+            setTotalDist(checkResult.result.totalDist);
+      });
+  }, [now]);
 
   const dayLoad = (text) => {
     setNow(new Date(text.dateString));
   };
 
-  const exercise = COMMENTDATA.map((comment) => (
+  const totalMinute = Math.ceil(totalTime / 60);
+  const percentage = (totalMinute / 60) * 100;
+
+  const exercise = totalExercise?.map((comment) => (
     <RecTextLine>
-      <ListText>{comment.name}</ListText>
+      <ListText>{comment}</ListText>
       <WithLocalSvg width={20} height={20} asset={Check} />
     </RecTextLine>
   ));
@@ -139,29 +160,33 @@ export default function Records(props) {
               bgColor={isDark ? colors.grey_9 : colors.white}
             >
               <View style={{ flexDirection: "row", alignItems: "center" }}>
-                <CircleText>{minute}</CircleText>
-                <MiniText>분</MiniText>
+                <CircleText>{totalMinute}</CircleText>
+                <MiniText> 분</MiniText>
               </View>
             </PercentageCircle>
             <CircleTitle>소요시간</CircleTitle>
           </CircleContent>
           <CircleContent>
             <Circle>
-              <CircleText>{kilogram}</CircleText>
-              <MiniText>kg</MiniText>
+              <CircleText>{totalWeight}</CircleText>
+              <MiniText> kg</MiniText>
             </Circle>
             <CircleTitle>들어올린 무게</CircleTitle>
           </CircleContent>
           <CircleContent>
             <Circle>
-              <CircleText>{calorie}</CircleText>
-              <MiniText>Kcal</MiniText>
+              <CircleText>{totalCalories}</CircleText>
+              <MiniText> Kcal</MiniText>
             </Circle>
             <CircleTitle>소모 칼로리</CircleTitle>
           </CircleContent>
         </Circles>
         <List>
-          {1 ? exercise : <Text>해당 날짜에 완료한 운동이 없습니다.</Text>}
+          {totalExercise != [""] ? (
+            exercise
+          ) : (
+            <Text>해당 날짜에 완료한 운동이 없습니다.</Text>
+          )}
         </List>
       </Exercise>
     </Container>
