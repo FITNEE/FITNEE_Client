@@ -6,13 +6,14 @@ import WrappedText from 'react-native-wrapped-text'
 import BottomSheet, { BottomSheetScrollView, BottomSheetBackdrop } from "@gorhom/bottom-sheet";
 import Dictionary_LeftTab from '../../components/Dictionary_LeftTab'
 import Dictionary_RightTab from '../../components/Dictionary_RightTab'
+import Dictionary_Modal from '../../components/Dictionary_Modal'
 import axios from 'axios'
 import { IsDarkAtom } from "../../recoil/MyPageAtom"
 import { useRecoilValue } from "recoil"
 import { WithLocalSvg } from 'react-native-svg'
 import LeftIcon from '../../assets/SVGs/Left.svg'
 import AddIcon from '../../assets/SVGs/Add.svg'
-import Dictionary_Modal from '../../components/Dictionary_Modal'
+import EditIcon from '../../assets/SVGs/Edit.svg'
 
 export default function Dictionary_3({ navigation, route }){
     const isDark = useRecoilValue(IsDarkAtom)
@@ -63,7 +64,7 @@ export default function Dictionary_3({ navigation, route }){
     const [bubbleBool, setBubbleBool] = useState(true) // 말풍선 나타내기
     const [joinBtnBool, setJoinBtnBool] = useState(true) // 참여하기 버튼 나타내기
     const parentSetJoinBtnBool = (newBool) => setJoinBtnBool(newBool)
-    const [isAllRead, setIsAllRead] = useState(true)
+    const [isAllRead, setIsAllRead] = useState(false)
 
     const [isModalVisible, setIsModalVisible] = useState(false)
     const changeModalVisibility = (newBool)=> setIsModalVisible(newBool)
@@ -158,6 +159,7 @@ export default function Dictionary_3({ navigation, route }){
                                     <AddIcon
                                         width={40}
                                         height={40}
+                                        color={isDark? colors. d_sub_2 : colors.l_sub_2}
                                 /></TouchableOpacity>
                             </TitleContainer>
                             <TabContainer style={{borderBottomColor: isDark? `${colors.grey_8}`:`${colors.grey_1}`}}> 
@@ -199,7 +201,12 @@ export default function Dictionary_3({ navigation, route }){
                                 onPress={()=>setJoinBtnBool(false)}
                                 style={{backgroundColor: isDark? `${colors.d_main}`:`${colors.l_main}`}}
                             >
-                                <JoinImage></JoinImage>
+                                <EditIcon
+                                    width={20}
+                                    height={20}
+                                    style={{marginRight: 8}}
+                                    color={colors.white}
+                                />
                                 <JoinText style={{color: isDark? `${colors.black}`:`${colors.white}`}}>채팅 참여하기</JoinText>
                             </JoinBtnContainer>
                             :
@@ -318,7 +325,7 @@ const TabText = styled.Text`
     padding: 10px 0px;
 `
 const NotReadDot = styled.View`
-    background-color: ${colors.error};
+    background-color: ${colors.red};
     width: 6px;
     height: 6px;
     border-radius: 3px;
@@ -335,14 +342,7 @@ const JoinBtnContainer = styled.TouchableOpacity`
     left: ${`${SCREEN_WIDTH/2-123/2}px`};
     bottom: 24px;
 `
-const JoinImage = styled.Image`
-    background-color: ${colors.red};
-    width: 20px;
-    height: 20px;
-    margin-right: 10px;
-`
 const JoinText = styled.Text`
     font-weight: 600;
-    color: ${colors.white};
     font-size: 13;
 `

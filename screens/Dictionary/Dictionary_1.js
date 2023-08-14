@@ -179,7 +179,9 @@ export default function Dictionary_1({ navigation }) {
                                     <DeleteIcon
                                         width={24}
                                         height={24}
-                                /></TouchableOpacity>
+                                        color={isDark? colors.white: colors.grey_4}
+                                    />
+                                </TouchableOpacity>
                             </SearchInputContainer>
                         </SearchContainer>
                         { isSubmit && <PartContainer 
@@ -310,7 +312,7 @@ const PartText = styled.Text`
 `
 const PressedPart = styled.TouchableOpacity`
     border-radius: 100px;
-    padding: 8px 15px;
+    padding: 10px 15px;
     margin-right: 8px;
 `
 const PressedPartText = styled.Text`
@@ -319,16 +321,16 @@ const PressedPartText = styled.Text`
 `
 const BottomContainer = styled.View`
     padding: 40px 22px;
-`;
+`
 const KeywordBox = styled.View`
     width: 100%;
     margin-bottom: 56px;
-`;
+`
 const KeywordTitle = styled.Text`
     font-weight: 600;
     font-size: 16px;
     margin-bottom: 16px;
-`;
+`
 const KeywordContainer = styled.View`
     flex-direction: row;
     flex-wrap: wrap;
@@ -338,7 +340,7 @@ const KeywordWrapper = styled.TouchableOpacity`
     margin-right: 4px;
     margin-bottom: 4px;
     padding: 10px 14px;
-`;
+` 
 const Keyword = styled.Text`
     font-weight: 600;
     font-size: 13px;
