@@ -1,12 +1,12 @@
 import React from "react";
 import styled from "styled-components/native";
 import { days } from "./data";
-import { Keyboard, ScrollView } from "react-native";
 import { colors } from "../../colors";
 import { ComponentTitle } from "../Shared/MyRoutine_Shared";
 import { ScheduleChanger } from "../ScheduleChanger";
 import { ScreenWidth } from "../Shared";
 import { ContentContainer, NoRoutineText } from "../Shared/MyRoutine_Shared";
+import Trash from "../../assets/SVGs/Trash.svg";
 
 const SetContainer = styled.View`
   flex-direction: row;
@@ -76,7 +76,6 @@ const ExerciseItem_Custom = ({
   editRoutine,
   isDark,
 }) => {
-  console.log("ExerciseItem", id, "rendered");
   const SetsText = styled.Text`
     font-size: 17px;
     color: ${isDark ? colors.grey_4 : colors.grey_8};

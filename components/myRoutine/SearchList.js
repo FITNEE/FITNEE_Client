@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components/native";
 import { colors } from "../../colors";
-import Check from "../../assets/SVGs/Check.svg";
+
+import CheckBox_blank from "../../assets/SVGs/CheckBox_blank.svg";
+import CheckBox_checked from "../../assets/SVGs/CheckBox_checked.svg";
 const ListContainer = styled.ScrollView`
   width: 100%;
   height: 100%;
@@ -20,14 +22,14 @@ const TextContainer = styled.View`
   flex: 1;
 `;
 const IconContainer = styled.View`
-  width: 40px;
-  height: 40px;
+  width: 60px;
+  height: 60px;
   background-color: ${colors.grey_2};
   border-radius: 32px;
 `;
 const Title = styled.Text`
   font-weight: 500;
-  font-size: 15px;
+  font-size: 17px;
   color: ${colors.black};
 `;
 const SubText = styled.Text`
@@ -43,20 +45,29 @@ const CheckButton = styled.TouchableOpacity`
   height: 40px;
 `;
 
-export default function SearchList({ parentSearchList, editSelectedList }) {
+export default function SearchList({
+  parentSearchList,
+  editSelectedList,
+  selectedItem,
+}) {
+  const [isSelected, setIsSelected] = useState(false);
+  let tempArr = selectedItem.map((item) => item.healthCategoryIdx);
+  console.log(tempArr);
+
   return (
     <ListContainer>
       {parentSearchList?.map((words, index) => {
         return (
           <ResultContainer
             key={index}
-            onPress={() =>
+            onPress={() => {
+              setIsSelected(true);
               editSelectedList("add", index, {
                 exerciseName: words.name,
                 exerciseParts: words.parts,
                 healthCategoryIdx: words.healthCategoryIdx,
-              })
-            }
+              });
+            }}
           >
             <IconContainer />
             <TextContainer>
@@ -66,7 +77,11 @@ export default function SearchList({ parentSearchList, editSelectedList }) {
               </SubText>
             </TextContainer>
             <CheckButton>
-              <Check width={24} height={24} />
+              {isSelected & tempArr.includes(words.healthCategoryIdx) ? (
+                <CheckBox_checked width={24} height={24} />
+              ) : (
+                <CheckBox_blank width={24} height={24} />
+              )}
             </CheckButton>
           </ResultContainer>
         );

@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components/native";
 import { colors } from "../../colors";
-import { Button, ScreenWidth, BackButton } from "../../Shared";
+import { Button, BackButton } from "../../Shared";
 //prettier-ignore
 import {Title,ScreenLayout,NumberInput,MyBottomSheet, InputTitle} from "../../components/Shared/OnBoarding_Shared";
 
