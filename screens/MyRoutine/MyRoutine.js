@@ -288,11 +288,7 @@ export default MyRoutine = ({ navigation, route }) => {
   return (
     <ScreenBase
       style={{
-        backgroundColor: isDark
-          ? mode
-            ? colors.grey_9
-            : colors.black
-          : colors.white,
+        backgroundColor: isDark ? colors.grey_9 : colors.white,
       }}
     >
       <Header

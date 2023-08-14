@@ -13,7 +13,6 @@ const ResultContainer = styled.TouchableOpacity`
   flex-direction: row;
   align-items: center;
   border-top-width: 1px;
-  border-top-color: ${colors.grey_1};
   justify-content: space-between;
 `;
 const TextContainer = styled.View`
@@ -30,13 +29,11 @@ const IconContainer = styled.View`
 const Title = styled.Text`
   font-weight: 500;
   font-size: 17px;
-  color: ${colors.black};
 `;
 const SubText = styled.Text`
   font-size: 13px;
   margin-top: 4px;
   font-weight: 400;
-  color: ${colors.grey_7};
 `;
 const CheckButton = styled.TouchableOpacity`
   justify-content: center;
@@ -49,6 +46,7 @@ export default function SearchList({
   parentSearchList,
   editSelectedList,
   selectedItem,
+  isDark,
 }) {
   const [isSelected, setIsSelected] = useState(false);
   let tempArr = selectedItem.map((item) => item.healthCategoryIdx);
@@ -59,6 +57,7 @@ export default function SearchList({
       {parentSearchList?.map((words, index) => {
         return (
           <ResultContainer
+            style={{ borderTopColor: isDark ? colors.grey_8 : colors.grey_1 }}
             key={index}
             onPress={() => {
               setIsSelected(true);
@@ -69,18 +68,32 @@ export default function SearchList({
               });
             }}
           >
-            <IconContainer />
+            <IconContainer
+              style={{ backgroundColor: isDark ? colors.black : colors.white }}
+            />
             <TextContainer>
-              <Title>{words.name}</Title>
-              <SubText>
+              <Title style={{ color: isDark ? colors.white : colors.black }}>
+                {words.name}
+              </Title>
+              <SubText
+                style={{ color: isDark ? colors.grey_1 : colors.grey_7 }}
+              >
                 {words.parts} | {words.equipment}
               </SubText>
             </TextContainer>
             <CheckButton>
               {isSelected & tempArr.includes(words.healthCategoryIdx) ? (
-                <CheckBox_checked width={24} height={24} />
+                <CheckBox_checked
+                  width={24}
+                  height={24}
+                  color={isDark ? colors.d_sub_1 : colors.l_sub_2}
+                />
               ) : (
-                <CheckBox_blank width={24} height={24} />
+                <CheckBox_blank
+                  width={24}
+                  height={24}
+                  color={isDark ? colors.grey_3 : colors.grey_7}
+                />
               )}
             </CheckButton>
           </ResultContainer>

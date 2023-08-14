@@ -46,6 +46,7 @@ export const Button = ({
   enabled,
   onPress,
   text = "확인",
+  isDark,
   loading = false,
   mode = "normal",
 }) => {
@@ -69,7 +70,11 @@ export const Button = ({
         <ActivityIndicator color={colors.grey_7} />
       ) : (
         <ButtonText
-          style={enabled ? { color: colors.white } : { color: colors.grey_7 }}
+          style={
+            enabled
+              ? { color: isDark ? colors.black : colors.white }
+              : { color: colors.grey_7 }
+          }
         >
           {text}
         </ButtonText>
