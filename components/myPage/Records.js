@@ -18,6 +18,7 @@ const Container = styled.View`
 const Exercise = styled.View`
   padding-top: 24px;
   gap: 32px;
+  padding-bottom: 24px;
 `;
 
 const Circles = styled.View`
@@ -77,7 +78,7 @@ export default function Records(props) {
   const List = styled.View`
     border-radius: 12px;
     background-color: ${isDark ? colors.grey_7 : colors.grey_1};
-    margin: 0px 32px 49px 32px;
+    margin: 0px 32px;
     padding: 16px;
     gap: 7px;
   `;
@@ -181,13 +182,7 @@ export default function Records(props) {
             <CircleTitle>소모 칼로리</CircleTitle>
           </CircleContent>
         </Circles>
-        <List>
-          {totalExercise != [""] ? (
-            exercise
-          ) : (
-            <Text>해당 날짜에 완료한 운동이 없습니다.</Text>
-          )}
-        </List>
+        {totalExercise.length != 0 && <List>{exercise}</List>}
       </Exercise>
     </Container>
   );
