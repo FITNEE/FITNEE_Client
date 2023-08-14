@@ -25,7 +25,7 @@ const toastConfig = {
   success: () => (
     <ToastBase>
       <ToastText>루틴이 수정되었습니다.</ToastText>
-      <WithLocalSvg width={24} height={24} asset={Check} />
+      {/* <WithLocalSvg width={24} height={24} asset={Check} /> */}
     </ToastBase>
   ),
 };
