@@ -5,7 +5,7 @@ import BottomSheet from "@gorhom/bottom-sheet";
 import axios from "axios";
 import { useIsFocused } from "@react-navigation/native";
 import { colors } from "../../colors";
-import { Header } from "../../components/Shared/MyRoutine_Shared";
+import { Header, listToObject } from "../../components/Shared/MyRoutine_Shared";
 import {
   pressBack,
   processDayData,
@@ -43,7 +43,7 @@ export default MyRoutine = ({ navigation, route }) => {
 
   const [SCHEDULE, setSCHEDULE] = useState([]);
   //각 요일에 대한 세부 루틴정보들 저장하기 위한 배열 useState
-  const [routineData, setRoutineData] = useState([]);
+  const [routineData, setRoutineData] = useState(null);
   //커스텀모드에서 세부수정하고자 하는 운동종목 구분하기 위한 id값
   const [editingID, setEditingID] = useState(null);
   //DropDown 누른 운동 구분하기위함.
@@ -51,7 +51,6 @@ export default MyRoutine = ({ navigation, route }) => {
   //요일 슬라이드로 변경되는 실시간 SCHEDULE배열 임시 저장하기 위한 함수
   const [newRoutine, setNewRoutine] = useState([]);
 
-  const [newSCHE, setNewSCHE] = useState([]);
   //이전 ID값과 변경 이후 ID값 매칭된거, 이거로 app/routine/calendar 호출하기
   const [selectedDay, setSelectedDay] = useState((new Date().getDay() + 6) % 7);
   const [snapPoints, setSnapPoints] = useState(["1%"]);
@@ -60,11 +59,6 @@ export default MyRoutine = ({ navigation, route }) => {
   const setIsTabVisible = useSetRecoilState(TabBarAtom);
 
   const isDark = useRecoilValue(IsDarkAtom);
-  const updateNewSche = (tempSche) => {
-    tempSche && setNewSCHE(tempSche);
-
-    console.log("updateNewSche 실행됨:", newSCHE);
-  };
   //가장 밑단에서 backgroundColor 제공
   const ScreenBase = styled.SafeAreaView`
     width: 100%;
@@ -93,11 +87,10 @@ export default MyRoutine = ({ navigation, route }) => {
         setSCHEDULE(processDayData(res.result));
         getRoutine(processDayData(res.result), selectedDay, setIsLoading).then(
           (res) => {
-            if (res.code == 1000) {
+            console.log("getRoutine반응값:", res);
+            if (res.result) {
               setRoutineData(res.result.routineDetails);
               setNewRoutine(res.result.routineDetails);
-            } else {
-              console.log("routine 데이터 받아오지 못함");
             }
           }
         );
@@ -118,9 +111,8 @@ export default MyRoutine = ({ navigation, route }) => {
       );
       if (newSCHE) {
         //SCHEDULE의 변경이 있었을 경우,
-        let newSCHE_1 = JSON.parse(JSON.stringify(newSCHE));
-        let tempNewSCHE = Object.keys(newSCHE_1).reduce((acc, k) => {
-          let country = newSCHE_1[k];
+        let tempNewSCHE = Object.keys(newSCHE).reduce((acc, k) => {
+          let country = newSCHE[k];
           acc[country] = [...(acc[country] || []), k];
           return acc;
         }, {});
@@ -136,7 +128,7 @@ export default MyRoutine = ({ navigation, route }) => {
         updateRoutines(data).then((res) =>
           console.log("updateRoutineSchedule api 호출결과:", res)
         );
-        setNewSCHE(null);
+        newSCHE = null;
       }
     }
     setMode(!mode);
@@ -254,18 +246,21 @@ export default MyRoutine = ({ navigation, route }) => {
     Keyboard.dismiss();
   };
 
+  var newSCHE;
+  const updateNewSCHE = (position) => {
+    newSCHE = position;
+  };
   useEffect(() => {
     if (SCHEDULE[selectedDay] != undefined) {
       getRoutine(SCHEDULE, selectedDay, setIsLoading).then((res) => {
-        console.log(
-          "selectedDay변경으로 실행된 getRoutine 실행결과:",
-          res.result
-        );
-        if (res.code == 1000) {
+        // console.log("selectedDay변경으로 실행된 getRoutine 실행결과:", res);
+        if (res.result) {
           setRoutineData(res.result.routineDetails);
           setNewRoutine(res.result.routineDetails);
         } else {
           console.log("요일 루틴 가져오기 실패");
+          setRoutineData(null);
+          setNewRoutine(null);
         }
       });
     }
@@ -300,10 +295,10 @@ export default MyRoutine = ({ navigation, route }) => {
           <List_Custom
             isDark={isDark}
             SCHEDULE={SCHEDULE}
+            updateNewSCHE={updateNewSCHE}
             newRoutine={newRoutine}
             editRoutine={editRoutine}
             popMessage={popMessage}
-            updateNewSche={updateNewSche}
           />
           <Button
             onPress={() => navigation.navigate("ExerciseSearch", {})}
@@ -340,7 +335,7 @@ export default MyRoutine = ({ navigation, route }) => {
         </ContentBase>
       )}
 
-      <BottomSheet
+      {/* <BottomSheet
         ref={bottomModal}
         index={-1}
         snapPoints={["50%"]}
@@ -360,7 +355,7 @@ export default MyRoutine = ({ navigation, route }) => {
           extendModal={extendModal}
           setNewRoutine={setNewRoutine}
         />
-      </BottomSheet>
+      </BottomSheet> */}
     </ScreenBase>
   );
 };

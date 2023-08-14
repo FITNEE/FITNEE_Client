@@ -45,7 +45,7 @@ const Home = ({ navigation }) => {
   const setIsTabVisible = useSetRecoilState(TabBarAtom);
   setIsTabVisible(true);
 
-  const [showRoutine, SetShowRoutine] = useState(true);
+  const [showRoutine, SetShowRoutine] = useState(false);
 
   return (
     <SafeAreaView
