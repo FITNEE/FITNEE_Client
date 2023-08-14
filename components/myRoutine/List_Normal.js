@@ -2,7 +2,6 @@ import React from "react";
 import styled from "styled-components/native";
 import { colors } from "../../colors";
 import { ScreenWidth } from "../Shared";
-
 import ToggleDown from "../../assets/SVGs/ToggleDown.svg";
 import ToggleUp from "../../assets/SVGs/ToggleUp.svg";
 import { FlatList } from "react-native";

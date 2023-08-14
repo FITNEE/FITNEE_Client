@@ -78,7 +78,11 @@ export default WeekCalendar = ({
                         }
                   }
                 >
-                  <Exercise width={24} height={24} />
+                  <Exercise
+                    width={24}
+                    height={24}
+                    color={isDark ? colors.white : colors.l_main}
+                  />
                 </Circle>
               )}
           </DayContainer>
