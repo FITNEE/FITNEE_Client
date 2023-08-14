@@ -12,17 +12,8 @@ import Indicator from "../../components/Indicator";
 import { Alert } from "react-native";
 import { useRoute, StackActions } from "@react-navigation/native";
 import axios from "axios";
-import { LogBox } from "react-native";
-
-const ExerciseCircle = styled.View`
-  width: 307px;
-  height: 307px;
-  border-radius: 291px;
-  background: ${colors.grey_1};
-  margin-bottom: 14px;
-  justify-content: center;
-  align-items: center;
-`;
+import { IsDarkAtom } from "../../recoil/MyPageAtom";
+import { useRecoilValue } from "recoil";
 
 const TextBox = styled.View`
   width: 327px;
@@ -106,6 +97,18 @@ const StopExercise = styled.TouchableOpacity`
 `;
 
 export default function ExerciseCourse_1({ navigation }) {
+  const isDark = useRecoilValue(IsDarkAtom);
+
+  const ExerciseCircle = styled.View`
+    width: 307px;
+    height: 307px;
+    border-radius: 291px;
+    background: ${isDark ? colors.grey_9 : colors.grey_1};
+    margin-bottom: 14px;
+    justify-content: center;
+    align-items: center;
+  `;
+
   const goToStartExercise = () => {
     navigation.navigate("StartExercise");
   };
@@ -114,7 +117,7 @@ export default function ExerciseCourse_1({ navigation }) {
   const [currentId, setCurrentId] = useState(0);
   //const [oneDuration, setOneDuration] = useState(setData[0]?.duration);
   const [key, setKey] = useState(0);
-  const flatListRef = useRef();
+  const flatListRef = useRef(null);
   const [boxNumber, setBoxNumber] = useState(1);
   const [indicatorNum, setIndicatorNum] = useState(1);
   //시간 재는 용
@@ -143,13 +146,13 @@ export default function ExerciseCourse_1({ navigation }) {
     };
 
     if (listIndex + 1 >= dataList.length) {
-      await postTotalData(routineIdx, totalTime + realTotalTime, dataList);
+      await postTotalData(routineIdx, realTotalTime, dataList);
 
       // 조건이 충족되면 원하는 화면(FinalScreen)으로 이동합니다.
       navigation.dispatch(
         StackActions.replace("CompleteExercise", {
           dataList: modifiedDataList,
-          totalTime: realTotalTime + realTotalTime,
+          totalTime: realTotalTime,
           routineIdx: routineIdx,
         })
       );
@@ -258,7 +261,7 @@ export default function ExerciseCourse_1({ navigation }) {
     const newExerciseData = [
       ...dataList[listIndex].sets,
       {
-        set: dataList[listIndex].sets.length,
+        set: dataList[listIndex].totalSets,
         rep: 0,
         weight: 0,
       },
@@ -327,12 +330,15 @@ export default function ExerciseCourse_1({ navigation }) {
   const scrollBox = () => {
     const next =
       boxNumber >= dataList[listIndex].totalSets ? boxNumber : boxNumber + 1;
+    console.log("next:", next);
     const next2 =
       indicatorNum >= dataList[listIndex].totalSets + 1
         ? indicatorNum
         : indicatorNum + 1;
     if (boxNumber === dataList[listIndex].totalSets + 1) setIsPlaying(false);
     setBoxNumber(next);
+    console.log("boxNumber:", boxNumber);
+    flatListRef.current.scrollToIndex({ animated: true, index: next });
     setIndicatorNum(next2);
     setIsTimerRunning(false);
 
@@ -340,23 +346,9 @@ export default function ExerciseCourse_1({ navigation }) {
     console.log(timeInSeconds, totalTime);
     setTimeInSeconds(0);
 
-    setIsPlaying(false);
-    setKey((prevKey) => prevKey + 1); //타이머 리셋
-    setIsTimerRunning(true); //타이머 켜기
-    setTimeout(() => {
-      setIsPlaying(true);
-    }, 300);
-
-    this.flatListRef.scrollToIndex({ animated: true, index: boxNumber });
+    setKey((prevKey) => prevKey + 1); //돌아가는 타이머 리셋
+    setIsTimerRunning(true); //시간 재는 타이머 켜기
   };
-
-  useEffect(() => {
-    LogBox.ignoreLogs([
-      (log) =>
-        log.message.includes("Invariant Violation: scrollToIndex") &&
-        log.message.includes("out of range"),
-    ]);
-  }, [flatListRef]);
 
   useEffect(() => {
     let timerId;
@@ -373,7 +365,12 @@ export default function ExerciseCourse_1({ navigation }) {
   }, [isTimerRunning]);
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: colors.grey_2 }}>
+    <SafeAreaView
+      style={{
+        flex: 1,
+        backgroundColor: isDark ? colors.grey_9 : colors.grey_2,
+      }}
+    >
       <ExerciseCard
         exerciseName={dataList[listIndex].exerciseInfo.exerciseName}
       >
@@ -383,7 +380,7 @@ export default function ExerciseCourse_1({ navigation }) {
             key={key}
             isPlaying={isPlaying}
             //duration={oneDuration}
-            duration={6}
+            duration={5}
             colors={colors.l_main}
             size={315}
             strokeWidth={8}
@@ -406,15 +403,11 @@ export default function ExerciseCourse_1({ navigation }) {
         <BoxList>
           <FlatList
             //현재 하고 있는 세트와 다음 세트를 보여주는 리스트
-            style={{}}
-            initialScrollIndex={0}
             data={exerciseData}
             renderItem={renderItem}
             keyExtractor={(item) => item.set}
             showsVerticalScrollIndicator={false}
-            ref={(ref) => {
-              this.flatListRef = ref;
-            }}
+            ref={flatListRef}
             onEndReached={goToCompleteExercise}
             scrollEnabled={false}
           />
