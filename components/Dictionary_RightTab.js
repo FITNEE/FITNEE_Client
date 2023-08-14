@@ -58,11 +58,11 @@ export default function Dictionary_RightTab(props) {
     const { parentJoinBtnBool, parentSetJoinBtnBool, exerciseName } = props
     const [childJoinBtnBool, setChildJoinBtnBool] = useState(parentJoinBtnBool)
     useEffect(() => {
-    setChildJoinBtnBool(parentJoinBtnBool)
+        setChildJoinBtnBool(parentJoinBtnBool)
     }, [parentJoinBtnBool])
     const funcSetJoinBtnBool = (newBool) => {
-    setChildJoinBtnBool(newBool)
-    parentSetJoinBtnBool(newBool)
+        setChildJoinBtnBool(newBool)
+        parentSetJoinBtnBool(newBool)
     }
 
     // 채팅 불러오기
@@ -133,7 +133,6 @@ export default function Dictionary_RightTab(props) {
         setMyNickName(result.result[0].userNickname)
     })
     }, [])
-
 
     // 채팅 삭제 
     const deleteChat = async (idx) => {
