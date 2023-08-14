@@ -117,7 +117,7 @@ export default function ExerciseCourse_1({ navigation }) {
   const [currentId, setCurrentId] = useState(0);
   //const [oneDuration, setOneDuration] = useState(setData[0]?.duration);
   const [key, setKey] = useState(0);
-  const flatListRef = useRef(null);
+  const flatListRef = useRef();
   const [boxNumber, setBoxNumber] = useState(1);
   const [indicatorNum, setIndicatorNum] = useState(1);
   //시간 재는 용
@@ -336,9 +336,8 @@ export default function ExerciseCourse_1({ navigation }) {
         ? indicatorNum
         : indicatorNum + 1;
     if (boxNumber === dataList[listIndex].totalSets + 1) setIsPlaying(false);
-    setBoxNumber(next);
+    setBoxNumber(next + 1);
     console.log("boxNumber:", boxNumber);
-    flatListRef.current.scrollToIndex({ animated: true, index: next });
     setIndicatorNum(next2);
     setIsTimerRunning(false);
 
@@ -348,6 +347,8 @@ export default function ExerciseCourse_1({ navigation }) {
 
     setKey((prevKey) => prevKey + 1); //돌아가는 타이머 리셋
     setIsTimerRunning(true); //시간 재는 타이머 켜기
+
+    flatListRef.current.scrollToIndex({ animated: true, index: next });
   };
 
   useEffect(() => {
@@ -405,7 +406,7 @@ export default function ExerciseCourse_1({ navigation }) {
             //현재 하고 있는 세트와 다음 세트를 보여주는 리스트
             data={exerciseData}
             renderItem={renderItem}
-            keyExtractor={(item) => item.set}
+            keyExtractor={(item, index) => item.set + "-" + index}
             showsVerticalScrollIndicator={false}
             ref={flatListRef}
             onEndReached={goToCompleteExercise}
