@@ -1,8 +1,8 @@
 import { MovableSchedule } from "./myRoutine/MovableSchedule";
 import styled from "styled-components/native";
+import { colors } from "../colors";
 import { useSharedValue } from "react-native-reanimated";
 import { listToObject } from "./Shared/MyRoutine_Shared";
-import { colors } from "../colors";
 
 export const TextContainer = styled.View`
   flex-direction: row;
@@ -26,8 +26,9 @@ const ScheduleContainer = styled.SafeAreaView`
   height: 64px;
   width: 100%;
 `;
-export const ScheduleChanger = ({ SCHEDULE, days, isDark, updateNewSche }) => {
+export const ScheduleChanger = ({ SCHEDULE, days, isDark, updateNewSCHE }) => {
   /**여기다가 positions 값은 별도로 빼놓아야한다. 이유는 잘 모르겠음.*/
+  //후가공된 요일 데이터가 초기값이 된다.
   const positions = useSharedValue(listToObject(SCHEDULE));
   return (
     <DaysContainer
@@ -56,13 +57,13 @@ export const ScheduleChanger = ({ SCHEDULE, days, isDark, updateNewSche }) => {
             sche //동적으로 변경되는 SCHDULES 데이터를 기반으로 MoveableSchedule 렌더
           ) => (
             <MovableSchedule
-              isDark={isDark}
               id={sche.id}
               key={sche.id}
+              isDark={isDark}
               positions={positions}
-              updateNewSche={updateNewSche}
               routineId={sche.routineId}
               SCHEDULE={SCHEDULE}
+              updateNewSCHE={updateNewSCHE}
             />
           )
         )}
