@@ -1,7 +1,7 @@
 import { styled } from "styled-components/native";
 import { colors } from "../../colors";
 import { ContentContainer } from "../Shared/MyRoutine_Shared";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const BottomSheetBase = styled.Pressable`
   width: 100%;
@@ -69,30 +69,34 @@ const SubmitButton = styled.TouchableOpacity`
 export const BottomSheetContent = ({
   isDark,
   handleClosePress,
-  routineData,
   newRoutine,
   editingID,
   extendModal,
 }) => {
-  const [tempArr, setTempArr] = useState(newRoutine);
+  const [tempArr, setTempArr] = useState(null);
+  useEffect(() => {
+    setTempArr(newRoutine);
+  }, []);
   const editRoutine = (id, type, value) => {
-    let newArr = JSON.parse(JSON.stringify(newRoutine));
+    let newArr = JSON.parse(JSON.stringify(tempArr));
     if (type == "repeat") {
       newArr[editingID].content[id].rep = value;
     } else if (type == "weight") {
       newArr[editingID].content[id].weight = value;
     }
+    console.log(newArr[editingID].content[id]);
     setTempArr(newArr);
   };
+
   return (
     <BottomSheetBase
       style={{ backgroundColor: isDark ? colors.grey_8 : colors.white }}
     >
       <BottomSheetHeader>
         <ExerciseTitle style={{ color: isDark ? colors.white : colors.black }}>
-          {routineData /** 운동이 없는 요일을 선택했을 경우, Null값이 반환됨에 따라 
+          {newRoutine /** 운동이 없는 요일을 선택했을 경우, Null값이 반환됨에 따라 
                   null을 object로 만들수 없다는 오류를 피하기 위함 */ &&
-            routineData[editingID]?.exerciseName}
+            newRoutine[editingID]?.exerciseName}
         </ExerciseTitle>
         <SubmitButton onPress={() => handleClosePress(tempArr)}>
           <SubmitText>완료</SubmitText>

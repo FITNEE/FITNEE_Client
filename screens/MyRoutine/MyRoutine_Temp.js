@@ -5,7 +5,7 @@ import BottomSheet, { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
 import axios from "axios";
 import { useIsFocused } from "@react-navigation/native";
 import { colors } from "../../colors";
-import { Header } from "../../components/Shared/MyRoutine_Shared";
+import { Header, Header_Temp } from "../../components/Shared/MyRoutine_Shared";
 import {
   pressBack,
   processDayData,
@@ -27,33 +27,18 @@ import { Button } from "../../Shared";
 import { IsDarkAtom, TabBarAtom } from "../../recoil/MyPageAtom";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { BottomSheetContent } from "../../components/myRoutine/BottomSheetContent";
-const ScreenBase = styled.SafeAreaView`
-  width: 100%;
-  flex-direction: column;
-  flex: 1;
-`;
+
 const IndicatorBase = styled.View`
   width: 100%;
   height: 100%;
   justify-content: center;
   align-items: center;
 `;
-//평시모드에서 column, spaceBetween 속성부여역할로 헤더,푸터 제외한 모든 요소 감쌈
-const ContentBase = styled.View`
-  flex-direction: column;
-  justify-content: space-between;
-  width: 100%;
-  flex: 1;
-`;
-export default MyRoutine = ({ navigation, route }) => {
-  //커스텀 or 일반 보기모드 식별 위함
-  const [mode, setMode] = useState(false);
-
+export default MyRoutine_Temp = ({ navigation, route }) => {
   //요일별 운동 유무 및 각 요일 운동 idx 보관목적 ->custom하면서 변경될 수 있기에 useState로 저장
   const [isLoading, setIsLoading] = useState(false);
 
   const [SCHEDULE, setSCHEDULE] = useState([]);
-  const [newSCHE, setNewSCHE] = useState([]);
   //각 요일에 대한 세부 루틴정보들 저장하기 위한 배열 useState
   const [routineData, setRoutineData] = useState(null);
   //커스텀모드에서 세부수정하고자 하는 운동종목 구분하기 위한 id값
@@ -72,6 +57,24 @@ export default MyRoutine = ({ navigation, route }) => {
 
   const isDark = useRecoilValue(IsDarkAtom);
   //가장 밑단에서 backgroundColor 제공
+  const ScreenBase = styled.SafeAreaView`
+    width: 100%;
+    flex-direction: column;
+    flex: 1;
+    background-color: ${isDark
+      ? mode
+        ? colors.grey_9
+        : colors.black
+      : colors.white};
+  `;
+  //평시모드에서 column, spaceBetween 속성부여역할로 헤더,푸터 제외한 모든 요소 감쌈
+  const ContentBase = styled.View`
+    flex-direction: column;
+    justify-content: space-between;
+    width: 100%;
+    flex: 1;
+    background-color: ${isDark ? colors.black : colors.grey_1};
+  `;
 
   const isFocus = useIsFocused();
   const updateDatas = () => {
@@ -96,43 +99,47 @@ export default MyRoutine = ({ navigation, route }) => {
       }
     });
   };
-
-  const toggleMode = () => {
-    if (mode) {
-      if (newSCHE) {
-        //SCHEDULE의 변경이 있었을 경우,
-        let tempNewSCHE = Object.keys(newSCHE).reduce((acc, k) => {
-          let country = newSCHE[k];
-          acc[country] = [...(acc[country] || []), k];
-          return acc;
-        }, {});
-        let data = {
-          monRoutineIdx: SCHEDULE[tempNewSCHE[0]].routineId,
-          tueRoutineIdx: SCHEDULE[tempNewSCHE[1]].routineId,
-          wedRoutineIdx: SCHEDULE[tempNewSCHE[2]].routineId,
-          thuRoutineIdx: SCHEDULE[tempNewSCHE[3]].routineId,
-          friRoutineIdx: SCHEDULE[tempNewSCHE[4]].routineId,
-          satRoutineIdx: SCHEDULE[tempNewSCHE[5]].routineId,
-          sunRoutineIdx: SCHEDULE[tempNewSCHE[6]].routineId,
-        };
-        // console.log("후가공된 NeswSCHE:", data);
-        updateRoutines(data).then((res) =>
-          console.log("updateRoutineSchedule api 호출결과:", res)
-        );
-        setNewSCHE(null);
-      } else {
-        console.log("newSCHE변화없어서 메서드 실행취소");
-      }
-      updateRoutine(SCHEDULE, selectedDay, newRoutine).then(
-        (res) => {
-          console.log("updateRoutine api 호출결과:", res);
-          updateDatas();
-          showToast();
-        } //눌렀을 때 mode가 true였을 때, 즉 커스텀모드에서 완료버튼을 눌렀을때.
-      );
-    }
-    setMode(!mode);
+  const updateNewSCHE = (position) => {
+    console.log("updateNewSCHE 실행됨");
+    newSCHERef.current = position;
   };
+
+  //   const toggleMode = () => {
+  //     if (mode) {
+  //       if (newSCHERef.current) {
+  //         //SCHEDULE의 변경이 있었을 경우,
+  //         let tempNewSCHE = Object.keys(newSCHERef.current).reduce((acc, k) => {
+  //           let country = newSCHERef.current[k];
+  //           acc[country] = [...(acc[country] || []), k];
+  //           return acc;
+  //         }, {});
+  //         let data = {
+  //           monRoutineIdx: SCHEDULE[tempNewSCHE[0]].routineId,
+  //           tueRoutineIdx: SCHEDULE[tempNewSCHE[1]].routineId,
+  //           wedRoutineIdx: SCHEDULE[tempNewSCHE[2]].routineId,
+  //           thuRoutineIdx: SCHEDULE[tempNewSCHE[3]].routineId,
+  //           friRoutineIdx: SCHEDULE[tempNewSCHE[4]].routineId,
+  //           satRoutineIdx: SCHEDULE[tempNewSCHE[5]].routineId,
+  //           sunRoutineIdx: SCHEDULE[tempNewSCHE[6]].routineId,
+  //         };
+  //         // console.log("후가공된 NeswSCHE:", data);
+  //         updateRoutines(data).then((res) =>
+  //           console.log("updateRoutineSchedule api 호출결과:", res)
+  //         );
+  //         newSCHERef.current = null;
+  //       } else {
+  //         console.log("newSCHE변화없어서 메서드 실행취소");
+  //       }
+  //       updateRoutine(SCHEDULE, selectedDay, newRoutine).then(
+  //         (res) => {
+  //           console.log("updateRoutine api 호출결과:", res);
+  //           updateDatas();
+  //           showToast();
+  //         } //눌렀을 때 mode가 true였을 때, 즉 커스텀모드에서 완료버튼을 눌렀을때.
+  //       );
+  //     }
+  //     setMode(!mode);
+  //   };
   const popMessage = (id) => {
     // setSnapPoints([
     //   `${14 + 8 * newRoutine[id].content.length}%`,
@@ -220,12 +227,12 @@ export default MyRoutine = ({ navigation, route }) => {
     ),
     []
   );
-  useEffect(() => {
-    if (route.params) {
-      setMode(true);
-      editRoutine(0, "addExercise", route.params.selectedItem);
-    }
-  }, [isFocus]);
+  //   useEffect(() => {
+  //     if (route.params) {
+  //       setMode(true);
+  //       editRoutine(0, "addExercise", route.params.selectedItem);
+  //     }
+  //   }, [isFocus]);
 
   const extendModal = () => {
     console.log("modal Extended");
@@ -265,108 +272,53 @@ export default MyRoutine = ({ navigation, route }) => {
   //   }
   // }, [modalState]);
 
+  setIsTabVisible(true);
   const bottomModal = useRef(null);
-  useEffect(() => {
-    setIsTabVisible(!mode);
-  }, [mode]);
+  //   useEffect(() => {
+  //   }, [mode]);
 
   useEffect(() => {
     updateDatas();
   }, []);
 
+  const switchToCustom = () => {
+    navigation.navigate("RoutineCustom", {
+      routineData: routineData,
+      SCHEDULE: SCHEDULE,
+    });
+  };
   return (
-    <ScreenBase
-      style={{
-        backgroundColor: isDark
-          ? mode
-            ? colors.grey_9
-            : colors.black
-          : colors.white,
-      }}
-    >
-      <Header
+    <ScreenBase>
+      <Header_Temp
         isDark={isDark}
-        mode={mode}
-        toggleMode={toggleMode}
-        onPress={() => pressBack(setMode)}
+        isCustom={false}
+        onPressRight={() => switchToCustom()}
       />
-
-      {mode ? (
-        <>
-          <ScrollView
-            style={{
-              backgroundColor: isDark ? colors.grey_9 : colors.grey_1,
-            }}
-          >
-            <List_Custom
-              isDark={isDark}
-              SCHEDULE={SCHEDULE}
-              setNewSCHE={setNewSCHE}
-              newRoutine={newRoutine}
-              editRoutine={editRoutine}
-              popMessage={popMessage}
-            />
-          </ScrollView>
-          <Button
-            onPress={() => navigation.navigate("ExerciseSearch", {})}
-            text="운동 추가하기"
-            enabled={true}
-            mode="absolute"
-          />
-        </>
-      ) : (
-        <ContentBase
-          style={{
-            backgroundColor: isDark ? colors.black : colors.grey_1,
-          }}
-        >
-          <WeekCalendar //루틴 요약내용을 확인할 수 있는 주간달력 컴퍼넌트
-            setSelectedDay={setSelectedDay}
-            selectedDay={selectedDay}
-            SCHEDULE={SCHEDULE}
+      <ContentBase>
+        <WeekCalendar //루틴 요약내용을 확인할 수 있는 주간달력 컴퍼넌트
+          setSelectedDay={setSelectedDay}
+          selectedDay={selectedDay}
+          SCHEDULE={SCHEDULE}
+          isDark={isDark}
+        />
+        {isLoading ? (
+          <IndicatorBase>
+            <ActivityIndicator size="large" color={colors.l_main} />
+          </IndicatorBase>
+        ) : routineData ? (
+          <List_Normal
+            routineData={routineData}
+            selectedId={selectedId}
+            setSelectedId={setSelectedId}
             isDark={isDark}
           />
-          {isLoading ? (
-            <IndicatorBase>
-              <ActivityIndicator size="large" color={colors.l_main} />
-            </IndicatorBase>
-          ) : routineData ? (
-            <List_Normal
-              routineData={routineData}
-              selectedId={selectedId}
-              setSelectedId={setSelectedId}
-              isDark={isDark}
-            />
-          ) : (
-            <ContentContainer>
-              <NoRoutineText>해당 요일에는 루틴이 없어요</NoRoutineText>
-            </ContentContainer>
-          )}
-          <MyToast />
-        </ContentBase>
-      )}
-
-      <BottomSheet
-        ref={bottomModal}
-        backdropComponent={renderBackdrop}
-        index={-1}
-        snapPoints={["50%"]}
-        enablePanDownToClose={false}
-        enableHandlePanningGesture={false}
-        enableContentPanningGesture={false}
-        handleHeight={0}
-        enableDismissOnClose
-        handleIndicatorStyle={{ height: 0 }}
-      >
-        <BottomSheetContent
-          isDark={isDark}
-          handleClosePress={handleClosePress}
-          newRoutine={newRoutine}
-          editingID={editingID}
-          extendModal={extendModal}
-          setNewRoutine={setNewRoutine}
-        />
-      </BottomSheet>
+        ) : (
+          <ContentContainer>
+            <NoRoutineText>해당 요일에는 루틴이 없어요</NoRoutineText>
+          </ContentContainer>
+        )}
+        <MyToast />
+      </ContentBase>
     </ScreenBase>
   );
 };
