@@ -11,11 +11,19 @@ const TextLine = styled.View`
 `;
 
 const Box1 = styled.View`
-  width: 94px;
+  width: 130px;
+  flex-direction: row;
+  align-items: center;
+  justify-content: baseline;
+  height: 32px;
 `;
 
 const Box2 = styled.View`
-  width: 42px;
+  width: 84px;
+  flex-direction: row;
+  align-items: center;
+  justify-content: baseline;
+  height: 32px;
 `;
 
 export default function CurrentSet({ set, kg, num }) {
@@ -49,21 +57,21 @@ export default function CurrentSet({ set, kg, num }) {
 
   return (
     <Container>
-      <CurrentText>{set}</CurrentText>
-      <TextLine>
-        <CurrentUnit>세트</CurrentUnit>
-      </TextLine>
-
-      <Box1 />
-
-      {kg !== "null" ? <CurrentText>{kg}</CurrentText> : null}
-      {kg !== "null" ? (
+      <Box1>
+        <CurrentText>{set}</CurrentText>
         <TextLine>
-          <CurrentUnit>kg</CurrentUnit>
+          <CurrentUnit>세트</CurrentUnit>
         </TextLine>
-      ) : null}
+      </Box1>
 
-      <Box2 />
+      <Box2>
+        {kg !== "null" ? <CurrentText>{kg}</CurrentText> : null}
+        {kg !== "null" ? (
+          <TextLine>
+            <CurrentUnit>kg</CurrentUnit>
+          </TextLine>
+        ) : null}
+      </Box2>
 
       <CurrentText>{num}</CurrentText>
       <TextLine>
