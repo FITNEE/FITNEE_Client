@@ -13,15 +13,17 @@ const Button = styled.TouchableOpacity`
   margin-top: 19px;
   position: relative;
 `;
-const ButtonText = styled.Text`
-  color: ${colors.white};
-  text-align: center;
-  font-size: 17px;
-  font-style: normal;
-  font-weight: 600;
-  line-height: 25.5px;
-`;
 export default function ExerciseButton({ onPress, disabled, text }) {
+  const isDark = useRecoilValue(IsDarkAtom);
+
+  const ButtonText = styled.Text`
+    color: ${isDark ? colors.black : colors.white};
+    text-align: center;
+    font-size: 17px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 25.5px;
+  `;
   return (
     <Button disabled={disabled} onPress={onPress}>
       <ButtonText>{text}</ButtonText>
