@@ -11,34 +11,31 @@ const Button = styled.TouchableOpacity`
   height: 56px;
   width: 56px;
 `;
-
+const HeaderContainer = styled.View`
+  width: ${ScreenWidth}px;
+  height: 56px;
+  align-items: center;
+  justify-content: center;
+`;
+const Title = styled.Text`
+  font-size: 17px;
+  font-weight: 600;
+`;
+const ButtonText = styled.Text`
+  font-size: 17px;
+  font-weight: 600;
+  color: ${colors.l_main};
+`;
 export const Header = ({ mode, onPress, toggleMode, isDark }) => {
-  const HeaderContainer = styled.View`
-    width: ${ScreenWidth}px;
-    background-color: ${isDark
-      ? mode
-        ? colors.grey_9
-        : colors.black
-      : colors.white};
-    height: 56px;
-    align-items: center;
-    justify-content: center;
-  `;
-  const Title = styled.Text`
-    font-size: 17px;
-    font-weight: 600;
-    color: ${isDark ? colors.white : colors.black};
-  `;
-  const ButtonText = styled.Text`
-    font-size: 17px;
-    font-weight: 600;
-    color: ${colors.l_main};
-  `;
   const handleSubmit = () => {
     toggleMode();
   };
   return (
-    <HeaderContainer>
+    <HeaderContainer
+      style={{
+        backgroundColor: isDark ? colors.grey_9 : colors.white,
+      }}
+    >
       {mode && (
         <Button style={{ left: 12 }} onPress={onPress}>
           <Left
@@ -48,7 +45,9 @@ export const Header = ({ mode, onPress, toggleMode, isDark }) => {
           />
         </Button>
       )}
-      <Title>{mode ? "루틴커스텀" : "마이루틴"}</Title>
+      <Title style={{ color: isDark ? colors.white : colors.black }}>
+        {mode ? "루틴커스텀" : "마이루틴"}
+      </Title>
       <Button style={{ right: 12 }} onPress={handleSubmit}>
         {mode ? (
           <ButtonText>완료</ButtonText>

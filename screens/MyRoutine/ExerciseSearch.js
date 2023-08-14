@@ -13,8 +13,6 @@ import Search from "../../assets/SVGs/Search.svg";
 import Delete from "../../assets/SVGs/Close_Circle.svg";
 import Close from "../../assets/SVGs/Close.svg";
 import { Button } from "../../Shared";
-import { useRecoilValue } from "recoil";
-import { IsDarkAtom } from "../../recoil/MyPageAtom";
 
 const Container = styled.View`
   flex: 1;
@@ -22,7 +20,6 @@ const Container = styled.View`
 `;
 const TopContainer = styled.View`
   padding: 8px 24px;
-  border-bottom-width: 1px;
 `;
 const SearchContainer = styled.View`
   flex-direction: row;
@@ -46,7 +43,6 @@ const Logo = styled.Image`
 const SearchInput = styled.TextInput`
   font-size: 16px;
   font-weight: 400;
-  color: ${colors.black};
   flex: 1;
   margin: 0px 24px;
 `;
@@ -60,7 +56,6 @@ const KeywordsContainer = styled.View`
 `;
 const BottomContainer = styled.View`
   justify-content: space-between;
-  /* border: 1px solid; */
   padding: 0px 24px;
 `;
 const RecentContainer = styled.View`
@@ -111,7 +106,6 @@ const SelectedItemText = styled.Text`
   font-weight: 500;
   font-size: 13px;
   margin-left: 4px;
-  color: ${colors.black};
 `;
 export default function ExerciseSearch({ navigation }) {
   const isDark = useRecoilValue(IsDarkAtom);
@@ -234,19 +228,20 @@ export default function ExerciseSearch({ navigation }) {
             backgroundColor: isDark ? colors.grey_9 : colors.white,
           }}
         >
-          <TopContainer
-            style={{
-              borderBottomColor: isDark ? colors.grey_8 : colors.grey_1,
-            }}
-          >
+          <TopContainer>
             <SearchContainer>
               <SearchInputContainer
                 style={{
                   backgroundColor: isDark ? colors.black : colors.grey_1,
                 }}
               >
-                <Search width={24} height={24} color={colors.black} />
+                <Search
+                  width={24}
+                  height={24}
+                  color={isDark ? colors.white : colors.black}
+                />
                 <SearchInput
+                  style={{ color: isDark ? colors.white : colors.black }}
                   autoFocus={true}
                   placeholder="운동명, 부위 검색"
                   placeholderTextColor={colors.grey_4}
@@ -258,7 +253,11 @@ export default function ExerciseSearch({ navigation }) {
                 />
               </SearchInputContainer>
               <DeleteAllBtn onPress={onDeleteInput}>
-                <Close width={24} height={24} />
+                <Close
+                  width={24}
+                  height={24}
+                  color={isDark ? colors.white : colors.black}
+                />
               </DeleteAllBtn>
             </SearchContainer>
           </TopContainer>
@@ -325,6 +324,7 @@ export default function ExerciseSearch({ navigation }) {
           )}
           {isSearching && (
             <SearchList
+              isDark={isDark}
               parentSearchList={searchList}
               editSelectedList={editSelectedList}
               selectedItem={selectedItem}
@@ -347,14 +347,23 @@ export default function ExerciseSearch({ navigation }) {
               key={id}
               onPress={() => editSelectedList("delete", id, "none")}
             >
-              <Delete height={24} width={24} color={colors.black} />
-              <SelectedItemText>{item.exerciseName}</SelectedItemText>
+              <Delete
+                height={24}
+                width={24}
+                // color={isDark ? colors.black : colors.black}
+              />
+              <SelectedItemText
+                style={{ color: isDark ? colors.white : colors.black }}
+              >
+                {item.exerciseName}
+              </SelectedItemText>
             </ItemContainer>
           ))}
         </SelectedListContainer>
         <Button
           onPress={() => navigation.navigate("MyRoutine", { selectedItem })}
           text="다음"
+          isDark={isDark}
           enabled={true}
         />
       </BottomContainer>
