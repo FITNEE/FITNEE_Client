@@ -12,6 +12,7 @@ import { useRecoilValue } from "recoil"
 import { WithLocalSvg } from 'react-native-svg'
 import LeftIcon from '../../assets/SVGs/Left.svg'
 import AddIcon from '../../assets/SVGs/Add.svg'
+import Dictionary_Modal from '../../components/Dictionary_Modal'
 
 export default function Dictionary_3({ navigation, route }){
     const isDark = useRecoilValue(IsDarkAtom)
@@ -43,26 +44,30 @@ export default function Dictionary_3({ navigation, route }){
     const onPressAddRoutineBtn = ()=>{
         setBubbleBool(false)
 
-        const exerciseName = exerciseInfo.name
-        const exercisePart = exerciseInfo.parts
-        const categoryIdx = exerciseInfo.healthCategoryIdx
-        console.log(`${exerciseName},${exercisePart},${categoryIdx}`)
-        // navigation.navigate("MyRoutineNav",{
-        //     screen: 'MyRoutine',
-        //     params:{
-        //         exerciseName,exercisePart,categoryIdx
-        //     }
-        // })
-        navigation.navigate("MyRoutineNav", {exerciseName,exercisePart,categoryIdx})
+        setIsModalVisible(true)
+
+        // const exerciseName = exerciseInfo.name
+        // const exercisePart = exerciseInfo.parts
+        // const categoryIdx = exerciseInfo.healthCategoryIdx
+        // console.log(`${exerciseName},${exercisePart},${categoryIdx}`)
+        // // navigation.navigate("MyRoutineNav",{
+        // //     screen: 'MyRoutine',
+        // //     params:{
+        // //         exerciseName,exercisePart,categoryIdx
+        // //     }
+        // // })
+        // navigation.navigate("MyRoutineNav", {exerciseName,exercisePart,categoryIdx})
     }
 
     // RightTab에서 쓰이는 JoinBtnBool, 읽지 않음 버튼
     const [bubbleBool, setBubbleBool] = useState(true) // 말풍선 나타내기
     const [joinBtnBool, setJoinBtnBool] = useState(true) // 참여하기 버튼 나타내기
-    
     const parentSetJoinBtnBool = (newBool) => setJoinBtnBool(newBool)
     const [isAllRead, setIsAllRead] = useState(true)
 
+    const [isModalVisible, setIsModalVisible] = useState(false)
+    const changeModalVisibility = (newBool)=> setIsModalVisible(newBool)
+        
     const getReadInfo = async () => {
         try {
             let url = "https://gpthealth.shop/"
@@ -79,16 +84,16 @@ export default function Dictionary_3({ navigation, route }){
         }
     }
     useEffect(()=>{
-        getReadInfo().then((result)=>{
-            if(result[0].hasUnreadChats == 0) {
-                setIsAllRead(true)
-                console.log(`안 읽은 채팅 없음`)
-            }
-            else {
-                setIsAllRead(false)
-                console.log(`안 읽은 채팅 있음`)
-            }
-        })
+        // getReadInfo().then((result)=>{
+        //     if(result[0].hasUnreadChats == 0) {
+        //         setIsAllRead(true)
+        //         console.log(`안 읽은 채팅 없음`)
+        //     }
+        //     else {
+        //         setIsAllRead(false)
+        //         console.log(`안 읽은 채팅 있음`)
+        //     }
+        // })
     }, [])
     
     return (
@@ -100,6 +105,10 @@ export default function Dictionary_3({ navigation, route }){
             <SafeAreaView 
                 style={{backgroundColor: isDark? `${colors.black}`:`${colors.grey_1}`, flex: 1}}>
                 <Container>
+                    <Dictionary_Modal 
+                        isModalVisible={isModalVisible}
+                        changeModalVisibility={changeModalVisibility}
+                    />
                     <TopBtnContainer>
                         <TouchableOpacity 
                             onPress={()=>navigation.goBack()}>
