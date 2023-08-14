@@ -7,11 +7,7 @@ import {Title,ScreenLayout,NumberInput,MyBottomSheet, InputTitle} from "../../co
 
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { Pressable } from "react-native";
-
-import { WithLocalSvg } from "react-native-svg";
-import BMIImg from "../../assets/SVGs/BMI.svg";
 import Animated, {
-  runOnJS,
   useAnimatedStyle,
   withSpring,
 } from "react-native-reanimated";

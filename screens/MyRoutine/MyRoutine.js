@@ -1,5 +1,11 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { ActivityIndicator, Keyboard, Alert, ScrollView } from "react-native";
+import {
+  ActivityIndicator,
+  Keyboard,
+  Alert,
+  ScrollView,
+  View,
+} from "react-native";
 import styled from "styled-components/native";
 import BottomSheet, { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
 import axios from "axios";
@@ -67,7 +73,8 @@ export default MyRoutine = ({ navigation, route }) => {
   //이전 ID값과 변경 이후 ID값 매칭된거, 이거로 app/routine/calendar 호출하기
   const [selectedDay, setSelectedDay] = useState((new Date().getDay() + 6) % 7);
   const [modalState, setModalState] = useState(0);
-  const newSCHERef = useRef(null);
+  const [snapPoints, setSnapPoints] = useState(["1%"]);
+
   const setIsTabVisible = useSetRecoilState(TabBarAtom);
 
   const isDark = useRecoilValue(IsDarkAtom);
@@ -134,19 +141,17 @@ export default MyRoutine = ({ navigation, route }) => {
     setMode(!mode);
   };
   const popMessage = (id) => {
-    // setSnapPoints([
-    //   `${14 + 8 * newRoutine[id].content.length}%`,
-    //   `${46 + 8 * newRoutine[id].content.length}`,
-    // ]);
+    setSnapPoints([
+      `${14 + 8 * newRoutine[id].content.length}%`,
+      `${46 + 8 * newRoutine[id].content.length}`,
+    ]);
     setEditingID(id);
     Alert.alert("운동 편집", "", [
       {
         text: "상세옵션 편집",
         onPress: () => {
-          // setModalState(1);
-          // setSnapPoints([`${10 + 8 * newRoutine[id].content.length}%`]);
-          bottomModal.current?.expand();
-          // bottomModal.current?.snapToIndex(0);
+          setModalState(1);
+          bottomModal.current?.snapToIndex(0);
           //확대하고자 하는 운동종목의 세트수에 따라 확장되는 정도를 유동적으로 제어하기 위함
         },
         style: "default",
@@ -229,11 +234,10 @@ export default MyRoutine = ({ navigation, route }) => {
 
   const extendModal = () => {
     console.log("modal Extended");
-    // bottomModal.current.snapToIndex(1);
     if (modalState != 2) {
-      // setSnapPoints([`${parseInt(snapPoints[0]) + 28}%`]);
+      bottomModal.current?.snapToIndex(1);
     }
-    // setModalState(2);
+    setModalState(2);
   };
 
   const handleClosePress = (tempArr) => {
@@ -258,12 +262,6 @@ export default MyRoutine = ({ navigation, route }) => {
       });
     }
   }, [selectedDay]);
-
-  // useEffect(() => {
-  //   if (modalState == 0) {
-  //     // setSnapPoints(["1%"]);
-  //   }
-  // }, [modalState]);
 
   const bottomModal = useRef(null);
   useEffect(() => {
@@ -290,7 +288,6 @@ export default MyRoutine = ({ navigation, route }) => {
         toggleMode={toggleMode}
         onPress={() => pressBack(setMode)}
       />
-
       {mode ? (
         <>
           <ScrollView
@@ -350,7 +347,8 @@ export default MyRoutine = ({ navigation, route }) => {
         ref={bottomModal}
         backdropComponent={renderBackdrop}
         index={-1}
-        snapPoints={["50%"]}
+        backgroundComponent={() => <View />}
+        snapPoints={snapPoints}
         enablePanDownToClose={false}
         enableHandlePanningGesture={false}
         enableContentPanningGesture={false}

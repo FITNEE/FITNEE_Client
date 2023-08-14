@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components/native";
 import { colors } from "../../colors";
-import { WithLocalSvg } from "react-native-svg";
 import Check from "../../assets/SVGs/Check.svg";
 const ListContainer = styled.ScrollView`
   width: 100%;
@@ -67,7 +66,7 @@ export default function SearchList({ parentSearchList, editSelectedList }) {
               </SubText>
             </TextContainer>
             <CheckButton>
-              {/* <WithLocalSvg width={24} height={24} asset={Check} /> */}
+              <Check width={24} height={24} />
             </CheckButton>
           </ResultContainer>
         );
