@@ -6,7 +6,6 @@ import { Button, BackButton } from "../../Shared";
 import {Input,Title,ScreenLayout,SubText,NumberInput,MyBottomSheet, InputTitle} from "../../components/Shared/OnBoarding_Shared";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { Keyboard, Pressable } from "react-native";
-import { WithLocalSvg } from "react-native-svg";
 import Check from "../../assets/SVGs/Check.svg";
 import axios from "axios";
 
@@ -183,9 +182,7 @@ const CreateAccount_2 = ({ route, navigation }) => {
                 <GenderText style={gender == 2 && { color: colors.grey_8 }}>
                   여성
                 </GenderText>
-                {gender == 2 && (
-                  <WithLocalSvg width={24} height={24} asset={Check} />
-                )}
+                {gender == 2 && <Check width={24} height={24} />}
               </GenderButton>
               <GenderButton
                 style={
@@ -200,9 +197,7 @@ const CreateAccount_2 = ({ route, navigation }) => {
                 <GenderText style={gender == 1 && { color: colors.grey_8 }}>
                   남성
                 </GenderText>
-                {gender == 1 && (
-                  <WithLocalSvg width={24} height={24} asset={Check} />
-                )}
+                {gender == 1 && <Check width={24} height={24} />}
               </GenderButton>
             </GenderContainer>
             <NumberInput

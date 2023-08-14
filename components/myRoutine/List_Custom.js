@@ -108,7 +108,7 @@ const ExerciseItem_Custom = ({
             <DeleteButton
               onPress={() => editRoutine(id, "deleteSet", contentId)}
             >
-              {/* <WithLocalSvg width={24} height={24} asset={Trash} /> */}
+              <Trash width={24} height={24} />
             </DeleteButton>
           </SetContainer>
         ))}

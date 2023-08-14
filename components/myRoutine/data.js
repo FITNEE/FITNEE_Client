@@ -7,6 +7,7 @@ export const getRoutines = async () => {
     let url = "https://gpthealth.shop/";
     let detailAPI = "app/routine/calendar";
     const response = await axios.get(url + detailAPI);
+
     const result = response.data;
     return result;
   } catch (error) {

@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { days } from "./data";
 import { colors } from "../../colors";
-import { WithLocalSvg } from "react-native-svg";
 import Exercise from "../../assets/SVGs/Exercise.svg";
 import { TextContainer, DayText } from "../../components/ScheduleChanger";
 import { styled } from "styled-components/native";
@@ -81,7 +80,7 @@ export default WeekCalendar = ({
                         }
                   }
                 >
-                  {/* <WithLocalSvg width={24} height={24} asset={Exercise} /> */}
+                  <Exercise width={24} height={24} />
                 </Circle>
               )}
           </DayContainer>

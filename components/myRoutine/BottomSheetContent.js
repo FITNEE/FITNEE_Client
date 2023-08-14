@@ -76,7 +76,7 @@ export const BottomSheetContent = ({
   const [tempArr, setTempArr] = useState(null);
   useEffect(() => {
     setTempArr(newRoutine);
-  }, []);
+  }, [newRoutine]);
   const editRoutine = (id, type, value) => {
     let newArr = JSON.parse(JSON.stringify(tempArr));
     if (type == "repeat") {
