@@ -12,8 +12,17 @@ import Indicator from "../../components/Indicator";
 import { Alert } from "react-native";
 import { useRoute, StackActions } from "@react-navigation/native";
 import axios from "axios";
-import { IsDarkAtom } from "../../recoil/MyPageAtom";
-import { useRecoilValue } from "recoil";
+import { monthsInQuarter } from "date-fns";
+
+const ExerciseCircle = styled.View`
+  width: 307px;
+  height: 307px;
+  border-radius: 291px;
+  background: ${colors.grey_1};
+  margin-bottom: 14px;
+  justify-content: center;
+  align-items: center;
+`;
 
 const TextBox = styled.View`
   width: 327px;
@@ -97,18 +106,6 @@ const StopExercise = styled.TouchableOpacity`
 `;
 
 export default function ExerciseCourse_1({ navigation }) {
-  const isDark = useRecoilValue(IsDarkAtom);
-
-  const ExerciseCircle = styled.View`
-    width: 307px;
-    height: 307px;
-    border-radius: 291px;
-    background: ${isDark ? colors.grey_9 : colors.grey_1};
-    margin-bottom: 14px;
-    justify-content: center;
-    align-items: center;
-  `;
-
   const goToStartExercise = () => {
     navigation.navigate("StartExercise");
   };
@@ -138,6 +135,12 @@ export default function ExerciseCourse_1({ navigation }) {
   const [advice, setAdvice] = useState(adviceData[0]);
 
   const goToNextExercise = async () => {
+    //패치 작업 수행
+    // await patchSkipData(
+    //   routineIdx,
+    //   dataList[listIndex].exerciseInfo.healthCategoryIdx
+    // );
+
     //스킵
     let modifiedDataList = [...dataList];
     modifiedDataList[listIndex] = {
@@ -146,14 +149,13 @@ export default function ExerciseCourse_1({ navigation }) {
     };
 
     if (listIndex + 1 >= dataList.length) {
-      await postTotalData(routineIdx, realTotalTime, dataList);
+      //await postTotalTime(routineIdx, totalTime + realTotalTime);
 
       // 조건이 충족되면 원하는 화면(FinalScreen)으로 이동합니다.
       navigation.dispatch(
         StackActions.replace("CompleteExercise", {
           dataList: modifiedDataList,
           totalTime: realTotalTime,
-          routineIdx: routineIdx,
         })
       );
     } else {
@@ -170,7 +172,7 @@ export default function ExerciseCourse_1({ navigation }) {
 
   const goToCompleteExercise = async () => {
     if (listIndex + 1 >= dataList.length) {
-      await postTotalData(routineIdx, totalTime + realTotalTime, dataList);
+      //await postTotalTime(routineIdx, totalTime);
       // 조건이 충족되면 원하는 화면(FinalScreen)으로 이동합니다.
       navigation.dispatch(
         StackActions.replace("CompleteExercise", {
@@ -208,7 +210,7 @@ export default function ExerciseCourse_1({ navigation }) {
   //   }
   // };
 
-  const postTotalData = async (routineIdx, totalTime, dataList) => {
+  const postTotalData = async (routineIdx, totalTime) => {
     try {
       let url = "https://gpthealth.shop/";
       let detailAPI = `/app/process/end`;
@@ -216,7 +218,6 @@ export default function ExerciseCourse_1({ navigation }) {
       const response = await axios.post(url + detailAPI, {
         routineIdx: routineIdx,
         totalExerciseTime: totalTime,
-        routineDetails: dataList,
       });
 
       const result = response.data;
@@ -242,26 +243,11 @@ export default function ExerciseCourse_1({ navigation }) {
     );
   };
 
-  const OpenConfirm2 = () => {
-    Alert.alert(
-      "운동을 건너뛰겠습니까?",
-      "건너뛴 이후에는 다시 실행할 수 없습니다.",
-      [
-        { text: "취소", onPress: () => console.log(" Stop") },
-        {
-          text: "건너뛰기",
-          onPress: goToNextExercise,
-          style: "destructive",
-        },
-      ]
-    );
-  };
-
   useEffect(() => {
     const newExerciseData = [
       ...dataList[listIndex].sets,
       {
-        set: dataList[listIndex].totalSets,
+        set: dataList[listIndex].sets.length,
         rep: 0,
         weight: 0,
       },
@@ -269,6 +255,30 @@ export default function ExerciseCourse_1({ navigation }) {
     setExerciseData(newExerciseData);
     console.log(exerciseData);
   }, []);
+  // useEffect(() => {
+  //   // 타이머가 종료될 때마다 key 값을 변경하여 CountdownCircleTimer 컴포넌트 리셋
+  //   setKey((prevKey) => prevKey + 1);
+  // }, [oneDuration]);
+
+  // duration을 받아서 카운트다운을 해주는 함수. duration이 바뀌면 리셋된다.
+  // const handleComplete = () => {
+  //   //i 업데이트
+  //   const nextId = i + 1 > setData.length ? setIsPlaying(false) : i + 1;
+  //   setI(nextId);
+
+  //   // 해당 id에 해당하는 데이터를 가져와 새로운 duration을 업데이트
+  //   const nextData = setData.find((item) => item.id === nextId);
+  //   const newDuration = nextData?.duration || 0;
+  //   //const newDuration = timeData[nextId]?.duration || 0;
+
+  //   //delay 동안 쉬도록
+  //   setIsPlaying(false);
+  //   setKey((prevKey) => prevKey + 1); //타이머 리셋
+  //   setTimeout(() => {
+  //     setIsPlaying(true);
+  //     setOneDuration(newDuration);
+  //   }, 300);
+  // };
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -330,14 +340,12 @@ export default function ExerciseCourse_1({ navigation }) {
   const scrollBox = () => {
     const next =
       boxNumber >= dataList[listIndex].totalSets ? boxNumber : boxNumber + 1;
-    console.log("next:", next);
     const next2 =
-      indicatorNum >= dataList[listIndex].totalSets + 1
+      indicatorNum > dataList[listIndex].totalSets
         ? indicatorNum
         : indicatorNum + 1;
-    if (boxNumber === dataList[listIndex].totalSets + 1) setIsPlaying(false);
-    setBoxNumber(next + 1);
-    console.log("boxNumber:", boxNumber);
+    if (boxNumber === dataList[listIndex].totalSets - 1) setIsPlaying(false);
+    setBoxNumber(next);
     setIndicatorNum(next2);
     setIsTimerRunning(false);
 
@@ -345,10 +353,15 @@ export default function ExerciseCourse_1({ navigation }) {
     console.log(timeInSeconds, totalTime);
     setTimeInSeconds(0);
 
-    setKey((prevKey) => prevKey + 1); //돌아가는 타이머 리셋
-    setIsTimerRunning(true); //시간 재는 타이머 켜기
+    //delay 동안 쉬도록
+    setIsPlaying(false);
+    setKey((prevKey) => prevKey + 1); //타이머 리셋
+    setIsTimerRunning(true); //타이머 켜기
+    setTimeout(() => {
+      setIsPlaying(true);
+    }, 300);
 
-    flatListRef.current.scrollToIndex({ animated: true, index: next });
+    this.flatListRef.scrollToIndex({ animated: true, index: boxNumber });
   };
 
   useEffect(() => {
@@ -366,12 +379,7 @@ export default function ExerciseCourse_1({ navigation }) {
   }, [isTimerRunning]);
 
   return (
-    <SafeAreaView
-      style={{
-        flex: 1,
-        backgroundColor: isDark ? colors.grey_9 : colors.grey_2,
-      }}
-    >
+    <SafeAreaView style={{ flex: 1, backgroundColor: colors.grey_2 }}>
       <ExerciseCard
         exerciseName={dataList[listIndex].exerciseInfo.exerciseName}
       >
@@ -381,7 +389,7 @@ export default function ExerciseCourse_1({ navigation }) {
             key={key}
             isPlaying={isPlaying}
             //duration={oneDuration}
-            duration={5}
+            duration={6}
             colors={colors.l_main}
             size={315}
             strokeWidth={8}
@@ -404,11 +412,15 @@ export default function ExerciseCourse_1({ navigation }) {
         <BoxList>
           <FlatList
             //현재 하고 있는 세트와 다음 세트를 보여주는 리스트
+            style={{}}
+            initialScrollIndex={0}
             data={exerciseData}
             renderItem={renderItem}
-            keyExtractor={(item, index) => item.set + "-" + index}
+            keyExtractor={(item) => item.set}
             showsVerticalScrollIndicator={false}
-            ref={flatListRef}
+            ref={(ref) => {
+              this.flatListRef = ref;
+            }}
             onEndReached={goToCompleteExercise}
             scrollEnabled={false}
           />
@@ -425,7 +437,7 @@ export default function ExerciseCourse_1({ navigation }) {
           onPress={scrollBox}
         />
 
-        <SkipExercrise onPress={() => OpenConfirm2()}>
+        <SkipExercrise onPress={goToNextExercise}>
           <SkipExercriseText>이 운동 건너뛰기</SkipExercriseText>
         </SkipExercrise>
       </ExerciseCard>

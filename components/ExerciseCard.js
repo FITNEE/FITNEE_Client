@@ -3,16 +3,10 @@ import styled from "styled-components/native";
 import { colors } from "../colors";
 import { useRecoilValue } from "recoil";
 import { IsDarkAtom } from "../recoil/MyPageAtom";
+import { View } from "react-native";
 
 export default function ExerciseCard({ exerciseName, children }) {
   const isDark = useRecoilValue(IsDarkAtom);
-
-  const Container = styled.View`
-    flex: 1;
-    align-items: center;
-    padding: 0px 24px;
-    background: ${isDark ? colors.grey_9 : colors.grey_2};
-  `;
 
   const ExerciseName = styled.Text`
     color: ${isDark ? colors.white : colors.black};
@@ -26,9 +20,17 @@ export default function ExerciseCard({ exerciseName, children }) {
   `;
 
   return (
-    <Container>
+    <View
+      style={{
+        flex: 1,
+        alignItems: "center",
+        paddingRight: 24,
+        paddingLeft: 24,
+        backgroundColor: isDark ? colors.grey_9 : colors.grey_2,
+      }}
+    >
       <ExerciseName>{exerciseName}</ExerciseName>
       {children}
-    </Container>
+    </View>
   );
 }
