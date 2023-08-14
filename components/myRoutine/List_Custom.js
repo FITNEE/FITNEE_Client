@@ -108,7 +108,7 @@ const ExerciseItem_Custom = ({
             <DeleteButton
               onPress={() => editRoutine(id, "deleteSet", contentId)}
             >
-              <WithLocalSvg width={24} height={24} asset={Trash} />
+              {/* <WithLocalSvg width={24} height={24} asset={Trash} /> */}
             </DeleteButton>
           </SetContainer>
         ))}
@@ -134,7 +134,7 @@ export default List_Custom = ({
   return (
     <ScrollView
       style={{
-        // backgroundColor: isDark ? colors.grey_9 : colors.grey_1,
+        backgroundColor: isDark ? colors.grey_9 : colors.grey_1,
         width: "100%",
         height: "100%",
       }}
@@ -143,7 +143,7 @@ export default List_Custom = ({
         <ComponentTitle
           title="요일 변경"
           subTitle="루틴을 원하는 요일에 끌어다 놓을 수 있어요"
-          // isDark={isDark}
+          isDark={isDark}
         />
         <ScheduleChanger
           updateNewSCHE={updateNewSCHE}
@@ -154,7 +154,7 @@ export default List_Custom = ({
         <ComponentTitle
           title="운동 편집"
           subTitle="루틴을 원하는 요일에 끌어다 놓을 수 있어요"
-          // isDark={isDark}
+          isDark={isDark}
         />
         {newRoutine ? (
           <>
@@ -165,7 +165,7 @@ export default List_Custom = ({
                 content={item.content}
                 title={item.exerciseName}
                 editRoutine={editRoutine}
-                // isDark={isDark}
+                isDark={isDark}
                 popMessage={() => popMessage(id)}
               />
             ))}

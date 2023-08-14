@@ -67,7 +67,7 @@ export default function SearchList({ parentSearchList, editSelectedList }) {
               </SubText>
             </TextContainer>
             <CheckButton>
-              <WithLocalSvg width={24} height={24} asset={Check} />
+              {/* <WithLocalSvg width={24} height={24} asset={Check} /> */}
             </CheckButton>
           </ResultContainer>
         );

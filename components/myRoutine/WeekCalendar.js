@@ -81,7 +81,7 @@ export default WeekCalendar = ({
                         }
                   }
                 >
-                  <WithLocalSvg width={24} height={24} asset={Exercise} />
+                  {/* <WithLocalSvg width={24} height={24} asset={Exercise} /> */}
                 </Circle>
               )}
           </DayContainer>

@@ -42,12 +42,12 @@ export const Header = ({ mode, onPress, toggleMode, isDark }) => {
     <HeaderContainer>
       {mode && (
         <Button style={{ left: 12 }} onPress={onPress}>
-          <WithLocalSvg
+          {/* <WithLocalSvg
             width={24}
             height={24}
             asset={Left}
             color={isDark ? colors.white : colors.black}
-          />
+          /> */}
         </Button>
       )}
       <Title>{mode ? "루틴커스텀" : "마이루틴"}</Title>
@@ -55,12 +55,13 @@ export const Header = ({ mode, onPress, toggleMode, isDark }) => {
         {mode ? (
           <ButtonText>완료</ButtonText>
         ) : (
-          <WithLocalSvg
-            width={24}
-            height={24}
-            asset={Edit}
-            color={isDark ? colors.white : colors.black}
-          />
+          <ButtonText>편집</ButtonText>
+          // <WithLocalSvg
+          //   width={24}
+          //   height={24}
+          //   asset={Edit}
+          //   color={isDark ? colors.white : colors.black}
+          // />
         )}
       </Button>
     </HeaderContainer>

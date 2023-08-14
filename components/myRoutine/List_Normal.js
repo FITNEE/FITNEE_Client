@@ -93,12 +93,12 @@ export default List_Normal = ({
               selectedId == index ? setSelectedId(null) : setSelectedId(index);
             }}
           >
-            <WithLocalSvg
+            {/* <WithLocalSvg
               width={24}
               height={24}
               asset={selectedId == index ? ToggleUp : ToggleDown}
               color={isDark ? colors.white : colors.black}
-            />
+            /> */}
           </DropDown>
         </DefaultContainer>
         {selectedId == index && (

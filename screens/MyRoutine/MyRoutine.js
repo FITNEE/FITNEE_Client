@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { ActivityIndicator, Keyboard, Alert, View } from "react-native";
 import styled from "styled-components/native";
-import BottomSheet from "@gorhom/bottom-sheet";
+import BottomSheet, { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
 import axios from "axios";
 import { useIsFocused } from "@react-navigation/native";
 import { colors } from "../../colors";
@@ -48,6 +48,7 @@ export default MyRoutine = ({ navigation, route }) => {
   const [editingID, setEditingID] = useState(null);
   //DropDown 누른 운동 구분하기위함.
   const [selectedId, setSelectedId] = useState(null);
+
   //요일 슬라이드로 변경되는 실시간 SCHEDULE배열 임시 저장하기 위한 함수
   const [newRoutine, setNewRoutine] = useState([]);
 
@@ -55,6 +56,7 @@ export default MyRoutine = ({ navigation, route }) => {
   const [selectedDay, setSelectedDay] = useState((new Date().getDay() + 6) % 7);
   const [snapPoints, setSnapPoints] = useState(["1%"]);
 
+  const editingIDRef = useRef(null);
   const [modalState, setModalState] = useState(0);
   const setIsTabVisible = useSetRecoilState(TabBarAtom);
 
@@ -91,6 +93,9 @@ export default MyRoutine = ({ navigation, route }) => {
             if (res.result) {
               setRoutineData(res.result.routineDetails);
               setNewRoutine(res.result.routineDetails);
+            } else {
+              setRoutineData(null);
+              setNewRoutine(null);
             }
           }
         );
@@ -99,16 +104,13 @@ export default MyRoutine = ({ navigation, route }) => {
       }
     });
   };
-
+  var newSCHE;
+  const updateNewSCHE = (position) => {
+    console.log(position);
+    newSCHE = position;
+  };
   const toggleMode = () => {
     if (mode) {
-      updateRoutine(SCHEDULE, selectedDay, newRoutine).then(
-        (res) => {
-          console.log("updateRoutine api 호출결과:", res);
-          updateDatas();
-          showToast();
-        } //눌렀을 때 mode가 true였을 때, 즉 커스텀모드에서 완료버튼을 눌렀을때.
-      );
       if (newSCHE) {
         //SCHEDULE의 변경이 있었을 경우,
         let tempNewSCHE = Object.keys(newSCHE).reduce((acc, k) => {
@@ -125,20 +127,31 @@ export default MyRoutine = ({ navigation, route }) => {
           satRoutineIdx: SCHEDULE[tempNewSCHE[5]].routineId,
           sunRoutineIdx: SCHEDULE[tempNewSCHE[6]].routineId,
         };
+        // console.log("후가공된 NeswSCHE:", data);
         updateRoutines(data).then((res) =>
           console.log("updateRoutineSchedule api 호출결과:", res)
         );
         newSCHE = null;
+      } else {
+        console.log("newSCHE변화없어서 메서드 실행취소");
       }
+      updateRoutine(SCHEDULE, selectedDay, newRoutine).then(
+        (res) => {
+          console.log("updateRoutine api 호출결과:", res);
+          updateDatas();
+          showToast();
+        } //눌렀을 때 mode가 true였을 때, 즉 커스텀모드에서 완료버튼을 눌렀을때.
+      );
     }
     setMode(!mode);
   };
   const popMessage = (id) => {
-    setEditingID(id);
     // setSnapPoints([
     //   `${14 + 8 * newRoutine[id].content.length}%`,
     //   `${46 + 8 * newRoutine[id].content.length}`,
     // ]);
+    editingIDRef.current = id;
+    console.log(editingIDRef.current);
     Alert.alert("운동 편집", "", [
       {
         text: "상세옵션 편집",
@@ -211,17 +224,17 @@ export default MyRoutine = ({ navigation, route }) => {
     }
     setNewRoutine(newArr);
   };
-  // const renderBackdrop = useCallback(
-  //   (props) => (
-  //     <BottomSheetBackdrop
-  //       {...props}
-  //       pressBehavior="none"
-  //       appearsOnIndex={0}
-  //       disappearsOnIndex={-1}
-  //     />
-  //   ),
-  //   []
-  // );
+  const renderBackdrop = useCallback(
+    (props) => (
+      <BottomSheetBackdrop
+        {...props}
+        pressBehavior="none"
+        appearsOnIndex={0}
+        disappearsOnIndex={-1}
+      />
+    ),
+    []
+  );
   useEffect(() => {
     if (route.params) {
       setMode(true);
@@ -246,14 +259,10 @@ export default MyRoutine = ({ navigation, route }) => {
     Keyboard.dismiss();
   };
 
-  var newSCHE;
-  const updateNewSCHE = (position) => {
-    newSCHE = position;
-  };
   useEffect(() => {
     if (SCHEDULE[selectedDay] != undefined) {
       getRoutine(SCHEDULE, selectedDay, setIsLoading).then((res) => {
-        // console.log("selectedDay변경으로 실행된 getRoutine 실행결과:", res);
+        console.log("selectedDay변경으로 실행된 getRoutine 실행결과:", res);
         if (res.result) {
           setRoutineData(res.result.routineDetails);
           setNewRoutine(res.result.routineDetails);
@@ -335,8 +344,9 @@ export default MyRoutine = ({ navigation, route }) => {
         </ContentBase>
       )}
 
-      {/* <BottomSheet
+      <BottomSheet
         ref={bottomModal}
+        backdropComponent={renderBackdrop}
         index={-1}
         snapPoints={["50%"]}
         enablePanDownToClose={false}
@@ -355,7 +365,7 @@ export default MyRoutine = ({ navigation, route }) => {
           extendModal={extendModal}
           setNewRoutine={setNewRoutine}
         />
-      </BottomSheet> */}
+      </BottomSheet>
     </ScreenBase>
   );
 };
