@@ -7,6 +7,7 @@ import {colors} from '../colors'
 import axios from 'axios'
 import { IsDarkAtom } from "../recoil/MyPageAtom"
 import { useRecoilValue } from "recoil"
+import AlertIcon from '../assets/SVGs/Alert.svg'
 
 export default function Dictionary_LeftTab(props){
     const isDark = useRecoilValue(IsDarkAtom)
@@ -72,20 +73,24 @@ export default function Dictionary_LeftTab(props){
             {
                 <CautionContainer>
                     <CautionTitleContainer>
-                        <CautionImage/>
+                        <AlertIcon
+                            width={20}
+                            height={20}
+                            style={{marginRight: 4}}
+                        />
                         <CautionTitle style={{color: isDark? `${colors.white}`:`${colors.black}`}}>이 부분은 특히 주의해주세요!</CautionTitle>
                     </CautionTitleContainer>
                     <CautionContentContainer  >  
-                         <CautionDetailContainer>
-                            <CautionDot style={{backgroundColor: isDark? `${colors.d_main}`:`${colors.l_main}`}}/>
+                         <CautionDetailContainer style={{marginBottom: 4}}>
+                            <CautionDot style={{backgroundColor: isDark? `${colors.d_sub_1}`:`${colors.l_sub_1}`}}/>
                             <CautionDetail style={{color: isDark? `${colors.white}`:`${colors.black}`}}>{exerciseDetail?.exercisecaution[0].caution1}</CautionDetail>
                         </CautionDetailContainer>        
-                        <CautionDetailContainer>
-                            <CautionDot style={{backgroundColor: isDark? `${colors.d_main}`:`${colors.l_main}`}}/>
+                        <CautionDetailContainer style={{marginBottom: 4}}>
+                            <CautionDot style={{backgroundColor: isDark? `${colors.d_sub_1}`:`${colors.l_sub_1}`}}/>
                             <CautionDetail style={{color: isDark? `${colors.white}`:`${colors.black}`}}>{exerciseDetail?.exercisecaution[0].caution2}</CautionDetail>
                         </CautionDetailContainer> 
                         <CautionDetailContainer>
-                            <CautionDot style={{backgroundColor: isDark? `${colors.d_main}`:`${colors.l_main}`}}/>
+                            <CautionDot style={{backgroundColor: isDark? `${colors.d_sub_1}`:`${colors.l_sub_1}`}}/>
                             <CautionDetail style={{color: isDark? `${colors.white}`:`${colors.black}`}}>{exerciseDetail?.exercisecaution[0].caution3}</CautionDetail>
                         </CautionDetailContainer>                   
                     {/* {
@@ -165,7 +170,7 @@ const CautionContentContainer = styled.View`
 `
 const CautionDetailContainer = styled.View`
     flex-direction: row;
-    align-items: center;   
+    align-items: center;    
 `
 const CautionDetail = styled.Text`
     color: ${colors.black};
@@ -177,6 +182,5 @@ const CautionDot = styled.View`
     height: 12px;
     border-radius: 6px;
     margin-right: 4px;
-    margin-top: 4px;
-    margin-bottom: 4px;
+
 `
