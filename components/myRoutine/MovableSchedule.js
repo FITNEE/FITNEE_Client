@@ -20,14 +20,15 @@ const SCHEDULE_W = (ScreenWidth - 60) / 7;
 
 export const MovableSchedule = ({
   id,
-  routineId,
-  setNewSCHE,
-  positions,
-  SCHEDULE,
   isDark,
+  positions,
+  routineId,
+  SCHEDULE,
+  updateNewSCHE,
 }) => {
   const [moving, setMoving] = useState(false);
   const left = useSharedValue(positions.value[id] * SCHEDULE_W);
+
   useAnimatedReaction(
     () => positions.value[id],
     (currentPosition, previousPosition) => {
@@ -73,11 +74,10 @@ export const MovableSchedule = ({
     },
     onFinish() {
       left.value = positions.value[id] * SCHEDULE_W;
-      runOnJS(setNewSCHE)(positions.value);
       runOnJS(setMoving)(false);
+      runOnJS(updateNewSCHE)(positions.value);
     },
   });
-
   const animatedStyle = useAnimatedStyle(() => {
     return {
       position: "absolute",

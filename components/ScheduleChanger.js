@@ -1,8 +1,8 @@
 import { MovableSchedule } from "./myRoutine/MovableSchedule";
 import styled from "styled-components/native";
+import { colors } from "../colors";
 import { useSharedValue } from "react-native-reanimated";
 import { listToObject } from "./Shared/MyRoutine_Shared";
-import { colors } from "../colors";
 
 export const TextContainer = styled.View`
   flex-direction: row;
@@ -26,20 +26,10 @@ const ScheduleContainer = styled.SafeAreaView`
   height: 64px;
   width: 100%;
 `;
-export const ScheduleChanger = ({ SCHEDULE, days, setNewSCHE, isDark }) => {
+export const ScheduleChanger = ({ SCHEDULE, days, isDark, updateNewSCHE }) => {
   /**여기다가 positions 값은 별도로 빼놓아야한다. 이유는 잘 모르겠음.*/
+  //후가공된 요일 데이터가 초기값이 된다.
   const positions = useSharedValue(listToObject(SCHEDULE));
-
-  // useEffect(() => {
-  //   //얕은 복사 해당 방법으로 newArr 변수를 생성하고 제어하면, SCHEDULE 배열 또한 변경되어 요일표시 컴퍼넌트가 원활하게 작동안함
-  //   //해당 컴퍼넌트는 SCHEDULE 배열을 기준으로 위치가 제어되기 때문에.
-  //   // let newArr = SCHEDULE; 따라서 JSON stringify 및 parse로 참조를 모두 끊어내어야한다.
-  //   let newArr = JSON.parse(JSON.stringify(SCHEDULE));
-  //   for (let i = 0; i < SCHEDULE.length; i++) {
-  //     newArr[i].id = tempSche[i];
-  //   }
-  //   setNewSCHE(newArr);
-  // }, [tempSche]);
   return (
     <DaysContainer
       style={{ backgroundColor: isDark ? colors.grey_8 : colors.white }}
@@ -67,13 +57,13 @@ export const ScheduleChanger = ({ SCHEDULE, days, setNewSCHE, isDark }) => {
             sche //동적으로 변경되는 SCHDULES 데이터를 기반으로 MoveableSchedule 렌더
           ) => (
             <MovableSchedule
-              isDark={isDark}
               id={sche.id}
               key={sche.id}
+              isDark={isDark}
               positions={positions}
               routineId={sche.routineId}
               SCHEDULE={SCHEDULE}
-              setNewSCHE={setNewSCHE}
+              updateNewSCHE={updateNewSCHE}
             />
           )
         )}

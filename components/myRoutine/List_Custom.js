@@ -3,10 +3,9 @@ import styled from "styled-components/native";
 import { days } from "./data";
 import { Keyboard, ScrollView } from "react-native";
 import { colors } from "../../colors";
-import { ComponentTitle } from "../Shared/MyRoutine_Shared";
+import { ComponentTitle, listToObject } from "../Shared/MyRoutine_Shared";
 import { ScheduleChanger } from "../ScheduleChanger";
 import { ScreenWidth } from "../Shared";
-
 import { WithLocalSvg } from "react-native-svg";
 import Trash from "../../assets/SVGs/Trash.svg";
 import { ContentContainer, NoRoutineText } from "../Shared/MyRoutine_Shared";
@@ -125,17 +124,17 @@ const ExerciseItem_Custom = ({
 };
 
 export default List_Custom = ({
+  isDark,
   SCHEDULE,
+  updateNewSCHE,
   newRoutine,
   editRoutine,
   popMessage,
-  setNewSCHE,
-  isDark,
 }) => {
   return (
     <ScrollView
       style={{
-        backgroundColor: isDark ? colors.grey_9 : colors.grey_1,
+        // backgroundColor: isDark ? colors.grey_9 : colors.grey_1,
         width: "100%",
         height: "100%",
       }}
@@ -144,18 +143,18 @@ export default List_Custom = ({
         <ComponentTitle
           title="요일 변경"
           subTitle="루틴을 원하는 요일에 끌어다 놓을 수 있어요"
-          isDark={isDark}
+          // isDark={isDark}
         />
         <ScheduleChanger
+          updateNewSCHE={updateNewSCHE}
           SCHEDULE={SCHEDULE}
           days={days}
-          setNewSCHE={setNewSCHE}
           isDark={isDark}
         />
         <ComponentTitle
           title="운동 편집"
           subTitle="루틴을 원하는 요일에 끌어다 놓을 수 있어요"
-          isDark={isDark}
+          // isDark={isDark}
         />
         {newRoutine ? (
           <>
@@ -166,7 +165,7 @@ export default List_Custom = ({
                 content={item.content}
                 title={item.exerciseName}
                 editRoutine={editRoutine}
-                isDark={isDark}
+                // isDark={isDark}
                 popMessage={() => popMessage(id)}
               />
             ))}
