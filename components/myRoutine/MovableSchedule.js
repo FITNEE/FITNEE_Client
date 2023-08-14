@@ -24,7 +24,7 @@ export const MovableSchedule = ({
   positions,
   routineId,
   SCHEDULE,
-  updateNewSCHE,
+  setNewSCHE,
 }) => {
   const [moving, setMoving] = useState(false);
   const left = useSharedValue(positions.value[id] * SCHEDULE_W);
@@ -75,7 +75,7 @@ export const MovableSchedule = ({
     onFinish() {
       left.value = positions.value[id] * SCHEDULE_W;
       runOnJS(setMoving)(false);
-      runOnJS(updateNewSCHE)(positions.value);
+      runOnJS(setNewSCHE)(positions.value);
     },
   });
   const animatedStyle = useAnimatedStyle(() => {

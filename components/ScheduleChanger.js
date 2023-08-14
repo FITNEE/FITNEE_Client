@@ -3,6 +3,7 @@ import styled from "styled-components/native";
 import { colors } from "../colors";
 import { useSharedValue } from "react-native-reanimated";
 import { listToObject } from "./Shared/MyRoutine_Shared";
+import React from "react";
 
 export const TextContainer = styled.View`
   flex-direction: row;
@@ -26,7 +27,7 @@ const ScheduleContainer = styled.SafeAreaView`
   height: 64px;
   width: 100%;
 `;
-export const ScheduleChanger = ({ SCHEDULE, days, isDark, updateNewSCHE }) => {
+export const ScheduleChanger = ({ SCHEDULE, days, isDark, setNewSCHE }) => {
   /**여기다가 positions 값은 별도로 빼놓아야한다. 이유는 잘 모르겠음.*/
   //후가공된 요일 데이터가 초기값이 된다.
   const positions = useSharedValue(listToObject(SCHEDULE));
@@ -63,7 +64,7 @@ export const ScheduleChanger = ({ SCHEDULE, days, isDark, updateNewSCHE }) => {
               positions={positions}
               routineId={sche.routineId}
               SCHEDULE={SCHEDULE}
-              updateNewSCHE={updateNewSCHE}
+              setNewSCHE={setNewSCHE}
             />
           )
         )}

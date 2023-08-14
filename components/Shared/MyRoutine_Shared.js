@@ -68,6 +68,66 @@ export const Header = ({ mode, onPress, toggleMode, isDark }) => {
   );
 };
 
+export const Header_Temp = ({
+  onPressLeft = null,
+  isDark,
+  onPressRight,
+  isCustom,
+}) => {
+  const HeaderContainer = styled.View`
+    width: ${ScreenWidth}px;
+    background-color: ${isDark
+      ? isCustom
+        ? colors.grey_9
+        : colors.black
+      : colors.white};
+    height: 56px;
+    align-items: center;
+    justify-content: center;
+  `;
+  const Title = styled.Text`
+    font-size: 17px;
+    font-weight: 600;
+    color: ${isDark ? colors.white : colors.black};
+  `;
+  const ButtonText = styled.Text`
+    font-size: 17px;
+    font-weight: 600;
+    color: ${colors.l_main};
+  `;
+  const handleSubmit = () => {
+    toggleMode();
+  };
+  return (
+    <HeaderContainer>
+      {isCustom && (
+        <Button style={{ left: 12 }} onPress={onPressLeft}>
+          {/* <WithLocalSvg
+            width={24}
+            height={24}
+            asset={Left}
+            color={isDark ? colors.white : colors.black}
+          /> */}
+        </Button>
+      )}
+      <Title>{isCustom ? "루틴 커스텀" : "마이루틴"}</Title>
+      <Button style={{ right: 12 }} onPress={onPressRight}>
+        {isCustom ? (
+          <ButtonText>완료</ButtonText>
+        ) : (
+          <ButtonText>편집</ButtonText>
+          // <WithLocalSvg
+          //   width={24}
+          //   height={24}
+          //   asset={Edit}
+          //   color={isDark ? colors.white : colors.black}
+          // />
+        )}
+      </Button>
+    </HeaderContainer>
+  );
+};
+
 export function clamp(value, lowerBound, upperBound) {
   "worklet";
   return Math.max(lowerBound, Math.min(value, upperBound));
