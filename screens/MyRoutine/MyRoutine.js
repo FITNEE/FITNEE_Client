@@ -60,6 +60,7 @@ export default MyRoutine = ({ navigation, route }) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const [SCHEDULE, setSCHEDULE] = useState([]);
+  console.log(SCHEDULE);
   const [newSCHE, setNewSCHE] = useState(null);
   //각 요일에 대한 세부 루틴정보들 저장하기 위한 배열 useState
   const [routineData, setRoutineData] = useState(null);
