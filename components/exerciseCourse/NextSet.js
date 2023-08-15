@@ -1,8 +1,9 @@
 import React from "react";
 import { useRecoilState } from "recoil";
 import styled from "styled-components/native";
-import { IsDarkAtom } from "../recoil/MyPageAtom";
-import { colors } from "../colors";
+import { IsDarkAtom } from "../../recoil/MyPageAtom";
+import { colors } from "../../colors";
+import Check_disabled from "../../assets/SVGs/Check_Disabled.svg";
 
 const TextLine = styled.View`
   flex-direction: row;
@@ -20,6 +21,14 @@ const Box1 = styled.View`
 
 const Box2 = styled.View`
   width: 84px;
+  flex-direction: row;
+  align-items: center;
+  justify-content: baseline;
+  height: 32px;
+`;
+
+const Box3 = styled.View`
+  width: 49px;
   flex-direction: row;
   align-items: center;
   justify-content: baseline;
@@ -65,10 +74,14 @@ export default function NextSet({ set, kg, num, isDark }) {
         {kg !== "null" ? <CurrentUnit isDark={isDark}>kg</CurrentUnit> : null}
       </Box2>
 
-      <TextLine>
-        <CurrentText isDark={isDark}>{num}</CurrentText>
-        <CurrentUnit isDark={isDark}>회</CurrentUnit>
-      </TextLine>
+      <Box3>
+        <TextLine>
+          <CurrentText isDark={isDark}>{num}</CurrentText>
+          <CurrentUnit isDark={isDark}>회</CurrentUnit>
+        </TextLine>
+      </Box3>
+
+      <Check_disabled width={24} height={24} />
     </Container>
   );
 }

@@ -1,15 +1,13 @@
 import React, { useContext, useEffect, useState } from "react";
-import { SafeAreaView, TouchableOpacity } from "react-native";
+import { SafeAreaView } from "react-native";
 import styled from "styled-components/native";
-import ProgressCircle from "../../components/ProgressCircle1";
-import GrayCircle from "../../components/GrayCircle";
+import ProgressCircle from "../../components/exerciseCourse/ProgressCircle1";
+import GrayCircle from "../../components/exerciseCourse/GrayCircle";
 import { ScrollView } from "react-native-gesture-handler";
-import { AppContext } from "../../components/ContextProvider";
 import { colors } from "../../colors";
-import { Alert, Share, View, Button } from "react-native";
-import { WithLocalSvg } from "react-native-svg";
 import { useRoute } from "@react-navigation/native";
 import Check from "../../assets/SVGs/Check.svg";
+import Check_disabled from "../../assets/SVGs/Check_Disabled.svg";
 import axios from "axios";
 import { useRecoilState } from "recoil";
 import { IsDarkAtom } from "../../recoil/MyPageAtom";
@@ -208,8 +206,11 @@ export default function CompleteExercise({ navigation }) {
             {dataList.map((item) => (
               <RecTextLine key={item.exerciseInfo.healthCategoryIdx}>
                 <RecText1>{item.exerciseInfo.exerciseName}</RecText1>
-
-                <WithLocalSvg asset={Check} width={20} height={20} />
+                {item.skip === 1 ? (
+                  <Check_disabled width={20} height={20} />
+                ) : (
+                  <Check width={20} height={20} />
+                )}
               </RecTextLine>
             ))}
           </ScrollView>

@@ -6,14 +6,14 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { Alert, SafeAreaView, Text, TouchableOpacity } from "react-native";
+import { Alert, SafeAreaView } from "react-native";
 import { TextInput, Dimensions, Animated, StyleSheet } from "react-native";
 const { width, height } = Dimensions.get("window");
 import styled from "styled-components/native";
-import ExerciseCard from "../../components/ExerciseCard";
-import ExerciseButton from "../../components/ExerciseButton";
-import CurrentExplainLine from "../../components/CurrentExplainLine";
-import CurrentSet from "../../components/CurrentSet";
+import ExerciseCard from "../../components/exerciseCourse/ExerciseCard";
+import ExerciseButton from "../../components/exerciseCourse/ExerciseButton";
+import CurrentExplainLine from "../../components/exerciseCourse/CurrentExplainLine";
+import CurrentSet from "../../components/exerciseCourse/CurrentSet";
 import { colors } from "../../colors";
 import {
   BottomSheetModal,
@@ -345,7 +345,7 @@ export default function ExerciseCourse({ navigation }) {
     };
 
     if (listIndex + 1 >= dataList.length) {
-      await postTotalData(routineIdx, totalTime, dataList);
+      await postTotalData(routineIdx, -1 * totalTime, dataList);
 
       // 조건이 충족되면 원하는 화면(FinalScreen)으로 이동합니다.
       navigation.dispatch(
