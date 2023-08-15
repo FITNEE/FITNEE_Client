@@ -53,17 +53,24 @@ export default function CreateRoutine_3({ navigation }) {
         parts[4].selected ||
         parts[5].selected
     );
+    SetAllPart(
+      parts[0].selected &&
+        parts[1].selected &&
+        parts[2].selected &&
+        parts[3].selected &&
+        parts[4].selected &&
+        parts[5].selected
+    );
   }, [parts]);
   const AllPartPress = () => {
     SetAllPart(!allPart);
-  };
-  useEffect(() => {
     setParts((prevParts) =>
       prevParts.map((part) =>
-        allPart ? { ...part, selected: true } : { ...part, selected: false }
+        !allPart ? { ...part, selected: true } : { ...part, selected: false }
       )
     );
-  }, [allPart]);
+  };
+
   return (
     <Container>
       <TitleContainer>
@@ -76,13 +83,31 @@ export default function CreateRoutine_3({ navigation }) {
             key={part.id}
             onPress={() => onPartPress(part.id)}
             style={{
-              backgroundColor: part.selected ? colors.l_sub_2 : colors.white,
-              borderWidth: 1, // borderColor를 덮어쓰는 방법으로 borderWidth를 설정해줍니다.
-              borderColor: part.selected ? colors.l_main : colors.white,
+              backgroundColor: allPart
+                ? colors.l_sub_2
+                : part.selected
+                ? colors.l_main
+                : colors.white,
+              borderWidth: 1,
+              borderColor: allPart
+                ? colors.l_main
+                : part.selected
+                ? colors.l_main
+                : colors.white,
             }}
           >
             <PartImage />
-            <PartName>{part.name}</PartName>
+            <PartName
+              style={{
+                color: allPart
+                  ? colors.l_main
+                  : part.selected
+                  ? colors.white
+                  : colors.black,
+              }}
+            >
+              {part.name}
+            </PartName>
           </PartItem>
         ))}
       </PartContainer>
@@ -140,7 +165,7 @@ const AllButton = styled.TouchableOpacity`
   width: 147px;
   height: 40px;
   background-color: ${(props) =>
-    props.isActive ? colors.l_sub_2 : colors.grey_3};
+    props.isActive ? colors.l_main : colors.grey_3};
   margin-bottom: 120px;
   border-radius: 100px;
   align-items: center;
@@ -150,8 +175,8 @@ const AllButton = styled.TouchableOpacity`
 `;
 const AllText = styled.Text`
   font-size: 13px;
-  font-weight: bold;
-  color: ${(props) => (props.isActive ? colors.l_main : colors.black)};
+  font-weight: 600;
+  color: ${(props) => (props.isActive ? colors.white : colors.black)};
 `;
 const NextButton = styled.TouchableOpacity`
   width: 327px;

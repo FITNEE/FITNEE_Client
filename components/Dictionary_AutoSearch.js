@@ -1,30 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components/native'
 import {colors} from '../colors'
-
-const AutoSearchContainer = styled.ScrollView`
-    width: 100%;
-    height: 100%;
-`
-const AutoSearch = styled.TouchableOpacity`
-    padding: 24px 16px;
-
-    border-top-width: 1px;
-    border-top-color: ${colors.grey_1};
-`
-const AutoSearchText = styled.Text`
-    font-weight: 500;
-    font-size: 15px;
-    color: ${colors.black}; 
-`
-const ColoredSearchText = styled.Text`
-    font-weight: 500;
-    font-size: 15px;
-    color: ${colors.l_main}; 
-`
-
+import { IsDarkAtom } from "../recoil/MyPageAtom"
+import { useRecoilValue } from "recoil"
 
 export default function Dictionary_AutoSearch(props){
+    const isDark = useRecoilValue(IsDarkAtom) 
 
     const { navigation, parentSearch, parentSearchList } = props
     const [searchList, setSearchList] = useState(parentSearchList)
@@ -46,15 +27,19 @@ export default function Dictionary_AutoSearch(props){
                 searchList === undefined?
                 null
                 :
-                searchList.map((words)=>{
+                searchList.map((words, i)=>{
                     let splitedString = splitString(words.name)
                     return(
-                        <AutoSearch onPress={()=> onPress(words)}>
-                            <AutoSearchText>
+                        <AutoSearch 
+                            onPress={()=> onPress(words)}
+                            style={ i!=0? {borderTopColor: isDark? `${colors.grey_8}`:`${colors.grey_2}`}: {borderTopWidth: 0}}
+                            key={i}
+                        >
+                            <AutoSearchText style={{color: isDark? `${colors.grey_5}`:`${colors.black}`}}>
                             {
                                 splitedString.map((word) => (
                                     word == parentSearch?
-                                    <ColoredSearchText>{ word }</ColoredSearchText>
+                                    <ColoredSearchText style={{color: isDark? `${colors.white}`:`${colors.l_main}`}}>{ word }</ColoredSearchText>
                                     :
                                     <AutoSearchText>{ word }</AutoSearchText>
                                 ))
@@ -67,3 +52,20 @@ export default function Dictionary_AutoSearch(props){
         </AutoSearchContainer>
     )
 }
+
+const AutoSearchContainer = styled.ScrollView`
+    width: 100%;
+    height: 100%;
+`
+const AutoSearch = styled.TouchableOpacity`
+    padding: 24px;
+    border-top-width: 1px;
+`
+const AutoSearchText = styled.Text`
+    font-weight: 500;
+    font-size: 15px;
+`
+const ColoredSearchText = styled.Text`
+    font-weight: 500;
+    font-size: 15px;
+`

@@ -11,22 +11,24 @@ import Animated, {
 } from "react-native-reanimated";
 import { PanGestureHandler } from "react-native-gesture-handler";
 import * as Haptics from "expo-haptics";
-import { clamp, objectMove } from "./Shared/MyRoutine_Shared";
-import { colors } from "../colors";
-import { ScreenWidth } from "../Shared";
+import { clamp, objectMove } from "../Shared/MyRoutine_Shared";
+import { colors } from "../../colors";
+import { ScreenWidth } from "../../Shared";
 import { styled } from "styled-components/native";
 
 const SCHEDULE_W = (ScreenWidth - 60) / 7;
 
 export const MovableSchedule = ({
   id,
-  routineId,
-  setNewSCHE,
+  isDark,
   positions,
+  routineId,
   SCHEDULE,
+  setNewSCHE,
 }) => {
   const [moving, setMoving] = useState(false);
   const left = useSharedValue(positions.value[id] * SCHEDULE_W);
+
   useAnimatedReaction(
     () => positions.value[id],
     (currentPosition, previousPosition) => {
@@ -72,12 +74,10 @@ export const MovableSchedule = ({
     },
     onFinish() {
       left.value = positions.value[id] * SCHEDULE_W;
-      // runOnJS(setPositions)(positions);
-      runOnJS(setNewSCHE)(positions.value);
       runOnJS(setMoving)(false);
+      runOnJS(setNewSCHE)(positions.value);
     },
   });
-
   const animatedStyle = useAnimatedStyle(() => {
     return {
       position: "absolute",
@@ -98,7 +98,7 @@ export const MovableSchedule = ({
     <Animated.View style={animatedStyle}>
       <PanGestureHandler onGestureEvent={gestureHandler}>
         <Animated.View>
-          <Schedule routineId={routineId} text={id} />
+          <Schedule routineId={routineId} isDark={isDark} />
         </Animated.View>
       </PanGestureHandler>
     </Animated.View>
@@ -113,7 +113,8 @@ const ScheduleContainer = styled.View`
   border-radius: 4px;
   width: ${SCHEDULE_W}px;
 `;
-export function Schedule({ routineId }) {
+
+export function Schedule({ routineId, isDark }) {
   return (
     <ScheduleContainer
       style={
@@ -121,7 +122,7 @@ export function Schedule({ routineId }) {
           borderWidth: 1,
           borderStyle: "dashed",
           borderColor: colors.l_main,
-          backgroundColor: colors.l_sub_2,
+          backgroundColor: isDark ? colors.grey_9 : colors.l_sub_2,
         }
       }
     >

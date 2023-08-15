@@ -8,62 +8,14 @@ import {
 } from "@gorhom/bottom-sheet";
 import { colors } from "../colors";
 import WrappedText from "react-native-wrapped-text";
-import { AppContext } from "./ContextProvider";
 import axios from "axios";
+import { IsDarkAtom } from "../recoil/MyPageAtom"
+import { useRecoilValue } from "recoil"
 
-const ChatContainer = styled.View`
-  margin-left: 24px;
-  margin-bottom: 16px;
-  margin-right: 24px;
-`;
-const MessageWrapper = styled.View`
-  align-items: flex-start;
-`;
-const MessageContainer = styled.View`
-  background-color: ${colors.grey_1};
-  border-radius: 12px 12px 12px 0px;
-  padding: 8px 16px;
-  max-width: 200px;
-`;
-const MyMessageContainer = styled.View`
-  background-color: ${colors.grey_1};
-  border-radius: 12px 12px 0px 12px;
-  padding: 8px 16px;
-  max-width: 200px;
-`;
-const MyMessageWrapper = styled.View`
-  justify-content: flex-end;
-  align-items: center;
-  flex-direction: row;
-`;
-const MsgDeleteBtn = styled.TouchableOpacity`
-  width: 24px;
-  height: 24px;
-  border-radius: 12px;
-  background-color: ${colors.red};
-  margin-right: 8px;
-`;
-const TextInputBG = styled.View`
-  background-color: ${colors.grey_1};
-  justify-content: center;
-  align-items: center;
-  padding: 9px 16px;
-`;
-const TextInputContainer = styled.View`
-  background-color: white;
-  border-radius: 50px;
-  width: 100%;
-  flex-direction: row;
-  padding: 6px;
-`;
-const TextInput = styled.TextInput`
-  color: ${colors.black};
-  width: 300px;
-  margin-left: 15px;
-`;
+
 
 export default function Dictionary_RightTab(props) {
-    const { isDark } = useContext(AppContext);
+    const isDark = useRecoilValue(IsDarkAtom)
     const UserName = styled.Text`
         color: ${isDark ? colors.d_main : colors.l_main};
         font-size: 11px;
@@ -89,6 +41,7 @@ export default function Dictionary_RightTab(props) {
             setChat(""),
             funcSetJoinBtnBool(true),
             setChatUpdate(!chatUpdate),
+            putChatRead(),
             scrollviewRef.current?.scrollToEnd({ animated: true })
             )
     }
@@ -102,41 +55,47 @@ export default function Dictionary_RightTab(props) {
     const [chatIdx, setChatIdx] = useState([])
 
     // 참여하기 버튼
-    const { parentJoinBtnBool, parentSetJoinBtnBool, parentIsAllRead, exerciseName } = props
+    const { parentJoinBtnBool, parentSetJoinBtnBool, exerciseName } = props
     const [childJoinBtnBool, setChildJoinBtnBool] = useState(parentJoinBtnBool)
     useEffect(() => {
     setChildJoinBtnBool(parentJoinBtnBool)
     }, [parentJoinBtnBool])
     const funcSetJoinBtnBool = (newBool) => {
-        setChildJoinBtnBool(newBool)
-        parentSetJoinBtnBool(newBool)
+    setChildJoinBtnBool(newBool)
+    parentSetJoinBtnBool(newBool)
     }
-    const setIsAllRead = (newBool) => parentIsAllRead(newBool)
 
     // 채팅 불러오기
     const getChat = async () => {
-    try {
-        let url = "https://gpthealth.shop/"
-        let detailAPI = "/app/dictionary/exercisechat"
-        const response = await axios.get(url + detailAPI, {
-            params: {
-                name: "사이드 레터럴 레이즈",
-            },
-        })
-        const result = response.data
-        return result
-    } catch (error) {
-        console.error("Failed to fetch data:", error)
-    }
+        try {
+            let url = "https://gpthealth.shop/"
+            let detailAPI = "/app/dictionary/exercisechat"
+            const response = await axios.get(url + detailAPI, {
+                params: {
+                    name: exerciseName,
+                },
+            })
+            const result = response.data
+
+            if(result.result.isSuccess) 
+                console.log(`채팅 불러오기 성공 (운동이름 : ${exerciseName})`)
+            else console.log(`채팅 불러오기 성공 (운동이름 : ${exerciseName})`)
+    
+            return result.result
+        } catch (error) {
+            console.error("Failed to fetch data:", error)
+        }
     }
     useEffect(() => {
-    getChat().then((result) => {
-        setMsg(result.result.chattinginfo)
-        // console.log(`healthchattingidx : ${msg.at(-1).healthChattingIdx}`)
-    })
+        getChat().then((result) => {
+            setMsg(result.chattinginfo)
+
+            const lastIdx = result.chattinginfo.at(-1).healthChattingIdx
+            putChatRead(lastIdx)
+        })
     }, [parentJoinBtnBool,chatUpdate])
 
-    //채팅 올리기
+    //채팅 보내기
     const postChat = async () => {
         try {
             let url = "https://gpthealth.shop/"
@@ -151,7 +110,7 @@ export default function Dictionary_RightTab(props) {
             else console.log(`채팅 업로드 실패 (운동: ${exerciseName}, 닉네임: ${myNickName}, 내용: ${chat})`)
         } 
         catch (error) {                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
-        console.error("Failed to fetch data:", error);
+            console.error("Failed to fetch data:", error);
         }
     } 
 
@@ -175,6 +134,8 @@ export default function Dictionary_RightTab(props) {
     })
     }, [])
 
+
+    // 채팅 삭제 
     const deleteChat = async (idx) => {
     try {
         let url = "https://gpthealth.shop/"
@@ -192,6 +153,8 @@ export default function Dictionary_RightTab(props) {
         console.error("Failed to fetch data:", error)
     }
     }
+
+    // 채팅 삭제 버튼
     const onPressMsgDeleteBtn = (idx) => {
         Alert.alert(
         "채팅 삭제",
@@ -208,25 +171,39 @@ export default function Dictionary_RightTab(props) {
             },
         ]
         )
+        setSelectedIdx(-1)
     }
 
-    const getChatInfo = async (idx) => {
+    // 어디까지 읽었는지 저장
+    const putChatRead = async (idx) => {
         try {
             let url = "https://gpthealth.shop/"
-            let detailAPI = `app/dictionary/readInfo`
-            const response = await axios.get(url + detailAPI, {
-                name: idx
+            let detailAPI = "/app/dictionary/chatRead"
+            const response = await axios.put(url + detailAPI, {
+                "healthChattingIdx" : idx
             })
-            const result = response.data
-            console.log(result)
+            const result = response.data   
+            
+            if(result.isSuccess) 
+                console.log(`어디까지 읽었는지 저장 성공 (idx : ${idx})`)
+            else console.log(`어디까지 읽었는지 저장 실패 (idx : ${idx})`)
     
-            if(result.isSuccess) console.log(`마지막 채팅 저장 성공(idx: ${idx})`)
-            else console.log(`마지막 채팅 저장 실패(idx: ${idx})`)
-            return result
-        } 
-        catch (error) {
+            return result.result
+        } catch (error) {
             console.error("Failed to fetch data:", error)
         }
+    }
+
+    // 삭제하려는 메시지의 msg 배열에서의 index값
+    const [selectedIdx, setSelectedIdx] = useState(-1)
+
+    //메시지를 꾹 눌렀을 때 메시지 삭제 버튼 토글
+    const onLongPress = (i) => {
+        // Vibration.vibrate()
+        if(i==selectedIdx) setSelectedIdx(-1)
+        else setSelectedIdx(i)
+
+        {/* 햅틱 효과 넣고 싶다 아님 띠용 이펙트 */}
     }
 
     return (
@@ -242,12 +219,12 @@ export default function Dictionary_RightTab(props) {
                         {msg.userNickname != myNickName ? 
                             (<MessageWrapper>
                                 <UserName>{msg.userNickname}</UserName>
-                                <MessageContainer>
+                                <MessageContainer style={{backgroundColor: isDark? `${colors.grey_8}`:`${colors.grey_1}`}}>
                                     <WrappedText
                                     textStyle={{
                                         fontWeight: 400,
                                         fontSize: 13,
-                                        color: `${colors.black}`,
+                                        color: isDark? `${colors.white}`:`${colors.black}`,
                                         lineHeight: 17,
                                     }}
                                     >
@@ -257,13 +234,16 @@ export default function Dictionary_RightTab(props) {
                             </MessageWrapper>)
                         : 
                             (<MyMessageWrapper> 
-                                <MsgDeleteBtn onPress={()=>onPressMsgDeleteBtn(msg.healthChattingIdx)} />
-                                <MyMessageContainer >
+                                {selectedIdx===i && <MsgDeleteBtn onPress={()=>onPressMsgDeleteBtn(msg.healthChattingIdx)} />}
+                                <MyMessageContainer 
+                                    onLongPress={()=>onLongPress(i)}
+                                    style={{backgroundColor: isDark? `${colors.grey_8}`:`${colors.grey_1}`}}
+                                >
                                     <WrappedText 
                                         textStyle={{
                                             fontWeight: 400,
                                             fontSize: 13,
-                                            color: `${colors.black}`,
+                                            color: isDark? `${colors.white}`:`${colors.black}`,
                                             lineHeight: 17,
                                         }}
                                         containerStyle={{ alignItems: "left" }}
@@ -279,27 +259,74 @@ export default function Dictionary_RightTab(props) {
         </TouchableWithoutFeedback>
 
         {childJoinBtnBool ? null : (
-          <TextInputBG>
-            <TextInputContainer>
-              <BottomSheetTextInput
-                style={{
-                  color: `${colors.black}`,
-                  width: 300,
-                  marginLeft: 15,
-                }}
-                type="text"
-                onChangeText={(text) => {
-                  setChat(text);
-                }}
-                value={chat}
-                onSubmitEditing={onSubmitChat}
-                autoFocus={true}
-                onFocus={onFocusInput}
-              />
-              <SendBtn onPress={onSubmitChat} />
+          <TextInputBG style={{backgroundColor: isDark? `#303235`:`#D1D3D9`}}>
+            <TextInputContainer style={{backgroundColor: isDark? `${colors.black}`:`${colors.white}`}}>
+                <BottomSheetTextInput
+                    style={{
+                        color: isDark? `${colors.white}`:`${colors.black}`,
+                        width: 300,
+                        marginLeft: 15,
+                        fontSize: 17
+                    }}
+                    type="text"
+                    onChangeText={(text) => setChat(text)}
+                    value={chat}
+                    onSubmitEditing={onSubmitChat}
+                    autoFocus={true}
+                    onFocus={onFocusInput}
+                    keyboardAppearance= {isDark? 'dark':'light'}
+                />
+                <SendBtn 
+                    onPress={onSubmitChat} 
+                    style={{backgroundColor: isDark? `${colors.d_main}`:`${colors.l_main}`}}
+                />
             </TextInputContainer>
           </TextInputBG>
         )}
       </>
     )
 }
+
+{/*textinputbg 색 변경하기*/}
+
+const ChatContainer = styled.View`
+  margin-left: 24px;
+  margin-bottom: 16px;
+  margin-right: 24px;
+`
+const MessageWrapper = styled.View`
+  align-items: flex-start;
+`
+const MessageContainer = styled.View`
+  border-radius: 12px 12px 12px 0px;
+  padding: 8px 16px;
+  max-width: 200px;
+`
+const MyMessageContainer = styled.TouchableOpacity`
+  border-radius: 12px 12px 0px 12px;
+  padding: 8px 16px;
+  max-width: 200px;
+`
+const MyMessageWrapper = styled.View`
+  justify-content: flex-end;
+  align-items: center;
+  flex-direction: row;
+`
+const MsgDeleteBtn = styled.TouchableOpacity`
+  width: 24px;
+  height: 24px;
+  border-radius: 12px;
+  background-color: ${colors.red};
+  margin-right: 8px;
+`
+const TextInputBG = styled.View` 
+  justify-content: center;
+  align-items: center;
+  padding: 9px 16px;
+`
+const TextInputContainer = styled.View`
+  border-radius: 50px;
+  width: 100%;
+  flex-direction: row;
+  padding: 6px;
+`

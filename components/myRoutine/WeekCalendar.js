@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { days } from "./data";
 import { colors } from "../../colors";
-import { WithLocalSvg } from "react-native-svg";
 import Exercise from "../../assets/SVGs/Exercise.svg";
 import { TextContainer, DayText } from "../../components/ScheduleChanger";
 import { styled } from "styled-components/native";
@@ -17,7 +16,6 @@ const DayContainer = styled.TouchableOpacity`
 const Circle = styled.View`
   width: 24px;
   height: 24px;
-  background-color: ${colors.grey_1};
   margin-bottom: 5.5px;
   border-radius: 12px;
 `;
@@ -28,28 +26,37 @@ const ScheduleContainer = styled.View`
   justify-content: space-between;
   height: 100px;
   align-items: center;
-  background-color: white;
 `;
 
-export default WeekCalendar = ({ setSelectedDay, selectedDay, SCHEDULE }) => {
+export default WeekCalendar = ({
+  setSelectedDay,
+  selectedDay,
+  SCHEDULE,
+  isDark,
+}) => {
   return (
-    <ScheduleContainer>
+    <ScheduleContainer
+      style={{ backgroundColor: isDark ? colors.grey_9 : colors.white }}
+    >
       <TextContainer>
         {days.map((item, id) => (
           <DayContainer
             onPress={() => setSelectedDay(id)}
             key={id}
             style={
-              id == selectedDay
-                ? { backgroundColor: colors.l_main }
-                : { backgroundColor: colors.white }
+              id == selectedDay && [
+                {
+                  backgroundColor: isDark ? colors.d_sub_1 : colors.l_main,
+                },
+                isDark && { borderColor: colors.d_main, borderWidth: 1 },
+              ]
             }
           >
             <DayText
               style={
                 id == selectedDay
-                  ? { color: colors.white }
-                  : { color: colors.black }
+                  ? { color: isDark ? colors.d_main : colors.white }
+                  : { color: isDark ? colors.white : colors.black }
               }
             >
               {item}
@@ -59,11 +66,23 @@ export default WeekCalendar = ({ setSelectedDay, selectedDay, SCHEDULE }) => {
                 <Circle
                   style={
                     id == selectedDay //만일 선택된 날짜랑 운동있는 요일이랑 겹치면 색상을 변경해야하기 때문에 css 예외처리
-                      ? { backgroundColor: colors.white }
-                      : { backgroundColor: colors.grey_3 }
+                      ? {
+                          backgroundColor: isDark
+                            ? colors.d_main
+                            : colors.white,
+                        }
+                      : {
+                          backgroundColor: isDark
+                            ? colors.d_main
+                            : colors.grey_3,
+                        }
                   }
                 >
-                  <WithLocalSvg width={24} height={24} asset={Exercise} />
+                  <Exercise
+                    width={24}
+                    height={24}
+                    color={isDark ? colors.white : colors.l_main}
+                  />
                 </Circle>
               )}
           </DayContainer>

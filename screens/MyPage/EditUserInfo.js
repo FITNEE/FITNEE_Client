@@ -10,7 +10,7 @@ import { colors } from "../../colors";
 import axios from "axios";
 import { TouchableOpacity } from "react-native";
 import { Image } from "react-native";
-import Back from "../../assets/left_arrow.png";
+import Left from "../../assets/SVGs/Left.svg";
 import { Alert } from "react-native";
 import { showNickToast } from "../../components/myPage/NickToast";
 
@@ -179,10 +179,7 @@ export default function EditUserInfo({ navigation }) {
             ]);
           }}
         >
-          <Image
-            source={Back}
-            style={{ width: 24, height: 24, marginLeft: 24 }}
-          ></Image>
+          <Left width={24} height={24} style={{ marginLeft: 24 }} />
         </TouchableOpacity>
       ),
       headerRight: () => (

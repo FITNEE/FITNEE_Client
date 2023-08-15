@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components/native";
-import { useNavigationState } from "@react-navigation/native";
+import { useIsFocused, useNavigationState } from "@react-navigation/native";
 import CreateRoutineHeader from "../components/CreateRoutineHeader";
 import { useRecoilState } from "recoil";
 import { CreateRoutineAtom } from "../recoil/CreateRoutineAtom";
 import { colors } from "../colors";
+import { TabBarAtom } from "../recoil/MyPageAtom";
 
 export default function CreateRoutine_1({ navigation }) {
   const [home, SetHome] = useState(false);
@@ -12,6 +13,11 @@ export default function CreateRoutine_1({ navigation }) {
   const [select, SetSelect] = useState(false);
   const index = useNavigationState((state) => state.index);
   const [routine, setRoutine] = useRecoilState(CreateRoutineAtom);
+  const isFocused = useIsFocused();
+  const [isTabVisible, setIsTabVisible] = useRecoilState(TabBarAtom);
+  useEffect(() => {
+    isFocused && setIsTabVisible(false);
+  }, [isFocused, isTabVisible]);
   useEffect(() => {
     navigation.setOptions({
       header: () => <CreateRoutineHeader title="루틴 등록" index={index} />,
