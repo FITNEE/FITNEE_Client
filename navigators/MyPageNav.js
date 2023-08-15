@@ -14,6 +14,7 @@ import Left from "../assets/SVGs/Left.svg";
 import { colors } from "../colors";
 import { useRecoilValue } from "recoil";
 import { IsDarkAtom } from "../recoil/MyPageAtom";
+import CreateRoutineNav from "../navigation/CreateRoutineNav";
 
 const Stack = createStackNavigator();
 
@@ -121,6 +122,14 @@ export default function MyPageNav() {
         })}
       />
       <Stack.Screen name="Login" component={Login} />
+      <Stack.Screen
+        name="createRoutine"
+        component={CreateRoutineNav}
+        options={{
+          headerShown: false,
+          headerBackTitleVisible: false,
+        }}
+      />
     </Stack.Navigator>
   );
 }
