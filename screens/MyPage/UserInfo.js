@@ -8,8 +8,8 @@ import { ScreenWidth } from "../../Shared";
 import { useIsFocused } from "@react-navigation/native";
 import { WithLocalSvg } from "react-native-svg";
 import Right from "../../assets/SVGs/Right.svg";
-import { NickToast } from "../../components/myPage/NickToast";
-import { PWToast } from "../../components/myPage/PWToast";
+import { NickToast, showNickToast } from "../../components/myPage/NickToast";
+import { PWToast, showPWToast } from "../../components/myPage/PWToast";
 import { useRecoilValue } from "recoil";
 import { IsDarkAtom } from "../../recoil/MyPageAtom";
 
@@ -98,6 +98,7 @@ export default function UserInfo({ navigation }) {
       birthYear: "",
       userId: "",
       userNickname: "",
+      gender: "",
     },
   ]);
 
@@ -123,12 +124,15 @@ export default function UserInfo({ navigation }) {
   const getUserName = userInfo[0].userNickname;
   const getBirthYear = userInfo[0].birthYear.toString();
   const getUserId = userInfo[0].userId;
+  const getGender = userInfo[0].gender;
 
   return (
     <SafeAreaView>
       <Container>
         <Profile>
-          <ProfileImage></ProfileImage>
+          <ProfileImage
+            style={{ backgroundColor: getGender == 1 ? "blue" : "pink" }}
+          ></ProfileImage>
         </Profile>
         <NickBlock onPress={() => navigation.navigate("EditUserInfo")}>
           <BlockTitle>닉네임</BlockTitle>
