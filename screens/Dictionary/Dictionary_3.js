@@ -109,6 +109,9 @@ export default function Dictionary_3({ navigation, route }){
                     <Dictionary_Modal 
                         isModalVisible={isModalVisible}
                         changeModalVisibility={changeModalVisibility}
+                        exerciseName = {exerciseInfo.name}
+                        exercisePart = {exerciseInfo.parts}
+                        healthCategoryIdx={exerciseInfo.healthCategoryIdx}
                     />
                     <TopBtnContainer>
                         <TouchableOpacity 
