@@ -64,7 +64,7 @@ export default function Dictionary_3({ navigation, route }){
     const [bubbleBool, setBubbleBool] = useState(true) // 말풍선 나타내기
     const [joinBtnBool, setJoinBtnBool] = useState(true) // 참여하기 버튼 나타내기
     const parentSetJoinBtnBool = (newBool) => setJoinBtnBool(newBool)
-    const [isAllRead, setIsAllRead] = useState(false)
+    const [isAllRead, setIsAllRead] = useState(true)
 
     const [isModalVisible, setIsModalVisible] = useState(false)
     const changeModalVisibility = (newBool)=> setIsModalVisible(newBool)
@@ -85,16 +85,16 @@ export default function Dictionary_3({ navigation, route }){
         }
     }
     useEffect(()=>{
-        // getReadInfo().then((result)=>{
-        //     if(result[0].hasUnreadChats == 0) {
-        //         setIsAllRead(true)
-        //         console.log(`안 읽은 채팅 없음`)
-        //     }
-        //     else {
-        //         setIsAllRead(false)
-        //         console.log(`안 읽은 채팅 있음`)
-        //     }
-        // })
+        getReadInfo().then((result)=>{
+            if(result[0].hasUnreadChats == 0) {
+                setIsAllRead(true)
+                console.log(`안 읽은 채팅 없음`)
+            }
+            else {
+                setIsAllRead(false)
+                console.log(`안 읽은 채팅 있음`)
+            }
+        })
     }, [])
     
     return (
@@ -205,7 +205,7 @@ export default function Dictionary_3({ navigation, route }){
                                     width={20}
                                     height={20}
                                     style={{marginRight: 8}}
-                                    color={colors.white}
+                                    color={isDark? `${colors.black}`:`${colors.white}`}
                                 />
                                 <JoinText style={{color: isDark? `${colors.black}`:`${colors.white}`}}>채팅 참여하기</JoinText>
                             </JoinBtnContainer>
