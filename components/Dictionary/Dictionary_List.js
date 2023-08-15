@@ -1,10 +1,10 @@
 import React, {useEffect, useState} from 'react'
 import styled from 'styled-components/native'
-import { colors } from '../colors'
-import { IsDarkAtom } from "../recoil/MyPageAtom"
+import { colors } from '../../colors'
+import { IsDarkAtom } from "../../recoil/MyPageAtom"
 import { useRecoilValue } from "recoil"
 import { WithLocalSvg } from 'react-native-svg'
-import RightIcon from '../assets/SVGs/Right.svg'
+import RightIcon from '../../assets/SVGs/Right.svg'
 import { TouchableOpacity } from 'react-native'
 
 const ListContainer = styled.ScrollView`
@@ -43,7 +43,7 @@ export default function Dictionary_List(props){
     const { navigation, searchList, part } = props
 
     // 검색리스트의 아이템 터치시 사전상세페이지로 이동, exercise = {equipment, muscle, name, parts}
-    const onPress = (exercise) => navigation.navigate('Dictionary_3', {exercise})
+    const onPress = (exercise) => navigation.navigate('Dictionary_2', {exercise})
     
     // 부위toggle버튼 클릭시 해당되는 운동들만 보여줌
     const [filteredList, setFilteredList] = useState(searchList)

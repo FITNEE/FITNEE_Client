@@ -11,8 +11,8 @@ import {
     ActivityIndicator, StatusBar
     } from 'react-native';
 import { colors } from '../../colors'
-import Dictionary_AutoSearch from '../../components/Dictionary_AutoSearch'
-import Dictionary_List from '../../components/Dictionary_List'
+import Dictionary_AutoSearch from '../../components/Dictionary/Dictionary_AutoSearch'
+import Dictionary_List from '../../components/Dictionary/Dictionary_List'
 import axios from 'axios'
 import { IsDarkAtom } from "../../recoil/MyPageAtom"
 import { useRecoilValue } from "recoil"
