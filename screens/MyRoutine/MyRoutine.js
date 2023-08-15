@@ -317,6 +317,7 @@ export default MyRoutine = ({ navigation, route }) => {
             onPress={() => navigation.navigate("ExerciseSearch", {})}
             text="운동 추가하기"
             enabled={true}
+            isDark={isDark}
             mode="absolute"
           />
         </>

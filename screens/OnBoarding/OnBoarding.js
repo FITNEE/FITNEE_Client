@@ -7,8 +7,12 @@ import {
   ScreenLayout,
   Title,
   SubText,
+  Input,
+  StatusText,
 } from "../../components/Shared/OnBoarding_Shared";
 import axios from "axios";
+import { useRecoilValue } from "recoil";
+import { IsDarkAtom } from "../../recoil/MyPageAtom";
 
 const TextContainer = styled.View`
   margin-top: 124px;
@@ -16,18 +20,11 @@ const TextContainer = styled.View`
   width: 100%;
   justify-content: center;
 `;
-const Input = styled.TextInput`
-  margin-top: 76px;
-  padding: 15px 7px;
-  border-radius: 4px;
-  background-color: white;
-  border-radius: 10px;
-  width: 100%;
-`;
 const BottomContainer = styled.View`
   align-items: center;
   width: 100%;
   flex: 1;
+  padding-top: 76px;
 `;
 const ORContainer = styled.View`
   margin-top: 158px;
@@ -59,15 +56,17 @@ const SNSButton = styled.TouchableOpacity`
   background-color: white;
   height: 64px;
 `;
-const StatusText = styled.Text`
-  font-size: 12px;
-  width: 100%;
-  text-align: right;
-  margin-right: 8px;
-  font-weight: 300;
-  margin-top: 4px;
-`;
+// const StatusText = styled.Text`
+//   font-size: 12px;
+//   width: 100%;
+//   text-align: right;
+//   margin-right: 8px;
+//   font-weight: 300;
+//   margin-top: 4px;
+// `;
 const OnBoarding = ({ navigation }) => {
+  const isDark = useRecoilValue(IsDarkAtom);
+
   const [email, setEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
@@ -101,16 +100,20 @@ const OnBoarding = ({ navigation }) => {
     });
   };
   return (
-    <ScreenLayout>
+    <ScreenLayout isDark={isDark}>
       <TextContainer>
-        <Title>이메일을 입력해주세요.</Title>
-        <SubText>로그인 또는 회원가입에 필요합니다.</SubText>
+        <Title text="이메일을 입력해주세요." isDark={isDark} />
+        <SubText text="로그인 또는 회원가입에 필요합니다." isDark={isDark} />
       </TextContainer>
       <BottomContainer>
         <Input
-          style={
-            email.length > 20 && { borderWidth: 1, borderColor: colors.red }
-          }
+          style={[
+            email.length > 20 && { borderWidth: 1, borderColor: colors.red },
+            {
+              backgroundColor: isDark ? colors.black : colors.white,
+              color: isDark ? colors.white : colors.black,
+            },
+          ]}
           keyboardType="url"
           placeholderTextColor={colors.grey_5}
           onSubmitEditing={() => handleSubmit()}
@@ -120,11 +123,13 @@ const OnBoarding = ({ navigation }) => {
           onChangeText={(text) => setEmail(text)}
         />
         {email.length > 20 && (
-          <StatusText style={{ color: colors.red }}>
+          <StatusText
+            style={{ color: colors.red, marginTop: 4, width: "100%" }}
+          >
             20자 이하로 설정해주세요.
           </StatusText>
         )}
-        <ORContainer>
+        {/* <ORContainer>
           <Line />
           <ORText>또는</ORText>
         </ORContainer>
@@ -138,10 +143,11 @@ const OnBoarding = ({ navigation }) => {
           <SNSButton>
             <Text>Naver</Text>
           </SNSButton>
-        </SNSContainer>
+        </SNSContainer> */}
       </BottomContainer>
       <Button
         loading={isLoading}
+        isDark={isDark}
         enabled={isUserId && !isLoading}
         onPress={() => handleSubmit()}
       />
