@@ -3,7 +3,6 @@ import styled from 'styled-components/native'
 import { colors } from '../../colors'
 import { IsDarkAtom } from "../../recoil/MyPageAtom"
 import { useRecoilValue } from "recoil"
-import { WithLocalSvg } from 'react-native-svg'
 import RightIcon from '../../assets/SVGs/Right.svg'
 import { TouchableOpacity } from 'react-native'
 
