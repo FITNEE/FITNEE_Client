@@ -1,66 +1,43 @@
-import React from "react";
-import { View, Text } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import { ScreenLayout } from "../../components/Shared/OnBoarding_Shared";
 
-function HomeScreen() {
-  const navigation = useNavigation();
+const ORContainer = styled.View`
+  margin-top: 158px;
+  width: 120px;
+  height: 13px;
+`;
+const Line = styled.View`
+  width: 100%;
+  border: ${StyleSheet.hairlineWidth}px solid ${colors.grey_5};
+  margin-top: 6px;
+`;
+const ORText = styled.Text`
+  color: ${colors.grey_6};
+  font-size: 13px;
+  position: absolute;
+  background-color: ${colors.grey_1};
+  width: 40px;
+  text-align: center;
+  left: 40px;
+`;
+export const Test = () => {
+  const getRoutine = async () => {
+    try {
+      let url = "https://gpthealth.shop/";
+      //후가공한 SCHEDULE 배열에서의 IDX값을 그대로 가져와 query스트링으로 추가
+      let detailAPI = `app/routine/${mySCHEDULE[selectedDay].routineId}`;
+      const response = await axios.get(url + detailAPI);
+
+      const result = response.data;
+      setIsLoading(false);
+      return result;
+    } catch (error) {
+      console.error("Failed to fetch data:", error);
+    }
+  };
 
   return (
-    <View>
-      <Text>Home Screen</Text>
-    </View>
+    <ScreenLayout>
+      <ORText>HELLO</ORText>
+    </ScreenLayout>
   );
-}
-
-function DetailScreen() {
-  const navigation = useNavigation();
-
-  return (
-    <View>
-      <Text>Detail Screen</Text>
-    </View>
-  );
-}
-
-function CustomHeader({ title }) {
-  const navigation = useNavigation();
-
-  function goBackHandler() {
-    navigation.goBack();
-  }
-
-  return (
-    <View style={{ flexDirection: "row", alignItems: "center" }}>
-      <Button title="Back" onPress={goBackHandler} />
-      <Text style={{ marginLeft: 10 }}>{title}</Text>
-    </View>
-  );
-}
-
-CustomHeader.defaultProps = {
-  title: "Default Title",
 };
-
-const Stack = createStackNavigator();
-
-export default function AppStack() {
-  return (
-    <Stack.Navigator>
-      <Stack.Screen
-        name="Home"
-        component={HomeScreen}
-        options={{
-          header: (props) => <CustomHeader {...props} />,
-        }}
-      />
-
-      <Stack.Screen
-        name="Details"
-        component={DetailScreen}
-        options={{
-          header: (props) => <CustomHeader {...props} />,
-        }}
-      />
-    </Stack.Navigator>
-  );
-}
