@@ -5,11 +5,15 @@ import { Button, BackButton } from "../../Shared";
 import {
   Input,
   ScreenLayout,
+  StatusText,
+  SubText,
   Title,
 } from "../../components/Shared/OnBoarding_Shared";
 import axios from "axios";
 import { AppContext } from "../../components/ContextProvider";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useRecoilValue } from "recoil";
+import { IsDarkAtom } from "../../recoil/MyPageAtom";
 
 const TextContainer = styled.View`
   margin-top: 124px;
@@ -20,25 +24,13 @@ const TextContainer = styled.View`
 `;
 const InputContainer = styled.View`
   width: 100%;
-  margin-bottom: 232px;
-`;
-const PWStatusText = styled.Text`
-  font-size: 12px;
-  width: 100%;
-  text-align: right;
-  margin-bottom: 12px;
-  margin-right: 8px;
-  font-weight: 300;
-  color: ${colors.red};
-`;
-const SubText = styled.Text`
-  font-size: 13px;
-  margin-top: 8px;
-  font-weight: 400;
-  color: ${colors.black};
+  flex: 1;
+  margin-top: 54px;
 `;
 
 const Login = ({ route, navigation }) => {
+  const isDark = useRecoilValue(IsDarkAtom);
+
   const [PW, setPW] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [statusText, setStatusText] = useState("");
@@ -80,17 +72,23 @@ const Login = ({ route, navigation }) => {
   };
 
   return (
-    <ScreenLayout>
-      <BackButton onPress={() => navigation.goBack()} />
+    <ScreenLayout isRelative={false} isDark={isDark}>
+      <BackButton isDark={isDark} onPress={() => navigation.goBack()} />
       <TextContainer>
-        <Title>다시 만나 반가워요!</Title>
-        <SubText>비밀번호를 입력해주세요.</SubText>
+        <Title text="다시 만나 반가워요!" isDark={isDark} />
+        <SubText text="비밀번호를 입력해주세요." isDark={isDark} />
       </TextContainer>
       <InputContainer>
-        <PWStatusText>{statusText}</PWStatusText>
+        <StatusText style={{ color: colors.red }}>{statusText}</StatusText>
         <Input
-          style={statusText && { borderWidth: 1, borderColor: colors.red }}
-          placeholderTextColor={colors.grey_3}
+          style={[
+            statusText && { borderWidth: 1, borderColor: colors.red },
+            {
+              backgroundColor: isDark ? colors.black : colors.white,
+              color: isDark ? colors.white : colors.black,
+            },
+          ]}
+          placeholderTextColor={colors.grey_5}
           autoFocus
           onSubmitEditing={() => handlePress()}
           placeholder="password"
@@ -101,11 +99,12 @@ const Login = ({ route, navigation }) => {
         />
       </InputContainer>
       <Button
+        isDark={isDark}
         loading={isLoading}
-        enabled={(PW.length > 2) & !isLoading}
+        enabled={(PW.length >= 4) & !isLoading}
         text="로그인"
         onPress={() => handlePress()}
-      ></Button>
+      />
     </ScreenLayout>
   );
 };
