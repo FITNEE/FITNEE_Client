@@ -113,6 +113,7 @@ export default function EditUserInfo({ navigation }) {
       birthYear: "",
       userId: "",
       userNickname: "",
+      gender: "",
     },
   ]);
 
@@ -135,6 +136,7 @@ export default function EditUserInfo({ navigation }) {
   }, []);
 
   const getUserName = userInfo[0].userNickname;
+  const getGender = userInfo[0].gender;
 
   const [newNickname, setNewNickname] = useState(getUserName);
 
@@ -247,7 +249,9 @@ export default function EditUserInfo({ navigation }) {
       >
         <Container DarkMode={isDark}>
           <Profile>
-            <ProfileImage></ProfileImage>
+            <ProfileImage
+              style={{ backgroundColor: getGender == 1 ? "blue" : "pink" }}
+            ></ProfileImage>
           </Profile>
           <InputContainer>
             <InputRed DarkMode={isDark} error={error} check={check}>

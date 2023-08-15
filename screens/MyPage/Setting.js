@@ -71,6 +71,7 @@ export default function Setting({ navigation }) {
       birthYear: "",
       userId: "",
       userNickname: "",
+      gender: "",
     },
   ]);
 
@@ -94,6 +95,7 @@ export default function Setting({ navigation }) {
   }, [isFocused]);
 
   const getUserName = userInfo[0].userNickname;
+  const getGender = userInfo[0].gender;
 
   const Container = styled.View`
     background-color: ${isDark ? colors.d_background : colors.l_background};
@@ -142,7 +144,9 @@ export default function Setting({ navigation }) {
           }}
         >
           <ProfileInfo>
-            <ProfileImage />
+            <ProfileImage
+              style={{ backgroundColor: getGender == 1 ? "blue" : "pink" }}
+            />
             <ProfileContents>
               <Name>{getUserName}</Name>
             </ProfileContents>
