@@ -14,21 +14,6 @@ export const getRoutines = async () => {
     console.error("Failed to fetch data:", error);
   }
 };
-// export  const getSchePart= async (mySCHEDULE, selectedDay, setIsLoading) => {
-//   setIsLoading(true);
-//   try {
-//     let url = "https://gpthealth.shop/";
-
-//     let detailAPI = `app/routine/${mySCHEDULE[selectedDay].routineId}`;
-//     const response = await axios.get(url + detailAPI);
-
-//     const result = response.data;
-//     setIsLoading(false);
-//     return result;
-//   } catch (error) {
-//     console.error("Failed to fetch data:", error);
-//   }
-// };
 export const getRoutine = async (mySCHEDULE, selectedDay, setIsLoading) => {
   setIsLoading(true);
   try {

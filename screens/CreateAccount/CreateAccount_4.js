@@ -4,12 +4,12 @@ import { colors } from "../../colors";
 import { Title } from "../../components/Shared/OnBoarding_Shared";
 import { Button } from "../../Shared";
 import LottieView from "lottie-react-native";
-import { AppContext } from "../../components/ContextProvider";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Alert } from "react-native";
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { IsDarkAtom } from "../../recoil/MyPageAtom";
+import { loggedInState } from "../../recoil/AuthAtom";
 
 const SubTitle = styled.Text`
   text-align: center;
@@ -53,6 +53,7 @@ const ContentBase = styled.SafeAreaView`
 `;
 const CreateAccount_4 = ({ route, navigation }) => {
   const isDark = useRecoilValue(IsDarkAtom);
+  const [loggedIn, setLoggedIn] = useRecoilState(loggedInState);
   const [isLoading, setIsLoading] = useState(true);
 
   const postUser = async (data) => {
@@ -107,12 +108,11 @@ const CreateAccount_4 = ({ route, navigation }) => {
     });
   };
 
-  const { toggleLogin } = useContext(AppContext);
   useEffect(() => {
     handlePress();
   }, []);
   const goBackHome = () => {
-    toggleLogin();
+    setLoggedIn(true);
   };
 
   return (

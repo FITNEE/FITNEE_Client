@@ -10,10 +10,10 @@ import {
   Title,
 } from "../../components/Shared/OnBoarding_Shared";
 import axios from "axios";
-import { AppContext } from "../../components/ContextProvider";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { IsDarkAtom } from "../../recoil/MyPageAtom";
+import { loggedInState } from "../../recoil/AuthAtom";
 
 const TextContainer = styled.View`
   margin-top: 124px;
@@ -30,11 +30,12 @@ const InputContainer = styled.View`
 
 const Login = ({ route, navigation }) => {
   const isDark = useRecoilValue(IsDarkAtom);
+  const [loggedIn, setLoggedIn] = useRecoilState(loggedInState);
 
   const [PW, setPW] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [statusText, setStatusText] = useState("");
-  const { toggleLogin } = useContext(AppContext);
+
   const email = route.params.email;
   const postLogin = async (email, PW) => {
     try {
@@ -63,7 +64,7 @@ const Login = ({ route, navigation }) => {
         AsyncStorage.setItem("userId", email).then(
           console.log("userId set to AsyncStorage")
         );
-        toggleLogin();
+        setLoggedIn(true);
       } else {
         setStatusText(response.message);
         setIsLoading(false);
