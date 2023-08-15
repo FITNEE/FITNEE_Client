@@ -2,10 +2,10 @@ import React, {useState, useEffect} from 'react'
 import styled from 'styled-components/native'
 import Modal from "react-native-modal"
 import {TouchableWithoutFeedback, Dimensions, TouchableOpacity} from 'react-native'
-import { colors } from '../colors'
+import { colors } from '../../colors'
 import Toast from 'react-native-toast-message'
 import { useRecoilValue } from "recoil"
-import { IsDarkAtom } from '../recoil/MyPageAtom'
+import { IsDarkAtom } from '../../recoil/MyPageAtom'
 import axios from 'axios'
 
 export default function Dictionary_Modal(props){

@@ -1,17 +1,13 @@
 import React, { useState, useRef, useContext, useEffect } from "react";
 import styled from "styled-components/native";
 import { Alert, TouchableWithoutFeedback, TouchableOpacity, Keyboard, View } from "react-native";
-import {
-  BottomSheetScrollView,
-  BottomSheetTextInput,
-//   BottomSheetFlatList
-} from "@gorhom/bottom-sheet";
-import { colors } from "../colors";
+import { BottomSheetScrollView, BottomSheetTextInput } from "@gorhom/bottom-sheet";
+import { colors } from "../../colors";
 import WrappedText from "react-native-wrapped-text";
 import axios from "axios";
-import { IsDarkAtom } from "../recoil/MyPageAtom"
+import { IsDarkAtom } from "../../recoil/MyPageAtom"
 import { useRecoilValue } from "recoil"
-import TrashIcon from '../assets/SVGs/Trash.svg'
+import TrashIcon from '../../assets/SVGs/Trash.svg'
 
 export default function Dictionary_RightTab(props) {
     const isDark = useRecoilValue(IsDarkAtom)

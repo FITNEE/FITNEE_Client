@@ -3,11 +3,11 @@ import { ActivityIndicator } from 'react-native'
 import styled from 'styled-components/native'
 import WrappedText from 'react-native-wrapped-text'
 import { BottomSheetScrollView } from "@gorhom/bottom-sheet"
-import {colors} from '../colors'
+import {colors} from '../../colors'
 import axios from 'axios'
-import { IsDarkAtom } from "../recoil/MyPageAtom"
+import { IsDarkAtom } from "../../recoil/MyPageAtom"
 import { useRecoilValue } from "recoil"
-import AlertIcon from '../assets/SVGs/Alert.svg'
+import AlertIcon from '../../assets/SVGs/Alert.svg'
 
 export default function Dictionary_LeftTab(props){
     const isDark = useRecoilValue(IsDarkAtom)
@@ -80,17 +80,17 @@ export default function Dictionary_LeftTab(props){
                         />
                         <CautionTitle style={{color: isDark? `${colors.white}`:`${colors.black}`}}>이 부분은 특히 주의해주세요!</CautionTitle>
                     </CautionTitleContainer>
-                    <CautionContentContainer  >  
+                    <CautionContentContainer style={{backgroundColor: isDark? `${colors.grey_8}`:`${colors.grey_1}`}}>  
                          <CautionDetailContainer style={{marginBottom: 4}}>
-                            <CautionDot style={{backgroundColor: isDark? `${colors.d_sub_1}`:`${colors.l_sub_1}`}}/>
+                            <CautionDot style={{backgroundColor: isDark? `${colors.d_main}`:`${colors.l_sub_1}`}}/>
                             <CautionDetail style={{color: isDark? `${colors.white}`:`${colors.black}`}}>{exerciseDetail?.exercisecaution[0].caution1}</CautionDetail>
                         </CautionDetailContainer>        
                         <CautionDetailContainer style={{marginBottom: 4}}>
-                            <CautionDot style={{backgroundColor: isDark? `${colors.d_sub_1}`:`${colors.l_sub_1}`}}/>
+                            <CautionDot style={{backgroundColor: isDark? `${colors.d_main}`:`${colors.l_sub_1}`}}/>
                             <CautionDetail style={{color: isDark? `${colors.white}`:`${colors.black}`}}>{exerciseDetail?.exercisecaution[0].caution2}</CautionDetail>
                         </CautionDetailContainer> 
                         <CautionDetailContainer>
-                            <CautionDot style={{backgroundColor: isDark? `${colors.d_sub_1}`:`${colors.l_sub_1}`}}/>
+                            <CautionDot style={{backgroundColor: isDark? `${colors.d_main}`:`${colors.l_sub_1}`}}/>
                             <CautionDetail style={{color: isDark? `${colors.white}`:`${colors.black}`}}>{exerciseDetail?.exercisecaution[0].caution3}</CautionDetail>
                         </CautionDetailContainer>                   
                     {/* {
@@ -165,7 +165,6 @@ const CautionTitle = styled.Text`
 `
 const CautionContentContainer = styled.View`
     padding: 24px;
-    background-color: ${colors.grey_1};
     border-radius: 12px;
 `
 const CautionDetailContainer = styled.View`
