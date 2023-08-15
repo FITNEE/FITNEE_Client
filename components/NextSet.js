@@ -6,8 +6,8 @@ import { colors } from "../colors";
 
 const TextLine = styled.View`
   flex-direction: row;
-  height: 20px;
-  align-items: flex-end;
+  height: 32px;
+  align-items: center;
 `;
 
 const Box1 = styled.View`
@@ -26,56 +26,48 @@ const Box2 = styled.View`
   height: 32px;
 `;
 
-export default function NextSet({ set, kg, num }) {
-  const isDark = useRecoilState(IsDarkAtom);
+const Container = styled.View`
+  width: 327px;
+  height: 56px;
+  border-radius: 12px;
+  background: ${({ isDark }) => (isDark ? colors.grey_8 : colors.grey_1)};
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+`;
 
-  const Container = styled.View`
-    width: 327px;
-    height: 56px;
-    border-radius: 12px;
-    background: ${isDark ? colors.grey_8 : colors.grey_1};
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 8px;
-  `;
+const CurrentText = styled.Text`
+  color: ${({ isDark }) => (isDark ? colors.white : "#858687")};
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 32px;
+`;
 
-  const CurrentText = styled.Text`
-    color: ${isDark ? colors.white : rgba(0, 0, 0, 0.5)};
-    font-size: 20px;
-    font-style: normal;
-    font-weight: 600;
-    line-height: 32px;
-  `;
+const CurrentUnit = styled.Text`
+  color: ${({ isDark }) => (isDark ? colors.white : "#858687")};
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 600;
+`;
 
-  const CurrentUnit = styled.Text`
-    color: ${isDark ? colors.white : rgba(0, 0, 0, 0.5)};
-    font-size: 15px;
-    font-style: normal;
-    font-weight: 600;
-  `;
-
+export default function NextSet({ set, kg, num, isDark }) {
   return (
-    <Container>
+    <Container isDark={{ isDark }}>
       <Box1>
-        <CurrentText>{set}</CurrentText>
-        <TextLine>
-          <CurrentUnit>세트</CurrentUnit>
-        </TextLine>
+        <CurrentText isDark={{ isDark }}>{set}</CurrentText>
+
+        <CurrentUnit isDark={{ isDark }}>세트</CurrentUnit>
       </Box1>
 
       <Box2>
-        {kg !== "null" ? <CurrentText>{kg}</CurrentText> : null}
-        {kg !== "null" ? (
-          <TextLine>
-            <CurrentUnit>kg</CurrentUnit>
-          </TextLine>
-        ) : null}
+        {kg !== "null" ? <CurrentText isDark={isDark}>{kg}</CurrentText> : null}
+        {kg !== "null" ? <CurrentUnit isDark={isDark}>kg</CurrentUnit> : null}
       </Box2>
 
-      <CurrentText>{num}</CurrentText>
       <TextLine>
-        <CurrentUnit>회</CurrentUnit>
+        <CurrentText isDark={isDark}>{num}</CurrentText>
+        <CurrentUnit isDark={isDark}>회</CurrentUnit>
       </TextLine>
     </Container>
   );

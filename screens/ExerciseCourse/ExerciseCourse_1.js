@@ -94,29 +94,27 @@ const StopExercise = styled.TouchableOpacity`
   top: 20px;
   right: 24px;
 `;
+const SkipExercriseText = styled.Text`
+  color: ${({ isDark }) => (isDark ? colors.grey_2 : colors.grey_8)};
+  text-align: center;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 19.5px;
+  text-decoration-line: underline;
+`;
 
+const ExerciseCircle = styled.View`
+  width: 307px;
+  height: 307px;
+  border-radius: 291px;
+  background: ${({ isDark }) => (isDark ? colors.black : colors.grey_1)};
+  margin-bottom: 14px;
+  justify-content: center;
+  align-items: center;
+`;
 export default function ExerciseCourse_1({ navigation }) {
   const isDark = useRecoilValue(IsDarkAtom);
-
-  const SkipExercriseText = styled.Text`
-    color: ${isDark ? colors.grey_2 : colors.grey_8};
-    text-align: center;
-    font-size: 13px;
-    font-style: normal;
-    font-weight: 600;
-    line-height: 19.5px;
-    text-decoration-line: underline;
-  `;
-
-  const ExerciseCircle = styled.View`
-    width: 307px;
-    height: 307px;
-    border-radius: 291px;
-    background: ${isDark ? colors.black : colors.grey_1};
-    margin-bottom: 14px;
-    justify-content: center;
-    align-items: center;
-  `;
 
   const goToStartExercise = () => {
     navigation.navigate("StartExercise");
@@ -161,7 +159,7 @@ export default function ExerciseCourse_1({ navigation }) {
     };
 
     if (listIndex + 1 >= dataList.length) {
-      //await postTotalTime(routineIdx, totalTime + realTotalTime);
+      await postTotalData(routineIdx, -1 * totalTime, dataList);
 
       // 조건이 충족되면 원하는 화면(FinalScreen)으로 이동합니다.
       navigation.dispatch(
@@ -184,7 +182,11 @@ export default function ExerciseCourse_1({ navigation }) {
 
   const goToCompleteExercise = async () => {
     if (listIndex + 1 >= dataList.length) {
-      //await postTotalTime(routineIdx, totalTime);
+      await postTotalData(
+        routineIdx,
+        -1 * (totalTime + realTotalTime),
+        dataList
+      );
       // 조건이 충족되면 원하는 화면(FinalScreen)으로 이동합니다.
       navigation.dispatch(
         StackActions.replace("CompleteExercise", {
@@ -222,14 +224,19 @@ export default function ExerciseCourse_1({ navigation }) {
   //   }
   // };
 
-  const postTotalData = async (routineIdx, totalTime) => {
+  const postTotalData = async (
+    routineIdx,
+    totalExerciseTime,
+    routineDetails
+  ) => {
     try {
       let url = "https://gpthealth.shop/";
       let detailAPI = `/app/process/end`;
 
       const response = await axios.post(url + detailAPI, {
-        routineIdx: routineIdx,
-        totalExerciseTime: totalTime,
+        originRoutineIdx: routineIdx,
+        totalExerciseTime: totalExerciseTime,
+        routineDetails: routineDetails,
       });
 
       const result = response.data;
@@ -249,6 +256,20 @@ export default function ExerciseCourse_1({ navigation }) {
         {
           text: "운동 중단하기",
           onPress: goToStartExercise,
+          style: "destructive",
+        },
+      ]
+    );
+  };
+  const OpenConfirm2 = () => {
+    Alert.alert(
+      "운동을 건너뛰겠습니까?",
+      "건너뛴 이후에는 다시 실행할 수 없습니다.",
+      [
+        { text: "취소", onPress: () => console.log(" Stop") },
+        {
+          text: "건너뛰기",
+          onPress: goToNextExercise,
           style: "destructive",
         },
       ]
@@ -293,8 +314,10 @@ export default function ExerciseCourse_1({ navigation }) {
         item.set + 1 === boxNumber
           ? isDark
             ? colors.grey_8
-            : colors.grey_1
-          : colors.grey_8;
+            : colors.white
+          : isDark
+          ? colors.grey_8
+          : colors.grey_1;
       textColor =
         item.set + 1 === boxNumber
           ? isDark
@@ -387,17 +410,7 @@ export default function ExerciseCourse_1({ navigation }) {
         exerciseName={dataList[listIndex].exerciseInfo.exerciseName}
       >
         <StopExercise onPress={() => OpenConfirm()} />
-        <View
-          style={{
-            width: 307,
-            height: 307,
-            borderRadius: 291,
-            backgroundColor: isDark ? colors.black : colors.grey_1,
-            marginBottom: 24,
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
+        <ExerciseCircle isDark={isDark}>
           <CountdownCircleTimer
             key={key}
             isPlaying={isPlaying}
@@ -415,11 +428,12 @@ export default function ExerciseCourse_1({ navigation }) {
           >
             {/* {({ remainingTime }) => <Text>{remainingTime}</Text>} */}
           </CountdownCircleTimer>
-        </View>
+        </ExerciseCircle>
 
         <Indicator
           totalPages={dataList[listIndex].totalSets}
           currentPage={indicatorNum - 1}
+          DarkMode={isDark}
         />
 
         <BoxList>
@@ -450,8 +464,10 @@ export default function ExerciseCourse_1({ navigation }) {
           onPress={scrollBox}
         />
 
-        <SkipExercrise onPress={goToNextExercise}>
-          <SkipExercriseText>이 운동 건너뛰기</SkipExercriseText>
+        <SkipExercrise onPress={() => OpenConfirm2()}>
+          <SkipExercriseText isDark={isDark}>
+            이 운동 건너뛰기
+          </SkipExercriseText>
         </SkipExercrise>
       </ExerciseCard>
     </SafeAreaView>

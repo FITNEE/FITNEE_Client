@@ -10,6 +10,7 @@ import StartExercise from "../screens/ExerciseCourse/StartExercise";
 import MyRoutineNav from "./MyRoutineNav";
 import CreateRoutineNav from "../navigation/CreateRoutineNav";
 import HomeNav from "./HomeNav";
+import NoRoutine from "../screens/ExerciseCourse/NoRoutine";
 
 const Stack = createStackNavigator();
 
@@ -22,6 +23,7 @@ export default function ExerciseCourseNav() {
       }}
     >
       <Stack.Screen name="StartExercise" component={StartExercise} />
+      <Stack.Screen name="NoRoutine" component={NoRoutine} />
       <Stack.Screen name="RegisterRoutine" component={RegisterRoutine} />
       <Stack.Screen name="CreateRoutineNav" component={CreateRoutineNav} />
       <Stack.Screen name="ExerciseCourse" component={ExerciseCourse} />

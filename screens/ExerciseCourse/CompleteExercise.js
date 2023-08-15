@@ -45,67 +45,66 @@ const RecTextLine = styled.View`
   margin-bottom: 4px;
   justify-content: space-between;
 `;
+const Container = styled.View`
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  padding: 0px 23.5px;
+  background-color: ${({ isDark }) => (isDark ? colors.grey_9 : colors.white)};
+`;
+
+const ExerciseText = styled.Text`
+  font-weight: 600;
+  font-size: 24px;
+  text-align: center;
+  line-height: 33.6px;
+  color: ${({ isDark }) => (isDark ? colors.white : colors.black)};
+`;
+const HomeButton = styled.TouchableOpacity`
+  width: 327px;
+  height: 52px;
+  border-radius: 12px;
+  background: ${({ isDark }) => (isDark ? colors.grey_8 : colors.grey_1)};
+  justify-content: center;
+`;
+
+const ButtonText = styled.Text`
+  color: ${({ isDark }) => (isDark ? colors.black : colors.white)};
+  text-align: center;
+  font-size: 17px;
+  font-style: normal;
+  font-weight: 600;
+`;
+
+const ButtonText2 = styled.Text`
+  color: ${({ isDark }) => (isDark ? colors.white : colors.black)};
+  text-align: center;
+  font-size: 17px;
+  font-style: normal;
+  font-weight: 600;
+`;
+
+const ExerciseRec = styled.View`
+  width: 311px;
+  height: 175px;
+  border-radius: 12px;
+  background: ${({ isDark }) => (isDark ? colors.grey_8 : colors.grey_1)};
+  margin-bottom: 68px;
+  justify-content: center;
+  align-items: center;
+  padding: 16px;
+`;
+
+const RecText1 = styled.Text`
+  color: ${({ isDark }) => (isDark ? colors.white : colors.grey_9)};
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 19.5px;
+  width: 188px;
+`;
 
 export default function CompleteExercise({ navigation }) {
   const isDark = useRecoilState(IsDarkAtom);
-
-  const Container = styled.View`
-    flex: 1;
-    align-items: center;
-    justify-content: center;
-    padding: 0px 23.5px;
-    background: ${isDark ? colors.grey_9 : colors.white};
-  `;
-
-  const ExerciseText = styled.Text`
-    font-weight: 600;
-    font-size: 24px;
-    text-align: center;
-    line-height: 33.6px;
-    color: ${isDark ? colors.white : colors.black};
-  `;
-  const HomeButton = styled.TouchableOpacity`
-    width: 327px;
-    height: 52px;
-    border-radius: 12px;
-    background: ${isDark ? colors.grey_8 : colors.grey_1};
-    justify-content: center;
-  `;
-
-  const ButtonText = styled.Text`
-    color: ${isDark ? colors.black : colors.white};
-    text-align: center;
-    font-size: 17px;
-    font-style: normal;
-    font-weight: 600;
-  `;
-
-  const ButtonText2 = styled.Text`
-    color: ${isDark ? colors.white : colors.black};
-    text-align: center;
-    font-size: 17px;
-    font-style: normal;
-    font-weight: 600;
-  `;
-
-  const ExerciseRec = styled.View`
-    width: 311px;
-    height: 175px;
-    border-radius: 12px;
-    background: ${isDark ? colors.grey_8 : colors.grey_1};
-    margin-bottom: 68px;
-    justify-content: center;
-    align-items: center;
-    padding: 16px;
-  `;
-
-  const RecText1 = styled.Text`
-    color: ${isDark ? colors.white : colors.grey_9};
-    font-size: 13px;
-    font-weight: 400;
-    line-height: 19.5px;
-    width: 188px;
-  `;
 
   const goToHome = () => navigation.navigate("HomeNav");
   const goToResult = () => navigation.navigate("ExerciseResult");
@@ -113,6 +112,7 @@ export default function CompleteExercise({ navigation }) {
   const route = useRoute();
   const dataList = route.params.dataList;
   const routineIdx = route.params.routineIdx;
+  console.log(routineIdx);
   const totalTime = route.params.totalTime * -1;
 
   // console.log(listIndex);
@@ -143,11 +143,7 @@ export default function CompleteExercise({ navigation }) {
       let url = "https://gpthealth.shop/";
       let detailAPI = `/app/process/end?routineIdx=${routineIdx}`;
 
-      const response = await axios.get(url + detailAPI, {
-        params: {
-          routineIdx: routineIdx,
-        },
-      });
+      const response = await axios.get(url + detailAPI, {});
       const result = response.data;
       console.log(result);
       return result;
@@ -171,13 +167,15 @@ export default function CompleteExercise({ navigation }) {
         backgroundColor: isDark ? colors.grey_9 : colors.white,
       }}
     >
-      <Container>
-        <ExerciseText>운동을 완료했어요!</ExerciseText>
+      <Container isDark={isDark}>
+        <ExerciseText isDark={isDark}>운동을 완료했어요!</ExerciseText>
 
         {shouldRender ? (
-          <ExerciseExplainText>중량 정보를 업데이트 했어요</ExerciseExplainText>
+          <ExerciseExplainText isDark={isDark}>
+            중량 정보를 업데이트 했어요
+          </ExerciseExplainText>
         ) : (
-          <ExerciseExplainText>
+          <ExerciseExplainText isDark={isDark}>
             한달동안 루틴을 {resultData.monthCountHealth}회 완료했어요
           </ExerciseExplainText>
         )}
@@ -205,7 +203,7 @@ export default function CompleteExercise({ navigation }) {
           />
         </CirclesLine>
 
-        <ExerciseRec>
+        <ExerciseRec isDark={isDark}>
           <ScrollView>
             {dataList.map((item) => (
               <RecTextLine key={item.exerciseInfo.healthCategoryIdx}>
@@ -217,11 +215,11 @@ export default function CompleteExercise({ navigation }) {
           </ScrollView>
         </ExerciseRec>
 
-        <ResultButton onPress={goToResult}>
+        <ResultButton isDark={isDark} onPress={goToResult}>
           <ButtonText>결과 자세히 보기</ButtonText>
         </ResultButton>
 
-        <HomeButton onPress={goToHome}>
+        <HomeButton isDark={isDark} onPress={goToHome}>
           <ButtonText2>홈으로 돌아가기</ButtonText2>
         </HomeButton>
       </Container>
