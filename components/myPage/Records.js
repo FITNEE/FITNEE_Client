@@ -99,9 +99,24 @@ export default function Records(props) {
   `;
 
   const [now, setNow] = useState(new Date());
-  const exerciseDays = props.exerciseDays;
-  const month = props.month;
   const date = now.getDate();
+  const resultMonth = now.getMonth() + 1;
+  const [exerciseDays, setExerciseDays] = useState([]);
+  const [month, setMonth] = useState(now.getMonth() + 1);
+
+  useEffect(() => {
+    props.getMyPageData(month).then((dateResult) => {
+      setExerciseDays(dateResult.result);
+    });
+  }, [month]);
+  /*
+  const prevMonth = () => {
+    setMonth(month - 1);
+  };
+  const nextMonth = () => {
+    setMonth(month + 1);
+  };
+  */
 
   const [totalExercise, setTotalExercise] = useState([]);
   const [totalCalories, setTotalCalories] = useState(0);
@@ -126,10 +141,11 @@ export default function Records(props) {
             setTotalTime(checkResult.result.totalTime) &
             setTotalDist(checkResult.result.totalDist);
       });
-  }, [now]);
+  }, [now, month]);
 
   const dayLoad = (text) => {
     setNow(new Date(text.dateString));
+    setMonth(text.month);
   };
 
   const totalMinute = Math.ceil(totalTime / 60);
@@ -144,11 +160,15 @@ export default function Records(props) {
 
   return (
     <Container>
-      <CalendarView exerciseDays={exerciseDays} dayFunction={dayLoad} />
+      <CalendarView
+        dayFunction={dayLoad}
+        exerciseDays={exerciseDays}
+        setMonth={setMonth}
+      />
       <Bar />
       <Exercise>
         <Title>
-          {month}월 {date}일 완료한 운동
+          {resultMonth}월 {date}일 완료한 운동
         </Title>
         <Circles>
           <CircleContent>

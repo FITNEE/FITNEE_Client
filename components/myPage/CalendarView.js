@@ -54,6 +54,7 @@ LocaleConfig.defaultLocale = "ko";
 export default function CalendarView(props) {
   const isDark = useRecoilValue(IsDarkAtom);
   const windowWidth = Dimensions.get("window").width;
+
   const today = format(new Date(), "yyyy-MM-dd");
   const days = props.exerciseDays.map((day) =>
     format(new Date(day.day), "yyyy-MM-dd")
@@ -91,6 +92,7 @@ export default function CalendarView(props) {
             />
           );
       }}
+      onMonthChange={(month) => props.setMonth(month.month)}
       markedDates={{
         ...exerciseDay,
         [today]: {
@@ -127,8 +129,6 @@ export default function CalendarView(props) {
         props.dayFunction(pressDay);
         setSelectedDate(pressDay.dateString);
       }}
-      //onPressArrowLeft={() => console.log("left")}
-      //onPressArrowRight={() => console.log("right")}
       hideExtraDays={true}
     />
   );
