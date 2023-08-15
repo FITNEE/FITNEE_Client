@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components/native'
-import {colors} from '../colors'
-import { IsDarkAtom } from "../recoil/MyPageAtom"
+import {colors} from '../../colors'
+import { IsDarkAtom } from "../../recoil/MyPageAtom"
 import { useRecoilValue } from "recoil"
 
 export default function Dictionary_AutoSearch(props){
@@ -19,7 +19,7 @@ export default function Dictionary_AutoSearch(props){
         const extracted = splitStr.filter((item) => item !== '')
         return extracted
     }
-    const onPress = (exercise) => navigation.navigate('Dictionary_3', {exercise})
+    const onPress = (exercise) => navigation.navigate('Dictionary_2', {exercise})
 
     return(
         <AutoSearchContainer> 
