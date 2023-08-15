@@ -94,6 +94,9 @@ export default function Dictionary_Modal(props){
             const response = await axios.get(url + detailAPI)
         
             const result = response.data
+
+            if(result.isSuccess) console.log(`기존 루틴 가져오기 성공`)
+            else console.log(`기존 루틴 가져오기 실패`)
             return result.result
         } 
         catch (error) {
@@ -116,7 +119,9 @@ export default function Dictionary_Modal(props){
                     },
             })
             const result = response.data
-            console.log(result)
+
+            if(result.isSuccess) console.log(`추가된 운동 등록 성공`)
+            else console.log(`추가된 운동 등록 실패`)
             return result
         } 
             catch (error) {

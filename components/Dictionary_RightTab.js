@@ -1,6 +1,6 @@
 import React, { useState, useRef, useContext, useEffect } from "react";
 import styled from "styled-components/native";
-import { Alert, TouchableWithoutFeedback, Keyboard, View } from "react-native";
+import { Alert, TouchableWithoutFeedback, TouchableOpacity, Keyboard, View } from "react-native";
 import {
   BottomSheetScrollView,
   BottomSheetTextInput,
@@ -11,8 +11,7 @@ import WrappedText from "react-native-wrapped-text";
 import axios from "axios";
 import { IsDarkAtom } from "../recoil/MyPageAtom"
 import { useRecoilValue } from "recoil"
-
-
+import TrashIcon from '../assets/SVGs/Trash.svg'
 
 export default function Dictionary_RightTab(props) {
     const isDark = useRecoilValue(IsDarkAtom)
@@ -209,7 +208,6 @@ export default function Dictionary_RightTab(props) {
       <>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <BottomSheetScrollView
-                ref={scrollviewRef}
                 style={{ paddingTop: 28 }}
                 showsVerticalScrollIndicator={false}
             >
@@ -233,7 +231,16 @@ export default function Dictionary_RightTab(props) {
                             </MessageWrapper>)
                         : 
                             (<MyMessageWrapper> 
-                                {selectedIdx===i && <MsgDeleteBtn onPress={()=>onPressMsgDeleteBtn(msg.healthChattingIdx)} />}
+                                {selectedIdx===i && 
+                                <TouchableOpacity 
+                                    style={{width: 24, height: 24}}
+                                    onPress={()=>onPressMsgDeleteBtn(msg.healthChattingIdx)}
+                                    >
+                                    <TrashIcon 
+                                        width={24}
+                                        height={24}
+                                        style={{marginRight: 8}}/>
+                                </TouchableOpacity>}
                                 <MyMessageContainer 
                                     onLongPress={()=>onLongPress(i)}
                                     style={{backgroundColor: isDark? `${colors.grey_8}`:`${colors.grey_1}`}}
@@ -310,13 +317,6 @@ const MyMessageWrapper = styled.View`
   justify-content: flex-end;
   align-items: center;
   flex-direction: row;
-`
-const MsgDeleteBtn = styled.TouchableOpacity`
-  width: 24px;
-  height: 24px;
-  border-radius: 12px;
-  background-color: ${colors.red};
-  margin-right: 8px;
 `
 const TextInputBG = styled.View` 
   justify-content: center;

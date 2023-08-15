@@ -8,15 +8,16 @@ import Dictionary_LeftTab from '../../components/Dictionary_LeftTab'
 import Dictionary_RightTab from '../../components/Dictionary_RightTab'
 import Dictionary_Modal from '../../components/Dictionary_Modal'
 import axios from 'axios'
-import { IsDarkAtom } from "../../recoil/MyPageAtom"
-import { useRecoilValue } from "recoil"
-import { WithLocalSvg } from 'react-native-svg'
+import { IsDarkAtom, BubbleAtom } from "../../recoil/MyPageAtom"
+import { useRecoilValue, useSetRecoilState } from "recoil"
 import LeftIcon from '../../assets/SVGs/Left.svg'
 import AddIcon from '../../assets/SVGs/Add.svg'
 import EditIcon from '../../assets/SVGs/Edit.svg'
 
 export default function Dictionary_3({ navigation, route }){
     const isDark = useRecoilValue(IsDarkAtom)
+    const isBubbleOn = useRecoilValue(BubbleAtom)
+    const setIsBubbleOn = useSetRecoilState(BubbleAtom)
     const exerciseInfo = route.params.exercise
 
     const leftTab = useRef()
@@ -28,7 +29,7 @@ export default function Dictionary_3({ navigation, route }){
     // LeftTab 누르면 leftTabActivate = true
     const [leftTabActivate, setLeftTabActivate ] = useState(true)
     const onTabPress = (target) => {
-        setBubbleBool(false)
+        setIsBubbleOn(false)
         target===leftTab? 
             setLeftTabActivate(true)
         : 
@@ -43,25 +44,11 @@ export default function Dictionary_3({ navigation, route }){
     )
     // 루틴 추가 말풍선
     const onPressAddRoutineBtn = ()=>{
-        setBubbleBool(false)
-
+        setIsBubbleOn(false)
         setIsModalVisible(true)
-
-        // const exerciseName = exerciseInfo.name
-        // const exercisePart = exerciseInfo.parts
-        // const categoryIdx = exerciseInfo.healthCategoryIdx
-        // console.log(`${exerciseName},${exercisePart},${categoryIdx}`)
-        // // navigation.navigate("MyRoutineNav",{
-        // //     screen: 'MyRoutine',
-        // //     params:{
-        // //         exerciseName,exercisePart,categoryIdx
-        // //     }
-        // // })
-        // navigation.navigate("MyRoutineNav", {exerciseName,exercisePart,categoryIdx})
     }
 
     // RightTab에서 쓰이는 JoinBtnBool, 읽지 않음 버튼
-    const [bubbleBool, setBubbleBool] = useState(true) // 말풍선 나타내기
     const [joinBtnBool, setJoinBtnBool] = useState(true) // 참여하기 버튼 나타내기
     const parentSetJoinBtnBool = (newBool) => setJoinBtnBool(newBool)
     const [isAllRead, setIsAllRead] = useState(true)
@@ -101,7 +88,7 @@ export default function Dictionary_3({ navigation, route }){
         <>
         <StatusBar barStyle={isDark? 'light-content': 'dark-content'}/>
         <TouchableWithoutFeedback
-            onPressIn={()=> setBubbleBool(false)}
+            onPressIn={()=> setIsBubbleOn(false)}
         >
             <SafeAreaView 
                 style={{backgroundColor: isDark? `${colors.black}`:`${colors.grey_1}`, flex: 1}}>
@@ -126,7 +113,7 @@ export default function Dictionary_3({ navigation, route }){
                         <ExerciseImage resizeMode='contain'/>
                     </ImageContainer>
                     {
-                        bubbleBool?
+                        isBubbleOn?
                             <Bubble style={{backgroundColor: isDark? `${colors.white}`:`${colors.grey_9}`}}>
                                 <BubbleText style={{color: isDark? `${colors.grey_9}`:`${colors.white}`}}>
                                     {`+ 버튼을 눌러 마이루틴에 해당\n운동을 추가해보세요!`}
