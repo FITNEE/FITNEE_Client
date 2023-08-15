@@ -33,10 +33,6 @@ export default function MyPage() {
 
   const now = new Date();
 
-  const todayFormat = now.toISOString().substring(0, 10).replace(/-/g, "");
-  const [checkedDate, setCheckedDate] = useState(todayFormat);
-  const [checkedTotalData, setCheckedTotalData] = useState([]);
-
   const getDayHealth = async (checkedDate) => {
     try {
       let url = "https://gpthealth.shop/";
@@ -48,26 +44,6 @@ export default function MyPage() {
       console.error("Failed to fetch data:", error);
     }
   };
-  /*
-  useEffect(() => {
-    getDayHealth(todayFormat).then((checkResult) => {
-      checkResult.code == 709 &&
-        setCheckedTotalData({
-          exercise: [],
-          totalCalories: 0,
-          totalDist: 0,
-          totalTime: 0,
-          totalWeight: 0,
-        });
-      checkResult.code == 1000 && setCheckedTotalData(checkResult.result);
-      console.log(checkResult);
-      console.log(checkedTotalData);
-    });
-  }, []);
-  */
-
-  const [date, setDate] = useState([]);
-  const [month, setMonth] = useState(now.getMonth() + 1);
 
   const getMyPageData = async (month) => {
     try {
@@ -80,12 +56,6 @@ export default function MyPage() {
       console.error("Failed to fetch data:", error);
     }
   };
-
-  useEffect(() => {
-    getMyPageData(month).then((dateResult) => {
-      setDate(dateResult.result);
-    });
-  }, [month]);
 
   const [weekData, setWeekData] = useState();
 
@@ -104,7 +74,7 @@ export default function MyPage() {
   useEffect(() => {
     getWeekHealth().then((weekResult) => {
       setWeekData(weekResult.result);
-      //console.log(weekResult.result);
+      console.log(weekResult);
     });
   }, []);
 
@@ -154,13 +124,7 @@ export default function MyPage() {
           </ChoiceButton>
         </Choice>
         {showRecords && (
-          <Records
-            exerciseDays={date}
-            month={month}
-            //checkedFunction={checkDayLoad}
-            getDayHealth={getDayHealth}
-            todayData={checkedTotalData}
-          />
+          <Records getDayHealth={getDayHealth} getMyPageData={getMyPageData} />
         )}
         {!showRecords && <Analysis weekData={weekData} />}
       </Container>

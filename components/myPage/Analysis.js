@@ -63,7 +63,6 @@ export default function Analysis(props) {
   const weekData = props.weekData;
 
   const weekIndex = weekData.length - 1;
-  console.log(weekIndex);
   const calorie = weekData[weekIndex].weeklyCalories;
   const hour = weekData[weekIndex].weeklyExerciseTime;
   const kilometer = weekData[weekIndex].weeklyDistance;
