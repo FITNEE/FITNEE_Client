@@ -194,7 +194,16 @@ export default function StartExercise({ navigation }) {
       const dayRoutineIdx = dayRoutineArr[day2].routineId;
       console.log(dayRoutineIdx);
 
-      if (dayRoutineIdx === 0) {
+      // 모든 요소가 0인지 확인하는 함수를 작성합니다.
+      const allElementsAreZero = dayRoutineArr.every(
+        (item) => item.routineId === 0
+      );
+
+      if (allElementsAreZero) {
+        // 모든 요소가 0인 경우, "NoRoutine"으로 이동합니다.
+        navigation.navigate("NoRoutine");
+        return;
+      } else if (dayRoutineIdx === 0) {
         navigation.navigate("RegisterRoutine");
         return;
       } else {

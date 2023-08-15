@@ -221,30 +221,9 @@ export default function ExerciseCourse({ navigation }) {
     }
   };
 
-  // const patchReplaceData = async (
-  //   routineIdx,
-  //   beforeHealthCategoryIdx,
-  //   afterHealthCategoryIdx
-  // ) => {
-  //   try {
-  //     let url = "https://gpthealth.shop/";
-  //     let detailAPI = `/app/process/replace?routineIdx=${routineIdx}`;
-
-  //     const response = await axios.patch(url + detailAPI, {
-  //       beforeHealthCategoryIdx: beforeHealthCategoryIdx,
-  //       afterHealthCategoryIdx: afterHealthCategoryIdx,
-  //     });
-  //     const result = response.data;
-  //     console.log("patchR" + result);
-  //     return result;
-  //   } catch (error) {
-  //     console.error("Error", error);
-  //   }
-  // };
-
   useEffect(() => {
     getReplaceData(routineIdx, healthCategoryIdx).then((response) => {
-      setReplaceList(response.result.replacementRecommendations);
+      setReplaceList(response.result);
       console.log(replaceList);
     });
   }, []);
@@ -340,19 +319,12 @@ export default function ExerciseCourse({ navigation }) {
     <CurrentExplainLine expl={item} />
   ));
 
-  const pushReplace = async (healthCategoryIdx, name) => {
-    //대체
+  const pushReplace = async (healthCategoryIdx, name, caution) => {
     let replacedData = [...dataList];
 
-    //healthCategoryIdx, name 변경
     replacedData[listIndex].exerciseInfo.healthCategoryIdx = healthCategoryIdx;
     replacedData[listIndex].exerciseInfo.exerciseName = name;
-
-    // await patchReplaceData(
-    //   routineIdx,
-    //   dataList[listIndex].exerciseInfo.healthCategoryIdx,
-    //   item.healthCategoryIdx
-    // );
+    replacedData[listIndex].exerciseInfo.caution = caution;
 
     navigation.dispatch(
       StackActions.replace("ExerciseCourse", {
@@ -529,7 +501,11 @@ export default function ExerciseCourse({ navigation }) {
                   </ReplaceView2>
                   <ReplaceButton2
                     onPress={() => {
-                      pushReplace(item.healthCategoryIdx, item.name);
+                      pushReplace(
+                        item.healthCategoryIdx,
+                        item.name,
+                        item.caution
+                      );
                     }}
                   >
                     <ReplaceButtonText>대체하기</ReplaceButtonText>
