@@ -11,21 +11,8 @@ import { WithLocalSvg } from "react-native-svg";
 import { useRoute } from "@react-navigation/native";
 import Check from "../../assets/SVGs/Check.svg";
 import axios from "axios";
-
-const Container = styled.View`
-  flex: 1;
-  align-items: center;
-  justify-content: center;
-  padding: 0px 23.5px;
-  background: ${colors.white};
-`;
-
-const ExerciseText = styled.Text`
-  font-weight: 600;
-  font-size: 24px;
-  text-align: center;
-  line-height: 33.6px;
-`;
+import { useRecoilState } from "recoil";
+import { IsDarkAtom } from "../../recoil/MyPageAtom";
 
 const ExerciseExplainText = styled.Text`
   padding: 8px;
@@ -37,7 +24,6 @@ const ExerciseExplainText = styled.Text`
   line-height: 19.5px;
   margin-bottom: 41px;
 `;
-
 const ResultButton = styled.TouchableOpacity`
   width: 327px;
   height: 52px;
@@ -47,53 +33,10 @@ const ResultButton = styled.TouchableOpacity`
   margin-bottom: 8px;
 `;
 
-const HomeButton = styled.TouchableOpacity`
-  width: 327px;
-  height: 52px;
-  border-radius: 12px;
-  background: ${colors.grey_1};
-  justify-content: center;
-`;
-
-const ButtonText = styled.Text`
-  color: ${colors.white};
-  text-align: center;
-  font-size: 17px;
-  font-style: normal;
-  font-weight: 600;
-`;
-
-const ButtonText2 = styled.Text`
-  color: ${colors.black};
-  text-align: center;
-  font-size: 17px;
-  font-style: normal;
-  font-weight: 600;
-`;
-
 const CirclesLine = styled.View`
   flex-direction: row;
   width: 256px;
   justify-content: space-around;
-`;
-
-const ExerciseRec = styled.View`
-  width: 311px;
-  height: 175px;
-  border-radius: 12px;
-  background: ${colors.grey_1};
-  margin-bottom: 68px;
-  justify-content: center;
-  align-items: center;
-  padding: 16px;
-`;
-
-const RecText1 = styled.Text`
-  color: #262626;
-  font-size: 13px;
-  font-weight: 400;
-  line-height: 19.5px;
-  width: 188px;
 `;
 
 const RecTextLine = styled.View`
@@ -102,17 +45,74 @@ const RecTextLine = styled.View`
   margin-bottom: 4px;
   justify-content: space-between;
 `;
+const Container = styled.View`
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  padding: 0px 23.5px;
+  background-color: ${({ isDark }) => (isDark ? colors.grey_9 : colors.white)};
+`;
+
+const ExerciseText = styled.Text`
+  font-weight: 600;
+  font-size: 24px;
+  text-align: center;
+  line-height: 33.6px;
+  color: ${({ isDark }) => (isDark ? colors.white : colors.black)};
+`;
+const HomeButton = styled.TouchableOpacity`
+  width: 327px;
+  height: 52px;
+  border-radius: 12px;
+  background: ${({ isDark }) => (isDark ? colors.grey_8 : colors.grey_1)};
+  justify-content: center;
+`;
+
+const ButtonText = styled.Text`
+  color: ${({ isDark }) => (isDark ? colors.black : colors.white)};
+  text-align: center;
+  font-size: 17px;
+  font-style: normal;
+  font-weight: 600;
+`;
+
+const ButtonText2 = styled.Text`
+  color: ${({ isDark }) => (isDark ? colors.white : colors.black)};
+  text-align: center;
+  font-size: 17px;
+  font-style: normal;
+  font-weight: 600;
+`;
+
+const ExerciseRec = styled.View`
+  width: 311px;
+  height: 175px;
+  border-radius: 12px;
+  background: ${({ isDark }) => (isDark ? colors.grey_8 : colors.grey_1)};
+  margin-bottom: 68px;
+  justify-content: center;
+  align-items: center;
+  padding: 16px;
+`;
+
+const RecText1 = styled.Text`
+  color: ${({ isDark }) => (isDark ? colors.white : colors.grey_9)};
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 19.5px;
+  width: 188px;
+`;
 
 export default function CompleteExercise({ navigation }) {
-  const { isDark } = useContext(AppContext);
+  const isDark = useRecoilState(IsDarkAtom);
 
   const goToHome = () => navigation.navigate("HomeNav");
   const goToResult = () => navigation.navigate("ExerciseResult");
 
   const route = useRoute();
   const dataList = route.params.dataList;
-  const listIndex = route.params.listIndex;
   const routineIdx = route.params.routineIdx;
+  console.log(routineIdx);
   const totalTime = route.params.totalTime * -1;
 
   // console.log(listIndex);
@@ -136,20 +136,14 @@ export default function CompleteExercise({ navigation }) {
   const now = new Date();
   let day = Week[now.getDay()];
   const [resultData, setResultData] = useState([]);
-  const [resultData2, setResultData2] = useState([]);
   const [detailData, setDetailData] = useState([]);
 
-  const getResultData = async (routineIdx, day) => {
+  const getResultData = async (routineIdx) => {
     try {
       let url = "https://gpthealth.shop/";
-      let detailAPI = `/app/process/end`;
+      let detailAPI = `/app/process/end?routineIdx=${routineIdx}`;
 
-      const response = await axios.get(url + detailAPI, {
-        params: {
-          routineIdx: routineIdx,
-          dayOfWeek: day,
-        },
-      });
+      const response = await axios.get(url + detailAPI, {});
       const result = response.data;
       console.log(result);
       return result;
@@ -159,24 +153,30 @@ export default function CompleteExercise({ navigation }) {
   };
 
   useEffect(() => {
-    getResultData(routineIdx, day).then((response) => {
-      setResultData(response.result.updateRoutine);
-      setResultData2(response.result);
+    getResultData(routineIdx).then((response) => {
+      setResultData(response.result);
       setDetailData(response.result.getComparison);
-      //setResultList(response.result.updateRoutine.routineDetails);
+      console.log(detailData);
     });
   }, []);
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: colors.white }}>
-      <Container>
-        <ExerciseText>운동을 완료했어요!</ExerciseText>
+    <SafeAreaView
+      style={{
+        flex: 1,
+        backgroundColor: isDark ? colors.grey_9 : colors.white,
+      }}
+    >
+      <Container isDark={isDark}>
+        <ExerciseText isDark={isDark}>운동을 완료했어요!</ExerciseText>
 
         {shouldRender ? (
-          <ExerciseExplainText>중량 정보를 업데이트 했어요</ExerciseExplainText>
+          <ExerciseExplainText isDark={isDark}>
+            중량 정보를 업데이트 했어요
+          </ExerciseExplainText>
         ) : (
-          <ExerciseExplainText>
-            루틴을 연속 {resultData2.countHealth}회 완료했어요
+          <ExerciseExplainText isDark={isDark}>
+            한달동안 루틴을 {resultData.monthCountHealth}회 완료했어요
           </ExerciseExplainText>
         )}
 
@@ -189,37 +189,37 @@ export default function CompleteExercise({ navigation }) {
             bubbleText={Math.ceil(detailData.exerciseTimeChange)}
           />
           <GrayCircle
-            num={resultData2.totalCalories}
+            num={resultData.todayTotalWeight}
             unit="kg"
             title="오늘 든 무게"
             bubbleOn={true}
             bubbleText={detailData.weightChange}
           />
           <GrayCircle
-            num={resultData2.totalWeight}
+            num={resultData.todayTotalCalories}
             unit="kcal"
             title="소모 칼로리"
             bubbleOn={false}
           />
         </CirclesLine>
 
-        <ExerciseRec>
+        <ExerciseRec isDark={isDark}>
           <ScrollView>
-            {/* {resultData.map((result) => (
-              <RecTextLine key={result.exerciseInfo.healthCategoryIdx}>
-                <RecText1>{result.exerciseInfo.exerciseName}</RecText1>
+            {dataList.map((item) => (
+              <RecTextLine key={item.exerciseInfo.healthCategoryIdx}>
+                <RecText1>{item.exerciseInfo.exerciseName}</RecText1>
 
                 <WithLocalSvg asset={Check} width={20} height={20} />
               </RecTextLine>
-            ))} */}
+            ))}
           </ScrollView>
         </ExerciseRec>
 
-        <ResultButton onPress={goToResult}>
+        <ResultButton isDark={isDark} onPress={goToResult}>
           <ButtonText>결과 자세히 보기</ButtonText>
         </ResultButton>
 
-        <HomeButton onPress={goToHome}>
+        <HomeButton isDark={isDark} onPress={goToHome}>
           <ButtonText2>홈으로 돌아가기</ButtonText2>
         </HomeButton>
       </Container>

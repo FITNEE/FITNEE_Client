@@ -14,15 +14,9 @@ import { format } from "date-fns";
 import { ScrollView } from "react-native-gesture-handler";
 import { colors } from "../../colors";
 import ViewShot from "react-native-view-shot";
+import { useRecoilState } from "recoil";
+import { IsDarkAtom } from "../../recoil/MyPageAtom";
 //import Share from "react-native-share";
-
-const Container = styled.View`
-  flex: 1;
-  justify-content: center;
-  align-items: center;
-
-  background: ${colors.white};
-`;
 
 const TextBox = styled.View`
   align-items: baseline;
@@ -30,21 +24,6 @@ const TextBox = styled.View`
   left: 24px;
   height: 96px;
   width: 375px;
-`;
-
-const ExerciseText = styled.Text`
-  font-weight: 600;
-  font-size: 24px;
-
-  line-height: 33.6px;
-`;
-
-const ExerciseExplainText = styled.Text`
-  color: ${colors.black};
-  font-size: 13px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 19.5px;
 `;
 
 const HomeView = styled.View`
@@ -63,25 +42,8 @@ const HomeButton = styled.TouchableOpacity`
   margin-top: 191px;
 `;
 
-const ButtonText = styled.Text`
-  color: ${colors.white};
-  text-align: center;
-  font-size: 17px;
-  font-style: normal;
-  font-weight: 600;
-`;
-
-const JustCircle = styled.View`
-  border-radius: 100%;
-  width: 160px;
-  height: 160px;
-  border-radius: 120px;
-  background: ${colors.grey_2};
-  margin-top: 64px;
-`;
-
 const JustText = styled.Text`
-  color: ${colors.black};
+  color: ${colors.l_main};
   font-size: 13px;
   font-style: normal;
   font-weight: 400;
@@ -114,6 +76,46 @@ const ResultBox = styled.View`
 `;
 
 export default function ExerciseResult({ navigation }) {
+  const isDark = useRecoilState(IsDarkAtom);
+  const Container = styled.View`
+    flex: 1;
+    justify-content: center;
+    align-items: center;
+    background-color: ${isDark ? colors.grey_9 : colors.white};
+  `;
+
+  const ExerciseText = styled.Text`
+    font-weight: 600;
+    font-size: 24px;
+    line-height: 33.6px;
+    color: ${isDark ? colors.white : colors.black};
+  `;
+
+  const ExerciseExplainText = styled.Text`
+    color: ${isDark ? colors.white : colors.black};
+    font-size: 13px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 19.5px;
+  `;
+
+  const ButtonText = styled.Text`
+    color: ${isDark ? colors.black : colors.white};
+    text-align: center;
+    font-size: 17px;
+    font-style: normal;
+    font-weight: 600;
+  `;
+
+  const JustCircle = styled.View`
+    border-radius: 100%;
+    width: 160px;
+    height: 160px;
+    border-radius: 120px;
+    background: ${isDark ? colors.grey_8 : colors.grey_2};
+    margin-top: 64px;
+  `;
+
   let Week = new Array("일", "월", "화", "수", "목", "금", "토");
 
   const now = new Date();
@@ -124,6 +126,27 @@ export default function ExerciseResult({ navigation }) {
   const ref = useRef();
   const [captureUri, setCaptureUri] = useState(null);
   const [sharing, setSharing] = useState(false); // 공유 진행 중 여부를 상태로 관리
+
+  // useEffect(() => {
+  //   // on mount
+  //   const fileName = "Your-File-Name.jpg";
+  //   const path =
+  //     Platform.OS === "android"
+  //       ? `${RNFS.DocumentDirectoryPath}/${fileName}`
+  //       : `${RNFS.LibraryDirectoryPath}/${fileName}`;
+  //   const options = {
+  //     format: "jpg",
+  //     quality: 0.9,
+  //     path,
+  //   };
+  //   ref.current
+  //     .capture(options)
+  //     .then((uri) => {
+  //       console.log("do something with ", uri);
+  //       setCaptureUri(uri); // 캡쳐가 완료되면 uri를 상태로 설정
+  //     })
+  //     .catch((error) => console.error("Error with capture: ", error));
+  // }, []);
 
   useEffect(() => {
     // on mount
@@ -162,7 +185,12 @@ export default function ExerciseResult({ navigation }) {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "#FFF" }}>
+    <SafeAreaView
+      style={{
+        flex: 1,
+        backgroundColor: isDark ? colors.grey_9 : colors.white,
+      }}
+    >
       <ScrollView>
         <ViewShot
           ref={ref}
@@ -184,6 +212,12 @@ export default function ExerciseResult({ navigation }) {
 
             <TextBox>
               <ExerciseText>성장속도가 빠른 {"\n"}야망 헬린이</ExerciseText>
+            </TextBox>
+
+            <TextBox>
+              <ExerciseText>
+                다음 운동부터 {"\n"}업데이트 되는 부분이에요
+              </ExerciseText>
             </TextBox>
           </Container>
         </ViewShot>
