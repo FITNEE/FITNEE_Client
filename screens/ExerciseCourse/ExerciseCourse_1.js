@@ -13,16 +13,8 @@ import { Alert } from "react-native";
 import { useRoute, StackActions } from "@react-navigation/native";
 import axios from "axios";
 import { monthsInQuarter } from "date-fns";
-
-const ExerciseCircle = styled.View`
-  width: 307px;
-  height: 307px;
-  border-radius: 291px;
-  background: ${colors.grey_1};
-  margin-bottom: 14px;
-  justify-content: center;
-  align-items: center;
-`;
+import { useRecoilValue } from "recoil";
+import { IsDarkAtom } from "../../recoil/MyPageAtom";
 
 const TextBox = styled.View`
   width: 327px;
@@ -72,11 +64,19 @@ const TextLine = styled.View`
 `;
 
 const Box1 = styled.View`
-  width: 94px;
+  width: 130px;
+  flex-direction: row;
+  align-items: center;
+  justify-content: baseline;
+  height: 32px;
 `;
 
 const Box2 = styled.View`
-  width: 42px;
+  width: 84px;
+  flex-direction: row;
+  align-items: center;
+  justify-content: baseline;
+  height: 32px;
 `;
 
 const SkipExercrise = styled.TouchableOpacity`
@@ -84,16 +84,6 @@ const SkipExercrise = styled.TouchableOpacity`
   height: 20px;
   position: relative;
   margin-top: 16px;
-`;
-
-const SkipExercriseText = styled.Text`
-  color: ${colors.grey_8};
-  text-align: center;
-  font-size: 13px;
-  font-style: normal;
-  font-weight: 600;
-  line-height: 19.5px;
-  text-decoration-line: underline;
 `;
 
 const StopExercise = styled.TouchableOpacity`
@@ -104,8 +94,28 @@ const StopExercise = styled.TouchableOpacity`
   top: 20px;
   right: 24px;
 `;
+const SkipExercriseText = styled.Text`
+  color: ${({ isDark }) => (isDark ? colors.grey_2 : colors.grey_8)};
+  text-align: center;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 19.5px;
+  text-decoration-line: underline;
+`;
 
+const ExerciseCircle = styled.View`
+  width: 307px;
+  height: 307px;
+  border-radius: 291px;
+  background: ${({ isDark }) => (isDark ? colors.black : colors.grey_1)};
+  margin-bottom: 14px;
+  justify-content: center;
+  align-items: center;
+`;
 export default function ExerciseCourse_1({ navigation }) {
+  const isDark = useRecoilValue(IsDarkAtom);
+
   const goToStartExercise = () => {
     navigation.navigate("StartExercise");
   };
@@ -149,7 +159,7 @@ export default function ExerciseCourse_1({ navigation }) {
     };
 
     if (listIndex + 1 >= dataList.length) {
-      //await postTotalTime(routineIdx, totalTime + realTotalTime);
+      await postTotalData(routineIdx, -1 * totalTime, dataList);
 
       // 조건이 충족되면 원하는 화면(FinalScreen)으로 이동합니다.
       navigation.dispatch(
@@ -172,7 +182,11 @@ export default function ExerciseCourse_1({ navigation }) {
 
   const goToCompleteExercise = async () => {
     if (listIndex + 1 >= dataList.length) {
-      //await postTotalTime(routineIdx, totalTime);
+      await postTotalData(
+        routineIdx,
+        -1 * (totalTime + realTotalTime),
+        dataList
+      );
       // 조건이 충족되면 원하는 화면(FinalScreen)으로 이동합니다.
       navigation.dispatch(
         StackActions.replace("CompleteExercise", {
@@ -210,14 +224,19 @@ export default function ExerciseCourse_1({ navigation }) {
   //   }
   // };
 
-  const postTotalData = async (routineIdx, totalTime) => {
+  const postTotalData = async (
+    routineIdx,
+    totalExerciseTime,
+    routineDetails
+  ) => {
     try {
       let url = "https://gpthealth.shop/";
       let detailAPI = `/app/process/end`;
 
       const response = await axios.post(url + detailAPI, {
-        routineIdx: routineIdx,
-        totalExerciseTime: totalTime,
+        originRoutineIdx: routineIdx,
+        totalExerciseTime: totalExerciseTime,
+        routineDetails: routineDetails,
       });
 
       const result = response.data;
@@ -242,6 +261,20 @@ export default function ExerciseCourse_1({ navigation }) {
       ]
     );
   };
+  const OpenConfirm2 = () => {
+    Alert.alert(
+      "운동을 건너뛰겠습니까?",
+      "건너뛴 이후에는 다시 실행할 수 없습니다.",
+      [
+        { text: "취소", onPress: () => console.log(" Stop") },
+        {
+          text: "건너뛰기",
+          onPress: goToNextExercise,
+          style: "destructive",
+        },
+      ]
+    );
+  };
 
   useEffect(() => {
     const newExerciseData = [
@@ -255,30 +288,6 @@ export default function ExerciseCourse_1({ navigation }) {
     setExerciseData(newExerciseData);
     console.log(exerciseData);
   }, []);
-  // useEffect(() => {
-  //   // 타이머가 종료될 때마다 key 값을 변경하여 CountdownCircleTimer 컴포넌트 리셋
-  //   setKey((prevKey) => prevKey + 1);
-  // }, [oneDuration]);
-
-  // duration을 받아서 카운트다운을 해주는 함수. duration이 바뀌면 리셋된다.
-  // const handleComplete = () => {
-  //   //i 업데이트
-  //   const nextId = i + 1 > setData.length ? setIsPlaying(false) : i + 1;
-  //   setI(nextId);
-
-  //   // 해당 id에 해당하는 데이터를 가져와 새로운 duration을 업데이트
-  //   const nextData = setData.find((item) => item.id === nextId);
-  //   const newDuration = nextData?.duration || 0;
-  //   //const newDuration = timeData[nextId]?.duration || 0;
-
-  //   //delay 동안 쉬도록
-  //   setIsPlaying(false);
-  //   setKey((prevKey) => prevKey + 1); //타이머 리셋
-  //   setTimeout(() => {
-  //     setIsPlaying(true);
-  //     setOneDuration(newDuration);
-  //   }, 300);
-  // };
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -303,31 +312,43 @@ export default function ExerciseCourse_1({ navigation }) {
     } else {
       backgroundColor =
         item.set + 1 === boxNumber
-          ? colors.grey_1
-          : "rgba(243, 243, 243, 0.50)";
+          ? isDark
+            ? colors.grey_8
+            : colors.white
+          : isDark
+          ? colors.grey_8
+          : colors.grey_1;
       textColor =
-        item.set + 1 === boxNumber ? colors.black : "rgba(0, 0, 0, 0.50)";
+        item.set + 1 === boxNumber
+          ? isDark
+            ? colors.white
+            : colors.black
+          : isDark
+          ? "#858687"
+          : "rgba(0, 0, 0, 0.50)";
     }
 
     return (
       <Container style={{ backgroundColor: backgroundColor }}>
-        <CurrentText style={{ color: textColor }}>{item.set + 1}</CurrentText>
-        <TextLine>
-          <CurrentUnit style={{ color: textColor }}>세트</CurrentUnit>
-        </TextLine>
-
-        <Box1 />
-
-        {item.weight !== "null" ? (
-          <CurrentText style={{ color: textColor }}>{item.weight}</CurrentText>
-        ) : null}
-        {item.weight !== "null" ? (
+        <Box1>
+          <CurrentText style={{ color: textColor }}>{item.set + 1}</CurrentText>
           <TextLine>
-            <CurrentUnit style={{ color: textColor }}>kg</CurrentUnit>
+            <CurrentUnit style={{ color: textColor }}>세트</CurrentUnit>
           </TextLine>
-        ) : null}
+        </Box1>
 
-        <Box2 />
+        <Box2>
+          {item.weight !== "null" ? (
+            <CurrentText style={{ color: textColor }}>
+              {item.weight}
+            </CurrentText>
+          ) : null}
+          {item.weight !== "null" ? (
+            <TextLine>
+              <CurrentUnit style={{ color: textColor }}>kg</CurrentUnit>
+            </TextLine>
+          ) : null}
+        </Box2>
 
         <CurrentText style={{ color: textColor }}>{item.rep}</CurrentText>
         <TextLine>
@@ -339,10 +360,12 @@ export default function ExerciseCourse_1({ navigation }) {
 
   const scrollBox = () => {
     const next =
-      boxNumber + 1 >= dataList.totalSets ? boxNumber : boxNumber + 1;
+      boxNumber >= dataList[listIndex].totalSets ? boxNumber : boxNumber + 1;
     const next2 =
-      indicatorNum >= dataList.totalSets ? indicatorNum : indicatorNum + 1;
-    if (boxNumber === dataList.totalSets - 1) setIsPlaying(false);
+      indicatorNum > dataList[listIndex].totalSets
+        ? indicatorNum
+        : indicatorNum + 1;
+    if (boxNumber === dataList[listIndex].totalSets - 1) setIsPlaying(false);
     setBoxNumber(next);
     setIndicatorNum(next2);
     setIsTimerRunning(false);
@@ -377,12 +400,17 @@ export default function ExerciseCourse_1({ navigation }) {
   }, [isTimerRunning]);
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: colors.grey_2 }}>
+    <SafeAreaView
+      style={{
+        flex: 1,
+        backgroundColor: isDark ? colors.grey_9 : colors.grey_2,
+      }}
+    >
       <ExerciseCard
         exerciseName={dataList[listIndex].exerciseInfo.exerciseName}
       >
         <StopExercise onPress={() => OpenConfirm()} />
-        <ExerciseCircle>
+        <ExerciseCircle isDark={isDark}>
           <CountdownCircleTimer
             key={key}
             isPlaying={isPlaying}
@@ -391,7 +419,7 @@ export default function ExerciseCourse_1({ navigation }) {
             colors={colors.l_main}
             size={315}
             strokeWidth={8}
-            trailColor={colors.grey_3}
+            trailColor={isDark ? colors.grey_7 : colors.grey_3}
             //onComplete={handleComplete}
             onComplete={() => ({ shouldRepeat: true })}
             updateInterval={0.001}
@@ -405,6 +433,7 @@ export default function ExerciseCourse_1({ navigation }) {
         <Indicator
           totalPages={dataList[listIndex].totalSets}
           currentPage={indicatorNum - 1}
+          DarkMode={isDark}
         />
 
         <BoxList>
@@ -435,8 +464,10 @@ export default function ExerciseCourse_1({ navigation }) {
           onPress={scrollBox}
         />
 
-        <SkipExercrise onPress={goToNextExercise}>
-          <SkipExercriseText>이 운동 건너뛰기</SkipExercriseText>
+        <SkipExercrise onPress={() => OpenConfirm2()}>
+          <SkipExercriseText isDark={isDark}>
+            이 운동 건너뛰기
+          </SkipExercriseText>
         </SkipExercrise>
       </ExerciseCard>
     </SafeAreaView>
