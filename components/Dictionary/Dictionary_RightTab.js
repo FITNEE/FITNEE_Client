@@ -36,7 +36,6 @@ export default function Dictionary_RightTab(props) {
             setChat(""),
             funcSetJoinBtnBool(true),
             setChatUpdate(!chatUpdate),
-            putChatRead(),
             scrollviewRef.current?.scrollToEnd({ animated: true })
             )
     }
@@ -50,7 +49,7 @@ export default function Dictionary_RightTab(props) {
     const [chatIdx, setChatIdx] = useState([])
 
     // 참여하기 버튼
-    const { parentJoinBtnBool, parentSetJoinBtnBool, exerciseName } = props
+    const { parentJoinBtnBool, parentSetJoinBtnBool, exerciseName, leftTabActivate, setIsAllRead } = props
     const [childJoinBtnBool, setChildJoinBtnBool] = useState(parentJoinBtnBool)
     useEffect(() => {
         setChildJoinBtnBool(parentJoinBtnBool)
@@ -82,13 +81,54 @@ export default function Dictionary_RightTab(props) {
         }
     }
     useEffect(() => {
-        getChat().then((result) => {
+        !leftTabActivate && getChat().then((result) => {
             setMsg(result.chattinginfo)
-
-            const lastIdx = result.chattinginfo.at(-1).healthChattingIdx
-            putChatRead(lastIdx)
         })
-    }, [parentJoinBtnBool,chatUpdate])
+    }, [parentJoinBtnBool,chatUpdate, leftTabActivate])
+
+    const [lastIdx, setLastIdx] = useState()
+    useEffect(()=>{
+        if(msg.length !=0){
+            putChatRead(msg.at(-1).healthChattingIdx).then(()=>{
+                setLastIdx(msg.at(-1).healthChattingIdx)
+            })
+        }
+    }, [msg])
+
+    const getReadInfo = async () => {
+        try {
+            let url = "https://gpthealth.shop/"
+            let detailAPI = "/app/dictionary/readInfo"
+            const response = await axios.get(url + detailAPI, {
+                params: {
+                    name: exerciseName,
+                },
+            })
+            const result = response.data
+            return result.result
+        } catch (error) {
+            console.error("Failed to fetch data:", error)
+        }
+    }
+
+    useEffect(()=>{
+        getReadInfo().then((result)=>{
+            if(result.chatExist.chatExists == 0) {
+                console.log(`채팅 내역 존재 X`)
+                setIsAllRead(true)
+            }
+            else {
+                if(result.informationRows.hasUnreadChats == 1){
+                    setIsAllRead(false)
+                    console.log(`안 읽은 채팅 있음`)
+                }
+                else{
+                    setIsAllRead(true)
+                    console.log(`안 읽은 채팅 없음`)
+                }
+            }
+        })
+    }, [leftTabActivate, lastIdx])
 
     //채팅 보내기
     const postChat = async () => {

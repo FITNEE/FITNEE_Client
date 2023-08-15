@@ -52,10 +52,11 @@ export default function Dictionary_2({ navigation, route }){
     const [joinBtnBool, setJoinBtnBool] = useState(true) // 참여하기 버튼 나타내기
     const parentSetJoinBtnBool = (newBool) => setJoinBtnBool(newBool)
     const [isAllRead, setIsAllRead] = useState(true)
+    const changeRead = (newBool)=> setIsAllRead(newBool)
 
     const [isModalVisible, setIsModalVisible] = useState(false)
     const changeModalVisibility = (newBool)=> setIsModalVisible(newBool)
-        
+    
     const getReadInfo = async () => {
         try {
             let url = "https://gpthealth.shop/"
@@ -73,17 +74,23 @@ export default function Dictionary_2({ navigation, route }){
     }
     useEffect(()=>{
         getReadInfo().then((result)=>{
-            if(result[0].hasUnreadChats == 0) {
+            if(result.chatExist.chatExists == 0) {
+                console.log(`채팅 내역 존재 X`)
                 setIsAllRead(true)
-                console.log(`안 읽은 채팅 없음`)
             }
             else {
-                setIsAllRead(false)
-                console.log(`안 읽은 채팅 있음`)
+                if(result.informationRows.hasUnreadChats == 1){
+                    setIsAllRead(false)
+                    console.log(`안 읽은 채팅 있음`)
+                }
+                else{
+                    setIsAllRead(true)
+                    console.log(`안 읽은 채팅 없음`)
+                }
             }
         })
     }, [])
-    
+
     return (
         <>
         <StatusBar barStyle={isDark? 'light-content': 'dark-content'}/>
@@ -102,11 +109,13 @@ export default function Dictionary_2({ navigation, route }){
                     />
                     <TopBtnContainer>
                         <TouchableOpacity 
-                            onPress={()=>navigation.goBack()}>
+                            onPress={()=>navigation.goBack()}
+                            style={{width: 40, height: 40}}    
+                        >
                             <LeftIcon
                                 width={24}
                                 height={24}
-                                color={isDark? colors.grey_1: colors.black} // dark 모드 색 임의로 넣어놈
+                                color={isDark? colors.white: colors.black}
                         /></TouchableOpacity>
                     </TopBtnContainer>
                     <ImageContainer>
@@ -181,6 +190,8 @@ export default function Dictionary_2({ navigation, route }){
                                         parentJoinBtnBool={joinBtnBool}
                                         parentSetJoinBtnBool={parentSetJoinBtnBool}
                                         exerciseName = {exerciseInfo.name}
+                                        leftTabActivate = {leftTabActivate}
+                                        setIsAllRead = {changeRead}
                                         />
                             } 
                         </DictionaryContainer>
