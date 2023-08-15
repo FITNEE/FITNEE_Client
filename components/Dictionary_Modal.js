@@ -23,10 +23,13 @@ export default function Dictionary_Modal(props){
      
     const temp = ['등, 어깨, 가슴', '등, 어깨, 가슴', '', '', '', '등, 어깨, 가슴', '']
     const showToast = () => {
+        changeModalVisibility(false)
         Toast.show({
-            type: 'success',
-            text1: 'Hello',
-            text2: 'This is some something 👋'
+            type: 'customToast',
+            text1: '해당 운동이 마이루틴에 추가되었습니다.',
+            visibilityTime: 1200,
+            topOffset: 56,
+            props: { isDark: isDark }
         })
     }
 
@@ -60,12 +63,23 @@ export default function Dictionary_Modal(props){
                         </DayContainer>
                      </TopContainer>
                     <BottomContainer>
-                        <CancelContainer onPress={()=>changeModalVisibility(false)}>
-                            <BottomText style={{color: colors.grey_7}}>취소</BottomText>
+                        <CancelContainer 
+                            onPress={()=>changeModalVisibility(false)}
+                            style={{backgroundColor: isDark?`${colors.grey_7}`: `${colors.grey_2}`}}
+                        >
+                            <BottomText style={{color: isDark? `${colors.grey_3 }`: `${colors.grey_7}`}}>취소</BottomText>
                         </CancelContainer>
-                        <SelectContainer 
-                            style={{backgroundColor: isDone? colors.l_main:colors.grey_6}}>
-                            <BottomText style={{color: isDone? colors.l_main:colors.white}}>선택 완료</BottomText>
+                        <SelectContainer
+                            title='Show toast'
+                            onPress={showToast} 
+                            style={{
+                                backgroundColor: 
+                                isDark? 
+                                    isDone? `${colors.d_main}`: `${colors.grey_4}` 
+                                : 
+                                    isDone? `${colors.l_main}`: `${colors.grey_6}` 
+                                }}>
+                            <BottomText style={{color: `${colors.white}`}}>선택 완료</BottomText>
                         </SelectContainer>
                     </BottomContainer>
                 </Container>
@@ -128,7 +142,6 @@ const BottomContainer = styled.View`
 const CancelContainer = styled.TouchableOpacity`
     width: 124px;
     height: 56px;
-    background-color: ${colors.grey_2};
     border-bottom-left-radius: 20px;
 
     align-items: center;
