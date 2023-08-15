@@ -24,18 +24,6 @@ const MyTheme = {
 };
 
 export default function App() {
-  /*
-  const [DarkMode, setDarkMode] = useState(true);
-  const theme = {
-    dark: DarkMode,
-    colors: {
-      primary: DarkMode ? "white" : "black",
-      background: DarkMode ? colors.grey_9 : colors.white,
-      text: DarkMode ? colors.white : colors.black,
-    },
-  };
-  */
-
   const [loading, setLoading] = useState(true);
   const [loggedIn, setLoggedIn] = useState(false);
   const [token, setToken] = useState("");

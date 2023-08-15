@@ -2,8 +2,6 @@ import React from "react";
 import styled from "styled-components/native";
 import { colors } from "../../colors";
 import { ScreenWidth } from "../Shared";
-
-import { WithLocalSvg } from "react-native-svg";
 import ToggleDown from "../../assets/SVGs/ToggleDown.svg";
 import ToggleUp from "../../assets/SVGs/ToggleUp.svg";
 import { FlatList } from "react-native";
@@ -93,12 +91,19 @@ export default List_Normal = ({
               selectedId == index ? setSelectedId(null) : setSelectedId(index);
             }}
           >
-            <WithLocalSvg
-              width={24}
-              height={24}
-              asset={selectedId == index ? ToggleUp : ToggleDown}
-              color={isDark ? colors.white : colors.black}
-            />
+            {selectedId == index ? (
+              <ToggleUp
+                width={24}
+                height={24}
+                color={isDark ? colors.white : colors.black}
+              />
+            ) : (
+              <ToggleDown
+                width={24}
+                height={24}
+                color={isDark ? colors.white : colors.black}
+              />
+            )}
           </DropDown>
         </DefaultContainer>
         {selectedId == index && (
@@ -125,6 +130,7 @@ export default List_Normal = ({
 
   return (
     <FlatList
+      contentContainerStyle={{ marginTop: 16, marginBottom: 16 }}
       showsVerticalScrollIndicator
       data={routineData}
       renderItem={renderItem}

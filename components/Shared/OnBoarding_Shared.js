@@ -1,32 +1,42 @@
 import styled from "styled-components/native";
 import { colors } from "../../colors";
-import { BottomSheetModal } from "@gorhom/bottom-sheet";
+import BottomSheet, { BottomSheetModal } from "@gorhom/bottom-sheet";
 import { Picker } from "react-native-wheel-pick";
 import { ScreenWidth } from "../../Shared";
 
-export const Title = styled.Text`
+const TitleText = styled.Text`
   font-size: 24px;
   line-height: 32px;
   font-weight: bold;
-  color: ${colors.black};
 `;
+export const Title = ({ isDark, text }) => {
+  return (
+    <TitleText style={{ color: isDark ? colors.white : colors.black }}>
+      {text}
+    </TitleText>
+  );
+};
 
+export const _SubText = styled.Text`
+  font-size: 13px;
+  margin-top: 8px;
+  font-weight: 400;
+  line-height: 19px;
+`;
+export const SubText = ({ isDark, text }) => {
+  return (
+    <_SubText style={{ color: isDark ? colors.white : colors.black }}>
+      {text}
+    </_SubText>
+  );
+};
 export const Input = styled.TextInput`
   padding: 15px 16px;
-  border-radius: 4px;
-  background-color: white;
   border-radius: 10px;
   width: 100%;
   height: 48px;
 `;
 
-export const SubText = styled.Text`
-  font-size: 13px;
-  margin-top: 8px;
-  font-weight: 400;
-  line-height: 19px;
-  color: ${colors.black};
-`;
 export const InputTitle = styled.Text`
   font-size: 12px;
   margin-left: 16px;
@@ -36,33 +46,35 @@ export const InputTitle = styled.Text`
   color: ${colors.l_main};
 `;
 export const StatusText = styled.Text`
-  font-size: 12px;
-  width: 100%;
+  font-size: 11px;
   text-align: right;
-  margin-bottom: 12px;
+  margin-bottom: 8px;
   margin-right: 8px;
   font-weight: 300;
-  margin-top: 16px;
-  color: ${colors.grey_7};
 `;
 
 export const ScreenContainer = styled.SafeAreaView`
   flex: 1;
-  background-color: ${colors.grey_1};
 `;
 const KeyBoardAwareContainer = styled.KeyboardAvoidingView`
   flex-direction: column;
   align-items: center;
-  justify-content: space-between;
   width: 90%;
   margin-left: 5%;
   flex: 1;
 `;
 
-export const ScreenLayout = ({ children }) => {
+export const ScreenLayout = ({ children, isDark, isRelative = false }) => {
   return (
-    <ScreenContainer>
-      <KeyBoardAwareContainer behavior={Platform.select({ ios: "padding" })}>
+    <ScreenContainer
+      style={{ backgroundColor: isDark ? colors.grey_9 : colors.grey_1 }}
+    >
+      <KeyBoardAwareContainer
+        style={{
+          justifyContent: isRelative ? "flex-start" : "space-between",
+        }}
+        behavior={Platform.select({ ios: "padding" })}
+      >
         {children}
       </KeyBoardAwareContainer>
     </ScreenContainer>
@@ -75,7 +87,6 @@ const NumberContainer = styled.TouchableOpacity`
   margin-top: 2px;
   padding: 15px 7px;
   border-radius: 4px;
-  background-color: white;
   border-radius: 10px;
   width: 100%;
   height: 48px;
@@ -85,18 +96,26 @@ const NumberText = styled.Text`
   margin-left: 8px;
 `;
 
-export const NumberInput = ({ onPress, value, placeholder, active }) => {
-  console.log(active);
+export const NumberInput = ({
+  onPress,
+  value,
+  placeholder,
+  active,
+  isDark,
+}) => {
   return (
     <NumberContainer
-      style={active && { borderColor: colors.l_main, borderWidth: 1 }}
+      style={[
+        active && { borderColor: colors.l_main, borderWidth: 1 },
+        { backgroundColor: isDark ? colors.black : colors.white },
+      ]}
       onPress={onPress}
     >
       <NumberText
         style={
           value
             ? {
-                color: colors.black,
+                color: isDark ? colors.white : colors.black,
               }
             : {
                 color: colors.grey_5,

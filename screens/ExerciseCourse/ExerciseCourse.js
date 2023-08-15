@@ -88,7 +88,7 @@ const SeperateLine = styled.View`
 
 const ReplaceView = styled.View`
   height: 92px;
-  width: 375px;
+  width: 100%;
   padding: 24px;
   align-items: center;
   background-color: ${colors.white};
@@ -171,8 +171,8 @@ export default function ExerciseCourse({ navigation }) {
   const listIndex = route.params.listIndex;
   const routineIdx = route.params.routineIdx;
   const totalTime = route.params.totalTime;
-  console.log("l", listIndex);
-  console.log("t", totalTime);
+  console.log("index:", listIndex);
+  console.log("time:", totalTime);
 
   const [replaceList, setReplaceList] = useState([]);
   const Week = new Array("sun", "mon", "tue", "wed", "thu", "fri", "sat");
@@ -180,7 +180,6 @@ export default function ExerciseCourse({ navigation }) {
   const now = new Date();
   let day = Week[now.getDay()];
   let healthCategoryIdx = dataList[listIndex].exerciseInfo.healthCategoryIdx;
-  // let healthCategoryIdx = 14;
 
   const getReplaceData = async (routineIdx, healthCategoryIdx) => {
     try {
@@ -201,20 +200,26 @@ export default function ExerciseCourse({ navigation }) {
     }
   };
 
-  const postReplaceData = async (routineIdx) => {
-    try {
-      let url = "https://gpthealth.shop/";
-      let detailAPI = `app/process/${routineIdx}`;
-      const response = axios.post(url + detailAPI, {
-        healthCategoryIdx: 0,
-        dayOfWeek: "string",
-      });
+  // const patchReplaceData = async (
+  //   routineIdx,
+  //   beforeHealthCategoryIdx,
+  //   afterHealthCategoryIdx
+  // ) => {
+  //   try {
+  //     let url = "https://gpthealth.shop/";
+  //     let detailAPI = `/app/process/replace?routineIdx=${routineIdx}`;
 
-      return response;
-    } catch (error) {
-      console.error("Failed to fetch data:", error);
-    }
-  };
+  //     const response = await axios.patch(url + detailAPI, {
+  //       beforeHealthCategoryIdx: beforeHealthCategoryIdx,
+  //       afterHealthCategoryIdx: afterHealthCategoryIdx,
+  //     });
+  //     const result = response.data;
+  //     console.log("patchR" + result);
+  //     return result;
+  //   } catch (error) {
+  //     console.error("Error", error);
+  //   }
+  // };
 
   useEffect(() => {
     getReplaceData(routineIdx, healthCategoryIdx).then((response) => {
@@ -314,12 +319,34 @@ export default function ExerciseCourse({ navigation }) {
     <CurrentExplainLine expl={item} />
   ));
 
+  const pushReplace = async (healthCategoryIdx, name) => {
+    let replacedData = [...dataList];
+
+    replacedData[listIndex].exerciseInfo.healthCategoryIdx = healthCategoryIdx;
+    replacedData[listIndex].exerciseInfo.exerciseName = name;
+
+    // await patchReplaceData(
+    //   routineIdx,
+    //   dataList[listIndex].exerciseInfo.healthCategoryIdx,
+    //   item.healthCategoryIdx
+    // );
+
+    navigation.dispatch(
+      StackActions.replace("ExerciseCourse", {
+        dataList: replacedData,
+        listIndex: listIndex,
+        routineIdx: routineIdx,
+        totalTime: totalTime,
+      })
+    );
+  };
+
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: colors.grey_2 }}>
-      <ExerciseCard
-        exerciseName={dataList[listIndex].exerciseInfo.exerciseName}
-      >
-        <BottomSheetModalProvider>
+    <BottomSheetModalProvider>
+      <SafeAreaView style={{ flex: 1, backgroundColor: colors.grey_2 }}>
+        <ExerciseCard
+          exerciseName={dataList[listIndex].exerciseInfo.exerciseName}
+        >
           <ExerciseCircle></ExerciseCircle>
 
           <Animated.View
@@ -401,15 +428,19 @@ export default function ExerciseCourse({ navigation }) {
                       </ReplaceText2>
                     </ReplaceTextView>
                   </ReplaceView2>
-                  <ReplaceButton2>
+                  <ReplaceButton2
+                    onPress={() => {
+                      pushReplace(item.healthCategoryIdx, item.name);
+                    }}
+                  >
                     <ReplaceButtonText>대체하기</ReplaceButtonText>
                   </ReplaceButton2>
                 </ReplaceView>
               ))}
             </BottomSheetBack>
           </BottomSheetModal>
-        </BottomSheetModalProvider>
-      </ExerciseCard>
-    </SafeAreaView>
+        </ExerciseCard>
+      </SafeAreaView>
+    </BottomSheetModalProvider>
   );
 }

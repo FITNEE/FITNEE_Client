@@ -1,12 +1,17 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components/native";
-import { TouchableWithoutFeedback, Keyboard, SafeAreaView } from "react-native";
+import {
+  TouchableWithoutFeedback,
+  Keyboard,
+  SafeAreaView,
+  Text,
+} from "react-native";
 import { colors } from "../../colors";
-import { AppContext } from "../../components/ContextProvider";
 import axios from "axios";
 import SearchList from "../../components/myRoutine/SearchList";
 import Search from "../../assets/SVGs/Search.svg";
-import { WithLocalSvg } from "react-native-svg";
+import Delete from "../../assets/SVGs/Close_Circle.svg";
+import Close from "../../assets/SVGs/Close.svg";
 import { Button } from "../../Shared";
 import { useRecoilValue } from "recoil";
 import { IsDarkAtom } from "../../recoil/MyPageAtom";
@@ -15,10 +20,8 @@ const Container = styled.View`
   flex: 1;
   width: 100%;
 `;
-
 const TopContainer = styled.View`
   padding: 8px 24px;
-  border-bottom-width: 1px;
 `;
 const SearchContainer = styled.View`
   flex-direction: row;
@@ -32,24 +35,15 @@ const SearchInputContainer = styled.View`
   align-items: center;
   padding: 8px 12px;
 `;
-const Logo = styled.Image`
-  width: 24px;
-  height: 24px;
-  background-color: ${colors.red};
-
-  margin-right: 12px;
-`;
 const SearchInput = styled.TextInput`
   font-size: 16px;
   font-weight: 400;
-  color: ${colors.black};
   flex: 1;
   margin: 0px 24px;
 `;
 const DeleteAllBtn = styled.TouchableOpacity`
   width: 24px;
   height: 24px;
-  background-color: ${colors.red};
   margin-left: 16px;
 `;
 const KeywordsContainer = styled.View`
@@ -57,7 +51,6 @@ const KeywordsContainer = styled.View`
 `;
 const BottomContainer = styled.View`
   justify-content: space-between;
-  border: 1px solid;
   padding: 0px 24px;
 `;
 const RecentContainer = styled.View`
@@ -99,21 +92,15 @@ const SelectedListContainer = styled.ScrollView`
   width: 100%;
   margin-bottom: 8px;
 `;
-const ItemContainer = styled.View`
+const ItemContainer = styled.TouchableOpacity`
   flex-direction: row;
   align-items: center;
   margin-right: 8px;
-`;
-const DeleteButton = styled.TouchableOpacity`
-  width: 24px;
-  height: 24px;
-  background-color: ${colors.red};
 `;
 const SelectedItemText = styled.Text`
   font-weight: 500;
   font-size: 13px;
   margin-left: 4px;
-  color: ${colors.grey_7};
 `;
 export default function ExerciseSearch({ navigation }) {
   const isDark = useRecoilValue(IsDarkAtom);
@@ -131,6 +118,7 @@ export default function ExerciseSearch({ navigation }) {
   ]);
   const [popularKeywords, setPopularKeywords] = useState([]);
   const [recentKeywords, setRecentKeywords] = useState([]);
+  //검색시 나오는 결과들 배열
   const [searchList, setSearchList] = useState([]);
   const [selectedItem, setSelectedItem] = useState([]);
 
@@ -235,19 +223,20 @@ export default function ExerciseSearch({ navigation }) {
             backgroundColor: isDark ? colors.grey_9 : colors.white,
           }}
         >
-          <TopContainer
-            style={{
-              borderBottomColor: isDark ? colors.grey_8 : colors.grey_1,
-            }}
-          >
+          <TopContainer>
             <SearchContainer>
               <SearchInputContainer
                 style={{
                   backgroundColor: isDark ? colors.black : colors.grey_1,
                 }}
               >
-                <WithLocalSvg width={24} height={24} asset={Search} />
+                <Search
+                  width={24}
+                  height={24}
+                  color={isDark ? colors.white : colors.black}
+                />
                 <SearchInput
+                  style={{ color: isDark ? colors.white : colors.black }}
                   autoFocus={true}
                   placeholder="운동명, 부위 검색"
                   placeholderTextColor={colors.grey_4}
@@ -258,7 +247,13 @@ export default function ExerciseSearch({ navigation }) {
                   onFocus={onFocusInput}
                 />
               </SearchInputContainer>
-              <DeleteAllBtn onPress={onDeleteInput} />
+              <DeleteAllBtn onPress={onDeleteInput}>
+                <Close
+                  width={24}
+                  height={24}
+                  color={isDark ? colors.white : colors.black}
+                />
+              </DeleteAllBtn>
             </SearchContainer>
           </TopContainer>
           {!isSearching && (
@@ -272,16 +267,31 @@ export default function ExerciseSearch({ navigation }) {
                   최근 검색 키워드
                 </RecentTitle>
                 <RecentKeywordContainer>
-                  {recentKeywords.map((keyword) => (
-                    <KeywordContainer
+                  {recentKeywords == undefined ? (
+                    recentKeywords.map((keyword) => (
+                      <KeywordContainer
+                        style={{
+                          backgroundColor: isDark
+                            ? colors.black
+                            : colors.grey_1,
+                        }}
+                        onPress={() => onPressKeyword(keyword)}
+                      >
+                        <Keyword>{keyword}</Keyword>
+                      </KeywordContainer>
+                    ))
+                  ) : (
+                    <SelectedItemText
                       style={{
-                        backgroundColor: isDark ? colors.black : colors.grey_1,
+                        width: "100%",
+                        textAlign: "center",
+                        marginTop: 8,
+                        color: colors.grey_5,
                       }}
-                      onPress={() => onPressKeyword(keyword)}
                     >
-                      <Keyword>{keyword}</Keyword>
-                    </KeywordContainer>
-                  ))}
+                      최근 검색어가 없어요
+                    </SelectedItemText>
+                  )}
                 </RecentKeywordContainer>
               </RecentContainer>
               <HotContainer>
@@ -309,31 +319,46 @@ export default function ExerciseSearch({ navigation }) {
           )}
           {isSearching && (
             <SearchList
+              isDark={isDark}
               parentSearchList={searchList}
               editSelectedList={editSelectedList}
+              selectedItem={selectedItem}
             />
           )}
         </Container>
       </TouchableWithoutFeedback>
       <BottomContainer
-        style={{ borderTopColor: isDark ? colors.grey_8 : colors.grey_1 }}
+        style={{
+          borderTopColor: isDark ? colors.grey_8 : colors.grey_2,
+          borderTopWidth: 1,
+        }}
       >
         <SelectedListContainer
           horizontal
           showsHorizontalScrollIndicator={false}
         >
           {selectedItem?.map((item, id) => (
-            <ItemContainer key={id}>
-              <DeleteButton
-                onPress={() => editSelectedList("delete", id, "none")}
+            <ItemContainer
+              key={id}
+              onPress={() => editSelectedList("delete", id, "none")}
+            >
+              <Delete
+                height={24}
+                width={24}
+                // color={isDark ? colors.black : colors.black}
               />
-              <SelectedItemText>{item.exerciseName}</SelectedItemText>
+              <SelectedItemText
+                style={{ color: isDark ? colors.white : colors.black }}
+              >
+                {item.exerciseName}
+              </SelectedItemText>
             </ItemContainer>
           ))}
         </SelectedListContainer>
         <Button
           onPress={() => navigation.navigate("MyRoutine", { selectedItem })}
           text="다음"
+          isDark={isDark}
           enabled={true}
         />
       </BottomContainer>

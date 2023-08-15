@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FlatList } from "react-native";
 import styled from "styled-components/native";
 import RoutineItem from "./RoutineItem";
@@ -14,7 +14,7 @@ const PageIndicator = ({ totalPages, currentPage }) => {
   );
 };
 
-export default Scroll = ({ data }) => {
+export default Scroll = ({ data, currentRoutine }) => {
   const [currentPage, setCurrentPage] = useState(0);
   const flatListRef = React.createRef();
   const [selectedID, setSelectedID] = useState("");
@@ -23,6 +23,10 @@ export default Scroll = ({ data }) => {
     const pageIndex = Math.floor(contentOffset.x / layoutMeasurement.width);
     setCurrentPage(pageIndex);
   };
+  useEffect(() => {
+    console.log(currentPage);
+    currentRoutine(currentPage);
+  }, [currentPage]);
   const renderItem = ({ item: routines }) => {
     return (
       <RoutineContainer>

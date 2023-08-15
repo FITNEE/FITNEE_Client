@@ -1,15 +1,12 @@
 import React from "react";
 import styled from "styled-components/native";
 import { days } from "./data";
-import { Keyboard, ScrollView } from "react-native";
 import { colors } from "../../colors";
 import { ComponentTitle } from "../Shared/MyRoutine_Shared";
 import { ScheduleChanger } from "../ScheduleChanger";
 import { ScreenWidth } from "../Shared";
-
-import { WithLocalSvg } from "react-native-svg";
-import Trash from "../../assets/SVGs/Trash.svg";
 import { ContentContainer, NoRoutineText } from "../Shared/MyRoutine_Shared";
+import Trash from "../../assets/SVGs/Trash.svg";
 
 const SetContainer = styled.View`
   flex-direction: row;
@@ -36,6 +33,7 @@ const Blank = styled.View`
 `;
 const ScrollPressable = styled.Pressable`
   width: ${ScreenWidth - 48}px;
+  flex: 1;
   margin-left: 24px;
 `;
 const TextContainer = styled.View`
@@ -69,6 +67,10 @@ const AddText = styled.Text`
   color: ${colors.l_main};
   font-weight: 600;
 `;
+const SetsText = styled.Text`
+  font-size: 17px;
+  font-weight: 400;
+`;
 
 const ExerciseItem_Custom = ({
   id,
@@ -78,11 +80,6 @@ const ExerciseItem_Custom = ({
   editRoutine,
   isDark,
 }) => {
-  const SetsText = styled.Text`
-    font-size: 17px;
-    color: ${isDark ? colors.grey_4 : colors.grey_8};
-    font-weight: 400;
-  `;
   return (
     <ExerciseContainer
       style={{ backgroundColor: isDark ? colors.grey_8 : colors.white }}
@@ -100,22 +97,32 @@ const ExerciseItem_Custom = ({
             key={contentId}
           >
             <TextContainer>
-              <SetsText>{contentId + 1}</SetsText>
-              <SetsText>
+              <SetsText
+                style={{ color: isDark ? colors.grey_4 : colors.grey_8 }}
+              >
+                {contentId + 1}
+              </SetsText>
+              <SetsText
+                style={{ color: isDark ? colors.grey_4 : colors.grey_8 }}
+              >
                 {item.weight ? item.weight + `   kg` : `-   kg`}
               </SetsText>
-              <SetsText>{item.rep + `   회`}</SetsText>
+              <SetsText
+                style={{ color: isDark ? colors.grey_4 : colors.grey_8 }}
+              >
+                {item.rep + `   회`}
+              </SetsText>
             </TextContainer>
             <DeleteButton
               onPress={() => editRoutine(id, "deleteSet", contentId)}
             >
-              <WithLocalSvg width={24} height={24} asset={Trash} />
+              <Trash width={24} height={24} />
             </DeleteButton>
           </SetContainer>
         ))}
         <AddButton
           style={{ backgroundColor: isDark ? colors.d_sub_2 : colors.l_sub_2 }}
-          onPress={() => editRoutine(id, "add", 0)}
+          onPress={() => editRoutine(id, "addSet", 0)}
         >
           <AddText>세트 추가</AddText>
         </AddButton>
@@ -124,62 +131,54 @@ const ExerciseItem_Custom = ({
   );
 };
 
-export default List_Custom = ({
+export const List_Custom = ({
+  isDark,
   SCHEDULE,
+  setNewSCHE,
   newRoutine,
   editRoutine,
   popMessage,
-  setNewSCHE,
-  isDark,
 }) => {
   return (
-    <ScrollView
-      style={{
-        backgroundColor: isDark ? colors.grey_9 : colors.grey_1,
-        width: "100%",
-        height: "100%",
-      }}
-    >
-      <ScrollPressable onPress={() => Keyboard.dismiss()}>
-        <ComponentTitle
-          title="요일 변경"
-          subTitle="루틴을 원하는 요일에 끌어다 놓을 수 있어요"
-          isDark={isDark}
-        />
-        <ScheduleChanger
-          SCHEDULE={SCHEDULE}
-          days={days}
-          setNewSCHE={setNewSCHE}
-          isDark={isDark}
-        />
-        <ComponentTitle
-          title="운동 편집"
-          subTitle="루틴을 원하는 요일에 끌어다 놓을 수 있어요"
-          isDark={isDark}
-        />
-        {newRoutine ? (
-          <>
-            {newRoutine?.map((item, id) => (
-              <ExerciseItem_Custom
-                key={id}
-                id={id}
-                content={item.content}
-                title={item.exerciseName}
-                editRoutine={editRoutine}
-                isDark={isDark}
-                popMessage={() => popMessage(id)}
-              />
-            ))}
-            <Blank />
-          </>
-        ) : (
-          <ContentContainer>
-            <NoRoutineText style={{ marginTop: 160 }}>
-              해당 요일에는 루틴이 없어요
-            </NoRoutineText>
-          </ContentContainer>
-        )}
-      </ScrollPressable>
-    </ScrollView>
+    <ScrollPressable>
+      <ComponentTitle
+        title="요일 변경"
+        subTitle="루틴을 원하는 요일에 끌어다 놓을 수 있어요"
+        isDark={isDark}
+      />
+      <ScheduleChanger
+        setNewSCHE={setNewSCHE}
+        SCHEDULE={SCHEDULE}
+        days={days}
+        isDark={isDark}
+      />
+      <ComponentTitle
+        title="운동 편집"
+        subTitle="루틴을 원하는 요일에 끌어다 놓을 수 있어요"
+        isDark={isDark}
+      />
+      {newRoutine ? (
+        <>
+          {newRoutine?.map((item, id) => (
+            <ExerciseItem_Custom
+              key={id}
+              id={id}
+              content={item.content}
+              title={item.exerciseName}
+              editRoutine={editRoutine}
+              isDark={isDark}
+              popMessage={() => popMessage(id)}
+            />
+          ))}
+          <Blank />
+        </>
+      ) : (
+        <ContentContainer>
+          <NoRoutineText style={{ marginTop: 160 }}>
+            해당 요일에는 루틴이 없어요
+          </NoRoutineText>
+        </ContentContainer>
+      )}
+    </ScrollPressable>
   );
 };

@@ -8,10 +8,7 @@ const Stack = createStackNavigator();
 export default function MyRoutineNav() {
   return (
     <Stack.Navigator
-      screenOptions={{
-        headerShown: false,
-        headerBackTitleVisible: false,
-      }}
+      screenOptions={{ headerShown: false, headerBackTitleVisible: false }}
     >
       <Stack.Screen name="MyRoutine" component={MyRoutine} />
       <Stack.Screen name="ExerciseSearch" component={ExerciseSearch} />

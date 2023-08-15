@@ -1,12 +1,15 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { createStackNavigator } from "@react-navigation/stack";
-import RegisterRoutine from "../screens/ExerciseCourseScreens/RegisterRoutine";
-import CompleteExercise from "../screens/ExerciseCourseScreens/CompleteExercise";
-import ExerciseResult from "../screens/ExerciseCourseScreens/ExerciseResult";
-import ExerciseCourse_1 from "../screens/ExerciseCourseScreens/ExerciseCourse_1";
-import ExerciseCourse_2 from "../screens/ExerciseCourseScreens/ExerciseCourse_2";
-import ExerciseCourse from "../screens/ExerciseCourseScreens/ExerciseCourse";
-import StartExercise from "../screens/ExerciseCourseScreens/StartExercise";
+import RegisterRoutine from "../screens/ExerciseCourse/RegisterRoutine";
+import CompleteExercise from "../screens/ExerciseCourse/CompleteExercise";
+import ExerciseResult from "../screens/ExerciseCourse/ExerciseResult";
+import ExerciseCourse_1 from "../screens/ExerciseCourse/ExerciseCourse_1";
+import ExerciseCourse_2 from "../screens/ExerciseCourse/ExerciseCourse_2";
+import ExerciseCourse from "../screens/ExerciseCourse/ExerciseCourse";
+import StartExercise from "../screens/ExerciseCourse/StartExercise";
+import MyRoutineNav from "./MyRoutineNav";
+import CreateRoutineNav from "../navigation/CreateRoutineNav";
+import HomeNav from "./HomeNav";
 
 const Stack = createStackNavigator();
 
@@ -18,11 +21,13 @@ export default function ExerciseCourseNav() {
         headerShown: false,
       }}
     >
-      <Stack.Screen name="RegisterRoutine" component={RegisterRoutine} />
       <Stack.Screen name="StartExercise" component={StartExercise} />
+      <Stack.Screen name="RegisterRoutine" component={RegisterRoutine} />
+      <Stack.Screen name="CreateRoutineNav" component={CreateRoutineNav} />
       <Stack.Screen name="ExerciseCourse" component={ExerciseCourse} />
       <Stack.Screen name="CompleteExercise" component={CompleteExercise} />
       <Stack.Screen name="ExerciseResult" component={ExerciseResult} />
+      <Stack.Screen name="HomeNav" component={HomeNav} />
       <Stack.Screen
         name="ExerciseCourse_1"
         component={ExerciseCourse_1}
