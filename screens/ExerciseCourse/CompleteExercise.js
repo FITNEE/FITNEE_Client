@@ -209,7 +209,7 @@ export default function CompleteExercise({ navigation }) {
                 {item.skip === 1 ? (
                   <Check_disabled width={20} height={20} />
                 ) : (
-                  <Check width={20} height={20} />
+                  <Check color={colors.white} width={20} height={20} />
                 )}
               </RecTextLine>
             ))}

@@ -345,7 +345,7 @@ export default function ExerciseCourse_1({ navigation }) {
         </Box3>
         {item.set === dataList[listIndex].totalSets ? null : item.set + 1 <=
           boxNumber ? (
-          <Check width={24} height={24} />
+          <Check color={colors.white} width={24} height={24} />
         ) : (
           <Check_disabled width={24} height={24} />
         )}
