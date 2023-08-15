@@ -3,18 +3,20 @@ import { SafeAreaView, Text, TouchableOpacity, View } from "react-native";
 import { TextInput, Dimensions, Animated, StyleSheet } from "react-native";
 const { width, height } = Dimensions.get("window");
 import styled from "styled-components/native";
-import ExerciseCard from "../../components/ExerciseCard";
-import ExerciseButton from "../../components/ExerciseButton";
+import ExerciseCard from "../../components/exerciseCourse/ExerciseCard";
+import ExerciseButton from "../../components/exerciseCourse/ExerciseButton";
 import { colors } from "../../colors";
 import { CountdownCircleTimer } from "react-native-countdown-circle-timer";
 import { FlatList } from "react-native-gesture-handler";
-import Indicator from "../../components/Indicator";
+import Indicator from "../../components/exerciseCourse/Indicator";
 import { Alert } from "react-native";
 import { useRoute, StackActions } from "@react-navigation/native";
 import axios from "axios";
-import { monthsInQuarter } from "date-fns";
 import { useRecoilValue } from "recoil";
 import { IsDarkAtom } from "../../recoil/MyPageAtom";
+import Check from "../../assets/SVGs/Check.svg";
+import Check_disabled from "../../assets/SVGs/Check_Disabled.svg";
+import Close from "../../assets/SVGs/Close.svg";
 
 const TextBox = styled.View`
   width: 327px;
@@ -79,6 +81,14 @@ const Box2 = styled.View`
   height: 32px;
 `;
 
+const Box3 = styled.View`
+  width: 49px;
+  flex-direction: row;
+  align-items: center;
+  justify-content: baseline;
+  height: 32px;
+`;
+
 const SkipExercrise = styled.TouchableOpacity`
   width: 85px;
   height: 20px;
@@ -89,7 +99,6 @@ const SkipExercrise = styled.TouchableOpacity`
 const StopExercise = styled.TouchableOpacity`
   width: 24px;
   height: 24px;
-  background-color: black;
   position: absolute;
   top: 20px;
   right: 24px;
@@ -113,6 +122,7 @@ const ExerciseCircle = styled.View`
   justify-content: center;
   align-items: center;
 `;
+
 export default function ExerciseCourse_1({ navigation }) {
   const isDark = useRecoilValue(IsDarkAtom);
 
@@ -145,12 +155,6 @@ export default function ExerciseCourse_1({ navigation }) {
   const [advice, setAdvice] = useState(adviceData[0]);
 
   const goToNextExercise = async () => {
-    //패치 작업 수행
-    // await patchSkipData(
-    //   routineIdx,
-    //   dataList[listIndex].exerciseInfo.healthCategoryIdx
-    // );
-
     //스킵
     let modifiedDataList = [...dataList];
     modifiedDataList[listIndex] = {
@@ -166,6 +170,7 @@ export default function ExerciseCourse_1({ navigation }) {
         StackActions.replace("CompleteExercise", {
           dataList: modifiedDataList,
           totalTime: realTotalTime,
+          routineIdx: routineIdx,
         })
       );
     } else {
@@ -206,23 +211,6 @@ export default function ExerciseCourse_1({ navigation }) {
       );
     }
   };
-
-  // const patchSkipData = async (routineIdx, healthCategoryIdx) => {
-  //   try {
-  //     let url = "https://gpthealth.shop/";
-  //     let detailAPI = `/app/process?routineIdx=${routineIdx}&healthCategoryIdx=${healthCategoryIdx}`;
-
-  //     const response = await axios.patch(url + detailAPI, {
-  //       routineIdx: routineIdx,
-  //       healthCategoryIdx: healthCategoryIdx,
-  //     });
-  //     const result = response.data;
-  //     console.log(result);
-  //     return result;
-  //   } catch (error) {
-  //     console.error("Error", error);
-  //   }
-  // };
 
   const postTotalData = async (
     routineIdx,
@@ -349,11 +337,18 @@ export default function ExerciseCourse_1({ navigation }) {
             </TextLine>
           ) : null}
         </Box2>
-
-        <CurrentText style={{ color: textColor }}>{item.rep}</CurrentText>
-        <TextLine>
-          <CurrentUnit style={{ color: textColor }}>회</CurrentUnit>
-        </TextLine>
+        <Box3>
+          <CurrentText style={{ color: textColor }}>{item.rep}</CurrentText>
+          <TextLine>
+            <CurrentUnit style={{ color: textColor }}>회</CurrentUnit>
+          </TextLine>
+        </Box3>
+        {item.set === dataList[listIndex].totalSets ? null : item.set + 1 <=
+          boxNumber ? (
+          <Check width={24} height={24} />
+        ) : (
+          <Check_disabled width={24} height={24} />
+        )}
       </Container>
     );
   };
@@ -409,7 +404,13 @@ export default function ExerciseCourse_1({ navigation }) {
       <ExerciseCard
         exerciseName={dataList[listIndex].exerciseInfo.exerciseName}
       >
-        <StopExercise onPress={() => OpenConfirm()} />
+        <StopExercise onPress={() => OpenConfirm()}>
+          <Close
+            width={24}
+            height={24}
+            color={isDark ? colors.white : colors.black}
+          />
+        </StopExercise>
         <ExerciseCircle isDark={isDark}>
           <CountdownCircleTimer
             key={key}

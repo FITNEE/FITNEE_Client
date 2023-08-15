@@ -2,14 +2,9 @@ import React, { useEffect, useState } from "react";
 import { Text } from "react-native";
 import PercentageCircle from "react-native-progress-circle";
 import { styled } from "styled-components/native";
-import { colors } from "../colors";
+import { colors } from "../../colors";
 import { useRecoilValue } from "recoil";
-import { IsDarkAtom } from "../recoil/MyPageAtom";
-
-const CircleBox = styled.View`
-  justify-content: center;
-  align-items: center;
-`;
+import { IsDarkAtom } from "../../recoil/MyPageAtom";
 
 const CircleLine = styled.View`
   flex-direction: row;
@@ -17,28 +12,19 @@ const CircleLine = styled.View`
   align-items: flex-end;
 `;
 
-export default function GrayCircle({ num, unit, title, bubbleOn, bubbleText }) {
+const CircleBox = styled.View`
+  justify-content: center;
+  align-items: center;
+`;
+
+export default function ProgressCircle({
+  num,
+  unit,
+  title,
+  bubbleOn,
+  bubbleText,
+}) {
   const isDark = useRecoilValue(IsDarkAtom);
-
-  const RoutineCircle = styled.View`
-    width: 80px;
-    height: 80px;
-    background: ${isDark ? colors.grey_8 : colors.grey_1};
-    border-radius: 100%;
-    justify-content: center;
-    align-items: center;
-  `;
-
-  const UnderCircle = styled.Text`
-    color: ${isDark ? colors.white : colors.black};
-    text-align: center;
-    font-size: 10px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: 15px;
-    margin-bottom: 31px;
-    margin-top: 8px;
-  `;
 
   const CircleText = styled.Text`
     color: ${isDark ? colors.white : colors.black};
@@ -54,8 +40,18 @@ export default function GrayCircle({ num, unit, title, bubbleOn, bubbleText }) {
     font-weight: 600;
   `;
 
-  const Bubble2 = styled.View`
-    //position: relative;
+  const UnderCircle = styled.Text`
+    color: ${isDark ? colors.white : colors.black};
+    text-align: center;
+    font-size: 10px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 15px;
+    margin-bottom: 31px;
+    margin-top: 8px;
+  `;
+
+  const Bubble = styled.View`
     position: absolute;
     background: ${isDark ? colors.white : colors.black};
     width: 60px;
@@ -67,7 +63,7 @@ export default function GrayCircle({ num, unit, title, bubbleOn, bubbleText }) {
     bottom: 124px;
   `;
 
-  const BubbleArrow2 = styled.View`
+  const BubbleArrow = styled.View`
     position: relative;
     border-style: solid;
     border-width: 12px 8px 0px;
@@ -78,22 +74,22 @@ export default function GrayCircle({ num, unit, title, bubbleOn, bubbleText }) {
     top: 16px;
   `;
 
-  const BubbleText2 = styled.Text`
+  const BubbleText = styled.Text`
     color: ${isDark ? colors.black : colors.white};
     font-size: 11px;
     font-weight: 700;
     top: 10px;
   `;
 
-  const [shouldRender, setShouldRender] = useState(true);
+  const percentage = (num / 60) * 100;
 
+  const [shouldRender, setShouldRender] = useState(true);
   useEffect(() => {
     if (bubbleOn === false) setShouldRender(false);
     // 일정 시간(예: 5초) 후에 렌더링 여부를 false로 변경
     const timer = setTimeout(() => {
       setShouldRender(false);
     }, 5000);
-
     // 컴포넌트가 언마운트되면 타이머 클리어
     return () => clearTimeout(timer);
   }, []); // 빈 배열을 전달하여 컴포넌트가 마운트될 때만 실행
@@ -101,17 +97,25 @@ export default function GrayCircle({ num, unit, title, bubbleOn, bubbleText }) {
   return (
     <CircleBox>
       {shouldRender ? (
-        <Bubble2>
-          <BubbleText2>{bubbleText}kg</BubbleText2>
-          <BubbleArrow2 />
-        </Bubble2>
+        <Bubble>
+          <BubbleText>{bubbleText}초</BubbleText>
+          <BubbleArrow />
+        </Bubble>
       ) : null}
-      <RoutineCircle>
+
+      <PercentageCircle
+        percent={percentage}
+        radius={40}
+        borderWidth={2}
+        color={colors.d_main}
+        shadowColor={isDark ? colors.grey_8 : colors.grey_1}
+        bgColor={isDark ? colors.grey_9 : colors.white}
+      >
         <CircleLine>
           <CircleText>{num}</CircleText>
           <CircleUnit>{unit}</CircleUnit>
         </CircleLine>
-      </RoutineCircle>
+      </PercentageCircle>
       <UnderCircle>{title}</UnderCircle>
     </CircleBox>
   );

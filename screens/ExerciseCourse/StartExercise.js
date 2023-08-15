@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { SafeAreaView, TouchableOpacity } from "react-native";
 import styled from "styled-components/native";
-import ProgressCircle from "../../components/ProgressCircle1";
-import GrayCircle from "../../components/GrayCircle";
+import ProgressCircle from "../../components/exerciseCourse/ProgressCircle1";
+import GrayCircle from "../../components/exerciseCourse/GrayCircle";
 import { ScrollView } from "react-native-gesture-handler";
 import { BackButton } from "../../Shared";
 import { colors } from "../../colors";
@@ -11,6 +11,7 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import { useIsFocused } from "@react-navigation/native";
 import { processDayData } from "../../components/myRoutine/Functions";
 import { TabBarAtom, IsDarkAtom } from "../../recoil/MyPageAtom";
+import Left from "../../assets/SVGs/Left.svg";
 
 const RecTextLine = styled.View`
   flex-direction: row;
@@ -134,6 +135,12 @@ export default function StartExercise({ navigation }) {
     align-items: center;
   `;
 
+  const BackIcon = styled.TouchableOpacity`
+    position: absolute;
+    left: 24px;
+    top: 16px;
+  `;
+
   const Week = new Array("sun", "mon", "tue", "wed", "thu", "fri", "sat");
 
   const now = new Date();
@@ -200,11 +207,11 @@ export default function StartExercise({ navigation }) {
       );
 
       if (allElementsAreZero) {
-        // 모든 요소가 0인 경우, "NoRoutine"으로 이동합니다.
-        navigation.navigate("NoRoutine");
+        // 모든 요소가 0인 경우
+        navigation.navigate("RegisterRoutine");
         return;
       } else if (dayRoutineIdx === 0) {
-        navigation.navigate("RegisterRoutine");
+        navigation.navigate("NoRoutine");
         return;
       } else {
         getExerciseData(day).then((response) => {
@@ -212,9 +219,9 @@ export default function StartExercise({ navigation }) {
           setCircleList(response.result);
         });
       }
+      setIsLoading(false);
     }
     fetchData();
-    setIsLoading(false);
   }, [isFocused, navigation]);
 
   const routineIdx = circleList?.routineIdx;
@@ -234,17 +241,17 @@ export default function StartExercise({ navigation }) {
     );
   }
 
+  const exerciseList = dataList.map((result) => (
+    <RecTextLine key={result.exerciseInfo.healthCategoryIdx}>
+      <RecText1>{result.exerciseInfo.exerciseName}</RecText1>
+      <RecText2 />
+      <RecText3>{result.totalSets}세트</RecText3>
+    </RecTextLine>
+  ));
+
   if (isLoading) {
     return <LoadingIndicator />;
   } else {
-    const exerciseList = dataList.map((result) => (
-      <RecTextLine key={result.exerciseInfo.healthCategoryIdx}>
-        <RecText1>{result.exerciseInfo.exerciseName}</RecText1>
-        <RecText2 />
-        <RecText3>{result.totalSets}세트</RecText3>
-      </RecTextLine>
-    ));
-
     return (
       <SafeAreaView
         style={{
@@ -253,7 +260,13 @@ export default function StartExercise({ navigation }) {
         }}
       >
         <Container>
-          <BackButton onPress={() => navigation.goBack()} />
+          <BackIcon onPress={() => navigation.goBack()}>
+            <Left
+              width={24}
+              height={24}
+              color={isDark ? colors.white : colors.black}
+            />
+          </BackIcon>
           <ExerciseText>운동을 시작해 볼까요?</ExerciseText>
           <ExerciseExplainText> </ExerciseExplainText>
 
@@ -270,6 +283,7 @@ export default function StartExercise({ navigation }) {
               title="세트간 휴식"
               bubbleOn={false}
             />
+
             <GrayCircle
               num={circleList?.totalCalories}
               unit="kcal"

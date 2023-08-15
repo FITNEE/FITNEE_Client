@@ -9,13 +9,10 @@ import { SafeAreaView, View, Text, TouchableOpacity } from "react-native";
 import { TextInput, Dimensions, Animated, StyleSheet } from "react-native";
 const { width, height } = Dimensions.get("window");
 import styled from "styled-components/native";
-import ExerciseCard from "../../components/ExerciseCard";
-import ExerciseButton from "../../components/ExerciseButton";
-import CurrentExplainLine from "../../components/CurrentExplainLine";
-import CurrentSet from "../../components/CurrentSet";
+import ExerciseCard from "../../components/exerciseCourse/ExerciseCard";
 import { colors } from "../../colors";
 import { CountdownCircleTimer } from "react-native-countdown-circle-timer";
-import NextSet from "../../components/NextSet";
+import NextSet from "../../components/exerciseCourse/NextSet";
 import {
   BottomSheetModal,
   BottomSheetModalProvider,
@@ -25,6 +22,7 @@ import { useRoute, StackActions } from "@react-navigation/native";
 import axios from "axios";
 import { useRecoilState } from "recoil";
 import { IsDarkAtom } from "../../recoil/MyPageAtom";
+import ArrowCircle from "../../assets/SVGs/ArrowCircle.svg";
 
 const StartButton = styled.TouchableOpacity`
   padding: 8px 12px;
@@ -32,9 +30,10 @@ const StartButton = styled.TouchableOpacity`
   justify-content: center;
   align-items: center;
   gap: 8px;
-  border-radius: 100px;
+  border-radius: 100%;
   background: ${colors.l_main};
   width: 99px;
+  margin-right: 24px;
 `;
 
 const StartButtonText = styled.Text`
@@ -102,6 +101,11 @@ const NextView = styled.View`
   z-index: 0;
 `;
 
+const NextTextView = styled.View`
+  flex-direction: row;
+  justify-content: center;
+`;
+
 const NextText = styled.Text`
   color: ${({ isDark }) => (isDark ? colors.black : colors.white)};
   font-size: 15px;
@@ -110,6 +114,7 @@ const NextText = styled.Text`
   line-height: 22.5px;
   width: 230px;
   height: 24px;
+  padding-left: 8px;
 `;
 
 const ModalTitleView = styled.View`
@@ -387,12 +392,15 @@ export default function ExerciseCourse_2({ navigation }) {
           </BottomSheetModal>
         </ExerciseCard>
         <NextView isDark={isDark}>
-          <NextText isDark={isDark}>
-            {dataList[listIndex + 1].exerciseInfo.exerciseName}
-          </NextText>
-          <StartButton onPress={goToNextExercise}>
-            <StartButtonText>바로 시작하기</StartButtonText>
-          </StartButton>
+          <NextTextView>
+            <ArrowCircle width={24} height={24} />
+            <NextText isDark={isDark}>
+              {dataList[listIndex + 1].exerciseInfo.exerciseName}
+            </NextText>
+            <StartButton onPress={goToNextExercise}>
+              <StartButtonText>바로 시작하기</StartButtonText>
+            </StartButton>
+          </NextTextView>
         </NextView>
       </SafeAreaView>
     </BottomSheetModalProvider>

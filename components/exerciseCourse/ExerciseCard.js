@@ -1,8 +1,8 @@
 import React from "react";
 import styled from "styled-components/native";
-import { colors } from "../colors";
+import { colors } from "../../colors";
 import { useRecoilValue } from "recoil";
-import { IsDarkAtom } from "../recoil/MyPageAtom";
+import { IsDarkAtom } from "../../recoil/MyPageAtom";
 import { View } from "react-native";
 
 export default function ExerciseCard({ exerciseName, children }) {
