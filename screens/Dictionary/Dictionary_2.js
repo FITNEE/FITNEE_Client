@@ -14,7 +14,7 @@ import LeftIcon from '../../assets/SVGs/Left.svg'
 import AddIcon from '../../assets/SVGs/Add.svg'
 import EditIcon from '../../assets/SVGs/Edit.svg'
 
-export default function Dictionary_3({ navigation, route }){
+export default function Dictionary_2({ navigation, route }){
     const isDark = useRecoilValue(IsDarkAtom)
     const isBubbleOn = useRecoilValue(BubbleAtom)
     const setIsBubbleOn = useSetRecoilState(BubbleAtom)
