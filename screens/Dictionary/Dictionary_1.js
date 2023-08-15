@@ -16,9 +16,9 @@ import Dictionary_List from '../../components/Dictionary_List'
 import axios from 'axios'
 import { IsDarkAtom } from "../../recoil/MyPageAtom"
 import { useRecoilValue } from "recoil"
-import { WithLocalSvg } from 'react-native-svg'
 import SearchIcon from '../../assets/SVGs/Search.svg'
 import DeleteIcon from '../../assets/SVGs/Delete.svg'
+import DeleteDarkIcon from '../../assets/SVGs/Delete_Dark.svg'
 
 export default function Dictionary_1({ navigation }) {
     const isDark = useRecoilValue(IsDarkAtom)
@@ -152,7 +152,7 @@ export default function Dictionary_1({ navigation }) {
                         <SearchContainer>
                             <SearchInputContainer 
                                 onPress={isSubmit? print: null}
-                                style={isDark? {backgroundColor: `${colors.black}`} : {backgroundColor: `${colors.grey_1}`}}
+                                style={{backgroundColor: isDark?`${colors.black}`: `${colors.grey_1}`}}
                             >
                                 <SearchIcon
                                     style={{ marginRight: 12 }}
@@ -170,17 +170,24 @@ export default function Dictionary_1({ navigation }) {
                                     value={search}
                                     onSubmitEditing={onSubmitEditing}
                                     onFocus={onFocusInput}
-                                    style={isDark? {color: `${colors.grey_3}`} : {color: `${colors.black}`}}
+                                    style={{color: isDark? `${colors.grey_3}` : `${colors.black}`}}
                                     >
                                 </SearchInput>
                                 <TouchableOpacity 
                                     style={{ marginLeft: 16}}
                                     onPress={onDeleteInput}>
-                                    <DeleteIcon
-                                        width={24}
-                                        height={24}
-                                        color={isDark? colors.white: colors.grey_4}
-                                    />
+                                    {
+                                        isDark? 
+                                        <DeleteDarkIcon
+                                            width={24}
+                                            height={24}
+                                        />
+                                        :
+                                        <DeleteIcon 
+                                            width={24}
+                                            height={24}
+                                        />
+                                    }
                                 </TouchableOpacity>
                             </SearchInputContainer>
                         </SearchContainer>
