@@ -8,13 +8,13 @@ import styled from 'styled-components/native'
 import { colors } from "./colors"
 import CheckIcon from './assets/SVGs/Check.svg'
 
-const MyTheme = {
-  ...DefaultTheme,
-  colors: {
-    ...DefaultTheme.colors,
-    background: "#f3f3f3",
-  },
-};
+// const MyTheme = {
+//   ...DefaultTheme,
+//   colors: {
+//     ...DefaultTheme.colors,
+//     background: "#f3f3f3",
+//   },
+// };
 
 export default function App() {
   return (
