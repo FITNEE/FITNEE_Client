@@ -6,6 +6,7 @@ import {colors} from '../colors'
 import Toast from 'react-native-toast-message'
 import { useRecoilValue } from "recoil"
 import { IsDarkAtom } from '../recoil/MyPageAtom'
+import axios from 'axios'
 
 const deviceWidth = Dimensions.get("window").width;
 const deviceHeight =
@@ -32,6 +33,52 @@ export default function Dictionary_Modal(props){
             props: { isDark: isDark }
         })
     }
+
+    const getRoutineInfo = async () => {
+        try {
+            let url = "https://gpthealth.shop/"
+            let detailAPI = "/app/routine/calendar/parts"
+            const response = await axios.get(url + detailAPI)
+            const result = response.data
+            console.log(result)
+
+            return result.result
+        } catch (error) {
+            console.error("Failed to fetch data:", error)
+        }
+    }
+    useEffect(()=>{
+        getRoutineInfo().then((result)=>{
+            // console.log(SortArray(result.parts))
+            // console.log(SortArray(result.routineIdx))
+        })
+    }, [])
+
+    const obj = {
+        "parts": {"fri": "등", "mon": "가슴", "sat": "", "sun": "유산소", "thu": "", "tue": "", "wed": "하체"}, 
+        "routineIdx": {"fri": 950, "mon": 1, "sat": 0, "sun": 951, "thu": 0, "tue": 0, "wed": 949}
+    };
+
+    const [routineIdx, setRoutineIdx] = useState()
+    const [routinePart, setRoutinePart] = useState()
+    const day = ['월', '화', []]
+
+    const SortArray = (obj) => {
+        const sortedPartsArr = 
+            Object.entries(obj).sort(([key1], [key2]) => {
+                const dayOrder = {mon: 1, tue: 2, wed: 3, thu: 4, fri: 5, sat: 6, sun: 7}
+                return dayOrder[key1] - dayOrder[key2]
+            }).map(([_, value]) => value)
+
+        return sortedPartsArr
+    }
+    useEffect(()=>{
+        setRoutinePart(SortArray(obj.parts))
+        setRoutineIdx(SortArray(obj.routineIdx))
+
+        console.log(routinePart)
+        console.log(routineIdx)
+    }, [isModalVisible])
 
     return(
             <Modal 
@@ -70,7 +117,6 @@ export default function Dictionary_Modal(props){
                             <BottomText style={{color: isDark? `${colors.grey_3 }`: `${colors.grey_7}`}}>취소</BottomText>
                         </CancelContainer>
                         <SelectContainer
-                            title='Show toast'
                             onPress={showToast} 
                             style={{
                                 backgroundColor: 

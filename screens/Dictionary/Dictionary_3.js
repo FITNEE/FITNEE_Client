@@ -230,7 +230,6 @@ const TopBtnContainer = styled.View`
 `
 const ImageContainer = styled.View`
     height: 326px;  
-    
     justify-content: center;
     align-items: center;
 `
@@ -258,7 +257,6 @@ font-size: 13px;
 const TitleWrapper = styled.View`
 `
 const TitleText = styled.Text`
-    color: ${colors.black};
     font-weight: 600;
     font-size: 24px;
     padding-top: 8px;
