@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { SafeAreaView, Text, View } from "react-native";
 import { AppContext } from "../../components/ContextProvider";
 import { Button } from "../../Shared";
@@ -6,8 +6,10 @@ import { styled } from "styled-components/native";
 import { colors } from "../../colors";
 import HomeRoutines from "../../components/HomeRoutines";
 import NotHomeRoutine from "../../components/NotHomeRoutine";
-import { useSetRecoilState } from "recoil";
-import { TabBarAtom } from "../../recoil/MyPageAtom";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { TabBarAtom, IsDarkAtom } from "../../recoil/MyPageAtom";
+import { useIsFocused } from "@react-navigation/native";
+import axios from "axios";
 
 const Top = styled.View`
   width: 100%;
@@ -42,10 +44,31 @@ const PremiumText = styled.Text`
 `;
 
 const Home = ({ navigation }) => {
-  const setIsTabVisible = useSetRecoilState(TabBarAtom);
-  setIsTabVisible(true);
+  const isFocus = useIsFocused();
+  const [isTabVisible, setIsTabVisible] = useRecoilState(TabBarAtom);
+  const [data, setData] = useState("");
 
-  const [showRoutine, SetShowRoutine] = useState(true);
+  useEffect(() => {
+    isFocus && setIsTabVisible(true);
+  }, [isFocus]);
+
+  const fetchData = async () => {
+    try {
+      const response = await axios.get(
+        "https://gpthealth.shop/app/routine/today"
+      );
+      console.log("Response : ", response.data);
+      setData(response.data);
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  //const { toggleLogin } = useContext(AppContext);
+  // const [showRoutine, SetShowRoutine] = useState(true);
 
   return (
     <SafeAreaView
@@ -63,10 +86,13 @@ const Home = ({ navigation }) => {
           <PremiumText>PREMIUM</PremiumText>
         </Premium>
       </Top>
-      {showRoutine && <HomeRoutines navigation={navigation} />}
-      {!showRoutine && <NotHomeRoutine navigation={navigation} />}
+      {data.isSuccess ? (
+        <HomeRoutines data={data.result} />
+      ) : (
+        <NotHomeRoutine />
+      )}
     </SafeAreaView>
   );
 };
-
+//data.isSuccess
 export default Home;

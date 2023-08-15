@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { days } from "./data";
 import { colors } from "../../colors";
-import { WithLocalSvg } from "react-native-svg";
 import Exercise from "../../assets/SVGs/Exercise.svg";
 import { TextContainer, DayText } from "../../components/ScheduleChanger";
 import { styled } from "styled-components/native";
@@ -37,7 +36,7 @@ export default WeekCalendar = ({
 }) => {
   return (
     <ScheduleContainer
-      style={{ backgroundColor: isDark ? colors.black : colors.white }}
+      style={{ backgroundColor: isDark ? colors.grey_9 : colors.white }}
     >
       <TextContainer>
         {days.map((item, id) => (
@@ -45,14 +44,12 @@ export default WeekCalendar = ({
             onPress={() => setSelectedDay(id)}
             key={id}
             style={
-              id == selectedDay
-                ? [
-                    {
-                      backgroundColor: isDark ? colors.d_sub_1 : colors.l_main,
-                    },
-                    isDark && { borderColor: colors.d_main, borderWidth: 1 },
-                  ]
-                : { backgroundColor: isDark ? colors.black : colors.white }
+              id == selectedDay && [
+                {
+                  backgroundColor: isDark ? colors.d_sub_1 : colors.l_main,
+                },
+                isDark && { borderColor: colors.d_main, borderWidth: 1 },
+              ]
             }
           >
             <DayText
@@ -81,7 +78,11 @@ export default WeekCalendar = ({
                         }
                   }
                 >
-                  <WithLocalSvg width={24} height={24} asset={Exercise} />
+                  <Exercise
+                    width={24}
+                    height={24}
+                    color={isDark ? colors.white : colors.l_main}
+                  />
                 </Circle>
               )}
           </DayContainer>

@@ -1,7 +1,10 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { SafeAreaView, TouchableOpacity } from "react-native";
 import styled from "styled-components/native";
 import { colors } from "../../colors";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import { TabBarAtom, IsDarkAtom } from "../../recoil/MyPageAtom";
+import { useIsFocused } from "@react-navigation/native";
 
 const Container = styled.View`
   flex: 1;
@@ -88,7 +91,14 @@ const RoutineRec = styled.View`
 `;
 
 export default function RegisterRoutine({ navigation }) {
-  const goToStartExercise = () => navigation.navigate("StartExercise");
+  const isFocus = useIsFocused();
+  const isDark = useRecoilValue(IsDarkAtom);
+  const setIsTabVisible = useSetRecoilState(TabBarAtom);
+  const goToCreateRoutine = () => navigation.navigate("CreateRoutineNav");
+
+  useEffect(() => {
+    isFocus && setIsTabVisible(true);
+  }, [isFocus]);
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.white }}>
       <Container>
@@ -118,7 +128,7 @@ export default function RegisterRoutine({ navigation }) {
         </CircleBox1>
 
         <RoutineRec />
-        <CreateRoutine onPress={goToStartExercise}>
+        <CreateRoutine onPress={goToCreateRoutine}>
           <CreateRoutineText>루틴 등록하기</CreateRoutineText>
         </CreateRoutine>
       </Container>

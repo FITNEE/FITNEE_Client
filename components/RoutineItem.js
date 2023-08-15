@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components/native";
 
 export default function RoutineItem({
@@ -8,10 +8,39 @@ export default function RoutineItem({
   onPress,
   select,
 }) {
+  const [kday, setKday] = useState("");
+  useEffect(() => {
+    switch (day) {
+      case "Sunday":
+        setKday("일");
+        break;
+      case "Monday":
+        setKday("월");
+        break;
+      case "Tuesday":
+        setKday("화");
+        break;
+      case "Wednesday":
+        setKday("수");
+        break;
+      case "Thursday":
+        setKday("목");
+        break;
+      case "Friday":
+        setKday("금");
+        break;
+      case "Saturday":
+        setKday("토");
+        break;
+
+      default:
+        break;
+    }
+  }, [day]);
   return (
     <Container>
       <Item onPress={onPress}>
-        <ItemTitle>{day}</ItemTitle>
+        <ItemTitle>{kday}</ItemTitle>
         <ItemSubTitle>{parts}</ItemSubTitle>
       </Item>
       {select ? (

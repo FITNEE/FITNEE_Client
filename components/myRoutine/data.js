@@ -7,13 +7,28 @@ export const getRoutines = async () => {
     let url = "https://gpthealth.shop/";
     let detailAPI = "app/routine/calendar";
     const response = await axios.get(url + detailAPI);
+
     const result = response.data;
     return result;
   } catch (error) {
     console.error("Failed to fetch data:", error);
   }
 };
+// export  const getSchePart= async (mySCHEDULE, selectedDay, setIsLoading) => {
+//   setIsLoading(true);
+//   try {
+//     let url = "https://gpthealth.shop/";
 
+//     let detailAPI = `app/routine/${mySCHEDULE[selectedDay].routineId}`;
+//     const response = await axios.get(url + detailAPI);
+
+//     const result = response.data;
+//     setIsLoading(false);
+//     return result;
+//   } catch (error) {
+//     console.error("Failed to fetch data:", error);
+//   }
+// };
 export const getRoutine = async (mySCHEDULE, selectedDay, setIsLoading) => {
   setIsLoading(true);
   try {
@@ -21,6 +36,7 @@ export const getRoutine = async (mySCHEDULE, selectedDay, setIsLoading) => {
     //후가공한 SCHEDULE 배열에서의 IDX값을 그대로 가져와 query스트링으로 추가
     let detailAPI = `app/routine/${mySCHEDULE[selectedDay].routineId}`;
     const response = await axios.get(url + detailAPI);
+
     const result = response.data;
     setIsLoading(false);
     return result;

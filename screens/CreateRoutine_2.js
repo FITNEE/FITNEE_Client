@@ -22,10 +22,18 @@ export default function CreateRoutine_2({ navigation }) {
     console.log("atom2 : ", routine);
   }, [routine]);
   const nextButton = () => {
-    setRoutine((prev) => ({
-      ...prev,
-      RM: value,
-    }));
+    if (dontKnow) {
+      setRoutine((prev) => ({
+        ...prev,
+        RM: 0,
+      }));
+    } else {
+      setRoutine((prev) => ({
+        ...prev,
+        RM: value,
+      }));
+    }
+
     navigation.push("CreateRoutine_3");
   };
   const handleDontKnow = () => {
@@ -155,10 +163,9 @@ const NextButton = styled.TouchableOpacity`
   height: 52px;
   align-items: center;
   justify-content: center;
-  background-color: ${(props) =>
-    props.isActive ? colors.l_main : colors.grey_3};
+  background-color: ${colors.l_main};
   border-radius: 10px;
 `;
 const ButtonText = styled.Text`
-  color: ${(props) => (props.isActive ? colors.white : colors.black)};
+  color: ${colors.white};
 `;

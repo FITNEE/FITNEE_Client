@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components/native";
 import { colors } from "../../colors";
-import { WithLocalSvg } from "react-native-svg";
-import Check from "../../assets/SVGs/Check.svg";
+
+import CheckBox_blank from "../../assets/SVGs/CheckBox_blank.svg";
+import CheckBox_checked from "../../assets/SVGs/CheckBox_checked.svg";
 const ListContainer = styled.ScrollView`
   width: 100%;
   height: 100%;
@@ -12,7 +13,6 @@ const ResultContainer = styled.TouchableOpacity`
   flex-direction: row;
   align-items: center;
   border-top-width: 1px;
-  border-top-color: ${colors.grey_1};
   justify-content: space-between;
 `;
 const TextContainer = styled.View`
@@ -21,21 +21,19 @@ const TextContainer = styled.View`
   flex: 1;
 `;
 const IconContainer = styled.View`
-  width: 40px;
-  height: 40px;
+  width: 60px;
+  height: 60px;
   background-color: ${colors.grey_2};
   border-radius: 32px;
 `;
 const Title = styled.Text`
   font-weight: 500;
-  font-size: 15px;
-  color: ${colors.black};
+  font-size: 17px;
 `;
 const SubText = styled.Text`
   font-size: 13px;
   margin-top: 4px;
   font-weight: 400;
-  color: ${colors.grey_7};
 `;
 const CheckButton = styled.TouchableOpacity`
   justify-content: center;
@@ -44,30 +42,59 @@ const CheckButton = styled.TouchableOpacity`
   height: 40px;
 `;
 
-export default function SearchList({ parentSearchList, editSelectedList }) {
+export default function SearchList({
+  parentSearchList,
+  editSelectedList,
+  selectedItem,
+  isDark,
+}) {
+  const [isSelected, setIsSelected] = useState(false);
+  let tempArr = selectedItem.map((item) => item.healthCategoryIdx);
+  console.log(tempArr);
+
   return (
     <ListContainer>
       {parentSearchList?.map((words, index) => {
         return (
           <ResultContainer
+            style={{ borderTopColor: isDark ? colors.grey_8 : colors.grey_1 }}
             key={index}
-            onPress={() =>
+            onPress={() => {
+              setIsSelected(true);
               editSelectedList("add", index, {
                 exerciseName: words.name,
                 exerciseParts: words.parts,
                 healthCategoryIdx: words.healthCategoryIdx,
-              })
-            }
+              });
+            }}
           >
-            <IconContainer />
+            <IconContainer
+              style={{ backgroundColor: isDark ? colors.black : colors.white }}
+            />
             <TextContainer>
-              <Title>{words.name}</Title>
-              <SubText>
+              <Title style={{ color: isDark ? colors.white : colors.black }}>
+                {words.name}
+              </Title>
+              <SubText
+                style={{ color: isDark ? colors.grey_1 : colors.grey_7 }}
+              >
                 {words.parts} | {words.equipment}
               </SubText>
             </TextContainer>
             <CheckButton>
-              <WithLocalSvg width={24} height={24} asset={Check} />
+              {isSelected & tempArr.includes(words.healthCategoryIdx) ? (
+                <CheckBox_checked
+                  width={24}
+                  height={24}
+                  color={isDark ? colors.d_sub_1 : colors.l_sub_2}
+                />
+              ) : (
+                <CheckBox_blank
+                  width={24}
+                  height={24}
+                  color={isDark ? colors.grey_3 : colors.grey_7}
+                />
+              )}
             </CheckButton>
           </ResultContainer>
         );

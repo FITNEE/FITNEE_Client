@@ -11,7 +11,6 @@ import Tab_Exercise from "../assets/SVGs/Tab_Exercise.svg";
 import Tab_MyPage from "../assets/SVGs/Tab_MyPage.svg";
 import Tab_MyRoutine from "../assets/SVGs/Tab_MyRoutine.svg";
 import { colors } from "../colors";
-import { WithLocalSvg } from "react-native-svg";
 import { styled } from "styled-components/native";
 import { useRecoilValue } from "recoil";
 import { IsDarkAtom, TabBarAtom } from "../recoil/MyPageAtom";
@@ -55,11 +54,10 @@ export default function LoggedInNav() {
         options={{
           tabBarIcon: ({ focused }) => (
             <>
-              <WithLocalSvg
+              <Tab_Home
                 style={{ color: focused ? colors.l_main : colors.grey_5 }}
                 width={24}
                 height={24}
-                asset={Tab_Home}
               />
               <IconText
                 style={{ color: focused ? colors.l_main : colors.grey_7 }}
@@ -77,11 +75,10 @@ export default function LoggedInNav() {
         options={{
           tabBarIcon: ({ focused }) => (
             <>
-              <WithLocalSvg
+              <Tab_MyRoutine
                 style={{ color: focused ? colors.l_main : colors.grey_5 }}
                 width={24}
                 height={24}
-                asset={Tab_MyRoutine}
               />
               <IconText
                 style={{ color: focused ? colors.l_main : colors.grey_7 }}
@@ -99,11 +96,10 @@ export default function LoggedInNav() {
         options={{
           tabBarIcon: ({ focused }) => (
             <>
-              <WithLocalSvg
+              <Tab_Exercise
                 style={{ color: focused ? colors.l_main : colors.grey_5 }}
                 width={24}
                 height={24}
-                asset={Tab_Exercise}
               />
               <IconText
                 style={{ color: focused ? colors.l_main : colors.grey_7 }}
@@ -121,11 +117,10 @@ export default function LoggedInNav() {
         options={{
           tabBarIcon: ({ focused }) => (
             <>
-              <WithLocalSvg
+              <Tab_ExerciseDict
                 style={{ color: focused ? colors.l_main : colors.grey_5 }}
                 width={24}
                 height={24}
-                asset={Tab_ExerciseDict}
               />
               <IconText
                 style={{ color: focused ? colors.l_main : colors.grey_7 }}
@@ -143,11 +138,10 @@ export default function LoggedInNav() {
         options={{
           tabBarIcon: ({ focused, color, size }) => (
             <>
-              <WithLocalSvg
+              <Tab_MyPage
                 style={{ color: focused ? colors.l_main : colors.grey_5 }}
                 width={24}
                 height={24}
-                asset={Tab_MyPage}
               />
 
               <IconText
