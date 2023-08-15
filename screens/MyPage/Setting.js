@@ -10,6 +10,7 @@ import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { IsDarkAtom, TabBarAtom } from "../../recoil/MyPageAtom";
 import { WithLocalSvg } from "react-native-svg";
 import Right from "../../assets/SVGs/Right.svg";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Profile = styled.TouchableOpacity`
   width: 100%;
@@ -121,6 +122,15 @@ export default function Setting({ navigation }) {
     line-height: 25.5px;
     color: ${isDark ? colors.white : colors.black};
   `;
+  /*
+  const logout = async () => {
+    try {
+      AsyncStorage.clear();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+*/
 
   return (
     <SafeAreaView>
@@ -168,8 +178,8 @@ export default function Setting({ navigation }) {
         <Block>
           <BlockText>버전 정보</BlockText>
         </Block>
-        <Block>
-          <BlockText onPress={() => toggleLogin()}>로그아웃</BlockText>
+        <Block onPress={() => toggleLogin()}>
+          <BlockText>로그아웃</BlockText>
         </Block>
       </Container>
     </SafeAreaView>
