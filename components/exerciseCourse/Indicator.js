@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import styled from "styled-components/native";
-import { colors } from "../colors";
+import { colors } from "../../colors";
 import { useRecoilState } from "recoil";
-import { IsDarkAtom } from "../recoil/MyPageAtom";
+import { IsDarkAtom } from "../../recoil/MyPageAtom";
 
 const NumberView = styled.View`
   width: 69px;

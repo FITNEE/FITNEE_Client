@@ -16,6 +16,8 @@ import { colors } from "../../colors";
 import ViewShot from "react-native-view-shot";
 import { useRecoilState } from "recoil";
 import { IsDarkAtom } from "../../recoil/MyPageAtom";
+import ShareIcon from "../../assets/SVGs/Share.svg";
+import ExerciseIcon from "../../assets/SVGs/Exercise.svg";
 //import Share from "react-native-share";
 
 const TextBox = styled.View`
@@ -75,46 +77,65 @@ const ResultBox = styled.View`
   margin-bottom: 32px;
 `;
 
+const ShareIconView = styled.TouchableOpacity`
+  position: absolute;
+  top: 60px;
+  right: 24px;
+`;
+
+const Container = styled.View`
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+  background-color: ${({ DarkMode }) =>
+    DarkMode ? colors.grey_9 : colors.white};
+`;
+
+const ExerciseText = styled.Text`
+  font-weight: 600;
+  font-size: 24px;
+  line-height: 33.6px;
+  color: ${({ DarkMode }) => (DarkMode ? colors.white : colors.black)};
+`;
+
+const ExerciseExplainText = styled.Text`
+  color: ${({ DarkMode }) => (DarkMode ? colors.white : colors.black)};
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 19.5px;
+`;
+
+const ButtonText = styled.Text`
+  color: ${({ DarkMode }) => (DarkMode ? colors.black : colors.white)};
+  text-align: center;
+  font-size: 17px;
+  font-style: normal;
+  font-weight: 600;
+`;
+
+const JustCircle = styled.View`
+  border-radius: 100%;
+  width: 160px;
+  height: 160px;
+  border-radius: 120px;
+  background-color: ${({ DarkMode }) =>
+    DarkMode ? colors.grey_8 : colors.grey_2};
+  margin-top: 64px;
+`;
+
+const ExerciseIconCircle = styled.View`
+  justify-content: center;
+  align-items: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 100%;
+  background-color: ${({ DarkMode }) =>
+    DarkMode ? colors.l_sub_2 : colors.d_sub_3};
+`;
+
 export default function ExerciseResult({ navigation }) {
   const isDark = useRecoilState(IsDarkAtom);
-  const Container = styled.View`
-    flex: 1;
-    justify-content: center;
-    align-items: center;
-    background-color: ${isDark ? colors.grey_9 : colors.white};
-  `;
-
-  const ExerciseText = styled.Text`
-    font-weight: 600;
-    font-size: 24px;
-    line-height: 33.6px;
-    color: ${isDark ? colors.white : colors.black};
-  `;
-
-  const ExerciseExplainText = styled.Text`
-    color: ${isDark ? colors.white : colors.black};
-    font-size: 13px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: 19.5px;
-  `;
-
-  const ButtonText = styled.Text`
-    color: ${isDark ? colors.black : colors.white};
-    text-align: center;
-    font-size: 17px;
-    font-style: normal;
-    font-weight: 600;
-  `;
-
-  const JustCircle = styled.View`
-    border-radius: 100%;
-    width: 160px;
-    height: 160px;
-    border-radius: 120px;
-    background: ${isDark ? colors.grey_8 : colors.grey_2};
-    margin-top: 64px;
-  `;
 
   let Week = new Array("일", "월", "화", "수", "목", "금", "토");
 
@@ -196,41 +217,53 @@ export default function ExerciseResult({ navigation }) {
           ref={ref}
           options={{ fileName: "Your-File-Name", format: "jpg", quality: 0.9 }}
         >
-          <Container>
+          <Container DarkMode={isDark}>
             <BlankBox />
             <TextBox>
-              <ExerciseText>
+              <ExerciseText DarkMode={isDark}>
                 소형차 한 대 만큼의 {"\n"}무게를 들어올렸어요
               </ExerciseText>
-              <ExerciseExplainText>
+              <ExerciseExplainText DarkMode={isDark}>
                 {formatDate} ({day})에 분석된 운동 역량 분석 결과입니다.
               </ExerciseExplainText>
             </TextBox>
 
-            <JustCircle />
+            <JustCircle DarkMode={isDark} />
             <JustText>3300kg</JustText>
 
             <TextBox>
-              <ExerciseText>성장속도가 빠른 {"\n"}야망 헬린이</ExerciseText>
+              <ExerciseText DarkMode={isDark}>
+                성장속도가 빠른 {"\n"}야망 헬린이
+              </ExerciseText>
             </TextBox>
 
             <TextBox>
-              <ExerciseText>
+              <ExerciseText DarkMode={isDark}>
                 다음 운동부터 {"\n"}업데이트 되는 부분이에요
               </ExerciseText>
             </TextBox>
+
+            <ResultBox>
+              <ExerciseIconCircle>
+                <ExerciseIcon width={20} height={20} color={colors.l_main} />
+              </ExerciseIconCircle>
+            </ResultBox>
           </Container>
         </ViewShot>
         <HomeView>
           <HomeButton onPress={goToHome}>
-            <ButtonText>확인했어요</ButtonText>
+            <ButtonText DarkMode={isDark}>확인했어요</ButtonText>
           </HomeButton>
         </HomeView>
       </ScrollView>
 
-      <View style={{ position: "absolute", top: 60, right: 24 }}>
-        <Button onPress={() => onShare()} title="Share" />
-      </View>
+      <ShareIconView onPress={() => onShare()}>
+        <ShareIcon
+          width={24}
+          height={24}
+          color={isDark ? colors.white : colors.black}
+        />
+      </ShareIconView>
     </SafeAreaView>
   );
 }
