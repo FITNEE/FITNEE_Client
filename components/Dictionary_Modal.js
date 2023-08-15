@@ -2,45 +2,36 @@ import React, {useState, useEffect} from 'react'
 import styled from 'styled-components/native'
 import Modal from "react-native-modal"
 import {TouchableWithoutFeedback, Dimensions, TouchableOpacity} from 'react-native'
-import {colors} from '../colors'
+import { colors } from '../colors'
 import Toast from 'react-native-toast-message'
 import { useRecoilValue } from "recoil"
 import { IsDarkAtom } from '../recoil/MyPageAtom'
 import axios from 'axios'
 
-const deviceWidth = Dimensions.get("window").width;
-const deviceHeight =
-//   Platform.OS === "ios"?
-   Dimensions.get("window").height
-    // : require("react-native-extra-dimensions-android").get(
-        // "REAL_WINDOW_HEIGHT"
-    //   );
-
 export default function Dictionary_Modal(props){
-    const {isModalVisible, changeModalVisibility} = props
+    const {isModalVisible, changeModalVisibility, exerciseName, exercisePart, healthCategoryIdx} = props
     const isDark = useRecoilValue(IsDarkAtom)
-
-    const [isDone, setIsDone] = useState(false)
      
-    const temp = ['등, 어깨, 가슴', '등, 어깨, 가슴', '', '', '', '등, 어깨, 가슴', '']
-    const showToast = () => {
-        changeModalVisibility(false)
-        Toast.show({
-            type: 'customToast',
-            text1: '해당 운동이 마이루틴에 추가되었습니다.',
-            visibilityTime: 1200,
-            topOffset: 56,
-            props: { isDark: isDark }
-        })
-    }
+    // getRoutineInfo에서 받아온 내용 저장
+    const [routineInfo, setRoutineInfo] = useState([])
+    // getRoutineInfo로 받아온 routineIdx, 대표부위를 요일별로 묶어서 배열로 변환
+    const sortArray = (obj) => {
+        const days = ['월', '화', '수', '목', '금', '토', '일']
+        const sortedArray = Object.keys(obj.parts).map((key, index) => ({
+            day: days[index],
+            parts: obj.parts[key],
+            routineIdx: obj.routineIdx[key]
+          }))
 
+        return sortedArray
+    }
+    // 일주일간의 요일별 routineIdx, 대표부위(parts)를 받아옴
     const getRoutineInfo = async () => {
         try {
             let url = "https://gpthealth.shop/"
             let detailAPI = "/app/routine/calendar/parts"
             const response = await axios.get(url + detailAPI)
             const result = response.data
-            console.log(result)
 
             return result.result
         } catch (error) {
@@ -48,37 +39,92 @@ export default function Dictionary_Modal(props){
         }
     }
     useEffect(()=>{
-        getRoutineInfo().then((result)=>{
-            // console.log(SortArray(result.parts))
-            // console.log(SortArray(result.routineIdx))
-        })
-    }, [])
-
-    const obj = {
-        "parts": {"fri": "등", "mon": "가슴", "sat": "", "sun": "유산소", "thu": "", "tue": "", "wed": "하체"}, 
-        "routineIdx": {"fri": 950, "mon": 1, "sat": 0, "sun": 951, "thu": 0, "tue": 0, "wed": 949}
-    };
-
-    const [routineIdx, setRoutineIdx] = useState()
-    const [routinePart, setRoutinePart] = useState()
-    const day = ['월', '화', []]
-
-    const SortArray = (obj) => {
-        const sortedPartsArr = 
-            Object.entries(obj).sort(([key1], [key2]) => {
-                const dayOrder = {mon: 1, tue: 2, wed: 3, thu: 4, fri: 5, sat: 6, sun: 7}
-                return dayOrder[key1] - dayOrder[key2]
-            }).map(([_, value]) => value)
-
-        return sortedPartsArr
-    }
-    useEffect(()=>{
-        setRoutinePart(SortArray(obj.parts))
-        setRoutineIdx(SortArray(obj.routineIdx))
-
-        console.log(routinePart)
-        console.log(routineIdx)
+        isModalVisible && 
+            getRoutineInfo().then((result)=>{
+                const temp = sortArray(result)
+                setRoutineInfo(temp)
+            })
+        isModalVisible && setSelectedIdx(-1)
     }, [isModalVisible])
+
+    // 선택하려는 요일의 routineInfo 내에서의 index값
+    const [selectedIdx, setSelectedIdx] = useState(-1)
+    const onPressDay = (i) => {
+        if(selectedIdx == i) setSelectedIdx(-1)
+        else setSelectedIdx(i)
+    }
+
+    // 선택완료 눌렀을 때 selectedIdx=-1이면 동작X
+    const onPressDone = () => {
+        if(selectedIdx != -1){
+            changeModalVisibility(false)
+            Toast.show({
+                type: 'customToast',
+                text1: '해당 운동이 마이루틴에 추가되었습니다.',
+                visibilityTime: 1200,
+                topOffset: 56,
+                props: { isDark: isDark }
+            })
+            getRoutineDetail(routineInfo[selectedIdx].routineIdx).then((result)=>{
+                let content = result.routineDetails
+                let addInfo = {
+                    "healthCategoryIdx": healthCategoryIdx,
+                    "exerciseName": exerciseName,
+                    "exerciseParts": exercisePart,
+                    "content": [
+                        // { rep: 15, weight: 40 },
+                        // { rep: 15, weight: 40 },
+                        // { rep: 15, weight: 40 },
+                        { rep: 15 },
+                        { rep: 15 },
+                        { rep: 15 },
+                    ]
+                }
+                content.push(addInfo)
+                updateRoutine(routineInfo[selectedIdx].routineIdx, content)
+            })
+        } 
+    }
+
+    // 선택한 요일의 기존에 저장되어 있던 루틴 내용을 가져옴
+    const getRoutineDetail = async (routineIdx) => {
+        try {
+            let url = "https://gpthealth.shop/";
+            let detailAPI = `app/routine/${routineIdx}`
+            const response = await axios.get(url + detailAPI)
+        
+            const result = response.data
+            return result.result
+        } 
+        catch (error) {
+          console.error("Failed to fetch data:", error);
+        }
+    }
+    // 선택한 요일에 기존+추가 합쳐서 post 하기
+    const updateRoutine = async (routineIdx, changedArray) => {
+        if (changedArray == undefined) {
+            let message = "changedArray == undefined여서, updateRoutine 실행취소";
+            return message;
+        } 
+        else{
+            try {
+                let url = "https://gpthealth.shop/"
+                let detailAPI = `app/routine/${routineIdx}`
+                const response = await axios.put(url + detailAPI, changedArray, {
+                    headers: {
+                    "Content-Type": "application/json",
+                    },
+            })
+            const result = response.data
+            console.log(result)
+            return result
+        } 
+            catch (error) {
+                console.error("Failed to fetch data:", error)
+            }
+        }
+    }
+
 
     return(
             <Modal 
@@ -97,14 +143,41 @@ export default function Dictionary_Modal(props){
 
                         <DayContainer>
                         {
-                            temp.map((part, i)=>(
-                                <DayWrapper key={i} style={{marginRight: i%2==0? 5: null, backgroundColor: isDark? `${colors.grey_9}`:`${colors.grey_1}`}}>
-                                    <DayText style={{color: isDark? `${colors.white}` : `${colors.black}`}}>
-                                        월
-                                    </DayText>
+                            routineInfo.map((info, i)=>{
 
-                                </DayWrapper>
-                            ))
+                                if(info.routineIdx == 0){
+                                    return (
+                                    <NoRoutineDay key={i} style={{marginRight: i%2==0? 5: null, backgroundColor: isDark? `${colors.grey_7}`:`${colors.grey_2}`}}>
+                                        <DayText style={{color: `${colors.grey_4}`}}>
+                                            {info.day}
+                                        </DayText>
+                                    </NoRoutineDay>)
+                                }
+                                else{
+                                    return (
+                                        <DayWrapper 
+                                            onPress={()=>onPressDay(i)}
+                                            key={i} 
+                                            style={{
+                                                marginRight: i%2==0? 5: null, 
+                                                backgroundColor: 
+                                                    selectedIdx == i? 
+                                                        isDark? `${colors.l_p50}`:`${colors.l_sub_2}`
+                                                    :
+                                                        isDark? `${colors.grey_9}`:`${colors.grey_1}`,
+                                                borderColor: selectedIdx == i? isDark? `${colors.d_main}`:`${colors.l_main}`: 'transparent',
+                                            }}
+                                        >
+                                            <DayText style={{color: isDark? `${colors.white}` : `${colors.black}`}}>
+                                                {info.day}
+                                            </DayText>
+                                            <PartText>
+                                                {info.parts}
+                                            </PartText>
+                                        </DayWrapper>
+                                    )
+                                }
+                            })
                         }
                         
                         </DayContainer>
@@ -117,14 +190,16 @@ export default function Dictionary_Modal(props){
                             <BottomText style={{color: isDark? `${colors.grey_3 }`: `${colors.grey_7}`}}>취소</BottomText>
                         </CancelContainer>
                         <SelectContainer
-                            onPress={showToast} 
+                            onPress={onPressDone} 
                             style={{
                                 backgroundColor: 
                                 isDark? 
-                                    isDone? `${colors.d_main}`: `${colors.grey_4}` 
+                                    selectedIdx != -1? `${colors.d_main}`: `${colors.grey_4}` 
                                 : 
-                                    isDone? `${colors.l_main}`: `${colors.grey_6}` 
-                                }}>
+                                    selectedIdx != -1? `${colors.l_main}`: `${colors.grey_6}` ,
+                                }}
+                            activeOpacity={ selectedIdx == -1? 1: 0.2 }        
+                        >
                             <BottomText style={{color: `${colors.white}`}}>선택 완료</BottomText>
                         </SelectContainer>
                     </BottomContainer>
@@ -162,24 +237,37 @@ const DayContainer = styled.View`
     padding: 0px 16px;
     margin-top: 28px;
 `
-const DayWrapper = styled.TouchableOpacity`
+const NoRoutineDay = styled.View`
     width: 145px;
     height: 39px;
     border-radius: 8px;
-    background-color: ${colors.grey_2};
     margin-bottom: 5px;
 
     flex-direction: row;
     align-items: center;
+    justify-content: space-between;
+    padding: 8px;
+`
+const DayWrapper = styled.TouchableOpacity`
+    width: 145px;
+    height: 39px;
+    border-radius: 8px;
+    border-width: 1px;
+    margin-bottom: 5px;
+
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px;
 `
 const DayText = styled.Text`
     font-weight: 500;
     font-size: 15px;
-    padding-left: 8px;
-    padding-right: 4px;
 `
 const PartText = styled.Text`
-
+    font-size: 13px;
+    font-weight: 400;
+    margin-right: 7px;
 `
 
 const BottomContainer = styled.View`
@@ -205,3 +293,28 @@ const BottomText = styled.Text`
     font-weight: 600;
     font-size: 17px;
 `
+
+
+
+  
+//   export const updateRoutine = async (mySCHEDULE, selectedDay, newRoutine) => {
+//     if (newRoutine == undefined) {
+//       let message = "newRoutine가 undefined여서, updateRoutine 실행취소";
+//       return message;
+//     } else {
+//       try {
+//         let url = "https://gpthealth.shop/";
+//         let detailAPI = `app/routine/${mySCHEDULE[selectedDay].routineId}`;
+//         const response = await axios.put(url + detailAPI, newRoutine, {
+//           headers: {
+//             "Content-Type": "application/json",
+//           },
+//         });
+//         const result = response.data;
+//         return result;
+//       } catch (error) {
+//         console.error("Failed to fetch data:", error);
+//       }
+//     }
+//   };
+  
