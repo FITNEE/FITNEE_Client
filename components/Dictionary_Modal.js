@@ -3,6 +3,9 @@ import styled from 'styled-components/native'
 import Modal from "react-native-modal"
 import {TouchableWithoutFeedback, Dimensions, TouchableOpacity} from 'react-native'
 import {colors} from '../colors'
+import Toast from 'react-native-toast-message'
+import { useRecoilValue } from "recoil"
+import { IsDarkAtom } from '../recoil/MyPageAtom'
 
 const deviceWidth = Dimensions.get("window").width;
 const deviceHeight =
@@ -14,10 +17,18 @@ const deviceHeight =
 
 export default function Dictionary_Modal(props){
     const {isModalVisible, changeModalVisibility} = props
+    const isDark = useRecoilValue(IsDarkAtom)
 
     const [isDone, setIsDone] = useState(false)
-    
+     
     const temp = ['등, 어깨, 가슴', '등, 어깨, 가슴', '', '', '', '등, 어깨, 가슴', '']
+    const showToast = () => {
+        Toast.show({
+            type: 'success',
+            text1: 'Hello',
+            text2: 'This is some something 👋'
+        })
+    }
 
     return(
             <Modal 
@@ -29,16 +40,18 @@ export default function Dictionary_Modal(props){
                 // animationInTiming={400}
                 // animationOutTiming={400}
                 style={{alignItems: 'center', justifyContent: 'center'}}>
-                <Container>
+                <Container style={{backgroundColor: isDark?`${colors.grey_8}`: `${colors.white}`}}>
                     <TopContainer>
-                        <Title>루틴에 운동 추가하기</Title> 
-                        <SubTitle>운동을 추가하고 싶은 요일을 선택해주세요.</SubTitle>
+                        <Title style={{color: isDark? `${colors.white}` : `${colors.black}`}}>루틴에 운동 추가하기</Title> 
+                        <SubTitle style={{color: isDark? `${colors.white}` : `${colors.black}`}}>운동을 추가하고 싶은 요일을 선택해주세요.</SubTitle>
 
                         <DayContainer>
                         {
                             temp.map((part, i)=>(
-                                <DayWrapper key={i} style={{marginRight: i%2==0? 5: null}}>
-                                    <DayText>월</DayText>
+                                <DayWrapper key={i} style={{marginRight: i%2==0? 5: null, backgroundColor: isDark? `${colors.grey_9}`:`${colors.grey_1}`}}>
+                                    <DayText style={{color: isDark? `${colors.white}` : `${colors.black}`}}>
+                                        월
+                                    </DayText>
 
                                 </DayWrapper>
                             ))
@@ -50,7 +63,8 @@ export default function Dictionary_Modal(props){
                         <CancelContainer onPress={()=>changeModalVisibility(false)}>
                             <BottomText style={{color: colors.grey_7}}>취소</BottomText>
                         </CancelContainer>
-                        <SelectContainer style={{backgroundColor: isDone? colors.l_main:colors.grey_6}}>
+                        <SelectContainer 
+                            style={{backgroundColor: isDone? colors.l_main:colors.grey_6}}>
                             <BottomText style={{color: isDone? colors.l_main:colors.white}}>선택 완료</BottomText>
                         </SelectContainer>
                     </BottomContainer>
@@ -63,7 +77,6 @@ export default function Dictionary_Modal(props){
 const Container = styled.View`
     width: 327px;
     height: 367px;
-    background-color: ${colors.white};
     border-radius: 20px;
 `
 const TopContainer = styled.View`
