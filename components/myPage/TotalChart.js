@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Dimensions, Text, View } from "react-native";
-import { LineChart } from "react-native-chart-kit";
+import { BarChart, LineChart } from "react-native-chart-kit";
 import { Text as TextSVG, Line, Circle } from "react-native-svg";
 import { colors } from "../../colors";
 import { styled } from "styled-components/native";
@@ -48,32 +48,45 @@ export default function TotalChart(props) {
       r: "5",
     },
   };
+  const timeChartConfig = {
+    color: () => (isDark ? colors.grey_7 : colors.grey_1),
+    labelColor: () => (isDark ? colors.white : colors.black),
+    useShadowColorFromDataset: true,
+    decimalPlaces: 2,
+    fillShadowGradientFromOpacity: 0.3,
+    fillShadowGradientToOpacity: 0,
+    backgroundGradientFrom: isDark ? "#595F72" : "#F6F8FA",
+    backgroundGradientTo: isDark ? "#595F72" : "#F6F8FA",
+    propsForLabels: {
+      fontSize: 11,
+      fonstWeight: 600,
+      lineHeight: 30,
+    },
+    propsForDots: {
+      r: "5",
+    },
+  };
   const screenWidth = Dimensions.get("window").width;
 
   const weekData = props.weekData;
+  console.log(weekData);
+
   const KcalData = weekData.map((result) => result.weeklyCalories);
   const TimeData = weekData.map((result) => result.weeklyExerciseTime);
   const LabelData = weekData.map((result) => result.weekNumber);
   const KmData = weekData.map((result) => result.weeklyDistance);
 
-  const totalTime = [];
-  let sum = 0;
-  for (let i = 0; i < TimeData.length; i++) {
-    sum += TimeData[i];
-    totalTime.push(sum);
-  }
-
   const LabelArray = [];
   for (let i = 0; i < LabelData.length; i++) {
     if (LabelData[i].length > 7) {
       if (LabelData[i].includes("1째 주")) {
-        LabelArray.push(`5주   /   ${LabelData[i].subString(0, 2)}월 1주`);
+        LabelArray.push(`${LabelData[i].subString(0, 2)}월 1주`);
       } else {
         LabelArray.push(`${LabelData[i].split("")[4]}주`);
       }
     } else {
       if (LabelData[i].includes("1째 주")) {
-        LabelArray.push(`5주   /   ${LabelData[i].split("")[0]}월 1주`);
+        LabelArray.push(`${LabelData[i].split("")[0]}월 1주`);
       } else {
         LabelArray.push(`${LabelData[i].split("")[3]}주`);
       }
@@ -116,7 +129,6 @@ export default function TotalChart(props) {
         color: () => "transparent",
       },
     ],
-    //legend: ["kcal", "km"],
   };
 
   /* 테스트 데이터
@@ -156,14 +168,6 @@ export default function TotalChart(props) {
   };
   */
 
-  const formatXLabel = (value) => {
-    for (var i = 0; i < data.labels.length; i++) {
-      if (value == data.labels[i]) {
-        return `${value}\n${totalTime[i]}`;
-      }
-    }
-  };
-
   const [unit, setUnit] = useState("kcal");
 
   const [render, setRender] = useState(
@@ -199,7 +203,6 @@ export default function TotalChart(props) {
             withHorizontalLabels={false}
             withVerticalLines={false}
             withHorizontalLines={true}
-            //formatXLabel={formatXLabel}
             style={{
               paddingRight: 7,
             }}

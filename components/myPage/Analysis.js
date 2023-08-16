@@ -12,7 +12,7 @@ const Container = styled.View`
   margin-bottom: 50px;
 `;
 const Exercise = styled.View`
-  padding-top: 18px;
+  padding-top: 24px;
 `;
 const Block = styled.View`
   padding: 8px 24px;
@@ -87,9 +87,10 @@ export default function Analysis(props) {
   const lastWeek = weekData.startAndEndExercise[0].lastWeek;
   const startingIndex = (firstMonth - 1) * 6 + firstWeek - 1;
   const finishingIndex = (lastMonth - 1) * 6 + lastWeek - 1;
-  console.log(firstMonth);
-  console.log(lastMonth);
-  console.log(weekData.formattedRows[finishingIndex]);
+  const slicedWeekData = weekData.formattedRows.slice(
+    startingIndex,
+    finishingIndex
+  );
   const calorie = weekData.formattedRows[finishingIndex].weeklyCalories;
   const kilometer = weekData.formattedRows[finishingIndex].weeklyDistance;
   const TimeData = weekData.formattedRows
@@ -106,23 +107,15 @@ export default function Analysis(props) {
     firstMonth == lastMonth && firstWeek == lastWeek && setViewChart(false);
   });
 
-  /*
-  const calorie = weekData.formattedRows[weekIndex].weeklyCalories;
-  const kilometer = weekData[weekIndex].weeklyDistance;
-
-  const TimeData = weekData.map((result) => result.weeklyExerciseTime);
-  let sum = 0;
-  for (let i = 0; i < TimeData.length; i++) {
-    sum += TimeData[i];
-  }
-  const hour = (sum / 3600).toFixed(2);
-  */
-
   return (
     <Container>
-      <NoneChart>
-        <NoneChartText>아직 데이터가 충분하지 않아요</NoneChartText>
-      </NoneChart>
+      {viewChart ? (
+        <TotalChart weekData={slicedWeekData} />
+      ) : (
+        <NoneChart>
+          <NoneChartText>아직 데이터가 충분하지 않아요</NoneChartText>
+        </NoneChart>
+      )}
       <Exercise>
         <Title>운동 현황</Title>
         <Block>
