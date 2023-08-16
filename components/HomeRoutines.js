@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { styled } from "styled-components/native";
 import { colors } from "../colors";
 import { Dimensions } from "react-native";
 import { View } from "react-native";
 import { FlatList } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import axios from "axios";
 
 const windowWidth = Dimensions.get("window").width;
 
@@ -126,7 +127,8 @@ const ButtonText = styled.Text`
   color: ${colors.white};
 `;
 
-export default function HomeRoutines() {
+export default function HomeRoutines({ data }) {
+  // const [data, setData] = useState("");
   const ExerciseData = [
     { id: 1, name: "데드리프트" },
     { id: 2, name: "덤벨프레스" },
@@ -136,10 +138,29 @@ export default function HomeRoutines() {
     { id: 6, name: "크런치" },
   ];
 
+  const postSearch = async (text) => {
+    try {
+      let url = "https://gpthealth.shop/";
+      let detailAPI = "/app/dictionary/searchexercise";
+      const response = await axios.post(url + detailAPI, null, {
+        params: {
+          search: text,
+        },
+      });
+      const exercise = response.data.result[0];
+      console.log("exercise :", exercise);
+      navigation.navigate("Dictionary_3", { exercise });
+    } catch (error) {
+      console.error("Failed to fetch data:", error);
+    }
+  };
+  const itemPress = (name) => {
+    postSearch(name);
+  };
   const renderItem = ({ item }) => (
-    <Card>
+    <Card onPress={() => itemPress(item)}>
       <ExerciseView />
-      <ExerciseName>{item.name}</ExerciseName>
+      <ExerciseName>{item}</ExerciseName>
     </Card>
   );
 
@@ -151,27 +172,35 @@ export default function HomeRoutines() {
   return (
     <Container>
       <TitleBlock>
-        <NameText>{"초코맛 프로틴"}님</NameText>
-        <Title>오늘 예정된 운동 루틴이에요</Title>
-        <DayText>{"2023. 07. 03 (월)"}</DayText>
+        <NameText>{data.userNickName} 님</NameText>
+        {data.isToday ? (
+          <Title>오늘 예정된 운동 루틴이에요</Title>
+        ) : (
+          <Title>다음에 예정된 운동루틴이에요</Title>
+        )}
+
+        <DayText>{data.todayStrKo}</DayText>
       </TitleBlock>
       <SectionBlock>
         <CircleIcon />
         <Section>
-          <SectionText>{"하체, 코어"}</SectionText>
-          <NumText>{ExerciseData.length}개의 운동</NumText>
+          <SectionText>{data.exerciseParts}</SectionText>
+          <NumText>{data.exerciseCount}개의 운동</NumText>
         </Section>
       </SectionBlock>
       <Cards
         horizontal={true}
-        data={ExerciseData}
+        data={data.exerciseNames}
         renderItem={renderItem}
-        keyExtractor={(item) => item.id}
+        // keyExtractor={(item) => item.id}
         showsHorizontalScrollIndicator={false}
       />
-      <Button onPress={navigateToExercise}>
-        <ButtonText>운동하러 가기</ButtonText>
-      </Button>
+      {data.isToday ? (
+        <Button onPress={navigateToExercise}>
+          <ButtonText>운동하러 가기</ButtonText>
+        </Button>
+      ) : null}
     </Container>
+    //data.isToday
   );
 }

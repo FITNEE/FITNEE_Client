@@ -5,6 +5,7 @@ import { useNavigationState } from "@react-navigation/native";
 import CreateRoutineHeader from "../components/CreateRoutineHeader";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { CreateRoutineAtom } from "../recoil/CreateRoutineAtom";
+import { colors } from "../colors";
 
 export default function CreateRoutine_2({ navigation }) {
   const [shouldRender, setShouldRender] = useState(true);
@@ -21,10 +22,18 @@ export default function CreateRoutine_2({ navigation }) {
     console.log("atom2 : ", routine);
   }, [routine]);
   const nextButton = () => {
-    setRoutine((prev) => ({
-      ...prev,
-      RM: value,
-    }));
+    if (dontKnow) {
+      setRoutine((prev) => ({
+        ...prev,
+        RM: 0,
+      }));
+    } else {
+      setRoutine((prev) => ({
+        ...prev,
+        RM: value,
+      }));
+    }
+
     navigation.push("CreateRoutine_3");
   };
   const handleDontKnow = () => {
@@ -76,7 +85,7 @@ export default function CreateRoutine_2({ navigation }) {
         }}
       />
       <DontKnowButton isActive={dontKnow} onPress={handleDontKnow}>
-        <DontKnowText>잘 모르겠어요</DontKnowText>
+        <DontKnowText isActive={dontKnow}>잘 모르겠어요</DontKnowText>
       </DontKnowButton>
       <NextButton onPress={nextButton}>
         <ButtonText>다음</ButtonText>
@@ -135,22 +144,28 @@ const SubTitle = styled.Text`
 const DontKnowButton = styled.TouchableOpacity`
   width: 99px;
   height: 40px;
-  background-color: ${(props) => (props.isActive ? "#BFBFBF" : "#DDDDDD")};
+  background-color: ${(props) =>
+    props.isActive ? colors.l_sub_2 : colors.grey_3};
   margin-bottom: 120px;
   border-radius: 100px;
   align-items: center;
   justify-content: center;
+  border: 1px;
+  border-color: ${(props) => (props.isActive ? colors.l_main : colors.l_sub_2)};
 `;
 const DontKnowText = styled.Text`
   font-size: 13px;
+  font-weight: 600;
+  color: ${(props) => (props.isActive ? colors.l_main : colors.black)};
 `;
 const NextButton = styled.TouchableOpacity`
   width: 327px;
   height: 52px;
   align-items: center;
   justify-content: center;
-  background-color: #bfbfbf;
+  background-color: ${colors.l_main};
   border-radius: 10px;
-  margin-bottom: 20px;
 `;
-const ButtonText = styled.Text``;
+const ButtonText = styled.Text`
+  color: ${colors.white};
+`;
