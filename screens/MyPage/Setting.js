@@ -1,15 +1,14 @@
-import React, { useContext, useEffect, useLayoutEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import { Text, SafeAreaView } from "react-native";
 import { styled } from "styled-components/native";
 import Mode from "../../components/myPage/Mode";
 import { colors } from "../../colors";
-import { AppContext } from "../../components/ContextProvider";
 import axios from "axios";
 import { useIsFocused, useNavigation } from "@react-navigation/native";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { IsDarkAtom, TabBarAtom } from "../../recoil/MyPageAtom";
-import { WithLocalSvg } from "react-native-svg";
 import Right from "../../assets/SVGs/Right.svg";
+import { loggedInState } from "../../recoil/AuthAtom";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Alert } from "react-native";
 
@@ -59,13 +58,16 @@ const BlockContent = styled.View`
 export default function Setting({ navigation }) {
   const isFocused = useIsFocused();
   const isDark = useRecoilValue(IsDarkAtom);
+  const [loggedIn, setLoggedIn] = useRecoilState(loggedInState);
   const [isTabVisible, setIsTabVisible] = useRecoilState(TabBarAtom);
 
   useEffect(() => {
     isFocused && setIsTabVisible(false);
   }, [isFocused, isTabVisible]);
-
-  const { toggleLogin } = useContext(AppContext);
+  const Logout = () => {
+    AsyncStorage.clear();
+    setLoggedIn(false);
+  };
   const [userInfo, setUserInfo] = useState([
     {
       birthYear: "",
@@ -151,10 +153,10 @@ export default function Setting({ navigation }) {
               <Name>{getUserName}</Name>
             </ProfileContents>
           </ProfileInfo>
-          <WithLocalSvg
+          <Right
             width={20}
             height={20}
-            asset={Right}
+            // asset={Right}
             color={colors.grey_7}
           />
         </Profile>
@@ -204,8 +206,8 @@ export default function Setting({ navigation }) {
         <Block>
           <BlockText>버전 정보</BlockText>
         </Block>
-        <Block onPress={() => toggleLogin()}>
-          <BlockText>로그아웃</BlockText>
+        <Block>
+          <BlockText onPress={() => Logout()}>로그아웃</BlockText>
         </Block>
       </Container>
     </SafeAreaView>

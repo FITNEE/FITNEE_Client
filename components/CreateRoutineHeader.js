@@ -3,6 +3,7 @@ import { Ionicons } from "@expo/vector-icons";
 import styled from "styled-components/native";
 import { useNavigation } from "@react-navigation/native";
 import { Animated } from "react-native";
+import { colors } from "../colors";
 
 export default function CreateRoutineHeader({ title, index, children }) {
   const [width, setWidth] = useState(0);
@@ -40,7 +41,7 @@ export default function CreateRoutineHeader({ title, index, children }) {
                 height: "100%",
                 width: "100%",
                 borderRadius: 10,
-                backgroundColor: "#757575",
+                backgroundColor: colors.grey_4,
                 transform: [
                   {
                     translateX: animatedValue,
@@ -87,8 +88,8 @@ const Title = styled.Text`
 
 const StackBar = styled.View`
   width: 90%;
-  height: 6px;
-  background-color: #dddddd;
+  height: 4px;
+  background-color: ${colors.grey_2};
   border-radius: 10px;
   overflow: hidden;
 `;

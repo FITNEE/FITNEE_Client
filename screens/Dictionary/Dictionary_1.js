@@ -8,147 +8,20 @@ import {
     ScrollView,
     TouchableOpacity,
     SafeAreaView,
-    ActivityIndicator
+    ActivityIndicator, StatusBar
     } from 'react-native';
 import { colors } from '../../colors'
-import { AppContext } from '../../components/ContextProvider'
-import Dictionary_AutoSearch from '../../components/Dictionary_AutoSearch'
-import Dictionary_List from '../../components/Dictionary_List'
+import Dictionary_AutoSearch from '../../components/Dictionary/Dictionary_AutoSearch'
+import Dictionary_List from '../../components/Dictionary/Dictionary_List'
 import axios from 'axios'
-
-const Container = styled.View`
-    flex: 1;
-    width: 100%;
-    background-color: white;
-`
-
-const TopContainer = styled.View`
-    padding: 8px 24px;
-    border-bottom-width: 1px;
-    border-bottom-color: ${colors.grey_1};
-`
-const SearchContainer = styled.View`
-    flex-direction: row;
-    justify-content: center;
-    align-items: center; 
-`
-const SearchInputContainer = styled.View`
-    background-color: ${colors.grey_1};
-    border-radius: 12px;
-    flex-direction: row;
-    align-items: center;
-    padding: 8px 12px;
-`
-const Logo = styled.Image`
-    width: 24px;
-    height: 24px;
-    background-color: ${colors.red};
-
-  margin-right: 12px;
-`;
-const SearchInput = styled.TextInput`
-    font-size: 16px;
-    font-weight: 400;
-    color: ${colors.black};
-    width: 240px;
-`
-const DeleteAllBtn = styled.TouchableOpacity`
-    width: 24px;
-    height: 24px;
-    background-color: ${colors.red};
-    margin-left: 16px;
-`
-const PartContainer = styled.ScrollView`
-    padding-top: 8px;
-    margin-top: 8px;
-    margin-right: -24px;
-`
-const Part = styled.TouchableOpacity`
-    border-radius: 100px;
-    background-color: ${colors.grey_1};
- 
-    padding: 8px 15px;
-    margin-right: 8px;
-`
-const PartText = styled.Text`
-    font-weight: 600;
-    font-size: 14px;
-    color: ${colors.black};
-`
-const BottomContainer = styled.View`
-  padding: 40px 22px;
-`;
-const RecentContainer = styled.View`
-  height: 50px;
-  width: 100%;
-
-  margin-bottom: 56px;
-`;
-const RecentTitle = styled.Text`
-  font-weight: 600;
-  font-size: 16px;
-  color: ${colors.black};
-
-  margin-bottom: 16px;
-`;
-const RecentKeywordContainer = styled.View`
-    flex-direction: row;
-    flex-wrap: wrap;
-`
-const HotContainer =  styled.View`
-    height: 123px;
-    width: 100%;
-`
-const HotTitle = styled.Text`
-  font-weight: 600;
-  font-size: 16px;
-  color: ${colors.black};
-
-    margin-bottom: 16px;
-`
-const PopularKeywordsContainer = styled.View`
-    flex-direction: row;
-    flex-wrap: wrap;
-`
-const KeywordContainer = styled.TouchableOpacity`
-    background-color: ${colors.grey_1};
-    border-radius: 100px;
-
-  margin-right: 4px;
-  margin-bottom: 4px;
-  padding: 10px 14px;
-`;
-const Keyword = styled.Text`
-    font-weight: 600;
-    font-size: 13px;
-    color: ${colors.grey_7}; 
-`
+import { IsDarkAtom } from "../../recoil/MyPageAtom"
+import { useRecoilValue } from "recoil"
+import SearchIcon from '../../assets/SVGs/Search.svg'
+import DeleteIcon from '../../assets/SVGs/Delete.svg'
+import DeleteDarkIcon from '../../assets/SVGs/Delete_Dark.svg'
 
 export default function Dictionary_1({ navigation }) {
-  const [recentKeyword, setRecentKeyword] = useState([]);
-  const [hotKeyword, setHotKeyword] = useState([
-    "바벨",
-    "머신",
-    "프리웨이트",
-    "덤벨",
-    "데드리프트",
-    "사이드 레터럴 레이즈",
-    "크런치",
-  ]);
-
-    const PressedPart = styled.TouchableOpacity`
-    border-radius: 100px;
-    background-color: ${ isDark ? colors.d_sub_2 : colors.l_sub_2};
-    padding: 8px 15px;
-    margin-right: 8px;
-    `
-    const PressedPartText = styled.Text`
-    font-weight: 600;
-    font-size: 14px;
-    color: ${ isDark ? colors.d_main : colors.l_main};
-    `
-
-    const { isDark } = useContext( AppContext );
+    const isDark = useRecoilValue(IsDarkAtom)
 
     const [search, setSearch] = useState('')
     const [isSearching, setIsSearching] = useState(false)
@@ -157,14 +30,12 @@ export default function Dictionary_1({ navigation }) {
     const [popularKeywords, setPopularKeywords] = useState([])
     const [recentKeywords, setRecentKeywords] = useState([])
     const [searchList, setSearchList] = useState([])
-    
 
     // 사용자가 검색창에 onFocus 했을 때
     const onFocusInput = ()=>{
         setIsSubmit(false)
         search.length == 0? null: setIsSearching(true)
     }
-    
     // 검색List창에서 부위 버튼 toggle
     const onPressPart = (i) => {
         let temp = [...part]
@@ -177,15 +48,12 @@ export default function Dictionary_1({ navigation }) {
         setIsSearching(false) // 키워드들 보이게
         setIsSubmit(false)
     }
-
-
     // 검색어(search)가 비어있으면 IsSearching = true / 아니면 false
     useEffect(()=>{
         search.length === 0?
             setIsSearching(false)
             : setIsSearching(true)
     }, [search])
-    
     // 최근 검색 키워드, 인기 키워드 받아오는 API
     const getKeywords = async () => {
         try {
@@ -211,8 +79,6 @@ export default function Dictionary_1({ navigation }) {
             setPopularKeywords(temp2)
         })
     }, [isSearching, isSubmit])
-         
-
     // 검색한 단어를 최근 검색 키워드에 저장하는 API  
     const postKeywords = async () => {
         try {
@@ -233,7 +99,6 @@ export default function Dictionary_1({ navigation }) {
           console.error("Failed to fetch data:", error);
         }
     } 
-
     // 검색어에 따라 일치하는 운동리스트 불러오는 API
     const postSearch = async (text) => {
         try {
@@ -266,25 +131,37 @@ export default function Dictionary_1({ navigation }) {
         setSearch(keyword)
         postSearch(keyword).then((result)=>setSearchList(result))
         setIsSubmit(true)
-
     }
     // 사용자가 키보드에서 검색 버튼 눌렀을 때
     const onSubmitEditing = () => {
         setIsSubmit(true)
         setIsSearching(false)
     }
-    // 검색될때마다 키워드 기록
-    useEffect(()=>postKeywords(), [isSubmit])
+    useEffect(()=>{
+        postKeywords()
+    }, [isSubmit])
 
     return(
-        <SafeAreaView style={{backgroundColor: 'white', flex: 1}}>
+        <>
+        <StatusBar barStyle={isDark? 'light-content': 'dark-content'}/>
+        <SafeAreaView 
+            style={{backgroundColor: isDark? `${colors.d_background}`:`${colors.l_background}`, flex: 1}}>
             <TouchableWithoutFeedback style={{flex:1}} onPress={Keyboard.dismiss}>
                 <Container>
-                    <TopContainer>
+                    <TopContainer style={{borderBottomColor: isDark? `${colors.grey_8}`:`${colors.grey_2}`}}>
                         <SearchContainer>
-                            <SearchInputContainer onPress={isSubmit? print: null}>
-                                <Logo/>
+                            <SearchInputContainer 
+                                onPress={isSubmit? print: null}
+                                style={{backgroundColor: isDark?`${colors.black}`: `${colors.grey_1}`}}
+                            >
+                                <SearchIcon
+                                    style={{ marginRight: 12 }}
+                                    width={24}
+                                    height={24}
+                                    color={isDark? colors.white: colors.black}
+                                />
                                 <SearchInput
+                                    keyboardAppearance= {isDark? 'dark':'light'}
                                     autoFocus={true}
                                     placeholder='운동명, 부위 검색'
                                     placeholderTextColor={colors.grey_4}
@@ -293,10 +170,26 @@ export default function Dictionary_1({ navigation }) {
                                     value={search}
                                     onSubmitEditing={onSubmitEditing}
                                     onFocus={onFocusInput}
+                                    style={{color: isDark? `${colors.grey_3}` : `${colors.black}`}}
                                     >
                                 </SearchInput>
+                                <TouchableOpacity 
+                                    style={{ marginLeft: 16}}
+                                    onPress={onDeleteInput}>
+                                    {
+                                        isDark? 
+                                        <DeleteDarkIcon
+                                            width={24}
+                                            height={24}
+                                        />
+                                        :
+                                        <DeleteIcon 
+                                            width={24}
+                                            height={24}
+                                        />
+                                    }
+                                </TouchableOpacity>
                             </SearchInputContainer>
-                            <DeleteAllBtn onPress={onDeleteInput}/>
                         </SearchContainer>
                         { isSubmit && <PartContainer 
                             horizontal 
@@ -304,40 +197,61 @@ export default function Dictionary_1({ navigation }) {
                             {
                                 part.map((part, i) => (
                                     part[1] == false?
-                                        <Part onPress={()=> onPressPart(i)}><PartText>{part[0]}</PartText></Part>
+                                        <Part 
+                                            onPress={()=> onPressPart(i)}
+                                            style={{backgroundColor: isDark? `${colors.grey_8}`:`${colors.grey_1}`}}
+                                        >
+                                            <PartText style={{color: isDark? `${colors.grey_4}`:`${colors.grey_6}`}}>{part[0]}</PartText>
+                                        </Part>
                                         :
-                                        <PressedPart onPress={()=> onPressPart(i)}><PressedPartText>{part[0]}</PressedPartText></PressedPart>
-
+                                        <PressedPart 
+                                            onPress={()=> onPressPart(i)}
+                                            style={{backgroundColor: isDark? `${colors.d_sub_2}`:`${colors.l_sub_2}`}}
+                                        >
+                                            <PressedPartText style={{color: isDark? `${colors.d_main}`:`${colors.l_main}`}}>{part[0]}</PressedPartText>
+                                        </PressedPart>
                                 ))
                             }
                         </PartContainer>}
                     </TopContainer>
                     { !isSearching && !isSubmit &&
                         <BottomContainer>
-                            <RecentContainer style={{marginBottom: 56}}>
-                                <RecentTitle>최근 검색 키워드</RecentTitle>
-                                <RecentKeywordContainer>
+                            <KeywordBox>
+                                <KeywordTitle style={{color: isDark? `${colors.white}`:`${colors.black}`}}>
+                                    최근 검색 키워드
+                                </KeywordTitle>
+                                <KeywordContainer>
                                 {
-                                    recentKeywords.map((keyword) => (
-                                        <KeywordContainer onPress={()=>onPressKeyword(keyword)}>
-                                            <Keyword>{keyword}</Keyword>
-                                        </KeywordContainer>
+                                    recentKeywords.map((keyword, i) => (
+                                        <KeywordWrapper 
+                                            onPress={()=>onPressKeyword(keyword)} 
+                                            key={i}
+                                            style={{backgroundColor: isDark? `${colors.grey_8}`:`${colors.grey_1}`}}
+                                        >
+                                            <Keyword style={{color: isDark? `${colors.grey_3}`:`${colors.grey_7}`}}>{keyword}</Keyword>
+                                        </KeywordWrapper>
                                     ))
                                 }    
-                                </RecentKeywordContainer>                
-                            </RecentContainer>
-                            <HotContainer>
-                                <HotTitle>인기 키워드</HotTitle>
-                                <PopularKeywordsContainer>
+                                </KeywordContainer>                
+                            </KeywordBox>
+                            <KeywordBox>
+                                <KeywordTitle style={{color: isDark? `${colors.white}`:`${colors.black}`}}>
+                                    인기 키워드
+                                </KeywordTitle>
+                                <KeywordContainer>
                                 {
-                                    popularKeywords.map((keyword) => (
-                                        <KeywordContainer onPress={()=>onPressKeyword(keyword)}>
-                                            <Keyword>{keyword}</Keyword>
-                                        </KeywordContainer>
+                                    popularKeywords.map((keyword, i) => (
+                                        <KeywordWrapper 
+                                            onPress={()=>onPressKeyword(keyword)}
+                                            key={i} 
+                                            style={{backgroundColor: isDark? `${colors.grey_8}`:`${colors.grey_1}`}}   
+                                        >
+                                            <Keyword style={{color: isDark? `${colors.grey_3}`:`${colors.grey_7}`}}>{keyword}</Keyword>
+                                        </KeywordWrapper>
                                     ))
                                 }
-                                </PopularKeywordsContainer>
-                            </HotContainer>
+                                </KeywordContainer>
+                            </KeywordBox>
                         </BottomContainer>
                     }
                     { isSearching && !isSubmit && 
@@ -353,8 +267,88 @@ export default function Dictionary_1({ navigation }) {
                     />}
                 </Container>
             </TouchableWithoutFeedback>
-        </SafeAreaView>
+        </SafeAreaView></>
     )
 } 
 
 
+const Container = styled.View`
+    flex: 1;
+    width: 100%;
+`
+const TopContainer = styled.View`
+    padding: 8px 24px;
+    border-bottom-width: 1px;
+`
+const SearchContainer = styled.View`
+    flex-direction: row;
+    justify-content: center;
+    align-items: center; 
+`
+const SearchInputContainer = styled.View`
+    border-radius: 12px;
+    flex-direction: row;
+    align-items: center;
+    padding: 8px 12px;
+`
+const SearchInput = styled.TextInput`
+    font-size: 16px;
+    font-weight: 400;
+    width: 240px;
+`
+const DeleteAllBtn = styled.TouchableOpacity`
+    width: 24px;
+    height: 24px;
+    background-color: ${colors.red};
+    margin-left: 16px;
+`
+const PartContainer = styled.ScrollView`
+    padding-top: 8px;
+    margin-top: 8px;
+    margin-right: -24px;
+`
+const Part = styled.TouchableOpacity`
+    border-radius: 100px;
+    padding: 10px 15px;
+    margin-right: 8px;
+`
+const PartText = styled.Text`
+    font-weight: 600;
+    font-size: 14px;
+    color: ${colors.black};
+`
+const PressedPart = styled.TouchableOpacity`
+    border-radius: 100px;
+    padding: 10px 15px;
+    margin-right: 8px;
+`
+const PressedPartText = styled.Text`
+    font-weight: 600;
+    font-size: 14px;
+`
+const BottomContainer = styled.View`
+    padding: 40px 22px;
+`
+const KeywordBox = styled.View`
+    width: 100%;
+    margin-bottom: 56px;
+`
+const KeywordTitle = styled.Text`
+    font-weight: 600;
+    font-size: 16px;
+    margin-bottom: 16px;
+`
+const KeywordContainer = styled.View`
+    flex-direction: row;
+    flex-wrap: wrap;
+`
+const KeywordWrapper = styled.TouchableOpacity`
+    border-radius: 100px;
+    margin-right: 4px;
+    margin-bottom: 4px;
+    padding: 10px 14px;
+` 
+const Keyword = styled.Text`
+    font-weight: 600;
+    font-size: 13px;
+`

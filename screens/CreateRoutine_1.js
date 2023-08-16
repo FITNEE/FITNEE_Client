@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components/native";
-import { useNavigationState } from "@react-navigation/native";
+import { useIsFocused, useNavigationState } from "@react-navigation/native";
 import CreateRoutineHeader from "../components/CreateRoutineHeader";
 import { useRecoilState } from "recoil";
 import { CreateRoutineAtom } from "../recoil/CreateRoutineAtom";
+import { colors } from "../colors";
+import { TabBarAtom } from "../recoil/MyPageAtom";
 
 export default function CreateRoutine_1({ navigation }) {
   const [home, SetHome] = useState(false);
@@ -11,6 +13,11 @@ export default function CreateRoutine_1({ navigation }) {
   const [select, SetSelect] = useState(false);
   const index = useNavigationState((state) => state.index);
   const [routine, setRoutine] = useRecoilState(CreateRoutineAtom);
+  const isFocused = useIsFocused();
+  const [isTabVisible, setIsTabVisible] = useRecoilState(TabBarAtom);
+  useEffect(() => {
+    isFocused && setIsTabVisible(false);
+  }, [isFocused, isTabVisible]);
   useEffect(() => {
     navigation.setOptions({
       header: () => <CreateRoutineHeader title="루틴 등록" index={index} />,
@@ -51,7 +58,7 @@ export default function CreateRoutine_1({ navigation }) {
       <SpaceContainer>
         <SpaceItem isActive={home} onPress={homePress}>
           <SpaceImage />
-          <SpaceName>집</SpaceName>
+          <SpaceName isActive={home}>집</SpaceName>
         </SpaceItem>
         <SpaceItem isActive={fitness} onPress={fitnessPress}>
           <SpaceImage />
@@ -77,6 +84,7 @@ const TitleContainer = styled.View`
 `;
 const Title = styled.Text`
   font-size: 20px;
+  font-weight: 600;
 `;
 const SubTitle = styled.Text`
   font-size: 12px;
@@ -93,28 +101,34 @@ const SpaceContainer = styled.View`
 const SpaceItem = styled.TouchableOpacity`
   width: 157px;
   height: 192px;
-  background-color: ${(props) => (props.isActive ? "#DDDDDD" : "white")};
+  background-color: ${(props) =>
+    props.isActive ? colors.l_sub_2 : colors.white};
   border-radius: 10px;
   align-items: center;
   justify-content: center;
+  border: 1px;
+  border-color: ${(props) => (props.isActive ? colors.l_main : colors.white)};
 `;
 const SpaceImage = styled.Image`
   width: 117px;
   height: 117px;
-  background-color: silver;
+  background-color: ${colors.grey_1};
   border-radius: 500px;
 `;
 const SpaceName = styled.Text`
   margin-top: 10px;
+  font-weight: bold;
+  color: ${(props) => (props.isActive ? colors.l_main : colors.black)};
 `;
 const NextButton = styled.TouchableOpacity`
   width: 327px;
   height: 52px;
   align-items: center;
   justify-content: center;
-  background-color: ${(props) => (props.isActive ? "#BFBFBF" : "#DDDDDD")};
+  background-color: ${(props) =>
+    props.isActive ? colors.l_main : colors.grey_3};
   border-radius: 10px;
 `;
 const ButtonText = styled.Text`
-  color: ${(props) => (props.isActive ? "black" : "#757575")};
+  color: ${(props) => (props.isActive ? colors.white : colors.black)};
 `;

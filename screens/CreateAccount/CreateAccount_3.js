@@ -1,29 +1,19 @@
 import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components/native";
 import { colors } from "../../colors";
-import { Button, ScreenWidth, BackButton } from "../../Shared";
+import { Button, BackButton } from "../../Shared";
 //prettier-ignore
-import {Title,ScreenLayout,NumberInput,MyBottomSheet, InputTitle} from "../../components/Shared/OnBoarding_Shared";
+import {Title,SubText, ScreenLayout,NumberInput,MyBottomSheet, InputTitle} from "../../components/Shared/OnBoarding_Shared";
 
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { Pressable } from "react-native";
-
-import { WithLocalSvg } from "react-native-svg";
-import BMIImg from "../../assets/SVGs/BMI.svg";
 import Animated, {
-  runOnJS,
   useAnimatedStyle,
   withSpring,
 } from "react-native-reanimated";
+import { useRecoilValue } from "recoil";
+import { IsDarkAtom } from "../../recoil/MyPageAtom";
 
-const SubTitle = styled.Text`
-  margin-top: 8px;
-  font-size: 13px;
-  width: 260px;
-  line-height: 18px;
-  font-weight: 400;
-  color: ${colors.black};
-`;
 const TextContainer = styled.View`
   margin-top: 124px;
   flex-direction: column;
@@ -42,7 +32,7 @@ const BMIBarBase = styled.View`
   width: 100%;
 `;
 const BMIBar = styled.View`
-  border: 1px solid ${colors.grey_1};
+  border: 1px solid;
   height: 18px;
 `;
 const BMISection = styled.View`
@@ -96,20 +86,19 @@ const BMIMarkerTop = styled.View`
   height: ${TextBoxHeight}px;
   justify-content: center;
   align-items: center;
-  background-color: ${colors.black};
   margin-left: ${-62 + PointRadius}px;
   top: ${-lineHeight - TextBoxHeight}px;
 `;
 const BMITitle = styled.Text`
-  font-size: 12px;
+  font-size: 13px;
+  font-weight: 600;
 `;
 const BMIText = styled.Text`
-  font-size: 12px;
+  font-size: 11px;
   margin-top: 4px;
-  color: white;
 `;
 
-export const BMIBase = ({ BMIMode }) => {
+export const BMIBase = ({ BMIMode, isDark }) => {
   return (
     <BMIBarBase>
       <BMISection
@@ -119,7 +108,13 @@ export const BMIBase = ({ BMIMode }) => {
       >
         <BMIBar
           style={{
-            backgroundColor: BMIMode == 1 ? colors.blue : colors.grey_2,
+            borderColor: isDark ? colors.grey_9 : colors.grey_1,
+            backgroundColor:
+              BMIMode == 1
+                ? colors.blue
+                : isDark
+                ? colors.grey_8
+                : colors.grey_2,
             borderTopLeftRadius: 8,
             borderBottomLeftRadius: 8,
           }}
@@ -133,7 +128,13 @@ export const BMIBase = ({ BMIMode }) => {
       >
         <BMIBar
           style={{
-            backgroundColor: BMIMode == 2 ? colors.green : colors.grey_3,
+            borderColor: isDark ? colors.grey_9 : colors.grey_1,
+            backgroundColor:
+              BMIMode == 2
+                ? colors.green
+                : isDark
+                ? colors.grey_7
+                : colors.grey_3,
           }}
         />
         <BMINumber>18.5</BMINumber>
@@ -145,7 +146,13 @@ export const BMIBase = ({ BMIMode }) => {
       >
         <BMIBar
           style={{
-            backgroundColor: BMIMode == 3 ? colors.green : colors.grey_4,
+            borderColor: isDark ? colors.grey_9 : colors.grey_1,
+            backgroundColor:
+              BMIMode == 3
+                ? colors.green
+                : isDark
+                ? colors.grey_6
+                : colors.grey_4,
           }}
         />
         <BMINumber>23</BMINumber>
@@ -157,6 +164,7 @@ export const BMIBase = ({ BMIMode }) => {
       >
         <BMIBar
           style={{
+            borderColor: isDark ? colors.grey_9 : colors.grey_1,
             backgroundColor: BMIMode == 4 ? colors.red : colors.grey_4,
             borderTopRightRadius: 8,
             borderBottomRightRadius: 8,
@@ -172,6 +180,7 @@ export const BMIBase = ({ BMIMode }) => {
 };
 
 const CreateAccount_3 = ({ route, navigation }) => {
+  const isDark = useRecoilValue(IsDarkAtom);
   const [height, setHeight] = useState(0);
   const [heights, setHeights] = useState([]);
   const [weight, setWeight] = useState(0);
@@ -274,7 +283,14 @@ const CreateAccount_3 = ({ route, navigation }) => {
     return {
       width: "100%",
       zIndex: 99,
-      left: withSpring(`${processedBMI}%`),
+      left: withSpring(`${processedBMI}%`, {
+        mass: 1,
+        damping: 32,
+        stiffness: 180,
+        overshootClamping: false,
+        restDisplacementThreshold: 0.01,
+        restSpeedThreshold: 2,
+      }),
     };
   }, [modalShown]);
 
@@ -284,16 +300,20 @@ const CreateAccount_3 = ({ route, navigation }) => {
         style={{ width: "100%", height: "100%" }}
         onPress={() => hideModal()}
       >
-        <ScreenLayout>
-          <BackButton onPress={() => navigation.goBack()} />
+        <ScreenLayout isDark={isDark}>
+          <BackButton isDark={isDark} onPress={() => navigation.goBack()} />
           <TextContainer>
-            <Title>마지막 단계에요!</Title>
-            <SubTitle>{`회원님의 신체 정보를 입력해주세요.
-딱 맞는 루틴 생성을 위해 꼭 필요한 정보에요.`}</SubTitle>
+            <Title text="마지막 단계에요!" isDark={isDark} />
+            <SubText
+              text={`회원님의 신체 정보를 입력해주세요.
+딱 맞는 루틴 생성을 위해 꼭 필요한 정보에요.`}
+              isDark={isDark}
+            />
           </TextContainer>
           <BottomContainer>
             <InputTitle>키(cm)</InputTitle>
             <NumberInput
+              isDark={isDark}
               value={height}
               onPress={() => popModal(1)}
               placeholder="키"
@@ -301,6 +321,7 @@ const CreateAccount_3 = ({ route, navigation }) => {
             />
             <InputTitle style={{ marginTop: 16 }}>몸무게 (kg)</InputTitle>
             <NumberInput
+              isDark={isDark}
               value={weight}
               onPress={() => popModal(2)}
               placeholder="몸무게"
@@ -309,7 +330,11 @@ const CreateAccount_3 = ({ route, navigation }) => {
           </BottomContainer>
           <BMIContainer>
             <Animated.View style={animatedStyle}>
-              <BMIMarkerTop>
+              <BMIMarkerTop
+                style={{
+                  backgroundColor: isDark ? colors.white : colors.black,
+                }}
+              >
                 <BMITitle
                   style={{
                     color:
@@ -324,16 +349,30 @@ const CreateAccount_3 = ({ route, navigation }) => {
                 >
                   BMI {BMI.toFixed(1)}
                 </BMITitle>
-                <BMIText>{statusText[BMIMode - 1]}</BMIText>
+                <BMIText
+                  style={{ color: isDark ? colors.black : colors.white }}
+                >
+                  {statusText[BMIMode - 1]}
+                </BMIText>
               </BMIMarkerTop>
               <BMIMarkerBottom>
-                <BMILine />
-                <BMIPointer />
+                <BMILine
+                  style={{ borderColor: isDark ? colors.white : colors.black }}
+                />
+                <BMIPointer
+                  style={{
+                    backgroundColor: isDark ? colors.white : colors.black,
+                  }}
+                />
               </BMIMarkerBottom>
             </Animated.View>
-            <BMIBase BMIMode={BMIMode} />
+            <BMIBase isDark={isDark} BMIMode={BMIMode} />
           </BMIContainer>
-          <Button enabled={height && weight} onPress={() => handleSubmit()} />
+          <Button
+            isDark={isDark}
+            enabled={height && weight}
+            onPress={() => handleSubmit()}
+          />
           <MyBottomSheet
             setValue={mode == 1 ? setHeight : setWeight}
             selectableDatas={mode == 1 ? heights : weights}

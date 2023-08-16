@@ -5,6 +5,10 @@ export const colors = {
   d_main: "#8457F1",
   d_sub_1: "#362856",
   d_sub_2: "#1F1B2A",
+  d_sub_3: "#332A53",
+
+  l_p10: "#F2EEFD",
+  l_p50: "#332A53",
 
   red: "#FF3F57",
   green: "#19CFA2",

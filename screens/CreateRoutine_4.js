@@ -5,6 +5,7 @@ import CreateRoutineHeader from "../components/CreateRoutineHeader";
 import { useRecoilState } from "recoil";
 import { CreateRoutineAtom } from "../recoil/CreateRoutineAtom";
 import axios from "axios";
+import { colors } from "../colors";
 
 export default function CreateRoutine_4({ navigation }) {
   const [select, SetSelect] = useState(false);
@@ -94,17 +95,25 @@ export default function CreateRoutine_4({ navigation }) {
         days[5].selected ||
         days[6].selected
     );
+    SetAllDay(
+      days[0].selected &&
+        days[1].selected &&
+        days[2].selected &&
+        days[3].selected &&
+        days[4].selected &&
+        days[5].selected &&
+        days[6].selected
+    );
   }, [days]);
   const AllDayPress = () => {
     SetAllDay(!allDay);
-  };
-  useEffect(() => {
     setDays((prevDays) =>
       prevDays.map((day) =>
-        allDay ? { ...day, selected: true } : { ...day, selected: false }
+        !allDay ? { ...day, selected: true } : { ...day, selected: false }
       )
     );
-  }, [allDay]);
+  };
+
   return (
     <Container>
       {loading ? (
@@ -123,16 +132,36 @@ export default function CreateRoutine_4({ navigation }) {
               <DayItem
                 key={day.id}
                 onPress={() => onDayPress(day.id)}
-                style={{ backgroundColor: day.selected ? "#757575" : "white" }}
+                style={{
+                  backgroundColor: allDay
+                    ? colors.l_sub_2
+                    : day.selected
+                    ? colors.l_main
+                    : colors.white,
+                  borderWidth: 1,
+                  borderColor: allDay
+                    ? colors.l_main
+                    : day.selected
+                    ? colors.l_main
+                    : colors.white,
+                }}
               >
-                <DayName style={{ color: day.selected ? "white" : "#757575" }}>
+                <DayName
+                  style={{
+                    color: allDay
+                      ? colors.l_main
+                      : day.selected
+                      ? colors.white
+                      : colors.black,
+                  }}
+                >
                   {day.name}
                 </DayName>
               </DayItem>
             ))}
           </DayContainer>
           <AllDayButton isActive={allDay} onPress={AllDayPress}>
-            <AllDayText>매일 운동할래요</AllDayText>
+            <AllDayText isActive={allDay}>매일 운동할래요</AllDayText>
           </AllDayButton>
           <NextButton isActive={select} disabled={!select} onPress={nextPress}>
             <ButtonText isActive={select}>선택 완료</ButtonText>
@@ -155,6 +184,7 @@ const TitleContainer = styled.View`
 `;
 const Title = styled.Text`
   font-size: 20px;
+  font-weight: 600;
 `;
 const SubTitle = styled.Text`
   font-size: 12px;
@@ -183,7 +213,8 @@ const DayName = styled.Text`
 const AllDayButton = styled.TouchableOpacity`
   width: 110px;
   height: 40px;
-  background-color: ${(props) => (props.isActive ? "#BFBFBF" : "#DDDDDD")};
+  background-color: ${(props) =>
+    props.isActive ? colors.l_main : colors.grey_3};
   margin-bottom: 50px;
   border-radius: 100px;
   align-items: center;
@@ -191,17 +222,19 @@ const AllDayButton = styled.TouchableOpacity`
 `;
 const AllDayText = styled.Text`
   font-size: 13px;
+  color: ${(props) => (props.isActive ? colors.white : colors.black)};
 `;
 const NextButton = styled.TouchableOpacity`
   width: 327px;
   height: 52px;
   align-items: center;
   justify-content: center;
-  background-color: ${(props) => (props.isActive ? "#BFBFBF" : "#DDDDDD")};
+  background-color: ${(props) =>
+    props.isActive ? colors.l_main : colors.grey_3};
   border-radius: 10px;
 `;
 const ButtonText = styled.Text`
-  color: ${(props) => (props.isActive ? "black" : "#757575")};
+  color: ${(props) => (props.isActive ? colors.white : colors.black)};
 `;
 const LoadingContainer = styled.View`
   flex: 1;
