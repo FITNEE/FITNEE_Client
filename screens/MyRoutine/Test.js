@@ -1,14 +1,13 @@
+import { useEffect, useState } from "react";
 import { ScreenLayout } from "../../components/Shared/OnBoarding_Shared";
+import { styled } from "styled-components/native";
+import { colors } from "../../colors";
+import axios from "axios";
 
 const ORContainer = styled.View`
   margin-top: 158px;
   width: 120px;
   height: 13px;
-`;
-const Line = styled.View`
-  width: 100%;
-  border: ${StyleSheet.hairlineWidth}px solid ${colors.grey_5};
-  margin-top: 6px;
 `;
 const ORText = styled.Text`
   color: ${colors.grey_6};
@@ -20,20 +19,31 @@ const ORText = styled.Text`
   left: 40px;
 `;
 export const Test = () => {
-  const getRoutine = async () => {
+  const [SCHE, setSCHE] = useState(null);
+  const getRoutines = async () => {
     try {
       let url = "https://gpthealth.shop/";
-      //후가공한 SCHEDULE 배열에서의 IDX값을 그대로 가져와 query스트링으로 추가
-      let detailAPI = `app/routine/${mySCHEDULE[selectedDay].routineId}`;
+      let detailAPI = "app/routine/calendar/parts";
       const response = await axios.get(url + detailAPI);
 
-      const result = response.data;
-      setIsLoading(false);
-      return result;
+      return response.data.result;
     } catch (error) {
       console.error("Failed to fetch data:", error);
     }
   };
+  const sortArray = (obj) => {
+    const sortedArray = Object.keys(obj.parts).map((key, index) => ({
+      id: index,
+      parts: obj.parts[key] !== null ? obj.parts[key] : "임시",
+      routineIdx: obj.routineIdx[key],
+    }));
+
+    return sortedArray;
+  };
+
+  useEffect(() => {
+    getRoutines().then((res) => console.log(sortArray(res)));
+  }, []);
 
   return (
     <ScreenLayout>
