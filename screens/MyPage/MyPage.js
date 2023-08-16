@@ -8,7 +8,6 @@ import axios from "axios";
 import { useIsFocused } from "@react-navigation/native";
 import { IsDarkAtom, TabBarAtom } from "../../recoil/MyPageAtom";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
-import { getDay } from "date-fns";
 
 const Choice = styled.View`
   margin-top: 10px;

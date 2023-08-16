@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Text, View } from "react-native";
 import PercentageCircle from "react-native-progress-circle";
 import { styled } from "styled-components/native";
@@ -12,7 +12,7 @@ const Container = styled.View`
   margin-bottom: 50px;
 `;
 const Exercise = styled.View`
-  padding-top: 32px;
+  padding-top: 18px;
 `;
 const Block = styled.View`
   padding: 8px 24px;
@@ -59,17 +59,70 @@ export default function Analysis(props) {
     line-height: 19.5px;
     color: ${isDark ? colors.white : colors.black};
   `;
+  const NoneChart = styled.View`
+    margin-left: 24px;
+    margin-right: 24px;
+    margin-top: 26px;
+    width: 327px;
+    height: 254px;
+    border-radius: 20px;
+    background-color: ${isDark ? colors.grey_8 : colors.grey_1};
+    justify-content: center;
+    align-items: center;
+  `;
+  const NoneChartText = styled.Text`
+    font-size: 11px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 16.5px;
+    opacity: 0.6;
+    color: ${isDark ? colors.grey_2 : colors.grey_7};
+  `;
 
   const weekData = props.weekData;
 
-  const weekIndex = weekData.length - 1;
-  const calorie = weekData[weekIndex].weeklyCalories;
-  const hour = weekData[weekIndex].weeklyExerciseTime;
+  const firstMonth = weekData.startAndEndExercise[0].firstMonth;
+  const firstWeek = weekData.startAndEndExercise[0].firstWeek;
+  const lastMonth = weekData.startAndEndExercise[0].lastMonth;
+  const lastWeek = weekData.startAndEndExercise[0].lastWeek;
+  const startingIndex = (firstMonth - 1) * 6 + firstWeek - 1;
+  const finishingIndex = (lastMonth - 1) * 6 + lastWeek - 1;
+  console.log(firstMonth);
+  console.log(lastMonth);
+  console.log(weekData.formattedRows[finishingIndex]);
+  const calorie = weekData.formattedRows[finishingIndex].weeklyCalories;
+  const kilometer = weekData.formattedRows[finishingIndex].weeklyDistance;
+  const TimeData = weekData.formattedRows
+    .slice(startingIndex, finishingIndex)
+    .map((value) => value.weeklyExerciseTime);
+  let sum = 0;
+  for (let i = 0; i < TimeData.length; i++) {
+    sum += TimeData[i];
+  }
+  const hour = (sum / 3600).toFixed(2);
+
+  const [viewChart, setViewChart] = useState(true);
+  useEffect(() => {
+    firstMonth == lastMonth && firstWeek == lastWeek && setViewChart(false);
+  });
+
+  /*
+  const calorie = weekData.formattedRows[weekIndex].weeklyCalories;
   const kilometer = weekData[weekIndex].weeklyDistance;
+
+  const TimeData = weekData.map((result) => result.weeklyExerciseTime);
+  let sum = 0;
+  for (let i = 0; i < TimeData.length; i++) {
+    sum += TimeData[i];
+  }
+  const hour = (sum / 3600).toFixed(2);
+  */
 
   return (
     <Container>
-      <TotalChart weekData={weekData} />
+      <NoneChart>
+        <NoneChartText>아직 데이터가 충분하지 않아요</NoneChartText>
+      </NoneChart>
       <Exercise>
         <Title>운동 현황</Title>
         <Block>
