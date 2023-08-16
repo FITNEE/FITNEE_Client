@@ -16,75 +16,80 @@ const CircleLine = styled.View`
   height: 20px;
   align-items: flex-end;
 `;
+const RoutineCircle = styled.View`
+  width: 80px;
+  height: 80px;
+  background: ${({ isDark }) => (isDark ? colors.grey_8 : colors.grey_1)};
+  border-radius: 100%;
+  justify-content: center;
+  align-items: center;
+`;
 
-export default function GrayCircle({ num, unit, title, bubbleOn, bubbleText }) {
-  const isDark = useRecoilValue(IsDarkAtom);
+const UnderCircle = styled.Text`
+  color: ${({ isDark }) => (isDark ? colors.white : colors.black)};
+  text-align: center;
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 15px;
+  margin-bottom: 31px;
+  margin-top: 8px;
+`;
 
-  const RoutineCircle = styled.View`
-    width: 80px;
-    height: 80px;
-    background: ${isDark ? colors.grey_8 : colors.grey_1};
-    border-radius: 100%;
-    justify-content: center;
-    align-items: center;
-  `;
+const CircleText = styled.Text`
+  color: ${({ isDark }) => (isDark ? colors.white : colors.black)};
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 600;
+`;
 
-  const UnderCircle = styled.Text`
-    color: ${isDark ? colors.white : colors.black};
-    text-align: center;
-    font-size: 10px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: 15px;
-    margin-bottom: 31px;
-    margin-top: 8px;
-  `;
+const CircleUnit = styled.Text`
+  color: ${({ isDark }) => (isDark ? colors.white : colors.black)};
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 600;
+`;
 
-  const CircleText = styled.Text`
-    color: ${isDark ? colors.white : colors.black};
-    font-size: 20px;
-    font-style: normal;
-    font-weight: 600;
-  `;
+const Bubble2 = styled.View`
+  //position: relative;
+  position: absolute;
+  background: ${({ isDark }) => (isDark ? colors.white : colors.black)};
+  width: 60px;
+  height: 32px;
+  padding: 0px;
+  border-radius: 12px;
+  z-index: 1;
+  align-items: center;
+  bottom: 124px;
+`;
 
-  const CircleUnit = styled.Text`
-    color: ${isDark ? colors.white : colors.black};
-    font-size: 10px;
-    font-style: normal;
-    font-weight: 600;
-  `;
+const BubbleArrow2 = styled.View`
+  position: relative;
+  border-style: solid;
+  border-width: 12px 8px 0px;
+  border-color: ${({ isDark }) => (isDark ? colors.white : colors.black)}
+    transparent;
+  display: block;
+  width: 0;
+  z-index: 1;
+  top: 16px;
+`;
 
-  const Bubble2 = styled.View`
-    //position: relative;
-    position: absolute;
-    background: ${isDark ? colors.white : colors.black};
-    width: 60px;
-    height: 32px;
-    padding: 0px;
-    border-radius: 12px;
-    z-index: 1;
-    align-items: center;
-    bottom: 124px;
-  `;
+const BubbleText2 = styled.Text`
+  color: ${({ isDark }) => (isDark ? colors.black : colors.white)};
+  font-size: 11px;
+  font-weight: 700;
+  top: 10px;
+`;
 
-  const BubbleArrow2 = styled.View`
-    position: relative;
-    border-style: solid;
-    border-width: 12px 8px 0px;
-    border-color: ${isDark ? colors.white : colors.black} transparent;
-    display: block;
-    width: 0;
-    z-index: 1;
-    top: 16px;
-  `;
-
-  const BubbleText2 = styled.Text`
-    color: ${isDark ? colors.black : colors.white};
-    font-size: 11px;
-    font-weight: 700;
-    top: 10px;
-  `;
-
+export default function GrayCircle({
+  num,
+  unit,
+  title,
+  bubbleOn,
+  bubbleText,
+  isDark,
+}) {
   const [shouldRender, setShouldRender] = useState(true);
 
   useEffect(() => {
@@ -101,18 +106,18 @@ export default function GrayCircle({ num, unit, title, bubbleOn, bubbleText }) {
   return (
     <CircleBox>
       {shouldRender ? (
-        <Bubble2>
-          <BubbleText2>{bubbleText}kg</BubbleText2>
-          <BubbleArrow2 />
+        <Bubble2 isDark={isDark}>
+          <BubbleText2 isDark={isDark}>{bubbleText}kg</BubbleText2>
+          <BubbleArrow2 isDark={isDark} />
         </Bubble2>
       ) : null}
-      <RoutineCircle>
+      <RoutineCircle isDark={isDark}>
         <CircleLine>
-          <CircleText>{num}</CircleText>
-          <CircleUnit>{unit}</CircleUnit>
+          <CircleText isDark={isDark}>{num}</CircleText>
+          <CircleUnit isDark={isDark}>{unit}</CircleUnit>
         </CircleLine>
       </RoutineCircle>
-      <UnderCircle>{title}</UnderCircle>
+      <UnderCircle isDark={isDark}>{title}</UnderCircle>
     </CircleBox>
   );
 }
