@@ -1,6 +1,5 @@
 import Toast from "react-native-toast-message";
 import Check from "../../assets/SVGs/Check.svg";
-import { WithLocalSvg } from "react-native-svg";
 import styled from "styled-components/native";
 import { colors } from "../../colors";
 
@@ -25,7 +24,7 @@ const toastConfig = {
   success: () => (
     <ToastBase>
       <ToastText>비밀번호가 변경되었습니다.</ToastText>
-      <WithLocalSvg width={24} height={24} asset={Check} />
+      <Check width={24} height={24} color={colors.white} />
     </ToastBase>
   ),
 };

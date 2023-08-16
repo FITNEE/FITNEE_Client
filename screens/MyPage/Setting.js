@@ -127,15 +127,6 @@ export default function Setting({ navigation }) {
     line-height: 25.5px;
     color: ${isDark ? colors.white : colors.black};
   `;
-  /*
-  const logout = async () => {
-    try {
-      AsyncStorage.clear();
-    } catch (error) {
-      console.log(error);
-    }
-  };
-*/
 
   return (
     <SafeAreaView>

@@ -15,7 +15,6 @@ import { Alert } from "react-native";
 import { showNickToast } from "../../components/myPage/NickToast";
 import { useRecoilValue } from "recoil";
 import { IsDarkAtom } from "../../recoil/MyPageAtom";
-import { WithLocalSvg } from "react-native-svg";
 
 const Container = styled.View`
   background-color: ${({ DarkMode }) =>
@@ -201,11 +200,10 @@ export default function EditUserInfo({ navigation }) {
             ]);
           }}
         >
-          <WithLocalSvg
+          <Left
             style={{ marginLeft: 24 }}
             width={24}
             height={24}
-            asset={Left}
             color={isDark ? colors.white : colors.black}
           />
         </TouchableOpacity>

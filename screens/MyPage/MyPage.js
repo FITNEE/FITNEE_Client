@@ -73,7 +73,6 @@ export default function MyPage() {
   useEffect(() => {
     getWeekHealth().then((weekResult) => {
       setWeekData(weekResult.result);
-      console.log(weekResult);
     });
   }, []);
 
