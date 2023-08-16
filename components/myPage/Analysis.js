@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { Text, View } from "react-native";
-import PercentageCircle from "react-native-progress-circle";
 import { styled } from "styled-components/native";
 import TotalChart from "./TotalChart";
 import { useRecoilValue } from "recoil";

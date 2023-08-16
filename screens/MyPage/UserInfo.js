@@ -138,11 +138,10 @@ export default function UserInfo({ navigation }) {
           <BlockTitle>닉네임</BlockTitle>
           <NickContent>
             <NickText>{getUserName}</NickText>
-            <WithLocalSvg
+            <Right
               style={{ marginLeft: 8 }}
               width={20}
               height={20}
-              asset={Right}
               color={colors.grey_7}
             />
           </NickContent>
