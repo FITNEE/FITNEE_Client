@@ -9,8 +9,8 @@ import { useRoute } from "@react-navigation/native";
 import Check from "../../assets/SVGs/Check.svg";
 import Check_disabled from "../../assets/SVGs/Check_Disabled.svg";
 import axios from "axios";
-import { useRecoilState } from "recoil";
 import { IsDarkAtom } from "../../recoil/MyPageAtom";
+import { useRecoilValue } from "recoil";
 
 const ExerciseExplainText = styled.Text`
   padding: 8px;
@@ -102,7 +102,7 @@ const RecText1 = styled.Text`
 `;
 
 export default function CompleteExercise({ navigation }) {
-  const isDark = useRecoilState(IsDarkAtom);
+  const isDark = useRecoilValue(IsDarkAtom);
 
   const goToHome = () => navigation.navigate("HomeNav");
   const goToResult = () => navigation.navigate("ExerciseResult");
@@ -185,6 +185,7 @@ export default function CompleteExercise({ navigation }) {
             title="소요시간"
             bubbleOn={true}
             bubbleText={Math.ceil(detailData.exerciseTimeChange)}
+            isDark={isDark}
           />
           <GrayCircle
             num={resultData.todayTotalWeight}
@@ -192,12 +193,14 @@ export default function CompleteExercise({ navigation }) {
             title="오늘 든 무게"
             bubbleOn={true}
             bubbleText={detailData.weightChange}
+            isDark={isDark}
           />
           <GrayCircle
             num={resultData.todayTotalCalories}
             unit="kcal"
             title="소모 칼로리"
             bubbleOn={false}
+            isDark={isDark}
           />
         </CirclesLine>
 
@@ -221,11 +224,11 @@ export default function CompleteExercise({ navigation }) {
         </ExerciseRec>
 
         <ResultButton isDark={isDark} onPress={goToResult}>
-          <ButtonText>결과 자세히 보기</ButtonText>
+          <ButtonText isDark={isDark}>결과 자세히 보기</ButtonText>
         </ResultButton>
 
         <HomeButton isDark={isDark} onPress={goToHome}>
-          <ButtonText2>홈으로 돌아가기</ButtonText2>
+          <ButtonText2 isDark={isDark}>홈으로 돌아가기</ButtonText2>
         </HomeButton>
       </Container>
     </SafeAreaView>

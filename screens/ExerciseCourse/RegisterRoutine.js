@@ -11,7 +11,7 @@ const Container = styled.View`
   align-items: center;
   justify-content: center;
   padding: 0px 23.5px;
-  background: ${colors.white};
+  background: ${({ isDark }) => (isDark ? colors.grey_9 : colors.white)};
 `;
 
 const RoutineText = styled.Text`
@@ -19,7 +19,7 @@ const RoutineText = styled.Text`
   font-size: 24px;
   text-align: center;
   line-height: 33.6px;
-  color: ${colors.black};
+  color: ${({ isDark }) => (isDark ? colors.white : colors.black)};
 `;
 
 const RoutineExplain = styled.View`
@@ -29,7 +29,7 @@ const RoutineExplain = styled.View`
 `;
 
 const RoutineExplainText = styled.Text`
-  color: ${colors.black};
+  color: ${({ isDark }) => (isDark ? colors.white : colors.black)};
   padding: 8px;
   text-align: center;
   font-size: 13px;
@@ -49,7 +49,7 @@ const CreateRoutine = styled.TouchableOpacity`
 `;
 
 const CreateRoutineText = styled.Text`
-  color: ${colors.grey_1};
+  color: ${({ isDark }) => (isDark ? colors.black : colors.grey_1)};
   text-align: center;
   font-size: 17px;
   font-style: normal;
@@ -70,13 +70,13 @@ const CircleBox2 = styled.View`
 const RoutineCircle = styled.View`
   width: 80px;
   height: 80px;
-  background: ${colors.grey_2};
+  background: ${({ isDark }) => (isDark ? colors.grey_8 : colors.grey_2)};
   border-radius: 100%;
   margin-bottom: 8px;
 `;
 
 const UnderCircle = styled.View`
-  background: ${colors.grey_2};
+  background: ${({ isDark }) => (isDark ? colors.grey_8 : colors.grey_2)};
   height: 15px;
   width: 55px;
   margin-bottom: 19px;
@@ -86,7 +86,7 @@ const RoutineRec = styled.View`
   width: 311px;
   height: 175px;
   border-radius: 12px;
-  background: ${colors.grey_2};
+  background: ${({ isDark }) => (isDark ? colors.grey_8 : colors.grey_2)};
   margin-bottom: 40px;
 `;
 
@@ -101,10 +101,10 @@ export default function RegisterRoutine({ navigation }) {
   }, [isFocus]);
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.white }}>
-      <Container>
-        <RoutineText>루틴을 생성해 주세요!</RoutineText>
+      <Container isDark={isDark}>
+        <RoutineText isDark={isDark}>루틴을 생성해 주세요!</RoutineText>
         <RoutineExplain>
-          <RoutineExplainText>
+          <RoutineExplainText isDark={isDark}>
             회원님께 딱 맞는 루틴으로 {"\n"}
             간편하게 운동하고 결과를 분석해보세요.
           </RoutineExplainText>
@@ -112,24 +112,24 @@ export default function RegisterRoutine({ navigation }) {
 
         <CircleBox1>
           <CircleBox2>
-            <RoutineCircle />
-            <UnderCircle />
+            <RoutineCircle isDark={isDark} />
+            <UnderCircle isDark={isDark} />
           </CircleBox2>
 
           <CircleBox2>
-            <RoutineCircle />
-            <UnderCircle />
+            <RoutineCircle isDark={isDark} />
+            <UnderCircle isDark={isDark} />
           </CircleBox2>
 
           <CircleBox2>
-            <RoutineCircle />
-            <UnderCircle />
+            <RoutineCircle isDark={isDark} />
+            <UnderCircle isDark={isDark} />
           </CircleBox2>
         </CircleBox1>
 
-        <RoutineRec />
+        <RoutineRec isDark={isDark} />
         <CreateRoutine onPress={goToCreateRoutine}>
-          <CreateRoutineText>루틴 등록하기</CreateRoutineText>
+          <CreateRoutineText isDark={isDark}>루틴 등록하기</CreateRoutineText>
         </CreateRoutine>
       </Container>
     </SafeAreaView>
