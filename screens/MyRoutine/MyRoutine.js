@@ -24,6 +24,8 @@ import {
   getRoutines,
   getRoutine,
   updateRoutine,
+  getRoutineParts,
+  sortArray,
 } from "../../components/myRoutine/data";
 import {
   ContentContainer,
@@ -83,12 +85,10 @@ export default MyRoutine = ({ navigation, route }) => {
 
   const isFocus = useIsFocused();
   const updateDatas = () => {
-    getRoutines().then((res) => {
-      console.log("res:", res);
+    getRoutineParts().then((res) => {
       if (res.result) {
-        //여기에 다시 호출하여서 동기로
-        setSCHEDULE(processDayData(res.result));
-        getRoutine(processDayData(res.result), selectedDay, setIsLoading).then(
+        setSCHEDULE(sortArray(res.result));
+        getRoutine(sortArray(res.result), selectedDay, setIsLoading).then(
           (res) => {
             console.log("getRoutine반응값:", res);
             if (res.result) {
