@@ -3,8 +3,6 @@ import { Text } from "react-native";
 import PercentageCircle from "react-native-progress-circle";
 import { styled } from "styled-components/native";
 import { colors } from "../../colors";
-import { useRecoilValue } from "recoil";
-import { IsDarkAtom } from "../../recoil/MyPageAtom";
 
 const CircleLine = styled.View`
   flex-direction: row;
@@ -16,71 +14,69 @@ const CircleBox = styled.View`
   justify-content: center;
   align-items: center;
 `;
+const CircleText = styled.Text`
+  color: ${({ isDark }) => (isDark ? colors.white : colors.black)};
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 600;
+`;
 
+const CircleUnit = styled.Text`
+  color: ${({ isDark }) => (isDark ? colors.white : colors.black)};
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 600;
+`;
+
+const UnderCircle = styled.Text`
+  color: ${({ isDark }) => (isDark ? colors.white : colors.black)};
+  text-align: center;
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 15px;
+  margin-bottom: 31px;
+  margin-top: 8px;
+`;
+
+const Bubble = styled.View`
+  position: absolute;
+  background: ${({ isDark }) => (isDark ? colors.white : colors.black)};
+  width: 60px;
+  height: 32px;
+  padding: 0px;
+  border-radius: 12px;
+  z-index: 1;
+  align-items: center;
+  bottom: 124px;
+`;
+
+const BubbleArrow = styled.View`
+  position: relative;
+  border-style: solid;
+  border-width: 12px 8px 0px;
+  border-color: ${({ isDark }) => (isDark ? colors.white : colors.black)}
+    transparent;
+  display: block;
+  width: 0;
+  z-index: 1;
+  top: 16px;
+`;
+
+const BubbleText = styled.Text`
+  color: ${({ isDark }) => (isDark ? colors.black : colors.white)};
+  font-size: 11px;
+  font-weight: 700;
+  top: 10px;
+`;
 export default function ProgressCircle({
   num,
   unit,
   title,
   bubbleOn,
   bubbleText,
+  isDark,
 }) {
-  const isDark = useRecoilValue(IsDarkAtom);
-
-  const CircleText = styled.Text`
-    color: ${isDark ? colors.white : colors.black};
-    font-size: 20px;
-    font-style: normal;
-    font-weight: 600;
-  `;
-
-  const CircleUnit = styled.Text`
-    color: ${isDark ? colors.white : colors.black};
-    font-size: 10px;
-    font-style: normal;
-    font-weight: 600;
-  `;
-
-  const UnderCircle = styled.Text`
-    color: ${isDark ? colors.white : colors.black};
-    text-align: center;
-    font-size: 10px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: 15px;
-    margin-bottom: 31px;
-    margin-top: 8px;
-  `;
-
-  const Bubble = styled.View`
-    position: absolute;
-    background: ${isDark ? colors.white : colors.black};
-    width: 60px;
-    height: 32px;
-    padding: 0px;
-    border-radius: 12px;
-    z-index: 1;
-    align-items: center;
-    bottom: 124px;
-  `;
-
-  const BubbleArrow = styled.View`
-    position: relative;
-    border-style: solid;
-    border-width: 12px 8px 0px;
-    border-color: ${isDark ? colors.white : colors.black} transparent;
-    display: block;
-    width: 0;
-    z-index: 1;
-    top: 16px;
-  `;
-
-  const BubbleText = styled.Text`
-    color: ${isDark ? colors.black : colors.white};
-    font-size: 11px;
-    font-weight: 700;
-    top: 10px;
-  `;
-
   const percentage = (num / 60) * 100;
 
   const [shouldRender, setShouldRender] = useState(true);
@@ -97,9 +93,9 @@ export default function ProgressCircle({
   return (
     <CircleBox>
       {shouldRender ? (
-        <Bubble>
-          <BubbleText>{bubbleText}초</BubbleText>
-          <BubbleArrow />
+        <Bubble isDark={isDark}>
+          <BubbleText isDark={isDark}>{bubbleText}초</BubbleText>
+          <BubbleArrow isDark={isDark} />
         </Bubble>
       ) : null}
 
@@ -112,11 +108,11 @@ export default function ProgressCircle({
         bgColor={isDark ? colors.grey_9 : colors.white}
       >
         <CircleLine>
-          <CircleText>{num}</CircleText>
-          <CircleUnit>{unit}</CircleUnit>
+          <CircleText isDark={isDark}>{num}</CircleText>
+          <CircleUnit isDark={isDark}>{unit}</CircleUnit>
         </CircleLine>
       </PercentageCircle>
-      <UnderCircle>{title}</UnderCircle>
+      <UnderCircle isDark={isDark}>{title}</UnderCircle>
     </CircleBox>
   );
 }

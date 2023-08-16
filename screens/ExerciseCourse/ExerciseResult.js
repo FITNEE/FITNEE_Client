@@ -131,7 +131,7 @@ const ExerciseIconCircle = styled.View`
   height: 20px;
   border-radius: 100%;
   background-color: ${({ DarkMode }) =>
-    DarkMode ? colors.l_sub_2 : colors.d_sub_3};
+    DarkMode ? colors.d_sub_3 : colors.l_sub_2};
 `;
 
 export default function ExerciseResult({ navigation }) {
@@ -244,7 +244,7 @@ export default function ExerciseResult({ navigation }) {
             </TextBox>
 
             <ResultBox>
-              <ExerciseIconCircle>
+              <ExerciseIconCircle DarkMode={isDark}>
                 <ExerciseIcon width={20} height={20} color={colors.l_main} />
               </ExerciseIconCircle>
             </ResultBox>
