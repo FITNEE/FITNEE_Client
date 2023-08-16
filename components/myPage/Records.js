@@ -4,9 +4,6 @@ import PercentageCircle from "react-native-progress-circle";
 import { styled } from "styled-components/native";
 import CalendarView from "./CalendarView";
 import { colors } from "../../colors";
-import COMMENTDATA from "../../screens/MyPage/COMMENTDATA";
-import { Image } from "react-native";
-import { WithLocalSvg } from "react-native-svg";
 import Check from "../../assets/SVGs/Check.svg";
 import { useRecoilValue } from "recoil";
 import { IsDarkAtom } from "../../recoil/MyPageAtom";
@@ -154,7 +151,7 @@ export default function Records(props) {
   const exercise = totalExercise?.map((comment) => (
     <RecTextLine>
       <ListText>{comment}</ListText>
-      <WithLocalSvg width={20} height={20} asset={Check} />
+      <Check width={20} height={20} color={colors.white} />
     </RecTextLine>
   ));
 

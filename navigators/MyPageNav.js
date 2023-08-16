@@ -36,11 +36,10 @@ export default function MyPageNav() {
           headerTitle: "",
           headerRight: () => (
             <TouchableOpacity onPress={() => navigation.navigate("Setting")}>
-              <WithLocalSvg
+              <SettingIcon
                 style={{ marginRight: 24 }}
                 width={24}
                 height={24}
-                asset={SettingIcon}
                 color={isDark ? colors.white : colors.black}
               />
             </TouchableOpacity>
@@ -54,11 +53,10 @@ export default function MyPageNav() {
           headerTitle: "앱 설정",
           headerLeft: () => (
             <TouchableOpacity onPress={() => navigation.goBack()}>
-              <WithLocalSvg
+              <Left
                 style={{ marginLeft: 24 }}
                 width={24}
                 height={24}
-                asset={Left}
                 color={isDark ? colors.white : colors.black}
               />
             </TouchableOpacity>
@@ -72,11 +70,10 @@ export default function MyPageNav() {
           headerTitle: "계정 정보",
           headerLeft: () => (
             <TouchableOpacity onPress={() => navigation.goBack()}>
-              <WithLocalSvg
+              <Left
                 style={{ marginLeft: 24 }}
                 width={24}
                 height={24}
-                asset={Left}
                 color={isDark ? colors.white : colors.black}
               />
             </TouchableOpacity>
@@ -92,11 +89,10 @@ export default function MyPageNav() {
           headerTitle: "닉네임 변경",
           headerLeft: () => (
             <TouchableOpacity onPress={() => navigation.goBack()}>
-              <WithLocalSvg
+              <Left
                 style={{ marginLeft: 24 }}
                 width={24}
                 height={24}
-                asset={Left}
                 color={isDark ? colors.white : colors.black}
               />
             </TouchableOpacity>
@@ -110,11 +106,10 @@ export default function MyPageNav() {
           headerTitle: "비밀번호 수정",
           headerLeft: () => (
             <TouchableOpacity onPress={() => navigation.goBack()}>
-              <WithLocalSvg
+              <Left
                 style={{ marginLeft: 24 }}
                 width={24}
                 height={24}
-                asset={Left}
                 color={isDark ? colors.white : colors.black}
               />
             </TouchableOpacity>

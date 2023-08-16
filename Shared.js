@@ -1,9 +1,6 @@
 import styled from "styled-components/native";
 import { colors } from "./colors";
 import { ActivityIndicator, Dimensions } from "react-native";
-import Back from "./assets/left_arrow.png";
-import { useRecoilValue } from "recoil";
-import { IsDarkAtom } from "./recoil/MyPageAtom";
 import Left from "./assets/SVGs/Left.svg";
 
 export const ScreenWidth = Dimensions.get("screen").width;
@@ -52,8 +49,6 @@ export const Button = ({
   loading = false,
   mode = "normal",
 }) => {
-  const isDark = useRecoilValue(IsDarkAtom);
-
   return (
     <MyButton
       disabled={!enabled}

@@ -3,7 +3,6 @@ import { Calendar, LocaleConfig } from "react-native-calendars";
 import { colors } from "../../colors";
 import { Image, Dimensions } from "react-native";
 import { format } from "date-fns";
-import { WithLocalSvg } from "react-native-svg";
 import Left from "../../assets/SVGs/Left.svg";
 import Right from "../../assets/SVGs/Right.svg";
 import { useRecoilValue } from "recoil";
@@ -73,21 +72,19 @@ export default function CalendarView(props) {
       renderArrow={(direction) => {
         if (direction == "left")
           return (
-            <WithLocalSvg
+            <Left
               style={{ marginLeft: windowWidth / 4 - 10 }}
               width={20}
               height={20}
-              asset={Left}
               color={colors.grey_5}
             />
           );
         if (direction == "right")
           return (
-            <WithLocalSvg
+            <Right
               style={{ marginRight: windowWidth / 4 }}
               width={20}
               height={20}
-              asset={Right}
               color={colors.grey_5}
             />
           );
