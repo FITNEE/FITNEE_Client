@@ -14,7 +14,7 @@ import { format } from "date-fns";
 import { ScrollView } from "react-native-gesture-handler";
 import { colors } from "../../colors";
 import ViewShot from "react-native-view-shot";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { IsDarkAtom } from "../../recoil/MyPageAtom";
 import ShareIcon from "../../assets/SVGs/Share.svg";
 import ExerciseIcon from "../../assets/SVGs/Exercise.svg";
@@ -135,7 +135,7 @@ const ExerciseIconCircle = styled.View`
 `;
 
 export default function ExerciseResult({ navigation }) {
-  const isDark = useRecoilState(IsDarkAtom);
+  const isDark = useRecoilValue(IsDarkAtom);
 
   let Week = new Array("일", "월", "화", "수", "목", "금", "토");
 
