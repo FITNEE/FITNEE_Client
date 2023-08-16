@@ -5,7 +5,13 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { SafeAreaView, View, Text, TouchableOpacity } from "react-native";
+import {
+  SafeAreaView,
+  View,
+  Text,
+  TouchableOpacity,
+  Alert,
+} from "react-native";
 import { TextInput, Dimensions, Animated, StyleSheet } from "react-native";
 const { width, height } = Dimensions.get("window");
 import styled from "styled-components/native";
@@ -20,9 +26,10 @@ import {
 } from "@gorhom/bottom-sheet";
 import { useRoute, StackActions } from "@react-navigation/native";
 import axios from "axios";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { IsDarkAtom } from "../../recoil/MyPageAtom";
 import ArrowCircle from "../../assets/SVGs/ArrowCircle.svg";
+import Close from "../../assets/SVGs/Close.svg";
 
 const StartButton = styled.TouchableOpacity`
   padding: 8px 12px;
@@ -195,7 +202,19 @@ const TimerText = styled.Text`
   font-size: 56px;
 `;
 
+const StopExercise = styled.TouchableOpacity`
+  width: 24px;
+  height: 24px;
+  position: absolute;
+  top: 20px;
+  right: 24px;
+`;
+
 export default function ExerciseCourse_2({ navigation }) {
+  const goToStartExercise = () => {
+    navigation.navigate("StartExercise");
+  };
+
   const goToNextExercise = () => {
     setIsPlaying(false);
     navigation.dispatch(
@@ -223,6 +242,21 @@ export default function ExerciseCourse_2({ navigation }) {
         routineIdx: routineIdx,
         totalTime: totalTime,
       })
+    );
+  };
+
+  const OpenConfirm = () => {
+    Alert.alert(
+      "현재 진행중인 운동루틴을 중단하시겠습니까?",
+      "현재까지 운동하신 내용은 저장되지 않습니다.",
+      [
+        { text: "취소", onPress: () => console.log("Cancel Stop") },
+        {
+          text: "운동 중단하기",
+          onPress: goToStartExercise,
+          style: "destructive",
+        },
+      ]
     );
   };
 
@@ -301,32 +335,43 @@ export default function ExerciseCourse_2({ navigation }) {
     });
   }, []);
 
-  const isDark = useRecoilState(IsDarkAtom);
+  const isDark = useRecoilValue(IsDarkAtom);
 
   return (
-    <BottomSheetModalProvider isDark={isDark}>
+    <BottomSheetModalProvider>
       <SafeAreaView
         style={{
           flex: 1,
           backgroundColor: isDark ? colors.grey_9 : colors.grey_2,
         }}
       >
-        <ExerciseCard exerciseName="휴식 시간">
-          <ExerciseCircle>
+        <ExerciseCard isDark={isDark} exerciseName="휴식 시간">
+          <StopExercise onPress={() => OpenConfirm()}>
+            <Close
+              width={24}
+              height={24}
+              color={isDark ? colors.white : colors.black}
+            />
+          </StopExercise>
+          <ExerciseCircle isDark={isDark}>
             <CountdownCircleTimer
               isPlaying={isPlaying}
               duration={duration}
               colors={colors.d_main}
               size={315}
               strokeWidth={8}
-              trailColor={isDark ? colors.grey_3 : colors.grey_7}
+              trailColor={isDark ? colors.grey_7 : colors.grey_3}
               onComplete={goToNextExercise}
               updateInterval={0.001}
               rotation={"counterclockwise"}
             >
               {({ remainingTime }) => (
                 RestTime({ remainingTime }),
-                (<TimerText>{children({ remainingTime })}</TimerText>)
+                (
+                  <TimerText isDark={isDark}>
+                    {children({ remainingTime })}
+                  </TimerText>
+                )
               )}
             </CountdownCircleTimer>
           </ExerciseCircle>
