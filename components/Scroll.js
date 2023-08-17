@@ -140,5 +140,5 @@ const PageDot = styled.View`
         : colors.grey_7
       : props.isDark
       ? colors.grey_7
-      : colors.grey_2};
+      : colors.grey_3};
 `;

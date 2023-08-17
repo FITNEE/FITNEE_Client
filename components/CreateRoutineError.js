@@ -4,7 +4,7 @@ import { colors } from "../colors";
 export default function CreateRoutineError({ isDark, retryPress, navigation }) {
   return (
     <ErrorContainer>
-      <Image />
+      <Image isDark={isDark} />
       <Title isDark={isDark}>앗 !</Title>
       <SubTitle
         isDark={isDark}
@@ -34,6 +34,7 @@ const Image = styled.View`
   background-color: white;
   border-radius: 62.5px;
   margin-bottom: 20px;
+  background-color: ${(props) => (props.isDark ? colors.grey_9 : colors.white)};
 `;
 const Title = styled.Text`
   font-size: 24px;

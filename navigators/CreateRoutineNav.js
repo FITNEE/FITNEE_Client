@@ -46,7 +46,7 @@ export default function CreateRoutineNav() {
       <Stack.Screen name="CreateRoutine_4" component={CreateRoutine_4} />
       <Stack.Screen
         name="CreateRoutine_5"
-        // options={{ headerShown: false }}
+        options={{ headerShown: false }}
         component={CreateRoutine_5}
       />
       <Stack.Screen

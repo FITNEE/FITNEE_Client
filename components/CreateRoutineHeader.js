@@ -72,7 +72,7 @@ const NoHeader = styled.View`
   opacity: 1;
 `;
 const HeaderContainer = styled.View`
-  height: 80px;
+  height: 100px;
   background-color: ${(props) => (props.isDark ? colors.black : colors.grey_1)};
   align-items: center;
   justify-content: flex-end;
@@ -102,6 +102,7 @@ const StackBar = styled.View`
     props.isDark ? colors.grey_9 : colors.grey_2};
   border-radius: 10px;
   overflow: hidden;
+  margin-top: 10px;
 `;
 const StackBarPin = styled.View`
   width: ${({ index }) => (index + 1) * 25}%;
