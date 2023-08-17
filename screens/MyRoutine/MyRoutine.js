@@ -87,20 +87,20 @@ export default MyRoutine = ({ navigation, route }) => {
   const updateDatas = () => {
     getRoutineParts().then((res) => {
       if (res.result) {
-        // console.log("sortArray(res.result):", sortArray(res.result));
-        // setSCHEDULE(sortArray(res.result));
-        // getRoutine(sortArray(res.result), selectedDay, setIsLoading).then(
-        //   (res) => {
-        //     console.log("getRoutine반응값:", res);
-        //     if (res.result) {
-        //       setRoutineData(res.result.routineDetails);
-        //       setNewRoutine(res.result.routineDetails);
-        //     } else {
-        //       setRoutineData(null);
-        //       setNewRoutine(null);
-        //     }
-        //   }
-        // );
+        console.log("sortArray(res.result):", sortArray(res.result));
+        setSCHEDULE(sortArray(res.result));
+        getRoutine(sortArray(res.result), selectedDay, setIsLoading).then(
+          (res) => {
+            console.log("getRoutine반응값:", res);
+            if (res.result) {
+              setRoutineData(res.result.routineDetails);
+              setNewRoutine(res.result.routineDetails);
+            } else {
+              setRoutineData(null);
+              setNewRoutine(null);
+            }
+          }
+        );
       } else {
         console.log("calender 데이터 받아오지 못함+routine데이터도 실패");
       }
