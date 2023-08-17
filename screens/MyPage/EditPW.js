@@ -14,16 +14,14 @@ import { IsDarkAtom } from "../../recoil/MyPageAtom";
 
 const Container = styled.View`
   height: 100%;
-  background-color: ${({ DarkMode }) =>
-    DarkMode ? colors.grey_9 : colors.white};
+  background-color: ${({ isDark }) => (isDark ? colors.grey_9 : colors.white)};
   padding: 32px 24px 0px 24px;
 `;
 const Input = styled.TextInput`
   padding: 15px 16px;
   border-radius: 10px;
-  background-color: ${({ DarkMode }) =>
-    DarkMode ? colors.black : colors.grey_1};
-  color: ${({ DarkMode }) => (DarkMode ? colors.white : colors.black)};
+  background-color: ${({ isDark }) => (isDark ? colors.black : colors.grey_1)};
+  color: ${({ isDark }) => (isDark ? colors.white : colors.black)};
   width: 100%;
   height: 48px;
 `;
@@ -141,17 +139,17 @@ export default function EditPW({ navigation }) {
   };
 
   return (
-    <SafeAreaView>
+    <SafeAreaView backgroundColor={isDark ? colors.grey_9 : colors.grey_1}>
       <TouchableWithoutFeedback
         onPress={() => {
           Keyboard.dismiss();
         }}
       >
-        <Container DarkMode={isDark}>
+        <Container isDark={isDark}>
           <InputContainer>
             <InputRed1 error={errorPW}>
               <Input
-                DarkMode={isDark}
+                isDark={isDark}
                 placeholderTextColor={isDark ? colors.grey_8 : colors.grey_6}
                 placeholder="기존 비밀번호 확인"
                 style={{
@@ -183,7 +181,7 @@ export default function EditPW({ navigation }) {
               on={click}
             >
               <Input
-                DarkMode={isDark}
+                isDark={isDark}
                 placeholderTextColor={isDark ? colors.grey_8 : colors.grey_6}
                 placeholder="새 비밀번호"
                 ref={(input) => {
@@ -203,7 +201,7 @@ export default function EditPW({ navigation }) {
               on={click}
             >
               <Input
-                DarkMode={isDark}
+                isDark={isDark}
                 placeholderTextColor={isDark ? colors.grey_8 : colors.grey_6}
                 onSubmitEditing={() => {
                   rewrittenNewPW == newPW && handlePress();

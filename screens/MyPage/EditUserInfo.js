@@ -16,8 +16,7 @@ import { useRecoilValue } from "recoil";
 import { IsDarkAtom } from "../../recoil/MyPageAtom";
 
 const Container = styled.View`
-  background-color: ${({ DarkMode }) =>
-    DarkMode ? colors.grey_9 : colors.white};
+  background-color: ${({ isDark }) => (isDark ? colors.grey_9 : colors.white)};
   height: 100%;
   padding: 0px 24px;
   align-items: center;
@@ -39,20 +38,19 @@ const InputRed = styled.View`
   border-radius: 8px;
   margin-bottom: 3px;
   border: 1px;
-  border-color: ${({ DarkMode, check, error }) =>
+  border-color: ${({ isDark, check, error }) =>
     check
       ? error
         ? colors.red
         : colors.green
-      : DarkMode
+      : isDark
       ? colors.black
       : colors.grey_2};
 `;
 const InputBlock = styled.TextInput`
   width: 238px;
-  background-color: ${({ DarkMode }) =>
-    DarkMode ? colors.black : colors.grey_1};
-  color: ${({ DarkMode }) => (DarkMode ? colors.white : colors.black)};
+  background-color: ${({ isDark }) => (isDark ? colors.black : colors.grey_1)};
+  color: ${({ isDark }) => (isDark ? colors.white : colors.black)};
   padding: 0px 16px;
   height: 46px;
   border-radius: 8px;
@@ -60,7 +58,41 @@ const InputBlock = styled.TextInput`
   font-style: normal;
   font-weight: 400;
 `;
-
+const StatusText = styled.Text`
+  margin-left: 40px;
+  font-size: 11px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 16.5px;
+  width: 100%;
+  margin-bottom: 20px;
+  margin-right: 8px;
+  font-weight: 300;
+  color: ${({ isDark, check, error }) =>
+    check
+      ? error
+        ? colors.red
+        : colors.green
+      : isDark
+      ? colors.grey_8
+      : colors.grey_2};
+`;
+const CheckButton = styled.TouchableOpacity`
+  width: 79px;
+  height: 48px;
+  border-radius: 8px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid ${({ isDark }) => (isDark ? colors.d_main : colors.l_main)};
+  margin-left: 8px;
+`;
+const CheckButtonText = styled.Text`
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 22.5px;
+  color: ${({ isDark }) => (isDark ? colors.d_main : colors.l_main)};
+`;
 const InputContainer = styled.View`
   flex-direction: row;
   width: 100%;
@@ -68,41 +100,6 @@ const InputContainer = styled.View`
 
 export default function EditUserInfo({ navigation }) {
   const isDark = useRecoilValue(IsDarkAtom);
-  const StatusText = styled.Text`
-    margin-left: 40px;
-    font-size: 11px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: 16.5px;
-    width: 100%;
-    margin-bottom: 20px;
-    margin-right: 8px;
-    font-weight: 300;
-    color: ${({ check, error }) =>
-      check
-        ? error
-          ? colors.red
-          : colors.green
-        : isDark
-        ? colors.grey_8
-        : colors.grey_2};
-  `;
-  const CheckButton = styled.TouchableOpacity`
-    width: 79px;
-    height: 48px;
-    border-radius: 8px;
-    align-items: center;
-    justify-content: center;
-    border: 1px solid ${isDark ? colors.d_main : colors.l_main};
-    margin-left: 8px;
-  `;
-  const CheckButtonText = styled.Text`
-    font-size: 15px;
-    font-style: normal;
-    font-weight: 600;
-    line-height: 22.5px;
-    color: ${isDark ? colors.d_main : colors.l_main};
-  `;
 
   const [check, setCheck] = useState(false);
   const [error, setError] = useState(true);
@@ -240,34 +237,34 @@ export default function EditUserInfo({ navigation }) {
   }, [error, newNickname, enabled]);
 
   return (
-    <SafeAreaView>
+    <SafeAreaView backgroundColor={isDark ? colors.grey_9 : colors.grey_1}>
       <TouchableWithoutFeedback
         onPress={() => {
           Keyboard.dismiss();
         }}
       >
-        <Container DarkMode={isDark}>
+        <Container isDark={isDark}>
           <Profile>
             <ProfileImage
               style={{ backgroundColor: getGender == 1 ? "blue" : "pink" }}
             ></ProfileImage>
           </Profile>
           <InputContainer>
-            <InputRed DarkMode={isDark} error={error} check={check}>
+            <InputRed isDark={isDark} error={error} check={check}>
               <InputBlock
                 editable
                 autoFocus
                 onChangeText={(text) => setNewNickname(text)}
                 placeholder={getUserName}
                 placeholderTextColor={isDark ? colors.grey_8 : colors.grey_6}
-                DarkMode={isDark}
+                isDark={isDark}
               />
             </InputRed>
-            <CheckButton enabled onPress={change}>
-              <CheckButtonText>중복 확인</CheckButtonText>
+            <CheckButton enabled onPress={change} isDark={isDark}>
+              <CheckButtonText isDark={isDark}>중복 확인</CheckButtonText>
             </CheckButton>
           </InputContainer>
-          <StatusText error={error} check={check}>
+          <StatusText error={error} check={check} isDark={isDark}>
             {check
               ? error
                 ? "이미 존재하는 닉네임입니다."
