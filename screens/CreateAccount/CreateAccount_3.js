@@ -48,7 +48,7 @@ const BMIContainer = styled.View`
 `;
 const BMINumber = styled.Text`
   font-size: 10px;
-  font-weight: 400;
+  font-family: Pretendard-Regular;
 `;
 const BMINumberContainer = styled.View`
   width: 100%;
@@ -90,11 +90,12 @@ const BMIMarkerTop = styled.View`
   top: ${-lineHeight - TextBoxHeight}px;
 `;
 const BMITitle = styled.Text`
+  font-family: Pretendard-Bold;
   font-size: 13px;
-  font-weight: 600;
 `;
 const BMIText = styled.Text`
   font-size: 11px;
+  font-family: Pretendard-Regular;
   margin-top: 4px;
 `;
 

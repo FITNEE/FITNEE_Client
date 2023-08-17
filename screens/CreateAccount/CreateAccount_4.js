@@ -12,11 +12,11 @@ import { IsDarkAtom } from "../../recoil/MyPageAtom";
 import { loggedInState } from "../../recoil/AuthAtom";
 
 const SubTitle = styled.Text`
+  font-family: Pretendard-Regular;
   text-align: center;
   margin-top: 8px;
   font-size: 13px;
   line-height: 18px;
-  font-weight: 400;
   color: ${colors.black};
 `;
 const TextContainer = styled.View`
@@ -25,14 +25,6 @@ const TextContainer = styled.View`
   align-items: center;
   width: 100%;
   justify-content: center;
-`;
-const Test = styled.Text`
-  margin-top: 8px;
-  font-size: 13px;
-  width: 260px;
-  line-height: 18px;
-  font-weight: 400;
-  color: ${colors.black};
 `;
 const AnimationContainer = styled.View`
   margin-top: -80px;
