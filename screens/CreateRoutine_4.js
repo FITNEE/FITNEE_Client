@@ -2,16 +2,21 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components/native";
 import { useNavigationState } from "@react-navigation/native";
 import CreateRoutineHeader from "../components/CreateRoutineHeader";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { CreateRoutineAtom } from "../recoil/CreateRoutineAtom";
 import axios from "axios";
 import { colors } from "../colors";
+import { Text } from "react-native";
+import CreateRoutineError from "../components/CreateRoutineError";
+import { IsDarkAtom } from "../recoil/MyPageAtom";
 
 export default function CreateRoutine_4({ navigation }) {
   const [select, SetSelect] = useState(false);
   const [allDay, SetAllDay] = useState(false);
   const [loading, SetLoading] = useState(false);
+  const [error, SetError] = useState(false);
   const [routine, setRoutine] = useRecoilState(CreateRoutineAtom);
+  const isDark = useRecoilValue(IsDarkAtom);
   const [days, setDays] = useState([
     { id: 1, name: "일", selected: false, ename: "Sunday" },
     { id: 2, name: "월", selected: false, ename: "Monday" },
@@ -52,11 +57,10 @@ export default function CreateRoutine_4({ navigation }) {
     }));
     SetLoading(true);
   };
-
-  // const timer = setTimeout(() => {
-  //   navigation.push("CreateRoutine_5");
-  // }, 2000);
-  // return () => clearTimeout(timer);
+  const retryPress = () => {
+    handleSubmit();
+    SetError(false);
+  };
 
   const handleSubmit = async () => {
     try {
@@ -69,12 +73,18 @@ export default function CreateRoutine_4({ navigation }) {
         }
       );
       console.log("Response:", response.data);
-
-      navigation.push("CreateRoutine_5", {
-        responseData: response.data.result,
-      });
+      if (response.data.isSuccess) {
+        SetLoading(false);
+        navigation.push("CreateRoutine_5", {
+          responseData: response.data.result,
+        });
+      } else {
+        console.log("Error :", response.data);
+        SetError(true);
+      }
     } catch (error) {
       console.error("Error:", error);
+      SetError(true);
     }
   };
 
@@ -115,17 +125,27 @@ export default function CreateRoutine_4({ navigation }) {
   };
 
   return (
-    <Container>
-      {loading ? (
-        <LoadingContainer>
+    <Container isDark={isDark}>
+      {error ? (
+        <CreateRoutineError
+          isDark={isDark}
+          retryPress={retryPress}
+          navigation={navigation}
+        />
+      ) : loading ? (
+        <LoadingContainer isDark={isDark}>
           <Loading />
-          <LoadingText>트레이닝 루틴을 생성 중입니다</LoadingText>
+          <LoadingText isDark={isDark}>
+            트레이닝 루틴을 생성 중입니다
+          </LoadingText>
         </LoadingContainer>
       ) : (
-        <Container>
+        <Container isDark={isDark}>
           <TitleContainer>
-            <Title>운동할 요일을 선택해주세요.</Title>
-            <SubTitle>마이루틴에서 언제든지 변경할 수 있어요.</SubTitle>
+            <Title isDark={isDark}>운동할 요일을 선택해주세요.</Title>
+            <SubTitle isDark={isDark}>
+              마이루틴에서 언제든지 변경할 수 있어요.
+            </SubTitle>
           </TitleContainer>
           <DayContainer>
             {days.map((day) => (
@@ -134,11 +154,15 @@ export default function CreateRoutine_4({ navigation }) {
                 onPress={() => onDayPress(day.id)}
                 style={{
                   backgroundColor: allDay
-                    ? colors.l_sub_2
+                    ? isDark
+                      ? "#1E1B29"
+                      : colors.l_sub_2
                     : day.selected
                     ? colors.l_main
+                    : isDark
+                    ? colors.grey_9
                     : colors.white,
-                  borderWidth: 1,
+                  borderWidth: allDay ? 1 : 0,
                   borderColor: allDay
                     ? colors.l_main
                     : day.selected
@@ -150,6 +174,8 @@ export default function CreateRoutine_4({ navigation }) {
                   style={{
                     color: allDay
                       ? colors.l_main
+                      : isDark
+                      ? colors.white
                       : day.selected
                       ? colors.white
                       : colors.black,
@@ -160,11 +186,20 @@ export default function CreateRoutine_4({ navigation }) {
               </DayItem>
             ))}
           </DayContainer>
-          <AllDayButton isActive={allDay} onPress={AllDayPress}>
-            <AllDayText isActive={allDay}>매일 운동할래요</AllDayText>
+          <AllDayButton isDark={isDark} isActive={allDay} onPress={AllDayPress}>
+            <AllDayText isDark={isDark} isActive={allDay}>
+              매일 운동할래요
+            </AllDayText>
           </AllDayButton>
-          <NextButton isActive={select} disabled={!select} onPress={nextPress}>
-            <ButtonText isActive={select}>선택 완료</ButtonText>
+          <NextButton
+            isDark={isDark}
+            isActive={select}
+            disabled={!select}
+            onPress={nextPress}
+          >
+            <ButtonText isDark={isDark} isActive={select}>
+              선택 완료
+            </ButtonText>
           </NextButton>
         </Container>
       )}
@@ -177,6 +212,7 @@ const Container = styled.View`
   width: 100%;
   align-items: center;
   justify-content: space-around;
+  background-color: ${(props) => (props.isDark ? colors.black : colors.grey_1)};
 `;
 const TitleContainer = styled.View`
   width: 90%;
@@ -185,10 +221,12 @@ const TitleContainer = styled.View`
 const Title = styled.Text`
   font-size: 20px;
   font-weight: 600;
+  color: ${(props) => (props.isDark ? colors.white : colors.black)};
 `;
 const SubTitle = styled.Text`
   font-size: 12px;
   margin-top: 10px;
+  color: ${(props) => (props.isDark ? colors.white : colors.black)};
 `;
 const DayContainer = styled.View`
   flex-direction: row;
@@ -214,7 +252,11 @@ const AllDayButton = styled.TouchableOpacity`
   width: 110px;
   height: 40px;
   background-color: ${(props) =>
-    props.isActive ? colors.l_main : colors.grey_3};
+    props.isActive
+      ? colors.l_main
+      : props.isDark
+      ? colors.grey_7
+      : colors.grey_3};
   margin-bottom: 50px;
   border-radius: 100px;
   align-items: center;
@@ -222,7 +264,8 @@ const AllDayButton = styled.TouchableOpacity`
 `;
 const AllDayText = styled.Text`
   font-size: 13px;
-  color: ${(props) => (props.isActive ? colors.white : colors.black)};
+  color: ${(props) =>
+    props.isActive ? colors.white : props.isDark ? colors.white : colors.black};
 `;
 const NextButton = styled.TouchableOpacity`
   width: 327px;
@@ -230,11 +273,23 @@ const NextButton = styled.TouchableOpacity`
   align-items: center;
   justify-content: center;
   background-color: ${(props) =>
-    props.isActive ? colors.l_main : colors.grey_3};
+    props.isActive
+      ? colors.l_main
+      : props.isDark
+      ? colors.grey_8
+      : colors.grey_3};
   border-radius: 10px;
 `;
 const ButtonText = styled.Text`
-  color: ${(props) => (props.isActive ? colors.white : colors.black)};
+  font-weight: bold;
+  color: ${(props) =>
+    props.isActive
+      ? props.isDark
+        ? colors.black
+        : colors.white
+      : props.isDark
+      ? colors.white
+      : colors.black};
 `;
 const LoadingContainer = styled.View`
   flex: 1;
@@ -242,6 +297,7 @@ const LoadingContainer = styled.View`
   align-items: center;
   justify-content: center;
   margin-bottom: 80px;
+  background-color: ${(props) => (props.isDark ? colors.black : colors.grey_1)};
 `;
 const Loading = styled.View`
   width: 291px;
@@ -251,4 +307,5 @@ const Loading = styled.View`
 `;
 const LoadingText = styled.Text`
   margin-top: 30px;
+  color: ${(props) => (props.isDark ? colors.white : colors.black)};
 `;

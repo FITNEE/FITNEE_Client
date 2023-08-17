@@ -6,6 +6,7 @@ import CreateRoutineHeader from "../components/CreateRoutineHeader";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { CreateRoutineAtom } from "../recoil/CreateRoutineAtom";
 import { colors } from "../colors";
+import { IsDarkAtom } from "../recoil/MyPageAtom";
 
 export default function CreateRoutine_2({ navigation }) {
   const [shouldRender, setShouldRender] = useState(true);
@@ -13,6 +14,7 @@ export default function CreateRoutine_2({ navigation }) {
   const [value, setValue] = useState(0);
   const [routine, setRoutine] = useRecoilState(CreateRoutineAtom);
   const index = useNavigationState((state) => state.index);
+  const isDark = useRecoilValue(IsDarkAtom);
   useEffect(() => {
     navigation.setOptions({
       header: () => <CreateRoutineHeader title="루틴 등록" index={index} />,
@@ -43,7 +45,7 @@ export default function CreateRoutine_2({ navigation }) {
     // 일정 시간(예: 5초) 후에 렌더링 여부를 false로 변경
     const timer = setTimeout(() => {
       setShouldRender(false);
-    }, 5000); // 5초
+    }, 500000); // 5초
 
     // 컴포넌트가 언마운트되면 타이머 클리어
     return () => clearTimeout(timer);
@@ -55,17 +57,17 @@ export default function CreateRoutine_2({ navigation }) {
   }
 
   return (
-    <Container>
+    <Container isDark={isDark}>
       <TitleContainer>
-        <Title>나의 예상 스쿼트 1RM은?</Title>
+        <Title isDark={isDark}>나의 예상 스쿼트 1RM은?</Title>
         {shouldRender ? (
-          <Bubble>
-            <BubbleText>{`정확한 동작으로 한 번 들어 올릴 
+          <Bubble isDark={isDark}>
+            <BubbleText isDark={isDark}>{`정확한 동작으로 한 번 들어 올릴 
 수 있는 무게를 의미해요.`}</BubbleText>
-            <BubbleArrow />
+            <BubbleArrow isDark={isDark} />
           </Bubble>
         ) : null}
-        <SubTitle>
+        <SubTitle isDark={isDark}>
           {`회원님의 답변을 바탕으로
 정확한 트레이닝 중량을 추천해 드릴게요.`}
         </SubTitle>
@@ -84,11 +86,17 @@ export default function CreateRoutine_2({ navigation }) {
           console.log(value);
         }}
       />
-      <DontKnowButton isActive={dontKnow} onPress={handleDontKnow}>
-        <DontKnowText isActive={dontKnow}>잘 모르겠어요</DontKnowText>
+      <DontKnowButton
+        isDark={isDark}
+        isActive={dontKnow}
+        onPress={handleDontKnow}
+      >
+        <DontKnowText isDark={isDark} isActive={dontKnow}>
+          잘 모르겠어요
+        </DontKnowText>
       </DontKnowButton>
-      <NextButton onPress={nextButton}>
-        <ButtonText>다음</ButtonText>
+      <NextButton isDark={isDark} onPress={nextButton}>
+        <ButtonText isDark={isDark}>다음</ButtonText>
       </NextButton>
     </Container>
   );
@@ -99,13 +107,14 @@ const Container = styled.View`
   width: 100%;
   align-items: center;
   justify-content: space-evenly;
+  background-color: ${(props) => (props.isDark ? colors.black : colors.grey_1)};
 `;
 const Bubble = styled.View`
   position: absolute;
   width: 164px;
   height: 53px;
   padding: 0px;
-  background: #363636;
+  background: ${(props) => (props.isDark ? colors.white : colors.grey_9)};
   border-radius: 10px;
   align-items: center;
   justify-content: center;
@@ -118,7 +127,8 @@ const BubbleArrow = styled.View`
   position: absolute;
   border-style: solid;
   border-width: 0 8px 10px;
-  border-color: #363636 transparent;
+  border-color: ${(props) => (props.isDark ? colors.white : colors.grey_9)}
+    transparent;
   display: block;
   width: 0;
   z-index: 1;
@@ -127,7 +137,7 @@ const BubbleArrow = styled.View`
 `;
 const BubbleText = styled.Text`
   font-size: 11px;
-  color: white;
+  color: ${(props) => (props.isDark ? colors.black : colors.white)};
 `;
 const TitleContainer = styled.View`
   width: 90%;
@@ -136,27 +146,38 @@ const TitleContainer = styled.View`
 const Title = styled.Text`
   font-size: 25px;
   font-weight: bold;
+  color: ${(props) => (props.isDark ? colors.white : colors.black)};
 `;
 const SubTitle = styled.Text`
   font-size: 15px;
   margin-top: 10px;
+  color: ${(props) => (props.isDark ? colors.white : colors.black)};
 `;
 const DontKnowButton = styled.TouchableOpacity`
   width: 99px;
   height: 40px;
   background-color: ${(props) =>
-    props.isActive ? colors.l_sub_2 : colors.grey_3};
+    props.isActive
+      ? colors.d_main
+      : props.isDark
+      ? colors.grey_7
+      : colors.grey_3};
   margin-bottom: 120px;
   border-radius: 100px;
   align-items: center;
   justify-content: center;
-  border: 1px;
+  border: ${(props) => (props.isDark ? 0 : "1px")};
   border-color: ${(props) => (props.isActive ? colors.l_main : colors.l_sub_2)};
 `;
 const DontKnowText = styled.Text`
   font-size: 13px;
   font-weight: 600;
-  color: ${(props) => (props.isActive ? colors.l_main : colors.black)};
+  color: ${(props) =>
+    props.isDark
+      ? colors.white
+      : props.isActive
+      ? colors.l_main
+      : colors.black};
 `;
 const NextButton = styled.TouchableOpacity`
   width: 327px;
@@ -167,5 +188,5 @@ const NextButton = styled.TouchableOpacity`
   border-radius: 10px;
 `;
 const ButtonText = styled.Text`
-  color: ${colors.white};
+  color: ${(props) => (props.isDark ? colors.black : colors.white)};
 `;

@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components/native";
-
+import { colors } from "../colors";
 export default function RoutineItem({
   day,
   parts,
   exercises,
   onPress,
   select,
+  isDark,
 }) {
   const [kday, setKday] = useState("");
   useEffect(() => {
@@ -38,17 +39,17 @@ export default function RoutineItem({
     }
   }, [day]);
   return (
-    <Container>
-      <Item onPress={onPress}>
-        <ItemTitle>{kday}</ItemTitle>
-        <ItemSubTitle>{parts}</ItemSubTitle>
+    <Container isDark={isDark}>
+      <Item isDark={isDark} onPress={onPress}>
+        <ItemTitle isDark={isDark}>{kday}</ItemTitle>
+        <ItemSubTitle isDark={isDark}>{parts}</ItemSubTitle>
       </Item>
       {select ? (
         <ExerciseContainer>
           {exercises.map((exercise) => (
-            <ExerciseItem key={exercise.healthCategoryIdx}>
-              <ExerciseName>{exercise.name}</ExerciseName>
-              <ExerciseSet>{exercise.set} set</ExerciseSet>
+            <ExerciseItem isDark={isDark} key={exercise.healthCategoryIdx}>
+              <ExerciseName isDark={isDark}>{exercise.name}</ExerciseName>
+              <ExerciseSet isDark={isDark}>{exercise.set} set</ExerciseSet>
             </ExerciseItem>
           ))}
         </ExerciseContainer>
@@ -61,7 +62,8 @@ const Item = styled.TouchableOpacity`
   flex-direction: row;
   width: 303px;
   height: 45px;
-  background-color: #f3f3f3;
+  background-color: ${(props) =>
+    props.isDark ? colors.grey_8 : colors.grey_2};
   border-radius: 12px;
   align-items: center;
   justify-content: space-between;
@@ -70,10 +72,12 @@ const Item = styled.TouchableOpacity`
 const ItemTitle = styled.Text`
   font-size: 20px;
   margin-left: 15px;
+  color: ${(props) => (props.isDark ? colors.white : colors.black)};
 `;
 const ItemSubTitle = styled.Text`
   margin-right: 15px;
-  color: #757575;
+  font-weight: bold;
+  color: ${colors.l_main};
 `;
 const ExerciseContainer = styled.View`
   margin: 1px 20px;
@@ -85,8 +89,8 @@ const ExerciseItem = styled.View`
   margin: 3px;
 `;
 const ExerciseName = styled.Text`
-  color: #757575;
+  color: ${(props) => (props.isDark ? colors.white : colors.black)};
 `;
 const ExerciseSet = styled.Text`
-  color: #757575;
+  color: ${colors.grey_5};
 `;

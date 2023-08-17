@@ -10,6 +10,7 @@ import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { TabBarAtom, IsDarkAtom } from "../../recoil/MyPageAtom";
 import { useIsFocused } from "@react-navigation/native";
 import axios from "axios";
+import { StatusBar } from "expo-status-bar";
 
 const Top = styled.View`
   width: 100%;
@@ -47,6 +48,7 @@ const Home = ({ navigation }) => {
   const isFocus = useIsFocused();
   const [isTabVisible, setIsTabVisible] = useRecoilState(TabBarAtom);
   const [data, setData] = useState("");
+  const isDark = useRecoilValue(IsDarkAtom);
 
   useEffect(() => {
     isFocus && setIsTabVisible(true);
@@ -71,27 +73,26 @@ const Home = ({ navigation }) => {
   // const [showRoutine, SetShowRoutine] = useState(true);
 
   return (
-    <SafeAreaView
-      style={{
-        width: "100%",
-        flex: 1,
-      }}
-    >
-      {/*<Text>Home</Text>
+    <>
+      <StatusBar barStyle={isDark ? "light-content" : "dark-content"} />
+      <SafeAreaView
+        style={{
+          width: "100%",
+          flex: 1,
+        }}
+      >
+        {/*<Text>Home</Text>
       <Button enabled={true} text='logOut' onPress={() => toggleLogin()} />*/}
-      <Top>
-        <Logo />
-        <Premium>
-          <Circle />
-          <PremiumText>PREMIUM</PremiumText>
-        </Premium>
-      </Top>
-      {data.isSuccess ? (
-        <HomeRoutines data={data.result} />
-      ) : (
-        <NotHomeRoutine />
-      )}
-    </SafeAreaView>
+        <Top>
+          <Logo />
+          <Premium>
+            <Circle />
+            <PremiumText>PREMIUM</PremiumText>
+          </Premium>
+        </Top>
+        {false ? <HomeRoutines data={data.result} /> : <NotHomeRoutine />}
+      </SafeAreaView>
+    </>
   );
 };
 //data.isSuccess

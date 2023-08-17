@@ -2,10 +2,11 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components/native";
 import { useIsFocused, useNavigationState } from "@react-navigation/native";
 import CreateRoutineHeader from "../components/CreateRoutineHeader";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { CreateRoutineAtom } from "../recoil/CreateRoutineAtom";
 import { colors } from "../colors";
-import { TabBarAtom } from "../recoil/MyPageAtom";
+import { IsDarkAtom, TabBarAtom } from "../recoil/MyPageAtom";
+import { StatusBar } from "react-native";
 
 export default function CreateRoutine_1({ navigation }) {
   const [home, SetHome] = useState(false);
@@ -15,6 +16,7 @@ export default function CreateRoutine_1({ navigation }) {
   const [routine, setRoutine] = useRecoilState(CreateRoutineAtom);
   const isFocused = useIsFocused();
   const [isTabVisible, setIsTabVisible] = useRecoilState(TabBarAtom);
+  const isDark = useRecoilValue(IsDarkAtom);
   useEffect(() => {
     isFocused && setIsTabVisible(false);
   }, [isFocused, isTabVisible]);
@@ -50,23 +52,35 @@ export default function CreateRoutine_1({ navigation }) {
     SetSelect(home || fitness);
   }, [home, fitness]);
   return (
-    <Container>
+    <Container isDark={isDark}>
+      <StatusBar barStyle={isDark ? "light-content" : "dark-content"} />
       <TitleContainer>
-        <Title>운동하는 곳을 선택해주세요</Title>
-        <SubTitle>장소에 맞게 운동을 추천해 드릴게요</SubTitle>
+        <Title isDark={isDark}>운동하는 곳을 선택해주세요</Title>
+        <SubTitle isDark={isDark}>장소에 맞게 운동을 추천해 드릴게요</SubTitle>
       </TitleContainer>
       <SpaceContainer>
-        <SpaceItem isActive={home} onPress={homePress}>
+        <SpaceItem isDark={isDark} isActive={home} onPress={homePress}>
           <SpaceImage />
-          <SpaceName isActive={home}>집</SpaceName>
+          <SpaceName isDark={isDark} isActive={home}>
+            집
+          </SpaceName>
         </SpaceItem>
-        <SpaceItem isActive={fitness} onPress={fitnessPress}>
+        <SpaceItem isDark={isDark} isActive={fitness} onPress={fitnessPress}>
           <SpaceImage />
-          <SpaceName>헬스장</SpaceName>
+          <SpaceName isDark={isDark} isActive={fitness}>
+            헬스장
+          </SpaceName>
         </SpaceItem>
       </SpaceContainer>
-      <NextButton isActive={select} onPress={nextButton} disabled={!select}>
-        <ButtonText isActive={select}>다음</ButtonText>
+      <NextButton
+        isDark={isDark}
+        isActive={select}
+        onPress={nextButton}
+        disabled={!select}
+      >
+        <ButtonText isDark={isDark} isActive={select}>
+          다음
+        </ButtonText>
       </NextButton>
     </Container>
   );
@@ -77,6 +91,7 @@ const Container = styled.View`
   width: 100%;
   align-items: center;
   justify-content: space-evenly;
+  background-color: ${(props) => (props.isDark ? colors.black : colors.grey_1)};
 `;
 const TitleContainer = styled.View`
   width: 90%;
@@ -85,10 +100,12 @@ const TitleContainer = styled.View`
 const Title = styled.Text`
   font-size: 20px;
   font-weight: 600;
+  color: ${(props) => (props.isDark ? colors.white : colors.black)};
 `;
 const SubTitle = styled.Text`
   font-size: 12px;
   margin-top: 10px;
+  color: ${(props) => (props.isDark ? colors.white : colors.black)};
 `;
 const SpaceContainer = styled.View`
   flex-direction: row;
@@ -102,23 +119,34 @@ const SpaceItem = styled.TouchableOpacity`
   width: 157px;
   height: 192px;
   background-color: ${(props) =>
-    props.isActive ? colors.l_sub_2 : colors.white};
+    props.isActive
+      ? props.isDark
+        ? "#1E1B29"
+        : colors.l_sub_2
+      : props.isDark
+      ? colors.grey_8
+      : colors.white};
   border-radius: 10px;
   align-items: center;
   justify-content: center;
-  border: 1px;
+  border: ${(props) => (props.isActive ? "1px" : 0)};
   border-color: ${(props) => (props.isActive ? colors.l_main : colors.white)};
 `;
 const SpaceImage = styled.Image`
   width: 117px;
   height: 117px;
-  background-color: ${colors.grey_1};
+  background-color: ${colors.grey_7};
   border-radius: 500px;
 `;
 const SpaceName = styled.Text`
   margin-top: 10px;
   font-weight: bold;
-  color: ${(props) => (props.isActive ? colors.l_main : colors.black)};
+  color: ${(props) =>
+    props.isActive
+      ? colors.l_main
+      : props.isDark
+      ? colors.white
+      : colors.black};
 `;
 const NextButton = styled.TouchableOpacity`
   width: 327px;
@@ -126,9 +154,21 @@ const NextButton = styled.TouchableOpacity`
   align-items: center;
   justify-content: center;
   background-color: ${(props) =>
-    props.isActive ? colors.l_main : colors.grey_3};
+    props.isActive
+      ? colors.l_main
+      : props.isDark
+      ? colors.grey_7
+      : colors.grey_3};
   border-radius: 10px;
 `;
 const ButtonText = styled.Text`
-  color: ${(props) => (props.isActive ? colors.white : colors.black)};
+  font-weight: bold;
+  color: ${(props) =>
+    props.isActive
+      ? props.isDark
+        ? colors.black
+        : colors.white
+      : props.isDark
+      ? colors.white
+      : colors.black};
 `;
