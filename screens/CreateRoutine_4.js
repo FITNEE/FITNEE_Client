@@ -304,6 +304,7 @@ const Loading = styled.View`
   height: 291px;
   background-color: white;
   border-radius: 291px;
+  background-color: ${(props) => (props.isDark ? colors.grey_9 : colors.white)};
 `;
 const LoadingText = styled.Text`
   margin-top: 30px;

@@ -1,7 +1,7 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import Home from "../screens/Home/Home";
-import CreateRoutineNav from "../navigation/CreateRoutineNav";
+import CreateRoutineNav from "./CreateRoutineNav";
 import ExerciseCourseNav from "./ExerciseCourseNav";
 import Dictionary_3 from "../screens/Dictionary/Dictionary_3";
 import { IsDarkAtom } from "../recoil/MyPageAtom";

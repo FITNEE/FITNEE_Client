@@ -17,7 +17,7 @@ const EmptyImage = styled.Image`
   margin-left: auto;
   margin-right: auto;
   border-radius: 62.5px;
-  background-color: ${colors.white};
+  background-color: ${(props) => (props.isDark ? colors.grey_9 : colors.white)};
 `;
 const TitleBlock = styled.View`
   margin-top: 16px;
@@ -31,6 +31,7 @@ const Title = styled.Text`
   height: 32px;
   text-align: center;
   margin-bottom: 10px;
+  color: ${(props) => (props.isDark ? colors.white : colors.black)};
 `;
 const SubText = styled.Text`
   font-size: 13px;
@@ -38,6 +39,7 @@ const SubText = styled.Text`
   font-weight: 400;
   line-height: 19.5px;
   text-align: center;
+  color: ${(props) => (props.isDark ? colors.white : colors.black)};
 `;
 const Button = styled.TouchableOpacity`
   margin-left: 16px;
@@ -54,10 +56,10 @@ const ButtonText = styled.Text`
   font-style: normal;
   font-weight: 600;
   line-height: 25.5px;
-  color: ${colors.white};
+  color: ${(props) => (props.isDark ? colors.black : colors.white)};
 `;
 
-export default function NotHomeRoutine() {
+export default function NotHomeRoutine({ isDark }) {
   const COMMENTDATA = [
     {
       id: 1,
@@ -74,14 +76,14 @@ export default function NotHomeRoutine() {
     <Container>
       <EmptyImage />
       <TitleBlock>
-        <Title>등록된 운동루틴이 없어요</Title>
-        <SubText>
+        <Title isDark={isDark}>등록된 운동루틴이 없어요</Title>
+        <SubText isDark={isDark}>
           간단한 질문에 답변하여{"\n"}나만의 루틴을 만들어보세요!
         </SubText>
       </TitleBlock>
 
       <Button onPress={navigateToCreateRoutine}>
-        <ButtonText>AI 루틴 생성하기</ButtonText>
+        <ButtonText isDark={isDark}>AI 루틴 생성하기</ButtonText>
       </Button>
     </Container>
   );
