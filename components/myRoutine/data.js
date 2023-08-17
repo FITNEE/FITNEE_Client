@@ -14,6 +14,27 @@ export const getRoutines = async () => {
     console.error("Failed to fetch data:", error);
   }
 };
+
+export const getRoutineParts = async () => {
+  try {
+    let url = "https://gpthealth.shop/";
+    let detailAPI = "app/routine/calendar/parts";
+    const response = await axios.get(url + detailAPI);
+    return response.data;
+  } catch (error) {
+    console.error("Failed to fetch data:", error);
+  }
+};
+
+export const sortArray = (obj) => {
+  const sortedArray = Object.keys(obj.parts).map((key, index) => ({
+    id: index,
+    parts: obj.parts[key] !== null ? obj.parts[key] : "운동",
+    routineId: obj.routineIdx[key],
+  }));
+  // console.log(sortedArray);
+  return sortedArray;
+};
 export const getRoutine = async (mySCHEDULE, selectedDay, setIsLoading) => {
   setIsLoading(true);
   try {

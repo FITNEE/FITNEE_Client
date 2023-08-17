@@ -6,10 +6,13 @@ import Scroll from "../components/Scroll";
 import { useNavigationState, useRoute } from "@react-navigation/native";
 import CreateRoutineHeader from "../components/CreateRoutineHeader";
 import axios from "axios";
+import { IsDarkAtom } from "../recoil/MyPageAtom";
+import { useRecoilValue } from "recoil";
 
 export default function CreateRoutine_5({ navigation }) {
   const [routine, SetRoutine] = useState("");
   const index = useNavigationState((state) => state.index);
+  const isDark = useRecoilValue(IsDarkAtom);
   const [dayId, setDayId] = useState({
     monRoutineIdx: 0,
     tueRoutineIdx: 0,
@@ -46,6 +49,7 @@ export default function CreateRoutine_5({ navigation }) {
   };
   const selectRoutine = () => {
     handleSubmit();
+    navigation.push("Home");
   };
   useEffect(() => {
     if (routine) {
@@ -102,19 +106,23 @@ export default function CreateRoutine_5({ navigation }) {
   }, [routine]);
 
   return (
-    <Container>
+    <Container isDark={isDark}>
       <TitleContainer>
-        <Title>루틴이 생성되었어요!</Title>
-        <SubTitle>
+        <Title isDark={isDark}>루틴이 생성되었어요!</Title>
+        <SubTitle isDark={isDark}>
           {`회원님의 답변을 기반으로 최적의 플랜을 만들었어요.
          가장 마음에 드는 플랜을 선택해주세요.`}
         </SubTitle>
       </TitleContainer>
       <ScrollContainer>
-        <Scroll data={responseData} currentRoutine={currentRoutine} />
+        <Scroll
+          isDark={isDark}
+          data={responseData}
+          currentRoutine={currentRoutine}
+        />
       </ScrollContainer>
-      <NextButton onPress={selectRoutine}>
-        <ButtonText>이 루틴으로 결정</ButtonText>
+      <NextButton isDark={isDark} onPress={selectRoutine}>
+        <ButtonText isDark={isDark}>이 루틴으로 결정</ButtonText>
       </NextButton>
     </Container>
   );
@@ -125,6 +133,7 @@ const Container = styled.View`
   width: 100%;
   align-items: center;
   justify-content: space-around;
+  background-color: ${(props) => (props.isDark ? colors.black : colors.grey_1)};
 `;
 const TitleContainer = styled.View`
   width: 90%;
@@ -133,10 +142,12 @@ const TitleContainer = styled.View`
 const Title = styled.Text`
   font-size: 24px;
   font-weight: bold;
+  color: ${(props) => (props.isDark ? colors.white : colors.black)};
 `;
 const SubTitle = styled.Text`
   font-size: 15px;
   margin-top: 5px;
+  color: ${(props) => (props.isDark ? colors.white : colors.black)};
 `;
 const ScrollContainer = styled.View`
   height: 615px;
@@ -147,8 +158,11 @@ const NextButton = styled.TouchableOpacity`
   height: 52px;
   align-items: center;
   justify-content: center;
-  background-color: #bfbfbf;
+  background-color: ${colors.d_main};
   border-radius: 10px;
   margin-bottom: 50px;
 `;
-const ButtonText = styled.Text``;
+const ButtonText = styled.Text`
+  font-weight: bold;
+  color: ${(props) => (props.isDark ? colors.black : colors.white)};
+`;

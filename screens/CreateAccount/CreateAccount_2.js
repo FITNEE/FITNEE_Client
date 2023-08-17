@@ -46,7 +46,10 @@ const GenderButton = styled.TouchableOpacity`
   width: 48%;
 `;
 
-const GenderText = styled.Text``;
+const GenderText = styled.Text`
+  font-size: 13px;
+  font-family: Pretendard-Regular;
+`;
 
 const CreateAccount_2 = ({ route, navigation }) => {
   const isDark = useRecoilValue(IsDarkAtom);

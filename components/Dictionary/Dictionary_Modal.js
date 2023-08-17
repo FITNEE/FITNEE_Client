@@ -225,13 +225,13 @@ const TopContainer = styled.View`
     align-items: center;
 `
 const Title = styled.Text`
-    font-weight: 600;
+    font-family: Pretendard-SemiBold;
     font-size: 20px;
     color: ${colors.black};
     margin-top: 28px;
 `
 const SubTitle = styled.Text`
-    font-weight: 400;
+    font-family: Pretendard-Regular;
     font-size: 13px;
     color: ${colors.black};
     margin-top: 8px;
@@ -266,12 +266,12 @@ const DayWrapper = styled.TouchableOpacity`
     padding: 8px;
 `
 const DayText = styled.Text`
-    font-weight: 500;
+    font-family: Pretendard-Medium;
     font-size: 15px;
 `
 const PartText = styled.Text`
     font-size: 13px;
-    font-weight: 400;
+    font-family: Pretendard-Regular;
     margin-right: 7px;
 `
 
@@ -295,8 +295,8 @@ const SelectContainer = styled.TouchableOpacity`
     justify-content: center;
 `
 const BottomText = styled.Text`
-    font-weight: 600;
-    font-size: 17px;
+    font-family: Pretendard-SemiBold;
+    font-size: 17px; 
 `
 
 
