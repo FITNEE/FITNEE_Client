@@ -21,12 +21,13 @@ export default Scroll = ({ isDark, data, currentRoutine }) => {
   const [selectedID, setSelectedID] = useState("");
   const handleScroll = (event) => {
     const { contentOffset, layoutMeasurement } = event.nativeEvent;
-    const pageIndex = Math.floor(contentOffset.x / layoutMeasurement.width);
+    const pageIndex = Math.round(contentOffset.x / layoutMeasurement.width);
     setCurrentPage(pageIndex);
   };
   useEffect(() => {
     console.log(currentPage);
     currentRoutine(currentPage);
+    setSelectedID("");
   }, [currentPage]);
   const renderItem = ({ item: routines }) => {
     return (
@@ -67,13 +68,14 @@ export default Scroll = ({ isDark, data, currentRoutine }) => {
         pagingEnabled={true}
         onScroll={handleScroll}
         // 스크롤이 멈출 때마다 현재 페이지를 계산합니다.
-        onMomentumScrollEnd={(event) => {
-          const offsetX = event.nativeEvent.contentOffset.x;
-          const width = event.nativeEvent.layoutMeasurement.width;
-          const pageIndex = Math.round(offsetX / width);
-          setCurrentPage(pageIndex);
-          // setSelectedID("");
-        }}
+        // onMomentumScrollEnd={(event) => {
+        //   const offsetX = event.nativeEvent.contentOffset.x;
+        //   const width = event.nativeEvent.layoutMeasurement.width;
+        //   const pageIndex = Math.round(offsetX / width);
+        //   setCurrentPage(pageIndex);
+        //   console.log("offsetX :", offsetX, " width :", width);
+        //   // setSelectedID("");
+        // }}
       />
       <PageIndicator
         isDark={isDark}
