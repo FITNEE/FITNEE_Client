@@ -98,7 +98,7 @@ export const MovableSchedule = ({
     <Animated.View style={animatedStyle}>
       <PanGestureHandler onGestureEvent={gestureHandler}>
         <Animated.View>
-          <Schedule routineId={routineId} isDark={isDark} />
+          <Schedule title={SCHEDULE[id].parts} isDark={isDark} />
         </Animated.View>
       </PanGestureHandler>
     </Animated.View>
@@ -114,11 +114,11 @@ const ScheduleContainer = styled.View`
   width: ${SCHEDULE_W}px;
 `;
 
-export function Schedule({ routineId, isDark }) {
+export function Schedule({ title, isDark }) {
   return (
     <ScheduleContainer
       style={
-        routineId != 0 && {
+        title && {
           borderWidth: 1,
           borderStyle: "dashed",
           borderColor: colors.l_main,
@@ -128,12 +128,12 @@ export function Schedule({ routineId, isDark }) {
     >
       <Text
         style={{
-          fontSize: routineId != 0 ? 15 : 12,
+          fontSize: title ? 15 : 12,
           fontWeight: "400",
-          color: routineId != 0 ? colors.l_main : colors.grey_6,
+          color: title ? colors.l_main : colors.grey_6,
         }}
       >
-        {routineId != 0 ? routineId : "휴식"}
+        {title ? title : "휴식"}
       </Text>
     </ScheduleContainer>
   );

@@ -10,6 +10,7 @@ import StartExercise from "../screens/ExerciseCourse/StartExercise";
 import MyRoutineNav from "./MyRoutineNav";
 import CreateRoutineNav from "./CreateRoutineNav";
 import HomeNav from "./HomeNav";
+import NoRoutine from "../screens/ExerciseCourse/NoRoutine";
 
 const Stack = createStackNavigator();
 
@@ -22,7 +23,28 @@ export default function ExerciseCourseNav() {
       }}
     >
       <Stack.Screen name="StartExercise" component={StartExercise} />
-      <Stack.Screen name="RegisterRoutine" component={RegisterRoutine} />
+      <Stack.Screen
+        name="NoRoutine"
+        component={NoRoutine}
+        options={{
+          // 화면 전환 애니메이션 없음
+          transitionSpec: {
+            open: { animation: "timing", config: { duration: 0 } },
+            close: { animation: "timing", config: { duration: 0 } },
+          },
+        }}
+      />
+      <Stack.Screen
+        name="RegisterRoutine"
+        component={RegisterRoutine}
+        options={{
+          // 화면 전환 애니메이션 없음
+          transitionSpec: {
+            open: { animation: "timing", config: { duration: 0 } },
+            close: { animation: "timing", config: { duration: 0 } },
+          },
+        }}
+      />
       <Stack.Screen name="CreateRoutineNav" component={CreateRoutineNav} />
       <Stack.Screen name="ExerciseCourse" component={ExerciseCourse} />
       <Stack.Screen name="CompleteExercise" component={CompleteExercise} />

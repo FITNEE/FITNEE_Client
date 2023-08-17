@@ -24,6 +24,8 @@ import {
   getRoutines,
   getRoutine,
   updateRoutine,
+  getRoutineParts,
+  sortArray,
 } from "../../components/myRoutine/data";
 import {
   ContentContainer,
@@ -83,11 +85,11 @@ export default MyRoutine = ({ navigation, route }) => {
 
   const isFocus = useIsFocused();
   const updateDatas = () => {
-    getRoutines().then((res) => {
-      console.log("res:", res);
+    getRoutineParts().then((res) => {
       if (res.result) {
-        setSCHEDULE(processDayData(res.result));
-        getRoutine(processDayData(res.result), selectedDay, setIsLoading).then(
+        console.log("sortArray(res.result):", sortArray(res.result));
+        setSCHEDULE(sortArray(res.result));
+        getRoutine(sortArray(res.result), selectedDay, setIsLoading).then(
           (res) => {
             console.log("getRoutine반응값:", res);
             if (res.result) {
@@ -317,6 +319,7 @@ export default MyRoutine = ({ navigation, route }) => {
             onPress={() => navigation.navigate("ExerciseSearch", {})}
             text="운동 추가하기"
             enabled={true}
+            isDark={isDark}
             mode="absolute"
           />
         </>

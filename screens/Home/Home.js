@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import { SafeAreaView, Text, View } from "react-native";
 import { AppContext } from "../../components/ContextProvider";
 import { Button } from "../../Shared";
@@ -8,7 +8,7 @@ import HomeRoutines from "../../components/HomeRoutines";
 import NotHomeRoutine from "../../components/NotHomeRoutine";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { TabBarAtom, IsDarkAtom } from "../../recoil/MyPageAtom";
-import { useIsFocused } from "@react-navigation/native";
+import { useFocusEffect, useIsFocused } from "@react-navigation/native";
 import axios from "axios";
 import { StatusBar } from "expo-status-bar";
 
@@ -71,6 +71,11 @@ const Home = ({ navigation }) => {
   useEffect(() => {
     fetchData();
   }, []);
+  useFocusEffect(
+    useCallback(() => {
+      fetchData();
+    }, [])
+  );
 
   //const { toggleLogin } = useContext(AppContext);
   // const [showRoutine, SetShowRoutine] = useState(true);

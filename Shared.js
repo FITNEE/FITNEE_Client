@@ -1,7 +1,7 @@
 import styled from "styled-components/native";
 import { colors } from "./colors";
 import { ActivityIndicator, Dimensions } from "react-native";
-import Back from "./assets/left_arrow.png";
+import Left from "./assets/SVGs/Left.svg";
 
 export const ScreenWidth = Dimensions.get("screen").width;
 export const ScreenHeight = Dimensions.get("screen").height;
@@ -10,19 +10,18 @@ const BackButtonContainer = styled.TouchableOpacity`
   position: absolute;
   top: 24px;
   left: 0px;
-  width: 32px;
-  height: 32px;
+  width: 48px;
+  height: 48px;
 `;
 
-const BackImg = styled.Image`
-  width: 100%;
-  height: 100%;
-`;
-
-export const BackButton = ({ onPress }) => {
+export const BackButton = ({ onPress, isDark }) => {
   return (
     <BackButtonContainer onPress={onPress}>
-      <BackImg source={Back}></BackImg>
+      <Left
+        width={24}
+        height={24}
+        color={isDark ? colors.white : colors.black}
+      />
     </BackButtonContainer>
   );
 };
@@ -57,9 +56,9 @@ export const Button = ({
       style={[
         enabled
           ? {
-              backgroundColor: colors.l_main,
+              backgroundColor: isDark ? colors.d_main : colors.l_main,
             }
-          : { backgroundColor: colors.grey_3 },
+          : { backgroundColor: isDark ? colors.grey_8 : colors.grey_3 },
         mode == "absolute" && {
           width: ScreenWidth - 48,
           marginLeft: 24,
@@ -67,13 +66,13 @@ export const Button = ({
       ]}
     >
       {loading ? (
-        <ActivityIndicator color={colors.grey_7} />
+        <ActivityIndicator color={isDark ? colors.grey_3 : colors.grey_7} />
       ) : (
         <ButtonText
           style={
             enabled
               ? { color: isDark ? colors.black : colors.white }
-              : { color: colors.grey_7 }
+              : { color: isDark ? colors.white : colors.grey_7 }
           }
         >
           {text}

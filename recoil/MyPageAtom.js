@@ -9,3 +9,8 @@ export const TabBarAtom = atom({
   key: "TabBarAtom",
   default: true,
 });
+
+export const BubbleAtom = atom({
+  key: "BubbleAtom",
+  default: true,
+});

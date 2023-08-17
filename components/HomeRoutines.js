@@ -106,7 +106,7 @@ const ExerciseView = styled.Image`
   width: 128px;
   height: 128px;
   border-radius: 100px;
-  background-color: ${colors.grey_1};
+  background-color: ${(props) => (props.isDark ? colors.black : colors.grey_1)};
   margin: 16px 0px 10px 0px;
 `;
 const ExerciseName = styled.Text`
@@ -156,7 +156,7 @@ export default function HomeRoutines({ isDark, data }) {
       });
       const exercise = response.data.result[0];
       console.log("exercise :", exercise);
-      navigation.navigate("Dictionary_3", { exercise });
+      navigation.navigate("Dictionary_2", { exercise });
     } catch (error) {
       console.error("Failed to fetch data:", error);
     }

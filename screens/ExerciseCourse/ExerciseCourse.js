@@ -6,14 +6,14 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { SafeAreaView, Text, TouchableOpacity } from "react-native";
+import { Alert, SafeAreaView } from "react-native";
 import { TextInput, Dimensions, Animated, StyleSheet } from "react-native";
 const { width, height } = Dimensions.get("window");
 import styled from "styled-components/native";
-import ExerciseCard from "../../components/ExerciseCard";
-import ExerciseButton from "../../components/ExerciseButton";
-import CurrentExplainLine from "../../components/CurrentExplainLine";
-import CurrentSet from "../../components/CurrentSet";
+import ExerciseCard from "../../components/exerciseCourse/ExerciseCard";
+import ExerciseButton from "../../components/exerciseCourse/ExerciseButton";
+import CurrentExplainLine from "../../components/exerciseCourse/CurrentExplainLine";
+import CurrentSet from "../../components/exerciseCourse/CurrentSet";
 import { colors } from "../../colors";
 import {
   BottomSheetModal,
@@ -22,12 +22,34 @@ import {
 } from "@gorhom/bottom-sheet";
 import { useRoute, StackActions } from "@react-navigation/native";
 import axios from "axios";
+import { useRecoilValue } from "recoil";
+import { IsDarkAtom } from "../../recoil/MyPageAtom";
+
+const ReplaceView2 = styled.View`
+  flex-direction: row;
+  align-items: center;
+`;
+
+const ReplaceTextView = styled.View`
+  align-items: baseline;
+`;
+
+const BottomSheetBack = styled.View`
+  height: 100%;
+`;
+
+const SkipExercrise = styled.TouchableOpacity`
+  width: 85px;
+  height: 20px;
+  position: relative;
+  margin-top: 16px;
+`;
 
 const ExerciseCircle = styled.View`
   width: 307px;
   height: 307px;
   border-radius: 291px;
-  background: ${colors.grey_1};
+  background: ${({ isDark }) => (isDark ? colors.black : colors.grey_1)};
 `;
 
 const ReplaceButton = styled.TouchableOpacity`
@@ -36,14 +58,14 @@ const ReplaceButton = styled.TouchableOpacity`
   align-items: center;
   gap: 8px;
   border-radius: 100px;
-  background: ${colors.grey_3};
+  background: ${({ isDark }) => (isDark ? colors.grey_7 : colors.grey_3)};
   margin-top: 18px;
   margin-bottom: 12px;
   margin-right: 242.5px;
 `;
 
 const ReplaceButtonText = styled.Text`
-  color: ${colors.l_main};
+  color: ${({ isDark }) => (isDark ? colors.white : colors.l_main)};
   text-align: center;
   font-size: 13px;
   font-style: normal;
@@ -55,13 +77,19 @@ const CurrentExplain = styled.View`
   width: 327px;
   height: 108px;
   border-radius: 12px;
-  background: ${colors.grey_1};
+  background: ${({ isDark }) => (isDark ? colors.grey_8 : colors.grey_1)};
   padding: 24px;
   justify-content: center;
 `;
 
+const ModalTitleView = styled.View`
+  height: 59px;
+  margin: 24px;
+  background-color: ${({ isDark }) => (isDark ? colors.grey_8 : colors.white)};
+`;
+
 const ModalTitle = styled.Text`
-  color: ${colors.black};
+  color: ${({ isDark }) => (isDark ? colors.white : colors.black)};
   font-size: 20px;
   font-weight: 600;
   line-height: 32px;
@@ -69,21 +97,16 @@ const ModalTitle = styled.Text`
 `;
 
 const ModalTitle2 = styled.Text`
-  color: ${colors.grey_8};
+  color: ${({ isDark }) => (isDark ? colors.grey_2 : colors.grey_8)};
   font-size: 15px;
   font-style: normal;
   font-weight: 400;
   line-height: 22.5px;
 `;
 
-const ModalTitleView = styled.View`
-  height: 59px;
-  margin: 24px;
-`;
-
 const SeperateLine = styled.View`
   height: 1px;
-  background-color: ${colors.grey_2};
+  background-color: ${({ isDark }) => (isDark ? colors.grey_7 : colors.grey_2)};
 `;
 
 const ReplaceView = styled.View`
@@ -91,30 +114,21 @@ const ReplaceView = styled.View`
   width: 100%;
   padding: 24px;
   align-items: center;
-  background-color: ${colors.white};
+  background-color: ${({ isDark }) => (isDark ? colors.grey_8 : colors.white)};
   flex-direction: row;
   justify-content: space-between;
-`;
-
-const ReplaceView2 = styled.View`
-  flex-direction: row;
-  align-items: center;
 `;
 
 const ReplaceCircle = styled.View`
   width: 60px;
   height: 60px;
   border-radius: 30px;
-  background: ${colors.grey_2};
+  background: ${({ isDark }) => (isDark ? colors.grey_9 : colors.grey_2)};
   margin-right: 16px;
 `;
 
-const ReplaceTextView = styled.View`
-  align-items: baseline;
-`;
-
 const ReplaceText1 = styled.Text`
-  color: ${colors.black};
+  color: ${({ isDark }) => (isDark ? colors.white : colors.black)};
   text-align: center;
   font-size: 17px;
   font-weight: 500;
@@ -122,7 +136,7 @@ const ReplaceText1 = styled.Text`
 `;
 
 const ReplaceText2 = styled.Text`
-  color: ${colors.grey_7};
+  color: ${({ isDark }) => (isDark ? colors.grey_3 : colors.grey_7)};
   font-size: 13px;
   font-style: normal;
   font-weight: 400;
@@ -134,19 +148,26 @@ const ReplaceButton2 = styled.TouchableOpacity`
   align-items: center;
   gap: 8px;
   border-radius: 100px;
-  background: ${colors.grey_3};
+  background: ${({ isDark }) => (isDark ? colors.grey_7 : colors.grey_3)};
   margin-top: 18px;
   margin-bottom: 12px;
   width: 69px;
   height: 36px;
 `;
 
-const BottomSheetBack = styled.View`
-  background-color: ${colors.grey_1};
-  height: 100%;
+const SkipExercriseText = styled.Text`
+  color: ${({ isDark }) => (isDark ? colors.grey_2 : colors.grey_8)};
+  text-align: center;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 19.5px;
+  text-decoration-line: underline;
 `;
 
 export default function ExerciseCourse({ navigation }) {
+  const isDark = useRecoilValue(IsDarkAtom);
+
   const goToCompleteExercise = () => {
     navigation.dispatch(
       StackActions.replace("ExerciseCourse_1", {
@@ -165,7 +186,7 @@ export default function ExerciseCourse({ navigation }) {
   const textInputAnimation = useRef(new Animated.Value(3)).current;
   const zIndexAnimation = useRef(new Animated.Value(0)).current;
   const bottomSheetRef = useRef(null);
-  const snapPoints = useMemo(() => ["65%"], []);
+  const snapPoints = useMemo(() => ["70%"], []);
   const route = useRoute();
   const dataList = route.params.dataList;
   const listIndex = route.params.listIndex;
@@ -200,30 +221,9 @@ export default function ExerciseCourse({ navigation }) {
     }
   };
 
-  // const patchReplaceData = async (
-  //   routineIdx,
-  //   beforeHealthCategoryIdx,
-  //   afterHealthCategoryIdx
-  // ) => {
-  //   try {
-  //     let url = "https://gpthealth.shop/";
-  //     let detailAPI = `/app/process/replace?routineIdx=${routineIdx}`;
-
-  //     const response = await axios.patch(url + detailAPI, {
-  //       beforeHealthCategoryIdx: beforeHealthCategoryIdx,
-  //       afterHealthCategoryIdx: afterHealthCategoryIdx,
-  //     });
-  //     const result = response.data;
-  //     console.log("patchR" + result);
-  //     return result;
-  //   } catch (error) {
-  //     console.error("Error", error);
-  //   }
-  // };
-
   useEffect(() => {
     getReplaceData(routineIdx, healthCategoryIdx).then((response) => {
-      setReplaceList(response.result.replacementRecommendations);
+      setReplaceList(response.result);
       console.log(replaceList);
     });
   }, []);
@@ -319,17 +319,12 @@ export default function ExerciseCourse({ navigation }) {
     <CurrentExplainLine expl={item} />
   ));
 
-  const pushReplace = async (healthCategoryIdx, name) => {
+  const pushReplace = async (healthCategoryIdx, name, caution) => {
     let replacedData = [...dataList];
 
     replacedData[listIndex].exerciseInfo.healthCategoryIdx = healthCategoryIdx;
     replacedData[listIndex].exerciseInfo.exerciseName = name;
-
-    // await patchReplaceData(
-    //   routineIdx,
-    //   dataList[listIndex].exerciseInfo.healthCategoryIdx,
-    //   item.healthCategoryIdx
-    // );
+    replacedData[listIndex].exerciseInfo.caution = caution;
 
     navigation.dispatch(
       StackActions.replace("ExerciseCourse", {
@@ -341,13 +336,84 @@ export default function ExerciseCourse({ navigation }) {
     );
   };
 
+  const goToNextExercise = async () => {
+    //스킵, skip 추가
+    let modifiedDataList = [...dataList];
+    modifiedDataList[listIndex] = {
+      ...modifiedDataList[listIndex],
+      skip: 1,
+    };
+
+    if (listIndex + 1 >= dataList.length) {
+      await postTotalData(routineIdx, -1 * totalTime, dataList);
+
+      // 조건이 충족되면 원하는 화면(FinalScreen)으로 이동합니다.
+      navigation.dispatch(
+        StackActions.replace("CompleteExercise", {
+          dataList: modifiedDataList,
+          totalTime: totalTime,
+          routineIdx: routineIdx,
+        })
+      );
+    } else {
+      navigation.dispatch(
+        StackActions.replace("ExerciseCourse", {
+          dataList: modifiedDataList,
+          listIndex: listIndex + 1,
+          routineIdx: routineIdx,
+          totalTime: totalTime,
+        })
+      );
+    }
+  };
+
+  const postTotalData = async (routineIdx, totalTime, dataList) => {
+    try {
+      let url = "https://gpthealth.shop/";
+      let detailAPI = `/app/process/end`;
+
+      const response = await axios.post(url + detailAPI, {
+        routineIdx: routineIdx,
+        totalExerciseTime: totalTime,
+        routineDetails: dataList,
+      });
+
+      const result = response.data;
+      console.log(result);
+      return result;
+    } catch (error) {
+      console.error("Error", error);
+    }
+  };
+
+  const OpenConfirm2 = () => {
+    Alert.alert(
+      "운동을 건너뛰겠습니까?",
+      "건너뛴 이후에는 다시 실행할 수 없습니다.",
+      [
+        { text: "취소", onPress: () => console.log(" Stop") },
+        {
+          text: "건너뛰기",
+          onPress: goToNextExercise,
+          style: "destructive",
+        },
+      ]
+    );
+  };
+
   return (
     <BottomSheetModalProvider>
-      <SafeAreaView style={{ flex: 1, backgroundColor: colors.grey_2 }}>
+      <SafeAreaView
+        style={{
+          flex: 1,
+          backgroundColor: isDark ? colors.grey_9 : colors.grey_2,
+        }}
+      >
         <ExerciseCard
           exerciseName={dataList[listIndex].exerciseInfo.exerciseName}
+          isDark={isDark}
         >
-          <ExerciseCircle></ExerciseCircle>
+          <ExerciseCircle isDark={isDark}></ExerciseCircle>
 
           <Animated.View
             style={[
@@ -382,8 +448,8 @@ export default function ExerciseCourse({ navigation }) {
             />
           </Animated.View>
 
-          <ReplaceButton disabled={false} onPress={handleModal}>
-            <ReplaceButtonText>운동 대체하기</ReplaceButtonText>
+          <ReplaceButton isDark={isDark} disabled={false} onPress={handleModal}>
+            <ReplaceButtonText isDark={isDark}>운동 대체하기</ReplaceButtonText>
           </ReplaceButton>
 
           <CurrentSet
@@ -392,48 +458,64 @@ export default function ExerciseCourse({ navigation }) {
             num={dataList[listIndex].sets[0].rep}
           />
 
-          <CurrentExplain>{adviceList}</CurrentExplain>
+          <CurrentExplain isDark={isDark}>{adviceList}</CurrentExplain>
 
           <ExerciseButton //운동 시작 버튼
             text="운동 시작"
             disabled={false}
             onPress={animation}
             //onPress={goToCompleteExercise}
+            isDark={isDark}
           />
+          <SkipExercrise onPress={() => OpenConfirm2()}>
+            <SkipExercriseText isDark={isDark}>
+              이 운동 건너뛰기
+            </SkipExercriseText>
+          </SkipExercrise>
 
           <BottomSheetModal
             ref={bottomSheetRef}
             index={0}
             snapPoints={snapPoints}
-            backgroundStyle={{ borderRadius: 20 }}
+            backgroundStyle={{
+              borderRadius: 20,
+              backgroundColor: isDark ? colors.grey_8 : colors.white,
+            }}
             backdropComponent={renderBackdrop}
           >
-            <ModalTitleView>
-              <ModalTitle>운동 대체하기</ModalTitle>
-              <ModalTitle2>
+            <ModalTitleView isDark={isDark}>
+              <ModalTitle isDark={isDark}>운동 대체하기</ModalTitle>
+              <ModalTitle2 isDark={isDark}>
                 현재 운동과 유사한 효과의 운동을 추천해 드릴게요.
               </ModalTitle2>
             </ModalTitleView>
             <BottomSheetBack>
-              <SeperateLine />
+              <SeperateLine isDark={isDark} />
 
               {replaceList.map((item, healthCategoryIdx) => (
-                <ReplaceView>
-                  <ReplaceView2>
-                    <ReplaceCircle />
-                    <ReplaceTextView key={healthCategoryIdx}>
-                      <ReplaceText1>{item.name}</ReplaceText1>
-                      <ReplaceText2>
+                <ReplaceView isDark={isDark}>
+                  <ReplaceView2 isDark={isDark}>
+                    <ReplaceCircle isDark={isDark} />
+                    <ReplaceTextView isDark={isDark} key={healthCategoryIdx}>
+                      <ReplaceText1 isDark={isDark}>{item.name}</ReplaceText1>
+                      <ReplaceText2 isDark={isDark}>
                         {item.parts} | {item.muscle} | {item.equipment}
                       </ReplaceText2>
                     </ReplaceTextView>
                   </ReplaceView2>
                   <ReplaceButton2
+                    isDark={isDark}
                     onPress={() => {
-                      pushReplace(item.healthCategoryIdx, item.name);
+                      pushReplace(
+                        item.healthCategoryIdx,
+                        item.name,
+                        item.caution
+                      );
                     }}
                   >
-                    <ReplaceButtonText>대체하기</ReplaceButtonText>
+                    <ReplaceButtonText isDark={isDark}>
+                      대체하기
+                    </ReplaceButtonText>
                   </ReplaceButton2>
                 </ReplaceView>
               ))}

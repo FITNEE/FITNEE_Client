@@ -1,6 +1,8 @@
 import React from "react";
 import styled from "styled-components/native";
-import { colors } from "../colors";
+import { colors } from "../../colors";
+import { useRecoilValue } from "recoil";
+import { IsDarkAtom } from "../../recoil/MyPageAtom";
 
 const Button = styled.TouchableOpacity`
   width: 247px;
@@ -11,20 +13,18 @@ const Button = styled.TouchableOpacity`
   margin-top: 19px;
   position: relative;
 `;
-
 const ButtonText = styled.Text`
-  color: ${colors.white};
+  color: ${({ isDark }) => (isDark ? colors.black : colors.white)};
   text-align: center;
   font-size: 17px;
   font-style: normal;
   font-weight: 600;
   line-height: 25.5px;
 `;
-
-export default function ExerciseButton({ onPress, disabled, text }) {
+export default function ExerciseButton({ onPress, disabled, text, isDark }) {
   return (
     <Button disabled={disabled} onPress={onPress}>
-      <ButtonText>{text}</ButtonText>
+      <ButtonText isDark={isDark}>{text}</ButtonText>
     </Button>
   );
 }

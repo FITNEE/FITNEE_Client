@@ -1,18 +1,13 @@
 import React, { useState, useRef, useContext, useEffect } from "react";
 import styled from "styled-components/native";
-import { Alert, TouchableWithoutFeedback, Keyboard, View } from "react-native";
-import {
-  BottomSheetScrollView,
-  BottomSheetTextInput,
-//   BottomSheetFlatList
-} from "@gorhom/bottom-sheet";
-import { colors } from "../colors";
+import { Alert, TouchableWithoutFeedback, TouchableOpacity, Keyboard, View } from "react-native";
+import { BottomSheetScrollView, BottomSheetTextInput } from "@gorhom/bottom-sheet";
+import { colors } from "../../colors";
 import WrappedText from "react-native-wrapped-text";
 import axios from "axios";
-import { IsDarkAtom } from "../recoil/MyPageAtom"
+import { IsDarkAtom } from "../../recoil/MyPageAtom"
 import { useRecoilValue } from "recoil"
-
-
+import TrashIcon from '../../assets/SVGs/Trash.svg'
 
 export default function Dictionary_RightTab(props) {
     const isDark = useRecoilValue(IsDarkAtom)
@@ -41,7 +36,6 @@ export default function Dictionary_RightTab(props) {
             setChat(""),
             funcSetJoinBtnBool(true),
             setChatUpdate(!chatUpdate),
-            putChatRead(),
             scrollviewRef.current?.scrollToEnd({ animated: true })
             )
     }
@@ -55,14 +49,14 @@ export default function Dictionary_RightTab(props) {
     const [chatIdx, setChatIdx] = useState([])
 
     // 참여하기 버튼
-    const { parentJoinBtnBool, parentSetJoinBtnBool, exerciseName } = props
+    const { parentJoinBtnBool, parentSetJoinBtnBool, exerciseName, leftTabActivate, setIsAllRead } = props
     const [childJoinBtnBool, setChildJoinBtnBool] = useState(parentJoinBtnBool)
     useEffect(() => {
-    setChildJoinBtnBool(parentJoinBtnBool)
+        setChildJoinBtnBool(parentJoinBtnBool)
     }, [parentJoinBtnBool])
     const funcSetJoinBtnBool = (newBool) => {
-    setChildJoinBtnBool(newBool)
-    parentSetJoinBtnBool(newBool)
+        setChildJoinBtnBool(newBool)
+        parentSetJoinBtnBool(newBool)
     }
 
     // 채팅 불러오기
@@ -87,13 +81,54 @@ export default function Dictionary_RightTab(props) {
         }
     }
     useEffect(() => {
-        getChat().then((result) => {
+        !leftTabActivate && getChat().then((result) => {
             setMsg(result.chattinginfo)
-
-            const lastIdx = result.chattinginfo.at(-1).healthChattingIdx
-            putChatRead(lastIdx)
         })
-    }, [parentJoinBtnBool,chatUpdate])
+    }, [parentJoinBtnBool,chatUpdate, leftTabActivate])
+
+    const [lastIdx, setLastIdx] = useState()
+    useEffect(()=>{
+        if(msg.length !=0){
+            putChatRead(msg.at(-1).healthChattingIdx).then(()=>{
+                setLastIdx(msg.at(-1).healthChattingIdx)
+            })
+        }
+    }, [msg])
+
+    const getReadInfo = async () => {
+        try {
+            let url = "https://gpthealth.shop/"
+            let detailAPI = "/app/dictionary/readInfo"
+            const response = await axios.get(url + detailAPI, {
+                params: {
+                    name: exerciseName,
+                },
+            })
+            const result = response.data
+            return result.result
+        } catch (error) {
+            console.error("Failed to fetch data:", error)
+        }
+    }
+
+    useEffect(()=>{
+        getReadInfo().then((result)=>{
+            if(result.chatExist.chatExists == 0) {
+                console.log(`채팅 내역 존재 X`)
+                setIsAllRead(true)
+            }
+            else {
+                if(result.informationRows.hasUnreadChats == 1){
+                    setIsAllRead(false)
+                    console.log(`안 읽은 채팅 있음`)
+                }
+                else{
+                    setIsAllRead(true)
+                    console.log(`안 읽은 채팅 없음`)
+                }
+            }
+        })
+    }, [leftTabActivate, lastIdx])
 
     //채팅 보내기
     const postChat = async () => {
@@ -133,7 +168,6 @@ export default function Dictionary_RightTab(props) {
         setMyNickName(result.result[0].userNickname)
     })
     }, [])
-
 
     // 채팅 삭제 
     const deleteChat = async (idx) => {
@@ -210,7 +244,6 @@ export default function Dictionary_RightTab(props) {
       <>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <BottomSheetScrollView
-                ref={scrollviewRef}
                 style={{ paddingTop: 28 }}
                 showsVerticalScrollIndicator={false}
             >
@@ -234,7 +267,16 @@ export default function Dictionary_RightTab(props) {
                             </MessageWrapper>)
                         : 
                             (<MyMessageWrapper> 
-                                {selectedIdx===i && <MsgDeleteBtn onPress={()=>onPressMsgDeleteBtn(msg.healthChattingIdx)} />}
+                                {selectedIdx===i && 
+                                <TouchableOpacity 
+                                    style={{width: 24, height: 24}}
+                                    onPress={()=>onPressMsgDeleteBtn(msg.healthChattingIdx)}
+                                    >
+                                    <TrashIcon 
+                                        width={24}
+                                        height={24}
+                                        style={{marginRight: 8}}/>
+                                </TouchableOpacity>}
                                 <MyMessageContainer 
                                     onLongPress={()=>onLongPress(i)}
                                     style={{backgroundColor: isDark? `${colors.grey_8}`:`${colors.grey_1}`}}
@@ -311,13 +353,6 @@ const MyMessageWrapper = styled.View`
   justify-content: flex-end;
   align-items: center;
   flex-direction: row;
-`
-const MsgDeleteBtn = styled.TouchableOpacity`
-  width: 24px;
-  height: 24px;
-  border-radius: 12px;
-  background-color: ${colors.red};
-  margin-right: 8px;
 `
 const TextInputBG = styled.View` 
   justify-content: center;
