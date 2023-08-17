@@ -5,12 +5,12 @@ import ProgressCircle from "../../components/exerciseCourse/ProgressCircle1";
 import GrayCircle from "../../components/exerciseCourse/GrayCircle";
 import { ScrollView } from "react-native-gesture-handler";
 import { colors } from "../../colors";
-import { useRoute } from "@react-navigation/native";
 import Check from "../../assets/SVGs/Check.svg";
 import Check_disabled from "../../assets/SVGs/Check_Disabled.svg";
 import axios from "axios";
 import { IsDarkAtom } from "../../recoil/MyPageAtom";
 import { useRecoilValue } from "recoil";
+import { useRoute, StackActions } from "@react-navigation/native";
 
 const ExerciseExplainText = styled.Text`
   padding: 8px;
@@ -104,7 +104,10 @@ const RecText1 = styled.Text`
 export default function CompleteExercise({ navigation }) {
   const isDark = useRecoilValue(IsDarkAtom);
 
-  const goToHome = () => navigation.navigate("HomeNav");
+  const goToHome = () => {
+    const replaceAction = StackActions.replace("HomeNav");
+    navigation.dispatch(replaceAction);
+  };
   const goToResult = () => navigation.navigate("ExerciseResult");
 
   const route = useRoute();
