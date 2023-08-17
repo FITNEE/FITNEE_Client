@@ -57,25 +57,6 @@ export default function Analysis(props) {
     line-height: 19.5px;
     color: ${isDark ? colors.white : colors.black};
   `;
-  const NoneChart = styled.View`
-    margin-left: 24px;
-    margin-right: 24px;
-    margin-top: 26px;
-    width: 327px;
-    height: 254px;
-    border-radius: 20px;
-    background-color: ${isDark ? colors.grey_8 : colors.grey_1};
-    justify-content: center;
-    align-items: center;
-  `;
-  const NoneChartText = styled.Text`
-    font-size: 11px;
-    font-style: normal;
-    font-weight: 600;
-    line-height: 16.5px;
-    opacity: 0.6;
-    color: ${isDark ? colors.grey_2 : colors.grey_7};
-  `;
 
   const weekData = props.weekData;
 
@@ -100,20 +81,9 @@ export default function Analysis(props) {
   }
   const hour = (sum / 3600).toFixed(2);
 
-  const [viewChart, setViewChart] = useState(true);
-  useEffect(() => {
-    firstMonth == lastMonth && firstWeek == lastWeek && setViewChart(false);
-  });
-
   return (
     <Container>
-      {viewChart ? (
-        <TotalChart weekData={slicedWeekData} />
-      ) : (
-        <NoneChart>
-          <NoneChartText>아직 데이터가 충분하지 않아요</NoneChartText>
-        </NoneChart>
-      )}
+      <TotalChart weekData={slicedWeekData} />
       <Exercise>
         <Title>운동 현황</Title>
         <Block>

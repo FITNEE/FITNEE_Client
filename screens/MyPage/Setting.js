@@ -197,8 +197,8 @@ export default function Setting({ navigation }) {
         <Block>
           <BlockText>버전 정보</BlockText>
         </Block>
-        <Block>
-          <BlockText onPress={() => Logout()}>로그아웃</BlockText>
+        <Block onPress={() => Logout()}>
+          <BlockText>로그아웃</BlockText>
         </Block>
       </Container>
     </SafeAreaView>
