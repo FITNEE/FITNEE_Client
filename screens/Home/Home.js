@@ -90,7 +90,11 @@ const Home = ({ navigation }) => {
             <PremiumText>PREMIUM</PremiumText>
           </Premium>
         </Top>
-        {false ? <HomeRoutines data={data.result} /> : <NotHomeRoutine />}
+        {data.isSuccess ? (
+          <HomeRoutines data={data.result} />
+        ) : (
+          <NotHomeRoutine />
+        )}
       </SafeAreaView>
     </>
   );
