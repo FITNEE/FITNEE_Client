@@ -64,8 +64,10 @@ export default function Analysis(props) {
   const firstWeek = weekData.startAndEndExercise[0].firstWeek;
   const lastMonth = weekData.startAndEndExercise[0].lastMonth;
   const lastWeek = weekData.startAndEndExercise[0].lastWeek;
-  const startingIndex = (firstMonth - 1) * 6 + firstWeek - 1;
-  const finishingIndex = (lastMonth - 1) * 6 + lastWeek - 1;
+  const startingIndex =
+    firstMonth != 0 ? (firstMonth - 1) * 6 + firstWeek - 1 : 0;
+  const finishingIndex =
+    lastMonth != 0 ? (lastMonth - 1) * 6 + lastWeek - 1 : 0;
   const slicedWeekData = weekData.formattedRows.slice(
     startingIndex,
     finishingIndex
@@ -79,7 +81,7 @@ export default function Analysis(props) {
   for (let i = 0; i < TimeData.length; i++) {
     sum += TimeData[i];
   }
-  const hour = (sum / 3600).toFixed(2);
+  const hour = (sum / 3600).toFixed(1);
 
   return (
     <Container>

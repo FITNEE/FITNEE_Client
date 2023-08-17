@@ -88,6 +88,7 @@ export default function Setting({ navigation }) {
   useEffect(() => {
     isFocused && setIsTabVisible(false);
   }, [isFocused, isTabVisible]);
+
   const Logout = () => {
     AsyncStorage.clear();
     setLoggedIn(false);
