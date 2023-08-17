@@ -17,6 +17,16 @@ export default function TotalChart(props) {
     border-radius: 20px;
     padding: 16px;
   `;
+  const NoneChartText = styled.Text`
+    padding: 112px 0px;
+    font-size: 11px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 16.5px;
+    opacity: 0.6;
+    text-align: center;
+    color: ${({ isDark }) => (isDark ? colors.grey_2 : colors.grey_7)};
+  `;
 
   const [message, setMessage] = useState({
     x: 0,
@@ -48,31 +58,13 @@ export default function TotalChart(props) {
       r: "5",
     },
   };
-  const timeChartConfig = {
-    color: () => (isDark ? colors.grey_7 : colors.grey_1),
-    labelColor: () => (isDark ? colors.white : colors.black),
-    useShadowColorFromDataset: true,
-    decimalPlaces: 2,
-    fillShadowGradientFromOpacity: 0.3,
-    fillShadowGradientToOpacity: 0,
-    backgroundGradientFrom: isDark ? "#595F72" : "#F6F8FA",
-    backgroundGradientTo: isDark ? "#595F72" : "#F6F8FA",
-    propsForLabels: {
-      fontSize: 11,
-      fonstWeight: 600,
-      lineHeight: 30,
-    },
-    propsForDots: {
-      r: "5",
-    },
-  };
+
   const screenWidth = Dimensions.get("window").width;
 
   const weekData = props.weekData;
   console.log(weekData);
 
   const KcalData = weekData.map((result) => result.weeklyCalories);
-  const TimeData = weekData.map((result) => result.weeklyExerciseTime);
   const LabelData = weekData.map((result) => result.weekNumber);
   const KmData = weekData.map((result) => result.weeklyDistance);
 
@@ -103,9 +95,7 @@ export default function TotalChart(props) {
     KmMax != 0
       ? KmData.map((value) => value / KmMax)
       : KmData.map((value) => value);
-  const realMax = Math.max(KmMax, KcalMax);
   const [maxData, setMaxData] = useState();
-  const dataLength = KcalData.length;
 
   const data = {
     labels: LabelArray,
@@ -178,7 +168,9 @@ export default function TotalChart(props) {
 
   return (
     <BoxContainer>
-      {data.labels.length < 2 && <Text>아직 데이터가 충분하지 않아요</Text>}
+      {data.labels.length < 2 && (
+        <NoneChartText>아직 데이터가 충분하지 않아요</NoneChartText>
+      )}
       {data.labels.length > 1 && (
         <Container
           horizontal

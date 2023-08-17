@@ -156,12 +156,14 @@ export default function UserInfo({ navigation }) {
         </Block>
         <Bar />
         <MiniBlock>
-          <Click
-            onPress={() => {
-              navigation.navigate("EditPW");
-            }}
-          >
-            <ClickText>비밀번호 수정</ClickText>
+          <Click>
+            <ClickText
+              onPress={() => {
+                navigation.navigate("EditPW");
+              }}
+            >
+              비밀번호 수정
+            </ClickText>
           </Click>
         </MiniBlock>
         <MiniBlock>
