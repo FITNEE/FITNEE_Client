@@ -47,7 +47,7 @@ const StatusText = styled.Text`
   margin-top: 3px;
   font-size: 11px;
   font-style: normal;
-  font-weight: 400;
+  font-family: Pretendard-Regular;
   line-height: 16.5px;
   width: 100%;
   margin-bottom: 8px;
@@ -153,6 +153,7 @@ export default function EditPW({ navigation }) {
                 placeholderTextColor={isDark ? colors.grey_8 : colors.grey_6}
                 placeholder="기존 비밀번호 확인"
                 style={{
+                  fontFamily: "Pretendard-Regular",
                   color: checking
                     ? isDark
                       ? colors.grey_7
@@ -184,6 +185,9 @@ export default function EditPW({ navigation }) {
                 isDark={isDark}
                 placeholderTextColor={isDark ? colors.grey_8 : colors.grey_6}
                 placeholder="새 비밀번호"
+                style={{
+                  fontFamily: "Pretendard-Regular",
+                }}
                 ref={(input) => {
                   this.secondInput = input;
                 }}
@@ -207,6 +211,9 @@ export default function EditPW({ navigation }) {
                   rewrittenNewPW == newPW && handlePress();
                 }}
                 placeholder="새 비밀번호 확인"
+                style={{
+                  fontFamily: "Pretendard-Regular",
+                }}
                 ref={(input) => {
                   this.thirdInput = input;
                 }}

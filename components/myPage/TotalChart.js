@@ -6,19 +6,20 @@ import { colors } from "../../colors";
 import { styled } from "styled-components/native";
 import { useRecoilValue } from "recoil";
 import { IsDarkAtom } from "../../recoil/MyPageAtom";
+import { processFontFamily } from "expo-font";
 
 const Container = styled.ScrollView``;
 const BoxContainer = styled.View`
   margin: 26px 24px 0px 24px;
   background-color: ${({ isDark }) => (isDark ? colors.grey_7 : colors.grey_1)};
   border-radius: 20px;
-  padding: 16px;
+  padding: 16px 16px 10px 16px;
 `;
 const NoneChartText = styled.Text`
   padding: 112px 0px;
   font-size: 11px;
   font-style: normal;
-  font-weight: 600;
+  font-family: Pretendard-SemiBold;
   line-height: 16.5px;
   opacity: 0.6;
   text-align: center;
@@ -37,7 +38,7 @@ export default function TotalChart(props) {
 
   const chartConfig = {
     color: () => (isDark ? colors.grey_7 : colors.grey_1),
-    labelColor: () => (isDark ? colors.white : colors.black),
+    labelColor: () => (isDark ? colors.grey_2 : colors.grey_7),
     useShadowColorFromDataset: true,
     decimalPlaces: 0,
     fillShadowGradientFromOpacity: 0.3,
@@ -46,8 +47,7 @@ export default function TotalChart(props) {
     backgroundGradientTo: isDark ? "#595F72" : "#F6F8FA",
     propsForLabels: {
       fontSize: 11,
-      fonstWeight: 600,
-      lineHeight: 30,
+      fontFamily: processFontFamily("Pretendard-SemiBold"),
     },
     propsForBackgroundLines: {
       strokeWidth: 1,
@@ -239,7 +239,7 @@ export default function TotalChart(props) {
                     <Text
                       style={{
                         fontSize: 11,
-                        fontWeight: 700,
+                        fontFamily: "Pretendard-Bold",
                         color: isDark ? colors.black : colors.white,
                         textAlign: "center",
                       }}
@@ -250,7 +250,7 @@ export default function TotalChart(props) {
                       <Text
                         style={{
                           fontSize: 11,
-                          fontWeight: 500,
+                          fontFamily: "Pretendard-Medium",
                           color: isDark ? colors.black : colors.white,
                           textAlign: "center",
                         }}

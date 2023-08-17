@@ -40,7 +40,7 @@ const Bar = styled.View`
 `;
 const Title = styled.Text`
   font-size: 17px;
-  font-weight: 600;
+  font-family: Pretendard-SemiBold;
   line-height: 25.5px;
   margin: 0px 24px;
   color: ${({ isDark }) => (isDark ? colors.white : colors.black)};
@@ -57,14 +57,14 @@ const Circle = styled.View`
 const CircleText = styled.Text`
   text-align: center;
   font-size: 20px;
-  font-weight: 600;
+  font-family: Pretendard-SemiBold;
   line-height: 32px;
   color: ${({ isDark }) => (isDark ? colors.white : colors.black)};
 `;
 const CircleTitle = styled.Text`
   text-align: center;
   font-size: 10px;
-  font-weight: 400;
+  font-family: Pretendard-Regular;
   line-height: 15px;
   color: ${({ isDark }) => (isDark ? colors.white : colors.black)};
 `;
@@ -78,14 +78,14 @@ const List = styled.View`
 const ListText = styled.Text`
   font-size: 13px;
   font-style: normal;
-  font-weight: 400;
+  font-family: Pretendard-Regular;
   line-height: 19.5px;
   color: ${({ isDark }) => (isDark ? colors.white : colors.black)};
 `;
 const MiniText = styled.Text`
   font-size: 10px;
   font-style: normal;
-  font-weight: 600;
+  font-family: Pretendard-SemiBold;
   padding-top: 4px;
   line-height: 32px;
   color: ${({ isDark }) => (isDark ? colors.white : colors.black)};
@@ -180,7 +180,7 @@ export default function Records(props) {
               <CircleText isDark={isDark}>{totalWeight}</CircleText>
               <MiniText isDark={isDark}> kg</MiniText>
             </Circle>
-            <CircleTitle isDark={isDark}>들어올린 무게</CircleTitle>
+            <CircleTitle isDark={isDark}>오늘 든 무게</CircleTitle>
           </CircleContent>
           <CircleContent>
             <Circle isDark={isDark}>

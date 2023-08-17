@@ -30,27 +30,27 @@ const Data = styled.View`
 `;
 const Title = styled.Text`
   font-size: 17px;
-  font-weight: 600;
+  font-family: Pretendard-SemiBold;
   line-height: 25.5px;
   margin: 0px 24px 16px 24px;
   color: ${({ isDark }) => (isDark ? colors.white : colors.black)};
 `;
 const CircleText = styled.Text`
   font-size: 24px;
-  font-weight: 600;
+  font-family: Pretendard-SemiBold;
   line-height: 33.6px;
   color: ${({ isDark }) => (isDark ? colors.white : colors.black)};
 `;
 const CircleMiniText = styled.Text`
   font-size: 13px;
-  font-weight: 400;
+  font-family: Pretendard-Regular;
   line-height: 19.5px;
   padding-top: 8px;
   color: ${({ isDark }) => (isDark ? colors.white : colors.black)};
 `;
 const CircleTitle = styled.Text`
   font-size: 13px;
-  font-weight: 400;
+  font-family: Pretendard-Regular;
   line-height: 19.5px;
   color: ${({ isDark }) => (isDark ? colors.white : colors.black)};
 `;

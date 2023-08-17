@@ -24,6 +24,11 @@ export default function MyPageNav() {
   return (
     <Stack.Navigator
       screenOptions={{
+        headerTitleStyle: {
+          fontFamily: "Pretendard-SemiBold",
+          fontSize: 17,
+          lineHeight: 25.5,
+        },
         headerStyle: { backgroundColor: isDark ? colors.grey_9 : colors.white },
         headerTintColor: isDark ? colors.white : colors.black,
         headerShadowVisible: false,
@@ -116,9 +121,8 @@ export default function MyPageNav() {
           ),
         })}
       />
-      <Stack.Screen name="Login" component={Login} />
       <Stack.Screen
-        name="createRoutine"
+        name="CreateRoutineNav"
         component={CreateRoutineNav}
         options={{
           headerShown: false,
