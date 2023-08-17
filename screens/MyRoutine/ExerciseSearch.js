@@ -1,11 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components/native";
-import {
-  TouchableWithoutFeedback,
-  Keyboard,
-  SafeAreaView,
-  Text,
-} from "react-native";
+import { TouchableWithoutFeedback, Keyboard, SafeAreaView } from "react-native";
 import { colors } from "../../colors";
 import axios from "axios";
 import SearchList from "../../components/myRoutine/SearchList";
@@ -37,7 +32,7 @@ const SearchInputContainer = styled.View`
 `;
 const SearchInput = styled.TextInput`
   font-size: 16px;
-  font-weight: 400;
+  font-family: Pretendard-Regular;
   flex: 1;
   margin: 0px 24px;
 `;
@@ -59,8 +54,8 @@ const RecentContainer = styled.View`
   margin-bottom: 56px;
 `;
 const RecentTitle = styled.Text`
-  font-weight: 600;
-  font-size: 16px;
+  font-family: Pretendard-SemiBold;
+  font-size: 15px;
   margin-bottom: 16px;
 `;
 const RecentKeywordContainer = styled.View`
@@ -82,7 +77,7 @@ const KeywordContainer = styled.TouchableOpacity`
   padding: 10px 14px;
 `;
 const Keyword = styled.Text`
-  font-weight: 600;
+  font-family: Pretendard-SemiBold;
   font-size: 13px;
   color: ${colors.grey_7};
 `;
@@ -98,7 +93,7 @@ const ItemContainer = styled.TouchableOpacity`
   margin-right: 8px;
 `;
 const SelectedItemText = styled.Text`
-  font-weight: 500;
+  font-family: Pretendard-Regular;
   font-size: 13px;
   margin-left: 4px;
 `;
@@ -268,16 +263,23 @@ export default function ExerciseSearch({ navigation }) {
                 </RecentTitle>
                 <RecentKeywordContainer>
                   {recentKeywords == undefined ? (
-                    recentKeywords.map((keyword) => (
+                    recentKeywords.map((keyword, id) => (
                       <KeywordContainer
+                        key={id}
                         style={{
                           backgroundColor: isDark
-                            ? colors.black
+                            ? colors.grey_8
                             : colors.grey_1,
                         }}
                         onPress={() => onPressKeyword(keyword)}
                       >
-                        <Keyword>{keyword}</Keyword>
+                        <Keyword
+                          style={{
+                            color: isDark ? colors.grey_3 : colors.grey_7,
+                          }}
+                        >
+                          {keyword}
+                        </Keyword>
                       </KeywordContainer>
                     ))
                   ) : (
@@ -303,14 +305,21 @@ export default function ExerciseSearch({ navigation }) {
                   인기 키워드
                 </RecentTitle>
                 <PopularKeywordsContainer>
-                  {popularKeywords.map((keyword) => (
+                  {popularKeywords.map((keyword, id) => (
                     <KeywordContainer
+                      key={id}
                       style={{
-                        backgroundColor: isDark ? colors.black : colors.grey_1,
+                        backgroundColor: isDark ? colors.grey_8 : colors.grey_1,
                       }}
                       onPress={() => onPressKeyword(keyword)}
                     >
-                      <Keyword>{keyword}</Keyword>
+                      <Keyword
+                        style={{
+                          color: isDark ? colors.grey_3 : colors.grey_7,
+                        }}
+                      >
+                        {keyword}
+                      </Keyword>
                     </KeywordContainer>
                   ))}
                 </PopularKeywordsContainer>

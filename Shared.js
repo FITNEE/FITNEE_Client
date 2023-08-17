@@ -37,9 +37,8 @@ const MyButton = styled.TouchableOpacity`
   margin-bottom: 24px;
 `;
 const ButtonText = styled.Text`
-  font-size: 16px;
-  font-weight: 400;
-  font-weight: 800;
+  font-size: 17px;
+  font-family: Pretendard-SemiBold;
 `;
 export const Button = ({
   enabled,

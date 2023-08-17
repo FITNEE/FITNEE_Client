@@ -2,11 +2,12 @@ import React from "react";
 import styled from "styled-components/native";
 import { days } from "./data";
 import { colors } from "../../colors";
-import { ComponentTitle } from "../Shared/MyRoutine_Shared";
+import { ComponentTitle, SetCount } from "../Shared/MyRoutine_Shared";
 import { ScheduleChanger } from "../ScheduleChanger";
 import { ScreenWidth } from "../Shared";
 import { ContentContainer, NoRoutineText } from "../Shared/MyRoutine_Shared";
 import Trash from "../../assets/SVGs/Trash.svg";
+import { SetsText } from "../Shared/MyRoutine_Shared";
 
 const SetContainer = styled.View`
   flex-direction: row;
@@ -19,9 +20,9 @@ const SetContainer = styled.View`
   margin-top: 4px;
 `;
 const ExerciseTitle = styled.Text`
-  font-size: 17px;
+  font-size: 15px;
   margin: 8px;
-  font-weight: 500;
+  font-family: Pretendard-Medium;
 `;
 
 const BottomContainer = styled.View`
@@ -39,6 +40,7 @@ const ScrollPressable = styled.Pressable`
 const TextContainer = styled.View`
   flex: 1;
   flex-direction: row;
+  align-items: flex-end;
   justify-content: space-between;
 `;
 const ExerciseContainer = styled.Pressable`
@@ -65,11 +67,7 @@ const AddButton = styled.TouchableOpacity`
 const AddText = styled.Text`
   font-size: 17px;
   color: ${colors.l_main};
-  font-weight: 600;
-`;
-const SetsText = styled.Text`
-  font-size: 17px;
-  font-weight: 400;
+  font-family: Pretendard-SemiBold;
 `;
 
 const ExerciseItem_Custom = ({
@@ -98,19 +96,46 @@ const ExerciseItem_Custom = ({
           >
             <TextContainer>
               <SetsText
-                style={{ color: isDark ? colors.grey_4 : colors.grey_8 }}
+                style={{
+                  color: isDark ? colors.grey_4 : colors.grey_8,
+                  fontSize: 17,
+                }}
               >
                 {contentId + 1}
               </SetsText>
-              <SetsText
-                style={{ color: isDark ? colors.grey_4 : colors.grey_8 }}
+            </TextContainer>
+            <TextContainer>
+              <SetCount
+                style={{
+                  color: isDark ? colors.white : colors.black,
+                  textAlign: "center",
+                }}
               >
-                {item.weight ? item.weight + `   kg` : `-   kg`}
+                {item.weight ? item.weight : "-"}
+              </SetCount>
+              <SetsText
+                style={{
+                  color: isDark ? colors.grey_4 : colors.grey_8,
+                  marginRight: 20,
+                }}
+              >
+                kg
               </SetsText>
+            </TextContainer>
+            <TextContainer style={{}}>
+              <SetCount
+                style={{
+                  color: isDark ? colors.white : colors.black,
+                  textAlign: "center",
+                  marginLeft: 20,
+                }}
+              >
+                {item.rep}
+              </SetCount>
               <SetsText
                 style={{ color: isDark ? colors.grey_4 : colors.grey_8 }}
               >
-                {item.rep + `   회`}
+                회
               </SetsText>
             </TextContainer>
             <DeleteButton
