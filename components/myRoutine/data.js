@@ -14,6 +14,7 @@ export const getRoutines = async () => {
     console.error("Failed to fetch data:", error);
   }
 };
+
 export const getRoutineParts = async () => {
   try {
     let url = "https://gpthealth.shop/";
