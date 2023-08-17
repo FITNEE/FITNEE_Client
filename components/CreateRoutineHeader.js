@@ -4,12 +4,15 @@ import styled from "styled-components/native";
 import { useNavigation } from "@react-navigation/native";
 import { Animated } from "react-native";
 import { colors } from "../colors";
+import { IsDarkAtom } from "../recoil/MyPageAtom";
+import { useRecoilValue } from "recoil";
 
 export default function CreateRoutineHeader({ title, index, children }) {
   const [width, setWidth] = useState(0);
   const navigation = useNavigation();
   const animatedValue = useRef(new Animated.Value(-320 + 80 * index)).current;
   const reactive = useRef(new Animated.Value(-1000)).current;
+  const isDark = useRecoilValue(IsDarkAtom);
   useEffect(() => {
     Animated.timing(animatedValue, {
       toValue: -width + (width * (index + 1)) / 4,
@@ -20,16 +23,21 @@ export default function CreateRoutineHeader({ title, index, children }) {
   return (
     <>
       {index == 4 ? (
-        <NoHeader />
+        <NoHeader isDark={isDark} />
       ) : (
-        <HeaderContainer>
-          <Header>
+        <HeaderContainer isDark={isDark}>
+          <Header isDark={isDark}>
             <BackButton onPress={() => navigation.goBack()}>
-              <Ionicons name="arrow-back" size={24} color="black" />
+              <Ionicons
+                name="arrow-back"
+                size={24}
+                color={isDark ? "white" : "black"}
+              />
             </BackButton>
-            <Title>{title}</Title>
+            <Title isDark={isDark}>{title}</Title>
           </Header>
           <StackBar
+            isDark={isDark}
             onLayout={(e) => {
               const newWidth = e.nativeEvent.layout.width;
 
@@ -41,7 +49,7 @@ export default function CreateRoutineHeader({ title, index, children }) {
                 height: "100%",
                 width: "100%",
                 borderRadius: 10,
-                backgroundColor: colors.grey_4,
+                backgroundColor: isDark ? colors.grey_8 : colors.grey_4,
                 transform: [
                   {
                     translateX: animatedValue,
@@ -60,12 +68,12 @@ const NoHeader = styled.View`
   background-color: #f3f3f3;
   align-items: center;
   justify-content: center;
-
+  background-color: ${(props) => (props.isDark ? colors.black : colors.grey_1)};
   opacity: 1;
 `;
 const HeaderContainer = styled.View`
   height: 80px;
-  background-color: #f3f3f3;
+  background-color: ${(props) => (props.isDark ? colors.black : colors.grey_1)};
   align-items: center;
   justify-content: flex-end;
   padding: 0px 10px;
@@ -74,7 +82,7 @@ const Header = styled.View`
   flex-direction: row;
   width: 95%;
   height: 40px;
-  background-color: #f3f3f3;
+  background-color: ${(props) => (props.isDark ? colors.black : colors.grey_1)};
   align-items: center;
   padding: 10px;
   margin-top: 22px;
@@ -84,12 +92,14 @@ const Title = styled.Text`
   font-weight: bold;
   font-size: 16;
   margin-left: 112px;
+  color: ${(props) => (props.isDark ? colors.white : colors.black)};
 `;
 
 const StackBar = styled.View`
   width: 90%;
-  height: 4px;
-  background-color: ${colors.grey_2};
+  height: 6px;
+  background-color: ${(props) =>
+    props.isDark ? colors.grey_9 : colors.grey_2};
   border-radius: 10px;
   overflow: hidden;
 `;

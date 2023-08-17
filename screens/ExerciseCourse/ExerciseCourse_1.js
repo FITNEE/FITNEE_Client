@@ -163,7 +163,7 @@ export default function ExerciseCourse_1({ navigation }) {
     };
 
     if (listIndex + 1 >= dataList.length) {
-      await postTotalData(routineIdx, -1 * totalTime, dataList);
+      await postTotalData(routineIdx, -1 * totalTime, modifiedDataList);
 
       // 조건이 충족되면 원하는 화면(FinalScreen)으로 이동합니다.
       navigation.dispatch(
@@ -407,6 +407,7 @@ export default function ExerciseCourse_1({ navigation }) {
     >
       <ExerciseCard
         exerciseName={dataList[listIndex].exerciseInfo.exerciseName}
+        isDark={isDark}
       >
         <StopExercise onPress={() => OpenConfirm()}>
           <Close
@@ -438,7 +439,7 @@ export default function ExerciseCourse_1({ navigation }) {
         <Indicator
           totalPages={dataList[listIndex].totalSets}
           currentPage={indicatorNum - 1}
-          DarkMode={isDark}
+          isDark={isDark}
         />
 
         <BoxList>
@@ -467,6 +468,7 @@ export default function ExerciseCourse_1({ navigation }) {
           disabled={false}
           //onPress={timeToRest}
           onPress={scrollBox}
+          isDark={isDark}
         />
 
         <SkipExercrise onPress={() => OpenConfirm2()}>

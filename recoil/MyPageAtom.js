@@ -2,7 +2,7 @@ import { atom } from "recoil";
 
 export const IsDarkAtom = atom({
   key: "DarkModeAtom",
-  default: false,
+  default: true,
 });
 
 export const TabBarAtom = atom({

@@ -14,7 +14,7 @@ import Left from "../assets/SVGs/Left.svg";
 import { colors } from "../colors";
 import { useRecoilValue } from "recoil";
 import { IsDarkAtom } from "../recoil/MyPageAtom";
-import CreateRoutineNav from "../navigation/CreateRoutineNav";
+import CreateRoutineNav from "./CreateRoutineNav";
 
 const Stack = createStackNavigator();
 

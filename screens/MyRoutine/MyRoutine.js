@@ -24,6 +24,8 @@ import {
   getRoutines,
   getRoutine,
   updateRoutine,
+  getRoutineParts,
+  sortArray,
 } from "../../components/myRoutine/data";
 import {
   ContentContainer,
@@ -83,12 +85,11 @@ export default MyRoutine = ({ navigation, route }) => {
 
   const isFocus = useIsFocused();
   const updateDatas = () => {
-    getRoutines().then((res) => {
-      console.log("res:", res);
+    getRoutineParts().then((res) => {
       if (res.result) {
-        //여기에 다시 호출하여서 동기로
-        setSCHEDULE(processDayData(res.result));
-        getRoutine(processDayData(res.result), selectedDay, setIsLoading).then(
+        console.log("sortArray(res.result):", sortArray(res.result));
+        setSCHEDULE(sortArray(res.result));
+        getRoutine(sortArray(res.result), selectedDay, setIsLoading).then(
           (res) => {
             console.log("getRoutine반응값:", res);
             if (res.result) {
@@ -347,10 +348,14 @@ export default MyRoutine = ({ navigation, route }) => {
             />
           ) : (
             <ContentContainer>
-              <NoRoutineText>해당 요일에는 루틴이 없어요</NoRoutineText>
+              <NoRoutineText
+                style={{ color: isDark ? colors.grey_3 : colors.grey_7 }}
+              >
+                해당 요일에는 루틴이 없어요
+              </NoRoutineText>
             </ContentContainer>
           )}
-          <MyToast />
+          <MyToast isDark={isDark} />
         </ContentBase>
       )}
 

@@ -45,128 +45,128 @@ const SkipExercrise = styled.TouchableOpacity`
   margin-top: 16px;
 `;
 
+const ExerciseCircle = styled.View`
+  width: 307px;
+  height: 307px;
+  border-radius: 291px;
+  background: ${({ isDark }) => (isDark ? colors.black : colors.grey_1)};
+`;
+
+const ReplaceButton = styled.TouchableOpacity`
+  padding: 8px 12px;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  border-radius: 100px;
+  background: ${({ isDark }) => (isDark ? colors.grey_7 : colors.grey_3)};
+  margin-top: 18px;
+  margin-bottom: 12px;
+  margin-right: 242.5px;
+`;
+
+const ReplaceButtonText = styled.Text`
+  color: ${({ isDark }) => (isDark ? colors.white : colors.l_main)};
+  text-align: center;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 19.5px;
+`;
+
+const CurrentExplain = styled.View`
+  width: 327px;
+  height: 108px;
+  border-radius: 12px;
+  background: ${({ isDark }) => (isDark ? colors.grey_8 : colors.grey_1)};
+  padding: 24px;
+  justify-content: center;
+`;
+
+const ModalTitleView = styled.View`
+  height: 59px;
+  margin: 24px;
+  background-color: ${({ isDark }) => (isDark ? colors.grey_8 : colors.white)};
+`;
+
+const ModalTitle = styled.Text`
+  color: ${({ isDark }) => (isDark ? colors.white : colors.black)};
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 32px;
+  margin-bottom: 4px;
+`;
+
+const ModalTitle2 = styled.Text`
+  color: ${({ isDark }) => (isDark ? colors.grey_2 : colors.grey_8)};
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 22.5px;
+`;
+
+const SeperateLine = styled.View`
+  height: 1px;
+  background-color: ${({ isDark }) => (isDark ? colors.grey_7 : colors.grey_2)};
+`;
+
+const ReplaceView = styled.View`
+  height: 92px;
+  width: 100%;
+  padding: 24px;
+  align-items: center;
+  background-color: ${({ isDark }) => (isDark ? colors.grey_8 : colors.white)};
+  flex-direction: row;
+  justify-content: space-between;
+`;
+
+const ReplaceCircle = styled.View`
+  width: 60px;
+  height: 60px;
+  border-radius: 30px;
+  background: ${({ isDark }) => (isDark ? colors.grey_9 : colors.grey_2)};
+  margin-right: 16px;
+`;
+
+const ReplaceText1 = styled.Text`
+  color: ${({ isDark }) => (isDark ? colors.white : colors.black)};
+  text-align: center;
+  font-size: 17px;
+  font-weight: 500;
+  line-height: 25.5px;
+`;
+
+const ReplaceText2 = styled.Text`
+  color: ${({ isDark }) => (isDark ? colors.grey_3 : colors.grey_7)};
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 19.5px;
+`;
+
+const ReplaceButton2 = styled.TouchableOpacity`
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  border-radius: 100px;
+  background: ${({ isDark }) => (isDark ? colors.grey_7 : colors.grey_3)};
+  margin-top: 18px;
+  margin-bottom: 12px;
+  width: 69px;
+  height: 36px;
+`;
+
+const SkipExercriseText = styled.Text`
+  color: ${({ isDark }) => (isDark ? colors.grey_2 : colors.grey_8)};
+  text-align: center;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 19.5px;
+  text-decoration-line: underline;
+`;
+
 export default function ExerciseCourse({ navigation }) {
   const isDark = useRecoilValue(IsDarkAtom);
-
-  const ExerciseCircle = styled.View`
-    width: 307px;
-    height: 307px;
-    border-radius: 291px;
-    background: ${isDark ? colors.black : colors.grey_1};
-  `;
-
-  const ReplaceButton = styled.TouchableOpacity`
-    padding: 8px 12px;
-    justify-content: center;
-    align-items: center;
-    gap: 8px;
-    border-radius: 100px;
-    background: ${isDark ? colors.grey_7 : colors.grey_3};
-    margin-top: 18px;
-    margin-bottom: 12px;
-    margin-right: 242.5px;
-  `;
-
-  const ReplaceButtonText = styled.Text`
-    color: ${isDark ? colors.white : colors.l_main};
-    text-align: center;
-    font-size: 13px;
-    font-style: normal;
-    font-weight: 600;
-    line-height: 19.5px;
-  `;
-
-  const CurrentExplain = styled.View`
-    width: 327px;
-    height: 108px;
-    border-radius: 12px;
-    background: ${isDark ? colors.grey_8 : colors.grey_1};
-    padding: 24px;
-    justify-content: center;
-  `;
-
-  const ModalTitleView = styled.View`
-    height: 59px;
-    margin: 24px;
-    background-color: ${isDark ? colors.grey_8 : colors.white};
-  `;
-
-  const ModalTitle = styled.Text`
-    color: ${isDark ? colors.white : colors.black};
-    font-size: 20px;
-    font-weight: 600;
-    line-height: 32px;
-    margin-bottom: 4px;
-  `;
-
-  const ModalTitle2 = styled.Text`
-    color: ${isDark ? colors.grey_2 : colors.grey_8};
-    font-size: 15px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: 22.5px;
-  `;
-
-  const SeperateLine = styled.View`
-    height: 1px;
-    background-color: ${isDark ? colors.grey_7 : colors.grey_2};
-  `;
-
-  const ReplaceView = styled.View`
-    height: 92px;
-    width: 100%;
-    padding: 24px;
-    align-items: center;
-    background-color: ${isDark ? colors.grey_8 : colors.white};
-    flex-direction: row;
-    justify-content: space-between;
-  `;
-
-  const ReplaceCircle = styled.View`
-    width: 60px;
-    height: 60px;
-    border-radius: 30px;
-    background: ${isDark ? colors.grey_9 : colors.grey_2};
-    margin-right: 16px;
-  `;
-
-  const ReplaceText1 = styled.Text`
-    color: ${isDark ? colors.white : colors.black};
-    text-align: center;
-    font-size: 17px;
-    font-weight: 500;
-    line-height: 25.5px;
-  `;
-
-  const ReplaceText2 = styled.Text`
-    color: ${isDark ? colors.grey_3 : colors.grey_7};
-    font-size: 13px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: 19.5px;
-  `;
-
-  const ReplaceButton2 = styled.TouchableOpacity`
-    justify-content: center;
-    align-items: center;
-    gap: 8px;
-    border-radius: 100px;
-    background: ${isDark ? colors.grey_7 : colors.grey_3};
-    margin-top: 18px;
-    margin-bottom: 12px;
-    width: 69px;
-    height: 36px;
-  `;
-
-  const SkipExercriseText = styled.Text`
-    color: ${isDark ? colors.grey_2 : colors.grey_8};
-    text-align: center;
-    font-size: 13px;
-    font-style: normal;
-    font-weight: 600;
-    line-height: 19.5px;
-    text-decoration-line: underline;
-  `;
 
   const goToCompleteExercise = () => {
     navigation.dispatch(
@@ -345,7 +345,8 @@ export default function ExerciseCourse({ navigation }) {
     };
 
     if (listIndex + 1 >= dataList.length) {
-      await postTotalData(routineIdx, -1 * totalTime, dataList);
+      console.log(routineIdx);
+      await postTotalData(routineIdx, -1 * totalTime, modifiedDataList);
 
       // 조건이 충족되면 원하는 화면(FinalScreen)으로 이동합니다.
       navigation.dispatch(
@@ -367,15 +368,19 @@ export default function ExerciseCourse({ navigation }) {
     }
   };
 
-  const postTotalData = async (routineIdx, totalTime, dataList) => {
+  const postTotalData = async (
+    routineIdx,
+    totalExerciseTime,
+    routineDetails
+  ) => {
     try {
       let url = "https://gpthealth.shop/";
       let detailAPI = `/app/process/end`;
 
       const response = await axios.post(url + detailAPI, {
-        routineIdx: routineIdx,
-        totalExerciseTime: totalTime,
-        routineDetails: dataList,
+        originRoutineIdx: routineIdx,
+        totalExerciseTime: totalExerciseTime,
+        routineDetails: routineDetails,
       });
 
       const result = response.data;
@@ -411,8 +416,9 @@ export default function ExerciseCourse({ navigation }) {
       >
         <ExerciseCard
           exerciseName={dataList[listIndex].exerciseInfo.exerciseName}
+          isDark={isDark}
         >
-          <ExerciseCircle></ExerciseCircle>
+          <ExerciseCircle isDark={isDark}></ExerciseCircle>
 
           <Animated.View
             style={[
@@ -447,8 +453,8 @@ export default function ExerciseCourse({ navigation }) {
             />
           </Animated.View>
 
-          <ReplaceButton disabled={false} onPress={handleModal}>
-            <ReplaceButtonText>운동 대체하기</ReplaceButtonText>
+          <ReplaceButton isDark={isDark} disabled={false} onPress={handleModal}>
+            <ReplaceButtonText isDark={isDark}>운동 대체하기</ReplaceButtonText>
           </ReplaceButton>
 
           <CurrentSet
@@ -457,16 +463,19 @@ export default function ExerciseCourse({ navigation }) {
             num={dataList[listIndex].sets[0].rep}
           />
 
-          <CurrentExplain>{adviceList}</CurrentExplain>
+          <CurrentExplain isDark={isDark}>{adviceList}</CurrentExplain>
 
           <ExerciseButton //운동 시작 버튼
             text="운동 시작"
             disabled={false}
             onPress={animation}
             //onPress={goToCompleteExercise}
+            isDark={isDark}
           />
           <SkipExercrise onPress={() => OpenConfirm2()}>
-            <SkipExercriseText>이 운동 건너뛰기</SkipExercriseText>
+            <SkipExercriseText isDark={isDark}>
+              이 운동 건너뛰기
+            </SkipExercriseText>
           </SkipExercrise>
 
           <BottomSheetModal
@@ -479,27 +488,28 @@ export default function ExerciseCourse({ navigation }) {
             }}
             backdropComponent={renderBackdrop}
           >
-            <ModalTitleView>
-              <ModalTitle>운동 대체하기</ModalTitle>
-              <ModalTitle2>
+            <ModalTitleView isDark={isDark}>
+              <ModalTitle isDark={isDark}>운동 대체하기</ModalTitle>
+              <ModalTitle2 isDark={isDark}>
                 현재 운동과 유사한 효과의 운동을 추천해 드릴게요.
               </ModalTitle2>
             </ModalTitleView>
             <BottomSheetBack>
-              <SeperateLine />
+              <SeperateLine isDark={isDark} />
 
               {replaceList.map((item, healthCategoryIdx) => (
-                <ReplaceView>
-                  <ReplaceView2>
-                    <ReplaceCircle />
-                    <ReplaceTextView key={healthCategoryIdx}>
-                      <ReplaceText1>{item.name}</ReplaceText1>
-                      <ReplaceText2>
+                <ReplaceView isDark={isDark}>
+                  <ReplaceView2 isDark={isDark}>
+                    <ReplaceCircle isDark={isDark} />
+                    <ReplaceTextView isDark={isDark} key={healthCategoryIdx}>
+                      <ReplaceText1 isDark={isDark}>{item.name}</ReplaceText1>
+                      <ReplaceText2 isDark={isDark}>
                         {item.parts} | {item.muscle} | {item.equipment}
                       </ReplaceText2>
                     </ReplaceTextView>
                   </ReplaceView2>
                   <ReplaceButton2
+                    isDark={isDark}
                     onPress={() => {
                       pushReplace(
                         item.healthCategoryIdx,
@@ -508,7 +518,9 @@ export default function ExerciseCourse({ navigation }) {
                       );
                     }}
                   >
-                    <ReplaceButtonText>대체하기</ReplaceButtonText>
+                    <ReplaceButtonText isDark={isDark}>
+                      대체하기
+                    </ReplaceButtonText>
                   </ReplaceButton2>
                 </ReplaceView>
               ))}

@@ -27,15 +27,15 @@ const IconContainer = styled.View`
   border-radius: 32px;
 `;
 const Title = styled.Text`
-  font-weight: 500;
+  font-family: Pretendard-Medium;
   font-size: 17px;
 `;
 const SubText = styled.Text`
+  font-family: Pretendard-Regular;
   font-size: 13px;
   margin-top: 4px;
-  font-weight: 400;
 `;
-const CheckButton = styled.TouchableOpacity`
+const CheckButton = styled.View`
   justify-content: center;
   align-items: center;
   width: 40px;

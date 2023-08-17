@@ -12,10 +12,10 @@ export const TextContainer = styled.View`
   justify-content: space-between;
 `;
 export const DayText = styled.Text`
+  font-family: Pretendard-Regular;
   width: 45px;
   text-align: center;
   font-size: 13px;
-  font-weight: 400;
 `;
 const DaysContainer = styled.View`
   padding: 6px;

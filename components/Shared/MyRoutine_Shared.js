@@ -19,11 +19,11 @@ const HeaderContainer = styled.View`
 `;
 const Title = styled.Text`
   font-size: 17px;
-  font-weight: 600;
+  font-family: Pretendard-SemiBold;
 `;
 const ButtonText = styled.Text`
   font-size: 17px;
-  font-weight: 600;
+  font-family: Pretendard-SemiBold;
   color: ${colors.l_main};
 `;
 
@@ -47,7 +47,7 @@ export const Header = ({ mode, onPress, toggleMode, isDark }) => {
         </Button>
       )}
       <Title style={{ color: isDark ? colors.white : colors.black }}>
-        {mode ? "루틴커스텀" : "마이루틴"}
+        {mode ? "루틴 커스텀" : "마이 루틴"}
       </Title>
       <Button style={{ right: 12 }} onPress={handleSubmit}>
         {mode ? (
@@ -94,6 +94,14 @@ export function listToObject(list) {
 
   return object;
 }
+export const SetsText = styled.Text`
+  font-size: 13px;
+  font-family: Pretendard-Regular;
+`;
+export const SetsText_Normal = styled.Text`
+  font-size: 17px;
+  font-family: Pretendard-Regular;
+`;
 const TextContainer = styled.View`
   flex-direction: row;
   margin-top: 40px;
@@ -102,15 +110,16 @@ const TextContainer = styled.View`
 `;
 const _ComponentTitle = styled.Text`
   font-size: 17px;
-  font-weight: 600;
+  font-family: Pretendard-SemiBold;
 `;
+
 const _ComponentSubTitle = styled.Text`
   font-size: 13px;
   flex: 1;
   color: ${colors.grey_7};
+  font-family: Pretendard-Regular;
   margin-top: 4px;
   margin-left: 8px;
-  font-weight: 300;
 `;
 export const ComponentTitle = ({ title, subTitle, isDark }) => {
   return (
@@ -136,8 +145,13 @@ export const ContentContainer = styled.View`
 `;
 export const NoRoutineText = styled.Text`
   font-size: 15px;
-  color: ${colors.grey_7};
-  font-weight: 400;
+  font-family: Pretendard-Regular;
   text-align: center;
   width: 100%;
+`;
+
+export const SetCount = styled.Text`
+  font-size: 17px;
+  font-family: Pretendard-Medium;
+  flex: 1;
 `;

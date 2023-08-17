@@ -62,11 +62,11 @@ const CurrentUnit = styled.Text`
 
 export default function NextSet({ set, kg, num, isDark }) {
   return (
-    <Container isDark={{ isDark }}>
+    <Container isDark={isDark}>
       <Box1>
-        <CurrentText isDark={{ isDark }}>{set}</CurrentText>
+        <CurrentText isDark={isDark}>{set}</CurrentText>
 
-        <CurrentUnit isDark={{ isDark }}>세트</CurrentUnit>
+        <CurrentUnit isDark={isDark}>세트</CurrentUnit>
       </Box1>
 
       <Box2>
