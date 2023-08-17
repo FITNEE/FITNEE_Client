@@ -87,6 +87,7 @@ export default MyRoutine = ({ navigation, route }) => {
   const updateDatas = () => {
     getRoutineParts().then((res) => {
       if (res.result) {
+        console.log("sortArray(res.result):", sortArray(res.result));
         setSCHEDULE(sortArray(res.result));
         getRoutine(sortArray(res.result), selectedDay, setIsLoading).then(
           (res) => {
