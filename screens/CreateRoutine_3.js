@@ -2,14 +2,16 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components/native";
 import { useNavigationState } from "@react-navigation/native";
 import CreateRoutineHeader from "../components/CreateRoutineHeader";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { CreateRoutineAtom } from "../recoil/CreateRoutineAtom";
 import { colors } from "../colors";
+import { IsDarkAtom } from "../recoil/MyPageAtom";
 
 export default function CreateRoutine_3({ navigation }) {
   const [select, SetSelect] = useState(false);
   const [allPart, SetAllPart] = useState(false);
   const [routine, setRoutine] = useRecoilState(CreateRoutineAtom);
+  const isDark = useRecoilValue(IsDarkAtom);
   const [parts, setParts] = useState([
     { id: 1, name: "가슴", selected: false, ename: "chest" },
     { id: 2, name: "등", selected: false, ename: "back" },
@@ -72,9 +74,9 @@ export default function CreateRoutine_3({ navigation }) {
   };
 
   return (
-    <Container>
+    <Container isDark={isDark}>
       <TitleContainer>
-        <Title>{`운동할 부위를
+        <Title isDark={isDark}>{`운동할 부위를
 모두 선택하세요`}</Title>
       </TitleContainer>
       <PartContainer>
@@ -84,11 +86,15 @@ export default function CreateRoutine_3({ navigation }) {
             onPress={() => onPartPress(part.id)}
             style={{
               backgroundColor: allPart
-                ? colors.l_sub_2
+                ? isDark
+                  ? "#1E1B29"
+                  : colors.l_sub_2
                 : part.selected
                 ? colors.l_main
+                : isDark
+                ? colors.grey_9
                 : colors.white,
-              borderWidth: 1,
+              borderWidth: allPart ? 1 : 0,
               borderColor: allPart
                 ? colors.l_main
                 : part.selected
@@ -101,6 +107,8 @@ export default function CreateRoutine_3({ navigation }) {
               style={{
                 color: allPart
                   ? colors.l_main
+                  : isDark
+                  ? colors.white
                   : part.selected
                   ? colors.white
                   : colors.black,
@@ -111,11 +119,20 @@ export default function CreateRoutine_3({ navigation }) {
           </PartItem>
         ))}
       </PartContainer>
-      <AllButton isActive={allPart} onPress={AllPartPress}>
-        <AllText isActive={allPart}>모든 부위를 운동할래요</AllText>
+      <AllButton isDark={isDark} isActive={allPart} onPress={AllPartPress}>
+        <AllText isDark={isDark} isActive={allPart}>
+          모든 부위를 운동할래요
+        </AllText>
       </AllButton>
-      <NextButton isActive={select} disabled={!select} onPress={nextButton}>
-        <ButtonText isActive={select}>다음</ButtonText>
+      <NextButton
+        isDark={isDark}
+        isActive={select}
+        disabled={!select}
+        onPress={nextButton}
+      >
+        <ButtonText isDark={isDark} isActive={select}>
+          다음
+        </ButtonText>
       </NextButton>
     </Container>
   );
@@ -126,6 +143,7 @@ const Container = styled.View`
   width: 100%;
   align-items: center;
   justify-content: space-evenly;
+  background-color: ${(props) => (props.isDark ? colors.black : colors.grey_1)};
 `;
 
 const TitleContainer = styled.View`
@@ -136,6 +154,7 @@ const TitleContainer = styled.View`
 const Title = styled.Text`
   font-size: 25px;
   font-weight: 600;
+  color: ${(props) => (props.isDark ? colors.white : colors.black)};
 `;
 const PartContainer = styled.View`
   flex-direction: row;
@@ -154,7 +173,7 @@ const PartItem = styled.TouchableOpacity`
 const PartImage = styled.Image`
   width: 85px;
   height: 85px;
-  background-color: #bfbfbf;
+  background-color: ${colors.grey_7};
   border-radius: 300px;
 `;
 const PartName = styled.Text`
@@ -165,18 +184,24 @@ const AllButton = styled.TouchableOpacity`
   width: 147px;
   height: 40px;
   background-color: ${(props) =>
-    props.isActive ? colors.l_main : colors.grey_3};
+    props.isActive
+      ? colors.l_main
+      : props.isDark
+      ? colors.grey_7
+      : colors.grey_3};
   margin-bottom: 120px;
   border-radius: 100px;
   align-items: center;
   justify-content: center;
-  border: 1px;
-  border-color: ${(props) => (props.isActive ? colors.l_main : colors.l_sub_2)};
+  /* border: 1px;
+  border-color: ${(props) =>
+    props.isActive ? colors.l_main : colors.l_sub_2}; */
 `;
 const AllText = styled.Text`
   font-size: 13px;
   font-weight: 600;
-  color: ${(props) => (props.isActive ? colors.white : colors.black)};
+  color: ${(props) =>
+    props.isActive ? colors.white : props.isDark ? colors.white : colors.black};
 `;
 const NextButton = styled.TouchableOpacity`
   width: 327px;
@@ -184,9 +209,21 @@ const NextButton = styled.TouchableOpacity`
   align-items: center;
   justify-content: center;
   background-color: ${(props) =>
-    props.isActive ? colors.l_main : colors.grey_3};
+    props.isActive
+      ? colors.l_main
+      : props.isDark
+      ? colors.grey_8
+      : colors.grey_3};
   border-radius: 10px;
 `;
 const ButtonText = styled.Text`
-  color: ${(props) => (props.isActive ? colors.white : colors.black)};
+  font-weight: bold;
+  color: ${(props) =>
+    props.isActive
+      ? props.isDark
+        ? colors.black
+        : colors.white
+      : props.isDark
+      ? colors.white
+      : colors.black};
 `;

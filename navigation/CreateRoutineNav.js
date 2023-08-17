@@ -9,6 +9,8 @@ import CreateRoutine_5 from "../screens/CreateRoutine_5";
 import CreateRoutineHeader from "../components/CreateRoutineHeader";
 import styled from "styled-components/native";
 import RoutineNav from "./RoutineNav";
+import HomeNav from "../navigators/HomeNav";
+import { colors } from "../colors";
 
 const Stack = createStackNavigator();
 
@@ -24,16 +26,22 @@ export default function CreateRoutineNav() {
           fontSize: 16,
         },
         // animation: fade,
-        headerStyle: {
-          backgroundColor: "#f3f3f3", // 배경 색상을 원하는 색상 값으로 변경해주세요, 예를 들어: '#f4511e'
-        },
-        // animationEnabled: false,
+        // headerStyle: {
+        //   backgroundColor: "#f3f3f3", // 배경 색상을 원하는 색상 값으로 변경해주세요, 예를 들어: '#f4511e'
+        // },
+        animationEnabled: false,
         // presentation: "transparentModal",
-        headerMode: "float",
+        // headerMode: "screen",
         // title: "루틴 등록",
       }}
     >
-      <Stack.Screen name="CreateRoutine_1" component={CreateRoutine_1} />
+      <Stack.Screen
+        name="CreateRoutine_1"
+        options={{
+          headerShown: true,
+        }}
+        component={CreateRoutine_1}
+      />
       <Stack.Screen name="CreateRoutine_2" component={CreateRoutine_2} />
       <Stack.Screen name="CreateRoutine_3" component={CreateRoutine_3} />
       <Stack.Screen name="CreateRoutine_4" component={CreateRoutine_4} />
@@ -41,6 +49,13 @@ export default function CreateRoutineNav() {
         name="CreateRoutine_5"
         // options={{ headerShown: false }}
         component={CreateRoutine_5}
+      />
+      <Stack.Screen
+        name="Home"
+        options={{
+          headerShown: false,
+        }}
+        component={HomeNav}
       />
     </Stack.Navigator>
   );
