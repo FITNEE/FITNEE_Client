@@ -9,8 +9,6 @@ import { styled } from "styled-components/native";
 import { colors } from "../../colors";
 import { Button } from "../../Shared";
 import axios from "axios";
-import { Alert } from "react-native";
-import { PWToast, showPWToast } from "../../components/myPage/PWToast";
 import { useRecoilValue } from "recoil";
 import { IsDarkAtom } from "../../recoil/MyPageAtom";
 
@@ -132,12 +130,13 @@ export default function EditPW({ navigation }) {
     }
   };
 
-  const goToUserInfo = () => {
-    navigation.navigate("UserInfo");
-  };
   const handlePress = () => {
     updateUserPW(newPW).then((updateResult) => {
-      updateResult.code === 1000 && goToUserInfo() & showPWToast();
+      updateResult.code === 1000 &&
+        navigation.navigate("UserInfo", {
+          showToast: true,
+          toastMessage: "비밀번호가 변경되었습니다.",
+        });
     });
   };
 
