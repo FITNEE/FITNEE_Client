@@ -6,35 +6,6 @@ import { useRecoilValue } from "recoil"
 import RightIcon from '../../assets/SVGs/Right.svg'
 import { TouchableOpacity } from 'react-native'
 
-const ListContainer = styled.ScrollView`
-`
-const ExerciseContainer = styled.TouchableOpacity`
-    padding: 16px 24px;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-`
-const ExerciseLeftContainer = styled.View`
-    flex-direction: row;
-    align-items: center;
-`
-const ExerciseImg = styled.Image`
-    width: 60px;
-    height: 60px;
-    border-radius: 30px;
-`
-const ExerciseDetailContainer = styled.View`
-    margin-left: 16px;
-`
-const ExerciseName = styled.Text`
-    font-weight: 500;
-    font-size: 17px;
-    margin-bottom: 5px;
-`
-const ExerciseArea = styled.Text`
-    font-weight: 400;
-    font-size: 13px;
-`
 export default function Dictionary_List(props){
     const isDark = useRecoilValue(IsDarkAtom)
 
@@ -104,3 +75,33 @@ export default function Dictionary_List(props){
         </ListContainer>
     )
 }
+
+const ListContainer = styled.ScrollView`
+`
+const ExerciseContainer = styled.TouchableOpacity`
+    padding: 16px 24px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+`
+const ExerciseLeftContainer = styled.View`
+    flex-direction: row;
+    align-items: center;
+`
+const ExerciseImg = styled.Image`
+    width: 60px;
+    height: 60px;
+    border-radius: 30px;
+`
+const ExerciseDetailContainer = styled.View`
+    margin-left: 16px;
+`
+const ExerciseName = styled.Text`
+    font-family: Pretendard-Medium;
+    font-size: 17px;
+    margin-bottom: 5px;
+`
+const ExerciseArea = styled.Text`
+    font-family: Pretendard-Regular;
+    font-size: 13px;
+`

@@ -93,26 +93,6 @@ export default function Dictionary_LeftTab(props){
                             <CautionDot style={{backgroundColor: isDark? `${colors.d_main}`:`${colors.l_sub_1}`}}/>
                             <CautionDetail style={{color: isDark? `${colors.white}`:`${colors.black}`}}>{exerciseDetail?.exercisecaution[0].caution3}</CautionDetail>
                         </CautionDetailContainer>                   
-                    {/* {
-                        exerciseDetail?.exercisecaution.map((cautionObject)=>{
-                            let temp = Object.values(cautionObject)
-                            console.log(temp)
-                            temp?.map((v)=>{
-                                console.log(v)
-                                (
-                                <CautionDetailContainer>
-                                     <CautionDot/>
-                                     <CautionDetail>안녕</CautionDetail>
-                                </CautionDetailContainer>
-                            )})
-                            // (
-                            //     <CautionDetailContainer>
-                            //           <CautionDot/>
-                            //           <CautionDetail>안녕</CautionDetail>
-                            //      </CautionDetailContainer>
-                            // )
-                        })
-                    } */}
                     </CautionContentContainer>
                 </CautionContainer>
             }
@@ -130,8 +110,7 @@ const Process = styled.View`
     flex-direction: row;
 `
 const ProcessNum = styled.Text`
-
-    font-weight: 600;
+    font-family: Pretendard-SemiBold;
     font-size: 15px;
 `
 const ProcessContent = styled.View`
@@ -140,7 +119,7 @@ const ProcessContent = styled.View`
     margin-right: 21px;
 `
 const ProcessName = styled.Text`
-    font-weight: 600;
+    font-family: Pretendard-SemiBold;
     font-size: 15px;
     margin-bottom: 8px;
 `
@@ -160,7 +139,7 @@ const CautionImage = styled.Image`
 `
 const CautionTitle = styled.Text`
     color: ${colors.black};
-    font-weight: 600;
+    font-family: Pretendard-SemiBold; 
     font-size: 15px;
 `
 const CautionContentContainer = styled.View`
@@ -173,7 +152,7 @@ const CautionDetailContainer = styled.View`
 `
 const CautionDetail = styled.Text`
     color: ${colors.black};
-    font-weight: 400;
+    font-family: Pretendard-Regular;
     font-size: 13px;
 `
 const CautionDot = styled.View`
