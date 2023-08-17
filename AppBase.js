@@ -14,8 +14,8 @@ export default function AppBase() {
   const onFinish = () => setLoading(false);
 
   const preload = async () => {
-    await AsyncStorage.getItem("userId").then((userId) => {
-      if (userId) {
+    await AsyncStorage.getItem("accessToken").then((accessToken) => {
+      if (accessToken) {
         setLoggedIn(true);
       }
     });
