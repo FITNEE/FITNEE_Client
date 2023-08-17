@@ -27,6 +27,7 @@ const NameText = styled.Text`
   font-weight: 600;
   line-height: 25.5px;
   margin-bottom: 4px;
+  color: ${(props) => (props.isDark ? colors.white : colors.black)};
 `;
 const Title = styled.Text`
   height: 32px;
@@ -35,6 +36,7 @@ const Title = styled.Text`
   font-weight: 600;
   line-height: 32px;
   margin-bottom: 4px;
+  color: ${(props) => (props.isDark ? colors.white : colors.black)};
 `;
 const DayText = styled.Text`
   color: ${colors.l_main};
@@ -54,7 +56,8 @@ const SectionBlock = styled.View`
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  background-color: ${colors.white};
+  background-color: ${(props) => (props.isDark ? colors.grey_9 : colors.white)};
+
   border-radius: 10px;
 `;
 const CircleIcon = styled.View`
@@ -68,12 +71,14 @@ const Section = styled.View`
   flex-direction: row;
   width: 268px;
   justify-content: space-between;
+  background-color: ${(props) => (props.isDark ? colors.grey_9 : colors.white)};
 `;
 const SectionText = styled.Text`
   font-size: 15px;
   font-style: normal;
   font-weight: 600;
   line-height: 22.5px;
+  color: ${(props) => (props.isDark ? colors.white : colors.black)};
 `;
 const NumText = styled.Text`
   color: ${colors.grey_7};
@@ -95,6 +100,7 @@ const Card = styled.TouchableOpacity`
   background-color: ${colors.white};
   margin: 0px 8px;
   align-items: center;
+  background-color: ${(props) => (props.isDark ? colors.grey_9 : colors.white)};
 `;
 const ExerciseView = styled.Image`
   width: 128px;
@@ -108,6 +114,7 @@ const ExerciseName = styled.Text`
   font-style: normal;
   font-weight: 600;
   line-height: 22.5px;
+  color: ${(props) => (props.isDark ? colors.white : colors.black)};
 `;
 const Button = styled.TouchableOpacity`
   margin-left: 16px;
@@ -124,10 +131,10 @@ const ButtonText = styled.Text`
   font-style: normal;
   font-weight: 600;
   line-height: 25.5px;
-  color: ${colors.white};
+  color: ${(props) => (props.isDark ? colors.black : colors.white)};
 `;
 
-export default function HomeRoutines({ data }) {
+export default function HomeRoutines({ isDark, data }) {
   // const [data, setData] = useState("");
   const ExerciseData = [
     { id: 1, name: "데드리프트" },
@@ -158,9 +165,9 @@ export default function HomeRoutines({ data }) {
     postSearch(name);
   };
   const renderItem = ({ item }) => (
-    <Card onPress={() => itemPress(item)}>
-      <ExerciseView />
-      <ExerciseName>{item}</ExerciseName>
+    <Card isDark={isDark} onPress={() => itemPress(item)}>
+      <ExerciseView isDark={isDark} />
+      <ExerciseName isDark={isDark}>{item}</ExerciseName>
     </Card>
   );
 
@@ -170,22 +177,22 @@ export default function HomeRoutines({ data }) {
   };
 
   return (
-    <Container>
+    <Container isDark={isDark}>
       <TitleBlock>
-        <NameText>{data.userNickName} 님</NameText>
+        <NameText isDark={isDark}>{data.userNickName} 님</NameText>
         {data.isToday ? (
-          <Title>오늘 예정된 운동 루틴이에요</Title>
+          <Title isDark={isDark}>오늘 예정된 운동 루틴이에요</Title>
         ) : (
-          <Title>다음에 예정된 운동루틴이에요</Title>
+          <Title isDark={isDark}>다음에 예정된 운동루틴이에요</Title>
         )}
 
-        <DayText>{data.todayStrKo}</DayText>
+        <DayText isDark={isDark}>{data.todayStrKo}</DayText>
       </TitleBlock>
-      <SectionBlock>
+      <SectionBlock isDark={isDark}>
         <CircleIcon />
-        <Section>
-          <SectionText>{data.exerciseParts}</SectionText>
-          <NumText>{data.exerciseCount}개의 운동</NumText>
+        <Section isDark={isDark}>
+          <SectionText isDark={isDark}>{data.exerciseParts}</SectionText>
+          <NumText isDark={isDark}>{data.exerciseCount}개의 운동</NumText>
         </Section>
       </SectionBlock>
       <Cards
@@ -196,8 +203,8 @@ export default function HomeRoutines({ data }) {
         showsHorizontalScrollIndicator={false}
       />
       {data.isToday ? (
-        <Button onPress={navigateToExercise}>
-          <ButtonText>운동하러 가기</ButtonText>
+        <Button isDark={isDark} onPress={navigateToExercise}>
+          <ButtonText isDark={isDark}>운동하러 가기</ButtonText>
         </Button>
       ) : null}
     </Container>

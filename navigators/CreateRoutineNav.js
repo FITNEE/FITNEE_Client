@@ -8,8 +8,7 @@ import CreateRoutine_4 from "../screens/CreateRoutine_4";
 import CreateRoutine_5 from "../screens/CreateRoutine_5";
 import CreateRoutineHeader from "../components/CreateRoutineHeader";
 import styled from "styled-components/native";
-import RoutineNav from "./RoutineNav";
-import HomeNav from "../navigators/HomeNav";
+import HomeNav from "./HomeNav";
 import { colors } from "../colors";
 
 const Stack = createStackNavigator();

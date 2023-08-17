@@ -8,7 +8,7 @@ import ExerciseCourse_2 from "../screens/ExerciseCourse/ExerciseCourse_2";
 import ExerciseCourse from "../screens/ExerciseCourse/ExerciseCourse";
 import StartExercise from "../screens/ExerciseCourse/StartExercise";
 import MyRoutineNav from "./MyRoutineNav";
-import CreateRoutineNav from "../navigation/CreateRoutineNav";
+import CreateRoutineNav from "./CreateRoutineNav";
 import HomeNav from "./HomeNav";
 
 const Stack = createStackNavigator();

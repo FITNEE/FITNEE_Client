@@ -21,14 +21,16 @@ const Top = styled.View`
 const Logo = styled.Image`
   width: 88px;
   height: 28px;
-  background-color: ${colors.grey_2};
+  background-color: ${(props) =>
+    props.isDark ? colors.grey_7 : colors.grey_3};
 `;
 const Premium = styled.View`
   padding: 6px 12px 6px 6px;
   gap: 4px;
   border-radius: 100px;
   flex-direction: row;
-  background-color: ${colors.grey_3};
+  background-color: ${(props) =>
+    props.isDark ? colors.grey_7 : colors.grey_3};
   align-items: center;
 `;
 const Circle = styled.View`
@@ -42,6 +44,7 @@ const PremiumText = styled.Text`
   font-style: normal;
   font-weight: 600;
   line-height: 19.5px;
+  color: ${(props) => (props.isDark ? colors.white : colors.black)};
 `;
 
 const Home = ({ navigation }) => {
@@ -79,21 +82,22 @@ const Home = ({ navigation }) => {
         style={{
           width: "100%",
           flex: 1,
+          backgroundColor: isDark ? colors.black : colors.grey_1,
         }}
       >
         {/*<Text>Home</Text>
       <Button enabled={true} text='logOut' onPress={() => toggleLogin()} />*/}
         <Top>
-          <Logo />
-          <Premium>
+          <Logo isDark={isDark} />
+          <Premium isDark={isDark}>
             <Circle />
-            <PremiumText>PREMIUM</PremiumText>
+            <PremiumText isDark={isDark}>PREMIUM</PremiumText>
           </Premium>
         </Top>
         {data.isSuccess ? (
-          <HomeRoutines data={data.result} />
+          <HomeRoutines isDark={isDark} data={data.result} />
         ) : (
-          <NotHomeRoutine />
+          <NotHomeRoutine isDark={isDark} />
         )}
       </SafeAreaView>
     </>
