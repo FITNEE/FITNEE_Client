@@ -1,6 +1,6 @@
 import React from "react";
 import CustomSwitch from "./CustomSwitch";
-import { useRecoilState, useSetRecoilState } from "recoil";
+import { useSetRecoilState } from "recoil";
 import { IsDarkAtom } from "../../recoil/MyPageAtom";
 
 export default function Mode() {

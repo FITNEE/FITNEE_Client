@@ -44,54 +44,53 @@ const Click = styled.View`
   margin-right: 24px;
   align-items: flex-end;
 `;
+const Container = styled.View`
+  background-color: ${({ isDark }) => (isDark ? colors.grey_9 : colors.white)};
+  height: 100%;
+`;
+const BlockTitle = styled.Text`
+  width: 100px;
+  font-size: 17px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 25.5px;
+  color: ${({ isDark }) => (isDark ? colors.white : colors.black)};
+`;
+const BlockContent = styled.Text`
+  width: ${ScreenWidth - 148}px;
+  text-align: right;
+  font-size: 17px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 25.5px;
+  color: ${({ isDark }) => (isDark ? colors.grey_3 : colors.grey_7)};
+`;
+const ClickText = styled.Text`
+  width: 80px;
+  text-align: right;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 19.5px;
+  text-decoration-line: underline;
+  color: ${({ isDark }) => (isDark ? colors.white : colors.black)};
+`;
+const NickText = styled.Text`
+  text-align: right;
+  font-size: 17px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 25.5px;
+  color: ${({ isDark }) => (isDark ? colors.grey_3 : colors.grey_7)};
+`;
+const Bar = styled.View`
+  height: 16px;
+  background-color: ${({ isDark }) => (isDark ? colors.black : colors.grey_1)};
+`;
 
 export default function UserInfo({ route, navigation }) {
   const isFocused = useIsFocused();
   const isDark = useRecoilValue(IsDarkAtom);
-
-  const Container = styled.View`
-    background-color: ${isDark ? colors.grey_9 : colors.white};
-    height: 100%;
-  `;
-  const BlockTitle = styled.Text`
-    width: 100px;
-    font-size: 17px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: 25.5px;
-    color: ${isDark ? colors.white : colors.black};
-  `;
-  const BlockContent = styled.Text`
-    width: ${ScreenWidth - 148}px;
-    text-align: right;
-    font-size: 17px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: 25.5px;
-    color: ${isDark ? colors.grey_3 : colors.grey_7};
-  `;
-  const ClickText = styled.Text`
-    width: 80px;
-    text-align: right;
-    font-size: 13px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: 19.5px;
-    text-decoration-line: underline;
-    color: ${isDark ? colors.white : colors.black};
-  `;
-  const NickText = styled.Text`
-    text-align: right;
-    font-size: 17px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: 25.5px;
-    color: ${isDark ? colors.grey_3 : colors.grey_7};
-  `;
-  const Bar = styled.View`
-    height: 16px;
-    background-color: ${isDark ? colors.black : colors.grey_1};
-  `;
 
   useEffect(() => {
     if (route.params?.showToast) {
@@ -139,17 +138,17 @@ export default function UserInfo({ route, navigation }) {
   const getGender = userInfo[0].gender;
 
   return (
-    <SafeAreaView>
-      <Container>
+    <SafeAreaView backgroundColor={isDark ? colors.grey_9 : colors.grey_1}>
+      <Container isDark={isDark}>
         <Profile>
           <ProfileImage
             style={{ backgroundColor: getGender == 1 ? "blue" : "pink" }}
           ></ProfileImage>
         </Profile>
         <NickBlock onPress={() => navigation.navigate("EditUserInfo")}>
-          <BlockTitle>닉네임</BlockTitle>
+          <BlockTitle isDark={isDark}>닉네임</BlockTitle>
           <NickContent>
-            <NickText>{getUserName}</NickText>
+            <NickText isDark={isDark}>{getUserName}</NickText>
             <Right
               style={{ marginLeft: 8 }}
               width={20}
@@ -159,17 +158,18 @@ export default function UserInfo({ route, navigation }) {
           </NickContent>
         </NickBlock>
         <Block>
-          <BlockTitle>출생년도</BlockTitle>
-          <BlockContent>{getBirthYear}</BlockContent>
+          <BlockTitle isDark={isDark}>출생년도</BlockTitle>
+          <BlockContent isDark={isDark}>{getBirthYear}</BlockContent>
         </Block>
         <Block>
-          <BlockTitle>이메일 주소</BlockTitle>
-          <BlockContent>{getUserId}</BlockContent>
+          <BlockTitle isDark={isDark}>이메일 주소</BlockTitle>
+          <BlockContent isDark={isDark}>{getUserId}</BlockContent>
         </Block>
-        <Bar />
+        <Bar isDark={isDark} />
         <MiniBlock>
           <Click>
             <ClickText
+              isDark={isDark}
               onPress={() => {
                 navigation.navigate("EditPW");
               }}
@@ -180,7 +180,7 @@ export default function UserInfo({ route, navigation }) {
         </MiniBlock>
         <MiniBlock>
           <Click>
-            <ClickText>회원 탈퇴하기</ClickText>
+            <ClickText isDark={isDark}>회원 탈퇴하기</ClickText>
           </Click>
         </MiniBlock>
       </Container>
