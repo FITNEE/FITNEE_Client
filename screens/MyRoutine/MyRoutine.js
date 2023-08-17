@@ -348,10 +348,14 @@ export default MyRoutine = ({ navigation, route }) => {
             />
           ) : (
             <ContentContainer>
-              <NoRoutineText>해당 요일에는 루틴이 없어요</NoRoutineText>
+              <NoRoutineText
+                style={{ color: isDark ? colors.grey_3 : colors.grey_7 }}
+              >
+                해당 요일에는 루틴이 없어요
+              </NoRoutineText>
             </ContentContainer>
           )}
-          <MyToast />
+          <MyToast isDark={isDark} />
         </ContentBase>
       )}
 
