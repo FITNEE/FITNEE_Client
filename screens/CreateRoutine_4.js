@@ -27,6 +27,14 @@ export default function CreateRoutine_4({ navigation }) {
     { id: 7, name: "토", selected: false, ename: "Saturday" },
   ]);
   const index = useNavigationState((state) => state.index);
+
+  const LoadingTexts = [
+    "트레이닝 루틴을 생성 중입니다",
+    "루틴 생성에는 1-2분 정도가 소요됩니다",
+    "생성 도중 화면을 나가면 오류가 생길 수 있습니다",
+  ];
+  const [loadingTextIndex, setLoadingTextIndex] = useState(0);
+  const [loadingText, setLoadingText] = useState(LoadingTexts[0]);
   useEffect(() => {
     if (loading) {
       navigation.setOptions({
@@ -46,6 +54,24 @@ export default function CreateRoutine_4({ navigation }) {
       handleSubmit();
     }
   }, [routine]);
+  useEffect(() => {
+    if (loading) {
+      const interval = setInterval(() => {
+        setLoadingTextIndex(
+          (prevIndex) => (prevIndex + 1) % LoadingTexts.length
+        );
+      }, 8000);
+
+      return () => {
+        clearInterval(interval); // 컴포넌트가 언마운트될 때 인터벌 정리
+      };
+    }
+  }, [loading]);
+  useEffect(() => {
+    if (loading) {
+      setLoadingText(LoadingTexts[loadingTextIndex]);
+    }
+  }, [loadingTextIndex]);
 
   const nextPress = () => {
     const selectedDays = days
@@ -135,9 +161,7 @@ export default function CreateRoutine_4({ navigation }) {
       ) : loading ? (
         <LoadingContainer isDark={isDark}>
           <Loading isDark={isDark} />
-          <LoadingText isDark={isDark}>
-            트레이닝 루틴을 생성 중입니다
-          </LoadingText>
+          <LoadingText isDark={isDark}>{loadingText}</LoadingText>
         </LoadingContainer>
       ) : (
         <Container isDark={isDark}>

@@ -156,7 +156,7 @@ const SubTitle = styled.Text`
   color: ${(props) => (props.isDark ? colors.white : colors.black)};
 `;
 const ScrollContainer = styled.View`
-  height: 600px;
+  /* height: 600px; */
 `;
 
 const NextButton = styled.TouchableOpacity`
