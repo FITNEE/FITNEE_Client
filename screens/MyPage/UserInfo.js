@@ -6,12 +6,10 @@ import axios from "axios";
 import { Dimensions } from "react-native";
 import { ScreenWidth } from "../../Shared";
 import { useIsFocused } from "@react-navigation/native";
-import { WithLocalSvg } from "react-native-svg";
 import Right from "../../assets/SVGs/Right.svg";
-import { NickToast, showNickToast } from "../../components/myPage/NickToast";
-import { PWToast, showPWToast } from "../../components/myPage/PWToast";
 import { useRecoilValue } from "recoil";
 import { IsDarkAtom } from "../../recoil/MyPageAtom";
+import Toast from "react-native-toast-message";
 
 const Profile = styled.View`
   align-items: center;
@@ -42,11 +40,12 @@ const MiniBlock = styled.View`
   height: 48px;
   justify-content: center;
 `;
-const Click = styled.TouchableOpacity`
+const Click = styled.View`
   margin-right: 24px;
+  align-items: flex-end;
 `;
 
-export default function UserInfo({ navigation }) {
+export default function UserInfo({ route, navigation }) {
   const isFocused = useIsFocused();
   const isDark = useRecoilValue(IsDarkAtom);
 
@@ -72,6 +71,7 @@ export default function UserInfo({ navigation }) {
     color: ${isDark ? colors.grey_3 : colors.grey_7};
   `;
   const ClickText = styled.Text`
+    width: 80px;
     text-align: right;
     font-size: 13px;
     font-style: normal;
@@ -90,8 +90,20 @@ export default function UserInfo({ navigation }) {
   `;
   const Bar = styled.View`
     height: 16px;
-    background-color: ${isDark ? colors.black : colors.white};
+    background-color: ${isDark ? colors.black : colors.grey_1};
   `;
+
+  useEffect(() => {
+    if (route.params?.showToast) {
+      Toast.show({
+        type: "customToast",
+        text1: route.params.toastMessage,
+        visibilityTime: 2000,
+        position: "bottom",
+        props: { isDark: isDark },
+      });
+    }
+  }, [route.params]);
 
   const [userInfo, setUserInfo] = useState([
     {
@@ -171,8 +183,6 @@ export default function UserInfo({ navigation }) {
             <ClickText>회원 탈퇴하기</ClickText>
           </Click>
         </MiniBlock>
-        <NickToast />
-        <PWToast />
       </Container>
     </SafeAreaView>
   );

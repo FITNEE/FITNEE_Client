@@ -12,7 +12,6 @@ import { TouchableOpacity } from "react-native";
 import { Image } from "react-native";
 import Left from "../../assets/SVGs/Left.svg";
 import { Alert } from "react-native";
-import { showNickToast } from "../../components/myPage/NickToast";
 import { useRecoilValue } from "recoil";
 import { IsDarkAtom } from "../../recoil/MyPageAtom";
 
@@ -213,8 +212,10 @@ export default function EditUserInfo({ navigation }) {
           disabled={!enabled}
           onPress={() => {
             !error && updateUserInfo(newNickname);
-            navigation.navigate("UserInfo");
-            showNickToast();
+            navigation.navigate("UserInfo", {
+              showToast: true,
+              toastMessage: "닉네임이 변경되었습니다.",
+            });
           }}
           style={{ marginRight: 24 }}
         >
