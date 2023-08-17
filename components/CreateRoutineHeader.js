@@ -6,6 +6,7 @@ import { Animated } from "react-native";
 import { colors } from "../colors";
 import { IsDarkAtom } from "../recoil/MyPageAtom";
 import { useRecoilValue } from "recoil";
+import Left from "../assets/SVGs/Left.svg";
 
 export default function CreateRoutineHeader({ title, index, children }) {
   const [width, setWidth] = useState(0);
@@ -28,10 +29,10 @@ export default function CreateRoutineHeader({ title, index, children }) {
         <HeaderContainer isDark={isDark}>
           <Header isDark={isDark}>
             <BackButton onPress={() => navigation.goBack()}>
-              <Ionicons
-                name="arrow-back"
-                size={24}
-                color={isDark ? "white" : "black"}
+              <Left
+                width={24}
+                height={24}
+                color={isDark ? colors.white : colors.black}
               />
             </BackButton>
             <Title isDark={isDark}>{title}</Title>
