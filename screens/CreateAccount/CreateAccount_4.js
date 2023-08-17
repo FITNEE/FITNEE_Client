@@ -86,8 +86,8 @@ const CreateAccount_4 = ({ route, navigation }) => {
       console.log(response);
       if (response.isSuccess) {
         setIsLoading(false);
-        AsyncStorage.setItem("userId", response.result.userId).then(
-          console.log("userId set to AsyncStorage")
+        AsyncStorage.setItem("accessToken", response.result.accessToken).then(
+          console.log("accessToken set to AsyncStorage")
         );
       } else {
         Alert.alert("회원가입 오류", response.message, [

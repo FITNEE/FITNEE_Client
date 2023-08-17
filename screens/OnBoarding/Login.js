@@ -43,7 +43,6 @@ const Login = ({ route, navigation }) => {
       let detailAPI = "app/user/login";
       console.log(email, PW);
       let data = { userId: email, userPw: PW };
-      // const queryStr = `?userId=${email}&userPw=${PW}`;
       const response = await axios.post(url + detailAPI, data, {
         headers: {
           "Content-Type": `application/json`,
@@ -61,8 +60,8 @@ const Login = ({ route, navigation }) => {
       console.log(response);
       //로그인 성공 시,
       if (response.code == 1000) {
-        AsyncStorage.setItem("userId", email).then(
-          console.log("userId set to AsyncStorage")
+        AsyncStorage.setItem("accessToken", response.result.accessToken).then(
+          console.log("accessToken set to AsyncStorage")
         );
         setLoggedIn(true);
       } else {
