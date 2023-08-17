@@ -62,7 +62,6 @@ export default function TotalChart(props) {
   const screenWidth = Dimensions.get("window").width;
 
   const weekData = props.weekData;
-  //console.log(weekData);
 
   const KcalData = weekData.map((result) => result.weeklyCalories);
   const LabelData = weekData.map((result) => result.weekNumber);
