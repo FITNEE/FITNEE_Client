@@ -86,7 +86,8 @@ export default Scroll = ({ isDark, data, currentRoutine }) => {
   );
 };
 const Container = styled.View`
-  flex: 1;
+  /* flex: 1; */
+  height: 600px;
 `;
 const RoutineContainer = styled.View`
   align-items: center;

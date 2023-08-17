@@ -18,6 +18,8 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import { IsDarkAtom } from "../../recoil/MyPageAtom";
 import ShareIcon from "../../assets/SVGs/Share.svg";
 import ExerciseIcon from "../../assets/SVGs/Exercise.svg";
+import UpdateExercise from "../../components/exerciseCourse/UpdateExercise";
+import axios from "axios";
 //import Share from "react-native-share";
 
 const TextBox = styled.View`
@@ -147,6 +149,7 @@ export default function ExerciseResult({ navigation }) {
   const ref = useRef();
   const [captureUri, setCaptureUri] = useState(null);
   const [sharing, setSharing] = useState(false); // 공유 진행 중 여부를 상태로 관리
+  const [update, setUpdate] = useState(null);
 
   // useEffect(() => {
   //   // on mount
@@ -205,6 +208,22 @@ export default function ExerciseResult({ navigation }) {
     }
   };
 
+  const fetchData = async () => {
+    try {
+      const response = await axios.get(
+        "https://gpthealth.shop/app/routine/end/update"
+      );
+      console.log("response.data : ", response.data);
+      setUpdate(response.data.Result);
+    } catch (error) {
+      console.error("Error :", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
   return (
     <SafeAreaView
       style={{
@@ -248,6 +267,7 @@ export default function ExerciseResult({ navigation }) {
                 <ExerciseIcon width={20} height={20} color={colors.l_main} />
               </ExerciseIconCircle>
             </ResultBox>
+            <UpdateExercise />
           </Container>
         </ViewShot>
         <HomeView>
