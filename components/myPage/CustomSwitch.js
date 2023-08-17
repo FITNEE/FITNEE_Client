@@ -60,7 +60,7 @@ const CustomSwitch = ({ option_left, option_right }) => {
             style={{
               color: isDark ? colors.white : colors.black,
               fontSize: 11,
-              fontWeight: 600,
+              fontFamily: "Pretendard-SemiBold",
               lineHeight: 16.5,
             }}
           >

@@ -16,7 +16,7 @@ const Container = styled.ScrollView`
 const ChoiceText = styled.Text`
   font-size: 17px;
   font-style: normal;
-  font-weight: 600;
+  font-family: Pretendard-SemiBold;
   line-height: 25.5px;
   color: ${({ isDark }) => (isDark ? colors.grey_6 : colors.grey_3)};
 `;

@@ -7,6 +7,8 @@ import Left from "../../assets/SVGs/Left.svg";
 import Right from "../../assets/SVGs/Right.svg";
 import { useRecoilValue } from "recoil";
 import { IsDarkAtom } from "../../recoil/MyPageAtom";
+import { processFontFamily } from "expo-font";
+import { StyleSheet } from "react-native";
 
 LocaleConfig.locales["ko"] = {
   monthNames: [
@@ -107,20 +109,24 @@ export default function CalendarView(props) {
       theme={{
         locale: "ko",
         calendarBackground: isDark ? colors.grey_9 : colors.white,
+        textDayHeaderFontFamily: "Pretendard-Regular",
         textDayFontSize: 13,
-        textDayFontWeight: 400,
-        textDayStyle: { color: isDark ? colors.grey_5 : colors.grey_4 },
+        textDayFontFamily: "Pretendard-Regular",
+        textDayStyle: {
+          color: isDark ? colors.grey_5 : colors.grey_4,
+        },
         textSectionTitleColor: isDark ? colors.grey_2 : colors.grey_7,
         "stylesheet.calendar.header": {
           monthText: {
+            fontFamily: "Pretendard-SemiBold",
             fontSize: 15,
-            fontWeight: 600,
             color: isDark ? colors.white : colors.black,
             margin: 24,
           },
         },
         selectedDayTextColor: isDark ? colors.white : colors.grey_9,
         selectedDayBackgroundColor: "transparent",
+        selectedDayFontFamily: "Pretendard-SemiBold",
       }}
       onDayPress={(pressDay) => {
         props.dayFunction(pressDay);

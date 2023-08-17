@@ -52,7 +52,7 @@ const BlockTitle = styled.Text`
   width: 100px;
   font-size: 17px;
   font-style: normal;
-  font-weight: 400;
+  font-family: Pretendard-Regular;
   line-height: 25.5px;
   color: ${({ isDark }) => (isDark ? colors.white : colors.black)};
 `;
@@ -61,7 +61,7 @@ const BlockContent = styled.Text`
   text-align: right;
   font-size: 17px;
   font-style: normal;
-  font-weight: 400;
+  font-family: Pretendard-Regular;
   line-height: 25.5px;
   color: ${({ isDark }) => (isDark ? colors.grey_3 : colors.grey_7)};
 `;
@@ -70,7 +70,7 @@ const ClickText = styled.Text`
   text-align: right;
   font-size: 13px;
   font-style: normal;
-  font-weight: 400;
+  font-family: Pretendard-Regular;
   line-height: 19.5px;
   text-decoration-line: underline;
   color: ${({ isDark }) => (isDark ? colors.white : colors.black)};
@@ -79,7 +79,7 @@ const NickText = styled.Text`
   text-align: right;
   font-size: 17px;
   font-style: normal;
-  font-weight: 400;
+  font-family: Pretendard-Regular;
   line-height: 25.5px;
   color: ${({ isDark }) => (isDark ? colors.grey_3 : colors.grey_7)};
 `;

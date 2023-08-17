@@ -56,13 +56,13 @@ const InputBlock = styled.TextInput`
   border-radius: 8px;
   font-size: 16px;
   font-style: normal;
-  font-weight: 400;
+  font-family: Pretendard-Regular;
 `;
 const StatusText = styled.Text`
   margin-left: 40px;
   font-size: 11px;
   font-style: normal;
-  font-weight: 400;
+  font-family: Pretendard-Regular;
   line-height: 16.5px;
   width: 100%;
   margin-bottom: 20px;
@@ -89,7 +89,7 @@ const CheckButton = styled.TouchableOpacity`
 const CheckButtonText = styled.Text`
   font-size: 15px;
   font-style: normal;
-  font-weight: 600;
+  font-family: Pretendard-SemiBold;
   line-height: 22.5px;
   color: ${({ isDark }) => (isDark ? colors.d_main : colors.l_main)};
 `;
@@ -219,7 +219,7 @@ export default function EditUserInfo({ navigation }) {
           <Text
             style={{
               fontSize: 17,
-              fontWeight: 600,
+              fontFamily: "Pretendard-SemiBold",
               color: enabled
                 ? isDark
                   ? colors.d_main
