@@ -134,7 +134,7 @@ export default function CreateRoutine_4({ navigation }) {
         />
       ) : loading ? (
         <LoadingContainer isDark={isDark}>
-          <Loading />
+          <Loading isDark={isDark} />
           <LoadingText isDark={isDark}>
             트레이닝 루틴을 생성 중입니다
           </LoadingText>

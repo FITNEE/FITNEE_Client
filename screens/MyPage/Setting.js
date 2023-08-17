@@ -1,15 +1,16 @@
-import React, { useContext, useEffect, useLayoutEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import { Text, SafeAreaView } from "react-native";
 import { styled } from "styled-components/native";
 import Mode from "../../components/myPage/Mode";
 import { colors } from "../../colors";
-import { AppContext } from "../../components/ContextProvider";
 import axios from "axios";
 import { useIsFocused, useNavigation } from "@react-navigation/native";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { IsDarkAtom, TabBarAtom } from "../../recoil/MyPageAtom";
-import { WithLocalSvg } from "react-native-svg";
 import Right from "../../assets/SVGs/Right.svg";
+import { loggedInState } from "../../recoil/AuthAtom";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Alert } from "react-native";
 
 const Profile = styled.TouchableOpacity`
   width: 100%;
@@ -57,18 +58,22 @@ const BlockContent = styled.View`
 export default function Setting({ navigation }) {
   const isFocused = useIsFocused();
   const isDark = useRecoilValue(IsDarkAtom);
+  const [loggedIn, setLoggedIn] = useRecoilState(loggedInState);
   const [isTabVisible, setIsTabVisible] = useRecoilState(TabBarAtom);
 
   useEffect(() => {
     isFocused && setIsTabVisible(false);
   }, [isFocused, isTabVisible]);
-
-  const { toggleLogin } = useContext(AppContext);
+  const Logout = () => {
+    AsyncStorage.clear();
+    setLoggedIn(false);
+  };
   const [userInfo, setUserInfo] = useState([
     {
       birthYear: "",
       userId: "",
       userNickname: "",
+      gender: "",
     },
   ]);
 
@@ -92,6 +97,7 @@ export default function Setting({ navigation }) {
   }, [isFocused]);
 
   const getUserName = userInfo[0].userNickname;
+  const getGender = userInfo[0].gender;
 
   const Container = styled.View`
     background-color: ${isDark ? colors.d_background : colors.l_background};
@@ -131,7 +137,9 @@ export default function Setting({ navigation }) {
           }}
         >
           <ProfileInfo>
-            <ProfileImage />
+            <ProfileImage
+              style={{ backgroundColor: getGender == 1 ? "blue" : "pink" }}
+            />
             <ProfileContents>
               <Name>{getUserName}</Name>
             </ProfileContents>
@@ -150,6 +158,27 @@ export default function Setting({ navigation }) {
           </BlockContent>
         </ModeView>
         <Bar />
+        <Block
+          onPress={() => {
+            Alert.alert(
+              "루틴을 다시 생성할까요?",
+              "현재 이용 중인 루틴은 삭제되며\n다시 불러올 수 없습니다.",
+              [
+                {
+                  text: "취소",
+                  style: "cancel",
+                },
+                {
+                  text: "다시 생성하기",
+                  style: "default",
+                  onPress: () => navigation.navigate("createRoutine"),
+                },
+              ]
+            );
+          }}
+        >
+          <BlockText>루틴 재설정</BlockText>
+        </Block>
         <Block>
           <BlockText>일반 설정</BlockText>
         </Block>
@@ -169,7 +198,7 @@ export default function Setting({ navigation }) {
           <BlockText>버전 정보</BlockText>
         </Block>
         <Block>
-          <BlockText onPress={() => toggleLogin()}>로그아웃</BlockText>
+          <BlockText onPress={() => Logout()}>로그아웃</BlockText>
         </Block>
       </Container>
     </SafeAreaView>

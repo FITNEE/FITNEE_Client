@@ -2,15 +2,34 @@ import React, { useEffect, useState } from "react";
 import { Text } from "react-native";
 import PercentageCircle from "react-native-progress-circle";
 import { styled } from "styled-components/native";
-import { colors } from "../colors";
+import { colors } from "../../colors";
+
+const CircleLine = styled.View`
+  flex-direction: row;
+  height: 20px;
+  align-items: flex-end;
+`;
 
 const CircleBox = styled.View`
   justify-content: center;
   align-items: center;
 `;
+const CircleText = styled.Text`
+  color: ${({ isDark }) => (isDark ? colors.white : colors.black)};
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 600;
+`;
+
+const CircleUnit = styled.Text`
+  color: ${({ isDark }) => (isDark ? colors.white : colors.black)};
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 600;
+`;
 
 const UnderCircle = styled.Text`
-  color: ${colors.black};
+  color: ${({ isDark }) => (isDark ? colors.white : colors.black)};
   text-align: center;
   font-size: 10px;
   font-style: normal;
@@ -20,29 +39,9 @@ const UnderCircle = styled.Text`
   margin-top: 8px;
 `;
 
-const CircleText = styled.Text`
-  color: ${colors.black};
-  font-size: 20px;
-  font-style: normal;
-  font-weight: 600;
-`;
-
-const CircleUnit = styled.Text`
-  color: ${colors.black};
-  font-size: 10px;
-  font-style: normal;
-  font-weight: 600;
-`;
-
-const CircleLine = styled.View`
-  flex-direction: row;
-  height: 20px;
-  align-items: flex-end;
-`;
-
 const Bubble = styled.View`
   position: absolute;
-  background: ${colors.black};
+  background: ${({ isDark }) => (isDark ? colors.white : colors.black)};
   width: 60px;
   height: 32px;
   padding: 0px;
@@ -56,7 +55,8 @@ const BubbleArrow = styled.View`
   position: relative;
   border-style: solid;
   border-width: 12px 8px 0px;
-  border-color: ${colors.black} transparent;
+  border-color: ${({ isDark }) => (isDark ? colors.white : colors.black)}
+    transparent;
   display: block;
   width: 0;
   z-index: 1;
@@ -64,18 +64,18 @@ const BubbleArrow = styled.View`
 `;
 
 const BubbleText = styled.Text`
-  color: ${colors.white};
+  color: ${({ isDark }) => (isDark ? colors.black : colors.white)};
   font-size: 11px;
   font-weight: 700;
   top: 10px;
 `;
-
 export default function ProgressCircle({
   num,
   unit,
   title,
   bubbleOn,
   bubbleText,
+  isDark,
 }) {
   const percentage = (num / 60) * 100;
 
@@ -93,9 +93,9 @@ export default function ProgressCircle({
   return (
     <CircleBox>
       {shouldRender ? (
-        <Bubble>
-          <BubbleText>{bubbleText}초</BubbleText>
-          <BubbleArrow />
+        <Bubble isDark={isDark}>
+          <BubbleText isDark={isDark}>{bubbleText}초</BubbleText>
+          <BubbleArrow isDark={isDark} />
         </Bubble>
       ) : null}
 
@@ -104,15 +104,15 @@ export default function ProgressCircle({
         radius={40}
         borderWidth={2}
         color={colors.d_main}
-        shadowColor={colors.grey_1}
-        bgColor={colors.white}
+        shadowColor={isDark ? colors.grey_8 : colors.grey_1}
+        bgColor={isDark ? colors.grey_9 : colors.white}
       >
         <CircleLine>
-          <CircleText>{num}</CircleText>
-          <CircleUnit>{unit}</CircleUnit>
+          <CircleText isDark={isDark}>{num}</CircleText>
+          <CircleUnit isDark={isDark}>{unit}</CircleUnit>
         </CircleLine>
       </PercentageCircle>
-      <UnderCircle>{title}</UnderCircle>
+      <UnderCircle isDark={isDark}>{title}</UnderCircle>
     </CircleBox>
   );
 }

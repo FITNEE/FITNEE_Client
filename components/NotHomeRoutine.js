@@ -74,7 +74,7 @@ export default function NotHomeRoutine({ isDark }) {
 
   return (
     <Container>
-      <EmptyImage />
+      <EmptyImage isDark={isDark} />
       <TitleBlock>
         <Title isDark={isDark}>등록된 운동루틴이 없어요</Title>
         <SubText isDark={isDark}>

@@ -67,6 +67,10 @@ const AddText = styled.Text`
   color: ${colors.l_main};
   font-weight: 600;
 `;
+const SetsText = styled.Text`
+  font-size: 17px;
+  font-weight: 400;
+`;
 
 const ExerciseItem_Custom = ({
   id,
@@ -76,11 +80,6 @@ const ExerciseItem_Custom = ({
   editRoutine,
   isDark,
 }) => {
-  const SetsText = styled.Text`
-    font-size: 17px;
-    color: ${isDark ? colors.grey_4 : colors.grey_8};
-    font-weight: 400;
-  `;
   return (
     <ExerciseContainer
       style={{ backgroundColor: isDark ? colors.grey_8 : colors.white }}
@@ -98,11 +97,21 @@ const ExerciseItem_Custom = ({
             key={contentId}
           >
             <TextContainer>
-              <SetsText>{contentId + 1}</SetsText>
-              <SetsText>
+              <SetsText
+                style={{ color: isDark ? colors.grey_4 : colors.grey_8 }}
+              >
+                {contentId + 1}
+              </SetsText>
+              <SetsText
+                style={{ color: isDark ? colors.grey_4 : colors.grey_8 }}
+              >
                 {item.weight ? item.weight + `   kg` : `-   kg`}
               </SetsText>
-              <SetsText>{item.rep + `   회`}</SetsText>
+              <SetsText
+                style={{ color: isDark ? colors.grey_4 : colors.grey_8 }}
+              >
+                {item.rep + `   회`}
+              </SetsText>
             </TextContainer>
             <DeleteButton
               onPress={() => editRoutine(id, "deleteSet", contentId)}

@@ -24,7 +24,7 @@ const toastConfig = {
   success: () => (
     <ToastBase>
       <ToastText>루틴이 수정되었습니다.</ToastText>
-      <Check width={24} height={24} />
+      <Check width={24} height={24} color={colors.white} />
     </ToastBase>
   ),
 };

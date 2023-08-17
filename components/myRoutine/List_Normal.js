@@ -130,7 +130,7 @@ export default List_Normal = ({
 
   return (
     <FlatList
-      contentContainerStyle={{ marginTop: 16 }}
+      contentContainerStyle={{ marginTop: 16, marginBottom: 16 }}
       showsVerticalScrollIndicator
       data={routineData}
       renderItem={renderItem}

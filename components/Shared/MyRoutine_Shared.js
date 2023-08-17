@@ -26,6 +26,7 @@ const ButtonText = styled.Text`
   font-weight: 600;
   color: ${colors.l_main};
 `;
+
 export const Header = ({ mode, onPress, toggleMode, isDark }) => {
   const handleSubmit = () => {
     toggleMode();

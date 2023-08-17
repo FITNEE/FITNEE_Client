@@ -1,123 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { SafeAreaView, TouchableOpacity } from "react-native";
 import styled from "styled-components/native";
-import ProgressCircle from "../../components/ProgressCircle1";
-import GrayCircle from "../../components/GrayCircle";
+import ProgressCircle from "../../components/exerciseCourse/ProgressCircle1";
+import GrayCircle from "../../components/exerciseCourse/GrayCircle";
 import { ScrollView } from "react-native-gesture-handler";
 import { BackButton } from "../../Shared";
 import { colors } from "../../colors";
 import axios from "axios";
-import {
-  useRecoilState,
-  useRecoilValue,
-  useRecoilValueLoadable,
-  useSetRecoilState,
-} from "recoil";
-import {
-  HasRoutineAtom,
-  hasRoutineSelector,
-} from "../../recoil/ExerciseCourseRecoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { useIsFocused } from "@react-navigation/native";
 import { processDayData } from "../../components/myRoutine/Functions";
 import { TabBarAtom, IsDarkAtom } from "../../recoil/MyPageAtom";
-
-const ExerciseText = styled.Text`
-  font-weight: 600;
-  font-size: 24px;
-  text-align: center;
-  line-height: 33.6px;
-`;
-
-const ExerciseExplainText = styled.Text`
-  padding: 8px;
-  color: #9747ff;
-  text-align: center;
-  font-size: 13px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 19.5px;
-  margin-bottom: 41px;
-`;
-
-const ExerciseButton = styled.TouchableOpacity`
-  width: 111px;
-  height: 111px;
-  flex-shrink: 0;
-  border-radius: 55.5px;
-  background: ${colors.l_main};
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-`;
-
-const ExerciseButtonText = styled.Text`
-  color: ${colors.white};
-  text-align: center;
-  font-size: 24px;
-  font-style: normal;
-  font-weight: 600;
-  line-height: 33.6px;
-`;
-
-const ExerciseRec = styled.View`
-  width: 311px;
-  height: 175px;
-  border-radius: 12px;
-  background: ${colors.grey_1};
-  margin-bottom: 33px;
-  justify-content: center;
-  align-items: center;
-  padding: 16px;
-`;
-
-const RecText1 = styled.Text`
-  color: ${colors.grey_7};
-  font-size: 13px;
-  font-weight: 400;
-  line-height: 19.5px;
-  width: 188px;
-`;
-
-const RecText2 = styled.Text`
-  color: ${colors.grey_7};
-  font-size: 13px;
-  font-weight: 400;
-  line-height: 19.5px;
-  width: 55px;
-`;
-
-const RecText3 = styled.Text`
-  color: ${colors.grey_7};
-  font-size: 13px;
-  font-weight: 400;
-  line-height: 19.5px;
-  width: 36px;
-`;
-
-const FirstRecText1 = styled.Text`
-  color: ${colors.grey_7};
-  font-size: 13px;
-  font-weight: 400;
-  line-height: 19.5px;
-  width: 188px;
-`;
-
-const FirstRecText2 = styled.Text`
-  color: ${colors.grey_7};
-  font-size: 13px;
-  font-weight: 400;
-  line-height: 19.5px;
-  width: 55px;
-`;
-
-const FirstRecText3 = styled.Text`
-  color: ${colors.grey_7};
-  font-size: 13px;
-  font-weight: 400;
-  line-height: 19.5px;
-  width: 36px;
-`;
+import Left from "../../assets/SVGs/Left.svg";
 
 const RecTextLine = styled.View`
   flex-direction: row;
@@ -131,22 +25,111 @@ const CirclesLine = styled.View`
   justify-content: space-around;
 `;
 
+const Container = styled.View`
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  padding: 0px 23.5px;
+  background: ${({ isDark }) => (isDark ? colors.d_background : colors.white)};
+`;
+
+const ExerciseButton = styled.TouchableOpacity`
+  width: 111px;
+  height: 111px;
+  flex-shrink: 0;
+  border-radius: 55.5px;
+  background: ${({ isDark }) => (isDark ? colors.d_main : colors.l_main)};
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`;
+
+const ExerciseText = styled.Text`
+  font-weight: 600;
+  font-size: 24px;
+  text-align: center;
+  line-height: 33.6px;
+  color: ${({ isDark }) => (isDark ? colors.white : colors.black)};
+`;
+
+const ExerciseRec = styled.View`
+  width: 311px;
+  height: 175px;
+  border-radius: 12px;
+  background: ${({ isDark }) => (isDark ? colors.grey_8 : colors.grey_1)};
+  margin-bottom: 33px;
+  justify-content: center;
+  align-items: center;
+  padding: 16px;
+`;
+
+const RecText1 = styled.Text`
+  color: ${({ isDark }) => (isDark ? colors.grey_3 : colors.grey_7)};
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 19.5px;
+  width: 188px;
+`;
+
+const RecText2 = styled.Text`
+  color: ${({ isDark }) => (isDark ? colors.grey_3 : colors.grey_7)};
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 19.5px;
+  width: 55px;
+`;
+
+const RecText3 = styled.Text`
+  color: ${({ isDark }) => (isDark ? colors.grey_3 : colors.grey_7)};
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 19.5px;
+  width: 36px;
+`;
+
+const ExerciseButtonText = styled.Text`
+  color: ${({ isDark }) => (isDark ? colors.black : colors.white)};
+  text-align: center;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 33.6px;
+`;
+
+const ExerciseExplainText = styled.Text`
+  padding: 8px;
+  color: ${colors.l_main};
+  text-align: center;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 19.5px;
+  margin-bottom: 41px;
+`;
+
 const Container2 = styled.View`
   flex: 1;
   align-items: center;
   justify-content: center;
   padding: 0px 23.5px;
-  background: ${colors.grey_1};
+  background: ${({ isDark }) => (isDark ? colors.grey_8 : colors.grey_1)};
 `;
 
 const ExerciseCircle = styled.View`
   width: 307px;
   height: 307px;
   border-radius: 291px;
-  background: ${colors.white};
+  background: ${({ isDark }) => (isDark ? colors.black : colors.white)};
   margin-bottom: 24px;
   justify-content: center;
   align-items: center;
+`;
+
+const BackIcon = styled.TouchableOpacity`
+  position: absolute;
+  left: 24px;
+  top: 16px;
 `;
 
 export default function StartExercise({ navigation }) {
@@ -157,14 +140,6 @@ export default function StartExercise({ navigation }) {
   useEffect(() => {
     isFocused && setIsTabVisible(false);
   }, [isFocused, isTabVisible]);
-
-  const Container = styled.View`
-    flex: 1;
-    align-items: center;
-    justify-content: center;
-    padding: 0px 23.5px;
-    background: ${isDark ? colors.d_background : colors.white};
-  `;
 
   const Week = new Array("sun", "mon", "tue", "wed", "thu", "fri", "sat");
 
@@ -226,16 +201,25 @@ export default function StartExercise({ navigation }) {
       const dayRoutineIdx = dayRoutineArr[day2].routineId;
       console.log(dayRoutineIdx);
 
-      if (dayRoutineIdx === 0) {
+      // 모든 요소가 0인지 확인하는 함수를 작성합니다.
+      const allElementsAreZero = dayRoutineArr.every(
+        (item) => item.routineId === 0
+      );
+
+      if (allElementsAreZero) {
+        // 모든 요소가 0인 경우
         navigation.navigate("RegisterRoutine");
+        return;
+      } else if (dayRoutineIdx === 0) {
+        navigation.navigate("NoRoutine");
         return;
       } else {
         getExerciseData(day).then((response) => {
           setDataList(response.result.routineDetails);
           setCircleList(response.result);
         });
-        setIsLoading(false);
       }
+      setIsLoading(false);
     }
     fetchData();
   }, [isFocused, navigation]);
@@ -250,24 +234,24 @@ export default function StartExercise({ navigation }) {
           backgroundColor: isDark ? colors.d_background : colors.grey_1,
         }}
       >
-        <Container2>
-          <ExerciseCircle />
+        <Container2 isDark={isDark}>
+          <ExerciseCircle isDark={isDark} />
         </Container2>
       </SafeAreaView>
     );
   }
 
+  const exerciseList = dataList.map((result) => (
+    <RecTextLine key={result.exerciseInfo.healthCategoryIdx}>
+      <RecText1 isDark={isDark}>{result.exerciseInfo.exerciseName}</RecText1>
+      <RecText2 isDark={isDark} />
+      <RecText3 isDark={isDark}>{result.totalSets}세트</RecText3>
+    </RecTextLine>
+  ));
+
   if (isLoading) {
     return <LoadingIndicator />;
   } else {
-    const exerciseList = dataList.map((result) => (
-      <RecTextLine key={result.exerciseInfo.healthCategoryIdx}>
-        <RecText1>{result.exerciseInfo.exerciseName}</RecText1>
-        <RecText2 />
-        <RecText3>{result.totalSets}세트</RecText3>
-      </RecTextLine>
-    ));
-
     return (
       <SafeAreaView
         style={{
@@ -275,10 +259,16 @@ export default function StartExercise({ navigation }) {
           backgroundColor: isDark ? colors.d_background : colors.white,
         }}
       >
-        <Container>
-          <BackButton onPress={() => navigation.goBack()} />
-          <ExerciseText>운동을 시작해 볼까요?</ExerciseText>
-          <ExerciseExplainText> </ExerciseExplainText>
+        <Container isDark={isDark}>
+          <BackIcon onPress={() => navigation.goBack()}>
+            <Left
+              width={24}
+              height={24}
+              color={isDark ? colors.white : colors.black}
+            />
+          </BackIcon>
+          <ExerciseText isDark={isDark}>운동을 시작해 볼까요?</ExerciseText>
+          <ExerciseExplainText isDark={isDark}> </ExerciseExplainText>
 
           <CirclesLine>
             <ProgressCircle
@@ -286,27 +276,31 @@ export default function StartExercise({ navigation }) {
               unit="분"
               title="예상 소요시간"
               bubbleOn={false}
+              isDark={isDark}
             />
             <ProgressCircle
               num="30"
               unit="초"
               title="세트간 휴식"
               bubbleOn={false}
+              isDark={isDark}
             />
+
             <GrayCircle
               num={circleList?.totalCalories}
               unit="kcal"
               title="소모 칼로리"
               bubbleOn={false}
+              isDark={isDark}
             />
           </CirclesLine>
 
-          <ExerciseRec>
+          <ExerciseRec isDark={isDark}>
             <ScrollView>{exerciseList}</ScrollView>
           </ExerciseRec>
 
-          <ExerciseButton onPress={goToExerciseCourse}>
-            <ExerciseButtonText>시작</ExerciseButtonText>
+          <ExerciseButton isDark={isDark} onPress={goToExerciseCourse}>
+            <ExerciseButtonText isDark={isDark}>시작</ExerciseButtonText>
           </ExerciseButton>
         </Container>
       </SafeAreaView>

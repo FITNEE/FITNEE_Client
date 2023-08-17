@@ -1,25 +1,16 @@
 import React, { useContext, useEffect, useState } from "react";
 import styled from "styled-components/native";
 import { colors } from "../../colors";
-import {
-  ScreenContainer,
-  Title,
-} from "../../components/Shared/OnBoarding_Shared";
+import { Title } from "../../components/Shared/OnBoarding_Shared";
 import { Button } from "../../Shared";
 import LottieView from "lottie-react-native";
-import { AppContext } from "../../components/ContextProvider";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Alert } from "react-native";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { IsDarkAtom } from "../../recoil/MyPageAtom";
+import { loggedInState } from "../../recoil/AuthAtom";
 
-const ScreenLayout = styled.SafeAreaView`
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-  width: 90%;
-  margin-left: 5%;
-  flex: 1;
-`;
 const SubTitle = styled.Text`
   text-align: center;
   margin-top: 8px;
@@ -45,13 +36,24 @@ const Test = styled.Text`
 `;
 const AnimationContainer = styled.View`
   margin-top: -80px;
-  background-color: ${colors.white};
   width: 80%;
   border-radius: 9999px;
   aspect-ratio: 1/1;
 `;
-
+const ScreenBase = styled.SafeAreaView`
+  flex: 1;
+`;
+const ContentBase = styled.SafeAreaView`
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  width: 90%;
+  margin-left: 5%;
+  flex: 1;
+`;
 const CreateAccount_4 = ({ route, navigation }) => {
+  const isDark = useRecoilValue(IsDarkAtom);
+  const [loggedIn, setLoggedIn] = useRecoilState(loggedInState);
   const [isLoading, setIsLoading] = useState(true);
 
   const postUser = async (data) => {
@@ -84,8 +86,8 @@ const CreateAccount_4 = ({ route, navigation }) => {
       console.log(response);
       if (response.isSuccess) {
         setIsLoading(false);
-        AsyncStorage.setItem("userId", response.result.userId).then(
-          console.log("userId set to AsyncStorage")
+        AsyncStorage.setItem("accessToken", response.result.accessToken).then(
+          console.log("accessToken set to AsyncStorage")
         );
       } else {
         Alert.alert("회원가입 오류", response.message, [
@@ -106,22 +108,25 @@ const CreateAccount_4 = ({ route, navigation }) => {
     });
   };
 
-  const { toggleLogin } = useContext(AppContext);
   useEffect(() => {
     handlePress();
   }, []);
   const goBackHome = () => {
-    toggleLogin();
+    setLoggedIn(true);
   };
 
   return (
-    <ScreenContainer>
-      <ScreenLayout>
+    <ScreenBase
+      style={{ backgroundColor: isDark ? colors.black : colors.grey_1 }}
+    >
+      <ContentBase>
         <TextContainer>
-          <Title>
-            {isLoading ? "계정을 생성하는 중" : "계정 생성을 완료했어요!"}
-          </Title>
-          <SubTitle>
+          <Title
+            text={isLoading ? "계정을 생성하는 중" : "계정 생성을 완료했어요!"}
+            isDark={isDark}
+          />
+
+          <SubTitle style={{ color: isDark ? colors.white : colors.black }}>
             {isLoading
               ? `잠시만 기다려 주세요
             `
@@ -129,17 +134,20 @@ const CreateAccount_4 = ({ route, navigation }) => {
 운동루틴을 경험하러 가볼까요?`}
           </SubTitle>
         </TextContainer>
-        <AnimationContainer>
+        <AnimationContainer
+          style={{ backgroundColor: isDark ? colors.grey_8 : colors.white }}
+        >
           {isLoading ? <LottieView /> : <Test></Test>}
         </AnimationContainer>
         <Button
           loading={isLoading}
+          isDark={isDark}
           enabled={!isLoading}
           text="시작하기"
           onPress={() => goBackHome()}
         />
-      </ScreenLayout>
-    </ScreenContainer>
+      </ContentBase>
+    </ScreenBase>
   );
 };
 

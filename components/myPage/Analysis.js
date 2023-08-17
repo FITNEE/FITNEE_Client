@@ -1,21 +1,16 @@
-import React, { useState } from "react";
-import { Text, View } from "react-native";
-import PercentageCircle from "react-native-progress-circle";
+import React, { useEffect, useState } from "react";
 import { styled } from "styled-components/native";
 import TotalChart from "./TotalChart";
+import { useRecoilValue } from "recoil";
+import { IsDarkAtom } from "../../recoil/MyPageAtom";
+import { colors } from "../../colors";
 
 const Container = styled.View`
   width: 100%;
   margin-bottom: 50px;
 `;
 const Exercise = styled.View`
-  padding-top: 32px;
-`;
-const Title = styled.Text`
-  font-size: 17px;
-  font-weight: 600;
-  line-height: 25.5px;
-  margin: 0px 24px 16px 24px;
+  padding-top: 24px;
 `;
 const Block = styled.View`
   padding: 8px 24px;
@@ -33,31 +28,92 @@ const BlockContent = styled.View``;
 const Data = styled.View`
   flex-direction: row;
 `;
-const CircleText = styled.Text`
-  font-size: 24px;
-  font-weight: 600;
-  line-height: 33.6px;
-`;
-const CircleMiniText = styled.Text`
-  font-size: 13px;
-  font-weight: 400;
-  line-height: 19.5px;
-  padding-top: 8px;
-`;
-const CircleTitle = styled.Text`
-  font-size: 13px;
-  font-weight: 400;
-  line-height: 19.5px;
-`;
 
-export default function Analysis() {
-  const calorie = useState("1280");
-  const kilometer = useState("244");
-  const hour = useState("43");
+export default function Analysis(props) {
+  const isDark = useRecoilValue(IsDarkAtom);
+  const Title = styled.Text`
+    font-size: 17px;
+    font-weight: 600;
+    line-height: 25.5px;
+    margin: 0px 24px 16px 24px;
+    color: ${isDark ? colors.white : colors.black};
+  `;
+  const CircleText = styled.Text`
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 33.6px;
+    color: ${isDark ? colors.white : colors.black};
+  `;
+  const CircleMiniText = styled.Text`
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 19.5px;
+    padding-top: 8px;
+    color: ${isDark ? colors.white : colors.black};
+  `;
+  const CircleTitle = styled.Text`
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 19.5px;
+    color: ${isDark ? colors.white : colors.black};
+  `;
+  const NoneChart = styled.View`
+    margin-left: 24px;
+    margin-right: 24px;
+    margin-top: 26px;
+    width: 327px;
+    height: 254px;
+    border-radius: 20px;
+    background-color: ${isDark ? colors.grey_8 : colors.grey_1};
+    justify-content: center;
+    align-items: center;
+  `;
+  const NoneChartText = styled.Text`
+    font-size: 11px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 16.5px;
+    opacity: 0.6;
+    color: ${isDark ? colors.grey_2 : colors.grey_7};
+  `;
+
+  const weekData = props.weekData;
+
+  const firstMonth = weekData.startAndEndExercise[0].firstMonth;
+  const firstWeek = weekData.startAndEndExercise[0].firstWeek;
+  const lastMonth = weekData.startAndEndExercise[0].lastMonth;
+  const lastWeek = weekData.startAndEndExercise[0].lastWeek;
+  const startingIndex = (firstMonth - 1) * 6 + firstWeek - 1;
+  const finishingIndex = (lastMonth - 1) * 6 + lastWeek - 1;
+  const slicedWeekData = weekData.formattedRows.slice(
+    startingIndex,
+    finishingIndex
+  );
+  const calorie = weekData.formattedRows[finishingIndex].weeklyCalories;
+  const kilometer = weekData.formattedRows[finishingIndex].weeklyDistance;
+  const TimeData = weekData.formattedRows
+    .slice(startingIndex, finishingIndex)
+    .map((value) => value.weeklyExerciseTime);
+  let sum = 0;
+  for (let i = 0; i < TimeData.length; i++) {
+    sum += TimeData[i];
+  }
+  const hour = (sum / 3600).toFixed(2);
+
+  const [viewChart, setViewChart] = useState(true);
+  useEffect(() => {
+    firstMonth == lastMonth && firstWeek == lastWeek && setViewChart(false);
+  });
 
   return (
     <Container>
-      <TotalChart />
+      {viewChart ? (
+        <TotalChart weekData={slicedWeekData} />
+      ) : (
+        <NoneChart>
+          <NoneChartText>아직 데이터가 충분하지 않아요</NoneChartText>
+        </NoneChart>
+      )}
       <Exercise>
         <Title>운동 현황</Title>
         <Block>

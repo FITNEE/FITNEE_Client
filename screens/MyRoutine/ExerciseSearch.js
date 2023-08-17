@@ -13,6 +13,8 @@ import Search from "../../assets/SVGs/Search.svg";
 import Delete from "../../assets/SVGs/Close_circle.svg";
 import Close from "../../assets/SVGs/Close.svg";
 import { Button } from "../../Shared";
+import { useRecoilValue } from "recoil";
+import { IsDarkAtom } from "../../recoil/MyPageAtom";
 
 const Container = styled.View`
   flex: 1;
@@ -32,13 +34,6 @@ const SearchInputContainer = styled.View`
   flex-direction: row;
   align-items: center;
   padding: 8px 12px;
-`;
-const Logo = styled.Image`
-  width: 24px;
-  height: 24px;
-  background-color: ${colors.red};
-
-  margin-right: 12px;
 `;
 const SearchInput = styled.TextInput`
   font-size: 16px;
