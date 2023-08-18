@@ -186,8 +186,7 @@ export default function CompleteExercise({ navigation }) {
             num={Math.ceil(totalTime / 60)}
             unit="분"
             title="소요시간"
-            bubbleOn={true}
-            bubbleText={Math.ceil(detailData.exerciseTimeChange)}
+            bubbleOn={false}
             isDark={isDark}
           />
           <GrayCircle

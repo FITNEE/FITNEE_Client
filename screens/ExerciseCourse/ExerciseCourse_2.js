@@ -210,7 +210,13 @@ const StopExercise = styled.TouchableOpacity`
   right: 24px;
 `;
 
-export default function ExerciseCourse_2({ navigation }) {
+export default function ExerciseCourse_2({
+  navigation,
+  dataList,
+  listIndex,
+  totalTime,
+  routineIdx,
+}) {
   const goToStartExercise = () => {
     navigation.navigate("StartExercise");
   };
@@ -438,7 +444,11 @@ export default function ExerciseCourse_2({ navigation }) {
         </ExerciseCard>
         <NextView isDark={isDark}>
           <NextTextView>
-            <ArrowCircle width={24} height={24} />
+            <ArrowCircle
+              width={24}
+              height={24}
+              color={isDark ? colors.black : colors.white}
+            />
             <NextText isDark={isDark}>
               {dataList[listIndex + 1].exerciseInfo.exerciseName}
             </NextText>

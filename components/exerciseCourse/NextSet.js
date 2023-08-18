@@ -60,6 +60,14 @@ const CurrentUnit = styled.Text`
   font-weight: 600;
 `;
 
+const CurrentText2 = styled.Text`
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 32px;
+  color: ${({ isDark }) => (isDark ? colors.white : "#858687")};
+`;
+
 export default function NextSet({ set, kg, num, isDark }) {
   return (
     <Container isDark={isDark}>
@@ -70,7 +78,11 @@ export default function NextSet({ set, kg, num, isDark }) {
       </Box1>
 
       <Box2>
-        {kg !== "null" ? <CurrentText isDark={isDark}>{kg}</CurrentText> : null}
+        {kg !== "null" ? (
+          <CurrentText isDark={isDark}>{kg}</CurrentText>
+        ) : (
+          <CurrentText2>빈 봉</CurrentText2>
+        )}
         {kg !== "null" ? <CurrentUnit isDark={isDark}>kg</CurrentUnit> : null}
       </Box2>
 
