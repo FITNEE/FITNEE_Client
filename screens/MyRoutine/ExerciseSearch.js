@@ -5,7 +5,7 @@ import { colors } from "../../colors";
 import axios from "axios";
 import SearchList from "../../components/myRoutine/SearchList";
 import Search from "../../assets/SVGs/Search.svg";
-import Delete from "../../assets/SVGs/Close_circle.svg";
+import Delete from "../../assets/SVGs/Close_Circle.svg";
 import Close from "../../assets/SVGs/Close.svg";
 import { Button } from "../../Shared";
 import { useRecoilValue } from "recoil";
