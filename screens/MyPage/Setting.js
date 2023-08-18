@@ -4,7 +4,11 @@ import { styled } from "styled-components/native";
 import Mode from "../../components/myPage/Mode";
 import { colors } from "../../colors";
 import axios from "axios";
-import { useIsFocused, useNavigation } from "@react-navigation/native";
+import {
+  StackActions,
+  useIsFocused,
+  useNavigation,
+} from "@react-navigation/native";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { IsDarkAtom, TabBarAtom } from "../../recoil/MyPageAtom";
 import Right from "../../assets/SVGs/Right.svg";
@@ -35,16 +39,6 @@ const ProfileImage = styled.View`
 const ProfileContents = styled.View`
   justify-content: center;
 `;
-const Name = styled.Text`
-  font-size: 17px;
-  font-style: normal;
-  font-weight: 600;
-  line-height: 25.5px;
-`;
-const Bar = styled.View`
-  height: 16px;
-  background-color: #f3f3f3;
-`;
 const ModeView = styled.View`
   padding: 15px 24px;
   flex-direction: row;
@@ -53,6 +47,36 @@ const ModeView = styled.View`
 const BlockContent = styled.View`
   margin-left: auto;
   margin-right: 0;
+`;
+const Container = styled.View`
+  background-color: ${({ isDark }) =>
+    isDark ? colors.d_background : colors.l_background};
+  height: 100%;
+`;
+const Bar = styled.View`
+  height: 16px;
+  background-color: ${({ isDark }) => (isDark ? colors.black : colors.grey_1)};
+`;
+const Name = styled.Text`
+  font-size: 17px;
+  font-style: normal;
+  font-family: Pretendard-SemiBold;
+  line-height: 25.5px;
+  color: ${({ isDark }) => (isDark ? colors.white : colors.black)};
+`;
+const Block = styled.TouchableOpacity`
+  padding: 19px 24px;
+  flex-direction: row;
+  align-items: center;
+  background-color: ${({ isDark }) =>
+    isDark ? colors.d_background : colors.l_background};
+`;
+const BlockText = styled.Text`
+  font-size: 17px;
+  font-style: normal;
+  font-family: Pretendard-Regular;
+  line-height: 25.5px;
+  color: ${({ isDark }) => (isDark ? colors.white : colors.black)};
 `;
 
 export default function Setting({ navigation }) {
@@ -64,6 +88,7 @@ export default function Setting({ navigation }) {
   useEffect(() => {
     isFocused && setIsTabVisible(false);
   }, [isFocused, isTabVisible]);
+
   const Logout = () => {
     AsyncStorage.clear();
     setLoggedIn(false);
@@ -99,38 +124,9 @@ export default function Setting({ navigation }) {
   const getUserName = userInfo[0].userNickname;
   const getGender = userInfo[0].gender;
 
-  const Container = styled.View`
-    background-color: ${isDark ? colors.d_background : colors.l_background};
-    height: 100%;
-  `;
-  const Bar = styled.View`
-    height: 16px;
-    background-color: ${isDark ? colors.black : colors.grey_1};
-  `;
-  const Name = styled.Text`
-    font-size: 17px;
-    font-style: normal;
-    font-weight: 600;
-    line-height: 25.5px;
-    color: ${isDark ? colors.white : colors.black};
-  `;
-  const Block = styled.TouchableOpacity`
-    padding: 19px 24px;
-    flex-direction: row;
-    align-items: center;
-    background-color: ${isDark ? colors.d_background : colors.l_background};
-  `;
-  const BlockText = styled.Text`
-    font-size: 17px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: 25.5px;
-    color: ${isDark ? colors.white : colors.black};
-  `;
-
   return (
-    <SafeAreaView>
-      <Container>
+    <SafeAreaView backgroundColor={isDark ? colors.grey_9 : colors.grey_1}>
+      <Container isDark={isDark}>
         <Profile
           onPress={() => {
             navigation.navigate("UserInfo");
@@ -141,7 +137,7 @@ export default function Setting({ navigation }) {
               style={{ backgroundColor: getGender == 1 ? "blue" : "pink" }}
             />
             <ProfileContents>
-              <Name>{getUserName}</Name>
+              <Name isDark={isDark}>{getUserName}</Name>
             </ProfileContents>
           </ProfileInfo>
           <Right
@@ -152,13 +148,14 @@ export default function Setting({ navigation }) {
           />
         </Profile>
         <ModeView>
-          <BlockText>다크화면 모드</BlockText>
+          <BlockText isDark={isDark}>다크화면 모드</BlockText>
           <BlockContent>
             <Mode />
           </BlockContent>
         </ModeView>
-        <Bar />
+        <Bar isDark={isDark} />
         <Block
+          isDark={isDark}
           onPress={() => {
             Alert.alert(
               "루틴을 다시 생성할까요?",
@@ -171,34 +168,37 @@ export default function Setting({ navigation }) {
                 {
                   text: "다시 생성하기",
                   style: "default",
-                  onPress: () => navigation.navigate("createRoutine"),
+                  onPress: () =>
+                    navigation.dispatch(
+                      StackActions.replace("CreateRoutineNav")
+                    ),
                 },
               ]
             );
           }}
         >
-          <BlockText>루틴 재설정</BlockText>
+          <BlockText isDark={isDark}>루틴 재설정</BlockText>
         </Block>
-        <Block>
-          <BlockText>일반 설정</BlockText>
+        <Block isDark={isDark}>
+          <BlockText isDark={isDark}>일반 설정</BlockText>
         </Block>
-        <Block>
-          <BlockText>알림 설정</BlockText>
+        <Block isDark={isDark}>
+          <BlockText isDark={isDark}>알림 설정</BlockText>
         </Block>
-        <Block>
-          <BlockText>자주 물어보는 질문</BlockText>
+        <Block isDark={isDark}>
+          <BlockText isDark={isDark}>자주 물어보는 질문</BlockText>
         </Block>
-        <Block>
-          <BlockText>개인정보 처리방침</BlockText>
+        <Block isDark={isDark}>
+          <BlockText isDark={isDark}>개인정보 처리방침</BlockText>
         </Block>
-        <Block>
-          <BlockText>서비스 이용약관</BlockText>
+        <Block isDark={isDark}>
+          <BlockText isDark={isDark}>서비스 이용약관</BlockText>
         </Block>
-        <Block>
-          <BlockText>버전 정보</BlockText>
+        <Block isDark={isDark}>
+          <BlockText isDark={isDark}>버전 정보</BlockText>
         </Block>
-        <Block>
-          <BlockText onPress={() => Logout()}>로그아웃</BlockText>
+        <Block isDark={isDark} onPress={() => Logout()}>
+          <BlockText isDark={isDark}>로그아웃</BlockText>
         </Block>
       </Container>
     </SafeAreaView>

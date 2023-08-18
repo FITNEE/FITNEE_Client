@@ -293,7 +293,7 @@ const SearchInputContainer = styled.View`
 `
 const SearchInput = styled.TextInput`
     font-size: 16px;
-    font-weight: 400;
+    font-family: Pretendard-SemiBold;
     width: 240px;
 `
 const DeleteAllBtn = styled.TouchableOpacity`
@@ -309,22 +309,21 @@ const PartContainer = styled.ScrollView`
 `
 const Part = styled.TouchableOpacity`
     border-radius: 100px;
-    padding: 10px 15px;
+    padding: 8px 20px;
     margin-right: 8px;
 `
 const PartText = styled.Text`
-    font-weight: 600;
+    font-family: Pretendard-SemiBold;
     font-size: 14px;
-    color: ${colors.black};
 `
 const PressedPart = styled.TouchableOpacity`
     border-radius: 100px;
-    padding: 10px 15px;
+    padding: 8px 20px;
     margin-right: 8px;
 `
 const PressedPartText = styled.Text`
-    font-weight: 600;
-    font-size: 14px;
+    font-family: Pretendard-SemiBold;
+    font-size: 14px; 
 `
 const BottomContainer = styled.View`
     padding: 40px 22px;
@@ -334,7 +333,7 @@ const KeywordBox = styled.View`
     margin-bottom: 56px;
 `
 const KeywordTitle = styled.Text`
-    font-weight: 600;
+    font-family: Pretendard-SemiBold;
     font-size: 16px;
     margin-bottom: 16px;
 `
@@ -349,6 +348,6 @@ const KeywordWrapper = styled.TouchableOpacity`
     padding: 10px 14px;
 ` 
 const Keyword = styled.Text`
-    font-weight: 600;
+    font-family: Pretendard-SemiBold;
     font-size: 13px;
 `

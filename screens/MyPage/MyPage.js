@@ -9,6 +9,17 @@ import { useIsFocused } from "@react-navigation/native";
 import { IsDarkAtom, TabBarAtom } from "../../recoil/MyPageAtom";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 
+const Container = styled.ScrollView`
+  background-color: ${({ isDark }) =>
+    isDark ? colors.d_background : colors.l_background};
+`;
+const ChoiceText = styled.Text`
+  font-size: 17px;
+  font-style: normal;
+  font-family: Pretendard-SemiBold;
+  line-height: 25.5px;
+  color: ${({ isDark }) => (isDark ? colors.grey_6 : colors.grey_3)};
+`;
 const Choice = styled.View`
   margin-top: 10px;
   margin-left: 24px;
@@ -78,16 +89,6 @@ export default function MyPage() {
 
   const [showRecords, SetShowRecords] = useState(true);
 
-  const Container = styled.ScrollView`
-    background-color: ${isDark ? colors.d_background : colors.l_background};
-  `;
-  const ChoiceText = styled.Text`
-    font-size: 17px;
-    font-style: normal;
-    font-weight: 600;
-    line-height: 25.5px;
-    color: ${isDark ? colors.grey_6 : colors.grey_3};
-  `;
   const SelectedTextStyle = {
     color: isDark ? colors.white : colors.black,
   };
@@ -97,8 +98,8 @@ export default function MyPage() {
   };
 
   return (
-    <SafeAreaView>
-      <Container>
+    <SafeAreaView backgroundColor={isDark ? colors.grey_9 : colors.grey_1}>
+      <Container isDark={isDark}>
         <Choice>
           <ChoiceButton
             onPress={() => {
@@ -106,7 +107,10 @@ export default function MyPage() {
             }}
             style={showRecords && SelectedBoxStyle}
           >
-            <ChoiceText style={showRecords && SelectedTextStyle}>
+            <ChoiceText
+              isDark={isDark}
+              style={showRecords && SelectedTextStyle}
+            >
               운동 기록
             </ChoiceText>
           </ChoiceButton>
@@ -116,7 +120,10 @@ export default function MyPage() {
             }}
             style={!showRecords && SelectedBoxStyle}
           >
-            <ChoiceText style={!showRecords && SelectedTextStyle}>
+            <ChoiceText
+              isDark={isDark}
+              style={!showRecords && SelectedTextStyle}
+            >
               운동 분석 및 현황
             </ChoiceText>
           </ChoiceButton>

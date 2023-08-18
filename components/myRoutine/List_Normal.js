@@ -5,6 +5,7 @@ import { ScreenWidth } from "../Shared";
 import ToggleDown from "../../assets/SVGs/ToggleDown.svg";
 import ToggleUp from "../../assets/SVGs/ToggleUp.svg";
 import { FlatList } from "react-native";
+import { SetsText, SetsText_Normal } from "../Shared/MyRoutine_Shared";
 
 const SetContainer = styled.View`
   flex-direction: row;
@@ -19,13 +20,15 @@ const ExerciseTextContainer = styled.View`
 `;
 const ExerciseTitle = styled.Text`
   font-size: 17px;
-  font-weight: 600;
+  font-family: Pretendard-Medium;
 `;
 const ExerciseSubText = styled.Text`
   font-size: 13px;
   margin-top: 4px;
+  font-family: Pretendard-Regular;
   color: ${colors.l_main};
 `;
+
 const DropDown = styled.TouchableOpacity`
   width: 40px;
   justify-content: center;
@@ -62,11 +65,6 @@ export default List_Normal = ({
   setSelectedId,
   isDark,
 }) => {
-  const SetsText = styled.Text`
-    font-size: 17px;
-    color: ${isDark ? colors.white : colors.grey_8};
-    font-weight: 400;
-  `;
   const renderItem = ({ item, index }) => {
     return (
       <ExerciseContainer
@@ -115,11 +113,21 @@ export default List_Normal = ({
                   fontWeight: 600,
                 }}
               >
-                <SetsText>{id + 1}</SetsText>
-                <SetsText>
+                <SetsText_Normal
+                  style={{ color: isDark ? colors.white : colors.grey_8 }}
+                >
+                  {id + 1}
+                </SetsText_Normal>
+                <SetsText_Normal
+                  style={{ color: isDark ? colors.white : colors.grey_8 }}
+                >
                   {item.weight ? `${item.weight} kg` : `-  kg`}
-                </SetsText>
-                <SetsText>{item.rep} 회</SetsText>
+                </SetsText_Normal>
+                <SetsText_Normal
+                  style={{ color: isDark ? colors.white : colors.grey_8 }}
+                >
+                  {item.rep} 회
+                </SetsText_Normal>
               </SetContainer>
             ))}
           </ExtendedContainer>

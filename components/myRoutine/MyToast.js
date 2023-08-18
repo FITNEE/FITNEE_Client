@@ -7,28 +7,30 @@ const ToastBase = styled.View`
   height: 44px;
   width: 90%;
   border-radius: 12px;
-  background-color: ${colors.black};
   justify-content: center;
   flex-direction: row;
   align-items: center;
   padding: 0px 16px;
 `;
 const ToastText = styled.Text`
-  color: white;
   font-size: 13px;
-  font-weight: 600;
+  font-family: Pretendard-SemiBold;
   flex: 1;
 `;
 
-const toastConfig = {
-  success: () => (
-    <ToastBase>
-      <ToastText>루틴이 수정되었습니다.</ToastText>
-      <Check width={24} height={24} color={colors.white} />
-    </ToastBase>
-  ),
-};
-export const MyToast = () => {
+export const MyToast = (isDark) => {
+  const toastConfig = {
+    success: () => (
+      <ToastBase
+        style={{ backgroundColor: isDark ? colors.white : colors.black }}
+      >
+        <ToastText style={{ color: isDark ? colors.black : colors.white }}>
+          루틴이 수정되었습니다.
+        </ToastText>
+        <Check width={24} height={24} color={colors.white} />
+      </ToastBase>
+    ),
+  };
   return <Toast config={toastConfig} />;
 };
 

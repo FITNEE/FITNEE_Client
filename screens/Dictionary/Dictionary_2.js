@@ -2,7 +2,6 @@ import React, { useState, useRef, useEffect, useCallback, useMemo, useContext, c
 import styled from 'styled-components/native'
 import { colors } from '../../colors'
 import { StatusBar, TouchableOpacity, Dimensions, TouchableWithoutFeedback, SafeAreaView } from 'react-native'
-import WrappedText from 'react-native-wrapped-text'
 import BottomSheet, { BottomSheetScrollView, BottomSheetBackdrop } from "@gorhom/bottom-sheet";
 import Dictionary_LeftTab from '../../components/Dictionary/Dictionary_LeftTab'
 import Dictionary_RightTab from '../../components/Dictionary/Dictionary_RightTab'
@@ -166,7 +165,7 @@ export default function Dictionary_2({ navigation, route }){
                                     ref={leftTab} 
                                     style={leftTabActivate? {borderBottomColor: `${ isDark ? colors.d_main : colors.l_main}`}: {borderBottomColor: `${ isDark ? colors.grey_8 : colors.grey_1}`}} 
                                     onPressIn={()=>onTabPress(leftTab)}>
-                                        <TabText style={{color: isDark? `${colors.white}`:`${colors.black}`, fontWeight: leftTabActivate? 600 : null}}>
+                                        <TabText style={{color: isDark? `${colors.white}`:`${colors.black}`, fontFamily: leftTabActivate? 'Pretendard-SemiBold' : 'Pretendard-Regular'}}>
                                             운동 방법
                                         </TabText>
                                 </LeftTab>          
@@ -174,7 +173,7 @@ export default function Dictionary_2({ navigation, route }){
                                     ref={rightTab} 
                                     style={leftTabActivate? {borderBottomColor: `${ isDark ? colors.grey_8 : colors.grey_1}`}: {borderBottomColor: `${ isDark ? colors.d_main : colors.l_main}`}} 
                                     onPressIn={()=>onTabPress(rightTab)}>
-                                        <TabText style={{color: isDark? `${colors.white}`:`${colors.black}`, fontWeight: leftTabActivate? null : 600}}>
+                                        <TabText style={{color: isDark? `${colors.white}`:`${colors.black}`, fontFamily: leftTabActivate? 'Pretendard-Regular' : 'Pretendard-SemiBold'}}>
                                             채팅
                                         </TabText>
                                         { isAllRead? null : <NotReadDot/> }
@@ -252,13 +251,13 @@ const NameContainer = styled.View`
     margin-right: 40px;
 `
 const AreaText = styled.Text`
-font-weight: 400;
-font-size: 13px;
+    font-family: Pretendard-Regular;
+    font-size: 13px;
 `
 const TitleWrapper = styled.View`
 `
 const TitleText = styled.Text`
-    font-weight: 600;
+    font-family: Pretendard-SemiBold;
     font-size: 24px;
     padding-top: 8px;
 `
@@ -287,7 +286,7 @@ const BubbleArrow = styled.View`
 const BubbleText = styled.Text`
     font-size: 11px;
     color: white;
-    font-weight: 400;
+    font-family: Pretendard-Regular;
     line-height: 18px;
 `
 const TabContainer = styled.View`
@@ -320,7 +319,6 @@ const RightTab = styled.TouchableOpacity`
 `
 const TabText = styled.Text`
     font-size: 15px;
-    font-weight: 400;
     padding: 10px 0px;
 `
 const NotReadDot = styled.View`
@@ -342,6 +340,6 @@ const JoinBtnContainer = styled.TouchableOpacity`
     bottom: 24px;
 `
 const JoinText = styled.Text`
-    font-weight: 600;
+    font-family: Pretendard-SemiBold;
     font-size: 13;
 `

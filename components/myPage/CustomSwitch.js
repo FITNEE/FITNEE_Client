@@ -8,9 +8,7 @@ import { IsDarkAtom } from "../../recoil/MyPageAtom";
 const CustomSwitch = ({ option_left, option_right }) => {
   const [isDark, setIsDark] = useRecoilState(IsDarkAtom);
 
-  const [animatedValue, setAnimatedValue] = useState(
-    new Animated.Value(isDark ? 0 : 28)
-  );
+  const [animatedValue] = useState(new Animated.Value(isDark ? 0 : 28));
 
   useEffect(() => {
     Animated.timing(animatedValue, {
@@ -41,7 +39,7 @@ const CustomSwitch = ({ option_left, option_right }) => {
       >
         <TouchableOpacity
           activeOpacity={0.5}
-          onPress={() => updatedSwitchData(0)}
+          onPress={() => updatedSwitchData()}
           style={{
             backgroundColor: isDark ? colors.grey_9 : colors.white,
             width: 28,
@@ -60,7 +58,7 @@ const CustomSwitch = ({ option_left, option_right }) => {
             style={{
               color: isDark ? colors.white : colors.black,
               fontSize: 11,
-              fontWeight: 600,
+              fontFamily: "Pretendard-SemiBold",
               lineHeight: 16.5,
             }}
           >

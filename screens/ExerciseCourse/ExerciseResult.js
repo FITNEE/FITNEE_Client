@@ -14,12 +14,13 @@ import { format } from "date-fns";
 import { ScrollView } from "react-native-gesture-handler";
 import { colors } from "../../colors";
 import ViewShot from "react-native-view-shot";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilValue } from "recoil";
 import { IsDarkAtom } from "../../recoil/MyPageAtom";
 import ShareIcon from "../../assets/SVGs/Share.svg";
 import ExerciseIcon from "../../assets/SVGs/Exercise.svg";
 import UpdateExercise from "../../components/exerciseCourse/UpdateExercise";
 import axios from "axios";
+import { useRoute, StackActions } from "@react-navigation/native";
 //import Share from "react-native-share";
 
 const TextBox = styled.View`
@@ -145,7 +146,11 @@ export default function ExerciseResult({ navigation }) {
   const day = Week[now.getDay()];
   let formatDate = format(now, "yyyy. MM. dd");
 
-  const goToHome = () => navigation.navigate("HomeNav");
+  const goToHome = () => {
+    const replaceAction = StackActions.replace("HomeNav");
+    navigation.dispatch(replaceAction);
+  };
+
   const ref = useRef();
   const [captureUri, setCaptureUri] = useState(null);
   const [sharing, setSharing] = useState(false); // 공유 진행 중 여부를 상태로 관리

@@ -163,7 +163,7 @@ export default function ExerciseCourse_1({ navigation }) {
     };
 
     if (listIndex + 1 >= dataList.length) {
-      await postTotalData(routineIdx, -1 * totalTime, dataList);
+      await postTotalData(routineIdx, -1 * totalTime, modifiedDataList);
 
       // 조건이 충족되면 원하는 화면(FinalScreen)으로 이동합니다.
       navigation.dispatch(

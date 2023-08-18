@@ -34,66 +34,65 @@ const RecTextLine = styled.View`
   align-items: center;
   justify-content: space-between;
 `;
+const Bar = styled.View`
+  height: 16px;
+  background-color: ${({ isDark }) => (isDark ? colors.black : colors.grey_1)};
+`;
+const Title = styled.Text`
+  font-size: 17px;
+  font-family: Pretendard-SemiBold;
+  line-height: 25.5px;
+  margin: 0px 24px;
+  color: ${({ isDark }) => (isDark ? colors.white : colors.black)};
+`;
+const Circle = styled.View`
+  width: 80px;
+  height: 80px;
+  border-radius: 40px;
+  background-color: ${({ isDark }) => (isDark ? colors.grey_7 : colors.grey_1)};
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+`;
+const CircleText = styled.Text`
+  text-align: center;
+  font-size: 20px;
+  font-family: Pretendard-SemiBold;
+  line-height: 32px;
+  color: ${({ isDark }) => (isDark ? colors.white : colors.black)};
+`;
+const CircleTitle = styled.Text`
+  text-align: center;
+  font-size: 10px;
+  font-family: Pretendard-Regular;
+  line-height: 15px;
+  color: ${({ isDark }) => (isDark ? colors.white : colors.black)};
+`;
+const List = styled.View`
+  border-radius: 12px;
+  background-color: ${({ isDark }) => (isDark ? colors.grey_7 : colors.grey_1)};
+  margin: 0px 32px;
+  padding: 16px;
+  gap: 7px;
+`;
+const ListText = styled.Text`
+  font-size: 13px;
+  font-style: normal;
+  font-family: Pretendard-Regular;
+  line-height: 19.5px;
+  color: ${({ isDark }) => (isDark ? colors.white : colors.black)};
+`;
+const MiniText = styled.Text`
+  font-size: 10px;
+  font-style: normal;
+  font-family: Pretendard-SemiBold;
+  padding-top: 4px;
+  line-height: 32px;
+  color: ${({ isDark }) => (isDark ? colors.white : colors.black)};
+`;
 
 export default function Records(props) {
   const isDark = useRecoilValue(IsDarkAtom);
-
-  const Bar = styled.View`
-    height: 16px;
-    background-color: ${isDark ? colors.black : colors.grey_1};
-  `;
-  const Title = styled.Text`
-    font-size: 17px;
-    font-weight: 600;
-    line-height: 25.5px;
-    margin: 0px 24px;
-    color: ${isDark ? colors.white : colors.black};
-  `;
-  const Circle = styled.View`
-    width: 80px;
-    height: 80px;
-    border-radius: 40px;
-    background-color: ${isDark ? colors.grey_7 : colors.grey_1};
-    align-items: center;
-    justify-content: center;
-    flex-direction: row;
-  `;
-  const CircleText = styled.Text`
-    text-align: center;
-    font-size: 20px;
-    font-weight: 600;
-    line-height: 32px;
-    color: ${isDark ? colors.white : colors.black};
-  `;
-  const CircleTitle = styled.Text`
-    text-align: center;
-    font-size: 10px;
-    font-weight: 400;
-    line-height: 15px;
-    color: ${isDark ? colors.white : colors.black};
-  `;
-  const List = styled.View`
-    border-radius: 12px;
-    background-color: ${isDark ? colors.grey_7 : colors.grey_1};
-    margin: 0px 32px;
-    padding: 16px;
-    gap: 7px;
-  `;
-  const ListText = styled.Text`
-    font-size: 13px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: 19.5px;
-    color: ${isDark ? colors.white : colors.black};
-  `;
-  const MiniText = styled.Text`
-    font-size: 10px;
-    font-style: normal;
-    font-weight: 600;
-    padding-top: 4px;
-    line-height: 32px;
-    color: ${isDark ? colors.white : colors.black};
-  `;
 
   const [now, setNow] = useState(new Date());
   const date = now.getDate();
@@ -106,14 +105,6 @@ export default function Records(props) {
       setExerciseDays(dateResult.result);
     });
   }, [month]);
-  /*
-  const prevMonth = () => {
-    setMonth(month - 1);
-  };
-  const nextMonth = () => {
-    setMonth(month + 1);
-  };
-  */
 
   const [totalExercise, setTotalExercise] = useState([]);
   const [totalCalories, setTotalCalories] = useState(0);
@@ -150,7 +141,7 @@ export default function Records(props) {
 
   const exercise = totalExercise?.map((comment) => (
     <RecTextLine>
-      <ListText>{comment}</ListText>
+      <ListText isDark={isDark}>{comment}</ListText>
       <Check width={20} height={20} color={colors.white} />
     </RecTextLine>
   ));
@@ -162,9 +153,9 @@ export default function Records(props) {
         exerciseDays={exerciseDays}
         setMonth={setMonth}
       />
-      <Bar />
+      <Bar isDark={isDark} />
       <Exercise>
-        <Title>
+        <Title isDark={isDark}>
           {resultMonth}월 {date}일 완료한 운동
         </Title>
         <Circles>
@@ -178,28 +169,28 @@ export default function Records(props) {
               bgColor={isDark ? colors.grey_9 : colors.white}
             >
               <View style={{ flexDirection: "row", alignItems: "center" }}>
-                <CircleText>{totalMinute}</CircleText>
-                <MiniText> 분</MiniText>
+                <CircleText isDark={isDark}>{totalMinute}</CircleText>
+                <MiniText isDark={isDark}> 분</MiniText>
               </View>
             </PercentageCircle>
-            <CircleTitle>소요시간</CircleTitle>
+            <CircleTitle isDark={isDark}>소요시간</CircleTitle>
           </CircleContent>
           <CircleContent>
-            <Circle>
-              <CircleText>{totalWeight}</CircleText>
-              <MiniText> kg</MiniText>
+            <Circle isDark={isDark}>
+              <CircleText isDark={isDark}>{totalWeight}</CircleText>
+              <MiniText isDark={isDark}> kg</MiniText>
             </Circle>
-            <CircleTitle>들어올린 무게</CircleTitle>
+            <CircleTitle isDark={isDark}>오늘 든 무게</CircleTitle>
           </CircleContent>
           <CircleContent>
-            <Circle>
-              <CircleText>{totalCalories}</CircleText>
-              <MiniText> Kcal</MiniText>
+            <Circle isDark={isDark}>
+              <CircleText isDark={isDark}>{totalCalories}</CircleText>
+              <MiniText isDark={isDark}> Kcal</MiniText>
             </Circle>
-            <CircleTitle>소모 칼로리</CircleTitle>
+            <CircleTitle isDark={isDark}>소모 칼로리</CircleTitle>
           </CircleContent>
         </Circles>
-        {totalExercise.length != 0 && <List>{exercise}</List>}
+        {totalExercise.length != 0 && <List isDark={isDark}>{exercise}</List>}
       </Exercise>
     </Container>
   );

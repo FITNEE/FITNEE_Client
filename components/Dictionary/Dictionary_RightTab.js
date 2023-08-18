@@ -11,19 +11,7 @@ import TrashIcon from '../../assets/SVGs/Trash.svg'
 
 export default function Dictionary_RightTab(props) {
     const isDark = useRecoilValue(IsDarkAtom)
-    const UserName = styled.Text`
-        color: ${isDark ? colors.d_main : colors.l_main};
-        font-size: 11px;
-        font-weight: 400;
-        margin-left: 8px;
-        margin-bottom: 5px;
-    `
-    const SendBtn = styled.TouchableOpacity`
-        background-color: ${isDark ? colors.d_main : colors.l_main};
-        width: 32px;
-        height: 32px;
-        border-radius: 16px;
-    `
+
     const scrollviewRef = useRef(null)
    
     const onSubmitChat = () => {
@@ -251,18 +239,12 @@ export default function Dictionary_RightTab(props) {
                     <ChatContainer key={i}>
                         {msg.userNickname != myNickName ? 
                             (<MessageWrapper>
-                                <UserName>{msg.userNickname}</UserName>
+                                <UserName style={{color: isDark ? `${colors.d_main}` : `${colors.l_main}`}}>{msg.userNickname}</UserName>
                                 <MessageContainer style={{backgroundColor: isDark? `${colors.grey_8}`:`${colors.grey_1}`}}>
-                                    <WrappedText
-                                    textStyle={{
-                                        fontWeight: 400,
-                                        fontSize: 13,
-                                        color: isDark? `${colors.white}`:`${colors.black}`,
-                                        lineHeight: 17,
-                                    }}
-                                    >
-                                    {msg.text}
-                                    </WrappedText>
+                                    <MessageText 
+                                        style={{color: isDark? `${colors.white}`:`${colors.black}`}}>
+                                        {msg.text}
+                                    </MessageText>
                                 </MessageContainer>
                             </MessageWrapper>)
                         : 
@@ -281,17 +263,10 @@ export default function Dictionary_RightTab(props) {
                                     onLongPress={()=>onLongPress(i)}
                                     style={{backgroundColor: isDark? `${colors.grey_8}`:`${colors.grey_1}`}}
                                 >
-                                    <WrappedText 
-                                        textStyle={{
-                                            fontWeight: 400,
-                                            fontSize: 13,
-                                            color: isDark? `${colors.white}`:`${colors.black}`,
-                                            lineHeight: 17,
-                                        }}
-                                        containerStyle={{ alignItems: "left" }}
-                                    >
+                                    <MessageText 
+                                        style={{color: isDark? `${colors.white}`:`${colors.black}`}}>
                                         {msg.text}
-                                    </WrappedText>
+                                    </MessageText>
                                 </MyMessageContainer>
                             </MyMessageWrapper>)}
                     </ChatContainer>
@@ -308,7 +283,8 @@ export default function Dictionary_RightTab(props) {
                         color: isDark? `${colors.white}`:`${colors.black}`,
                         width: 300,
                         marginLeft: 15,
-                        fontSize: 17
+                        fontSize: 17,
+                        fontFamily: 'Pretendard-Regular'
                     }}
                     type="text"
                     onChangeText={(text) => setChat(text)}
@@ -354,6 +330,11 @@ const MyMessageWrapper = styled.View`
   align-items: center;
   flex-direction: row;
 `
+const MessageText = styled.Text`
+    font-size: 13px;
+    font-family: Pretendard-Regular;
+    line-height: 17px;
+`
 const TextInputBG = styled.View` 
   justify-content: center;
   align-items: center;
@@ -364,4 +345,15 @@ const TextInputContainer = styled.View`
   width: 100%;
   flex-direction: row;
   padding: 6px;
+`
+const UserName = styled.Text`
+    font-size: 11px;
+    font-family: Pretendard-Regular;
+    margin-left: 8px;
+    margin-bottom: 5px;
+`
+const SendBtn = styled.TouchableOpacity`
+    width: 32px;
+    height: 32px;
+    border-radius: 16px;
 `
