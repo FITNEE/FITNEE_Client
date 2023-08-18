@@ -60,7 +60,10 @@ export default function LoggedInNav() {
                 height={24}
               />
               <IconText
-                style={{ color: focused ? colors.l_main : colors.grey_7 }}
+                style={{
+                  fontFamily: "Pretendard-Medium",
+                  color: focused ? colors.l_main : colors.grey_7,
+                }}
               >
                 홈
               </IconText>
@@ -81,7 +84,10 @@ export default function LoggedInNav() {
                 height={24}
               />
               <IconText
-                style={{ color: focused ? colors.l_main : colors.grey_7 }}
+                style={{
+                  fontFamily: "Pretendard-Medium",
+                  color: focused ? colors.l_main : colors.grey_7,
+                }}
               >
                 마이 루틴
               </IconText>
@@ -102,7 +108,10 @@ export default function LoggedInNav() {
                 height={24}
               />
               <IconText
-                style={{ color: focused ? colors.l_main : colors.grey_7 }}
+                style={{
+                  fontFamily: "Pretendard-Medium",
+                  color: focused ? colors.l_main : colors.grey_7,
+                }}
               >
                 운동하기
               </IconText>
@@ -123,7 +132,10 @@ export default function LoggedInNav() {
                 height={24}
               />
               <IconText
-                style={{ color: focused ? colors.l_main : colors.grey_7 }}
+                style={{
+                  fontFamily: "Pretendard-Medium",
+                  color: focused ? colors.l_main : colors.grey_7,
+                }}
               >
                 운동사전
               </IconText>
@@ -145,7 +157,10 @@ export default function LoggedInNav() {
               />
 
               <IconText
-                style={{ color: focused ? colors.l_main : colors.grey_7 }}
+                style={{
+                  fontFamily: "Pretendard-Medium",
+                  color: focused ? colors.l_main : colors.grey_7,
+                }}
               >
                 MY
               </IconText>

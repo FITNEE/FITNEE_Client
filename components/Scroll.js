@@ -22,6 +22,7 @@ export default Scroll = ({ isDark, data, currentRoutine }) => {
   const handleScroll = (event) => {
     const { contentOffset, layoutMeasurement } = event.nativeEvent;
     const pageIndex = Math.round(contentOffset.x / layoutMeasurement.width);
+    console.log("event.nativeEvent : ", event.nativeEvent);
     setCurrentPage(pageIndex);
   };
   useEffect(() => {
@@ -86,7 +87,8 @@ export default Scroll = ({ isDark, data, currentRoutine }) => {
   );
 };
 const Container = styled.View`
-  flex: 1;
+  /* flex: 1; */
+  height: 600px;
 `;
 const RoutineContainer = styled.View`
   align-items: center;
@@ -140,5 +142,5 @@ const PageDot = styled.View`
         : colors.grey_7
       : props.isDark
       ? colors.grey_7
-      : colors.grey_2};
+      : colors.grey_3};
 `;
