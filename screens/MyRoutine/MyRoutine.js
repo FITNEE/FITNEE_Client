@@ -4,7 +4,8 @@ import {
   Keyboard,
   Alert,
   ScrollView,
-  View, StatusBar
+  View,
+  StatusBar,
 } from "react-native";
 import styled from "styled-components/native";
 import BottomSheet, { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
@@ -285,7 +286,7 @@ export default MyRoutine = ({ navigation, route }) => {
 
   useEffect(() => {
     updateDatas();
-  }, []);
+  }, [isFocus]);
 
   return (
     <ScreenBase

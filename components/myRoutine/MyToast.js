@@ -18,7 +18,7 @@ const ToastText = styled.Text`
   flex: 1;
 `;
 
-export const MyToast = (isDark) => {
+export const MyToast = ({ isDark }) => {
   const toastConfig = {
     success: () => (
       <ToastBase
