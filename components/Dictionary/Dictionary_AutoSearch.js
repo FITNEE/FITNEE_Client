@@ -58,14 +58,17 @@ const AutoSearchContainer = styled.ScrollView`
     height: 100%;
 `
 const AutoSearch = styled.TouchableOpacity`
-    padding: 16px  24px;
+    padding: 16px 24px;
     border-top-width: 1px;
+    height: 55px;
 `
 const AutoSearchText = styled.Text`
     font-family: Pretendard-Medium;
     font-size: 15px;
+    line-height: 22.5px;
 `
 const ColoredSearchText = styled.Text`
     font-family: Pretendard-Medium;
     font-size: 15px;
+    line-height: 22.5px;
 `

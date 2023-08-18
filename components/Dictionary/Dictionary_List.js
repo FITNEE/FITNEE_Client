@@ -100,6 +100,7 @@ const ExerciseName = styled.Text`
     font-family: Pretendard-Medium;
     font-size: 17px;
     margin-bottom: 5px;
+    line-height: 25.5px;
 `
 const ExerciseArea = styled.Text`
     font-family: Pretendard-Regular;
