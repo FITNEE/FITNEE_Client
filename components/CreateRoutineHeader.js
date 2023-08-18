@@ -73,37 +73,37 @@ const NoHeader = styled.View`
   opacity: 1;
 `;
 const HeaderContainer = styled.View`
-  height: 100px;
+  height: 112px;
   background-color: ${(props) => (props.isDark ? colors.black : colors.grey_1)};
   align-items: center;
-  justify-content: flex-end;
+  /* justify-content: flex-end; */
   padding: 0px 10px;
 `;
 const Header = styled.View`
   flex-direction: row;
   width: 95%;
-  height: 40px;
+  height: 56px;
   background-color: ${(props) => (props.isDark ? colors.black : colors.grey_1)};
   align-items: center;
   padding: 10px;
-  margin-top: 22px;
+  margin-top: 44px;
 `;
 const BackButton = styled.TouchableOpacity``;
 const Title = styled.Text`
-  font-weight: bold;
-  font-size: 16;
+  font-family: Pretendard-SemiBold;
+  font-size: 17;
   margin-left: 112px;
   color: ${(props) => (props.isDark ? colors.white : colors.black)};
 `;
 
 const StackBar = styled.View`
   width: 90%;
-  height: 6px;
+  height: 4px;
   background-color: ${(props) =>
     props.isDark ? colors.grey_9 : colors.grey_2};
   border-radius: 10px;
   overflow: hidden;
-  margin-top: 10px;
+  margin-top: 4px;
 `;
 const StackBarPin = styled.View`
   width: ${({ index }) => (index + 1) * 25}%;

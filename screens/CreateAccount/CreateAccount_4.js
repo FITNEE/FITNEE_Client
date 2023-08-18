@@ -129,7 +129,7 @@ const CreateAccount_4 = ({ route, navigation }) => {
         <AnimationContainer
           style={{ backgroundColor: isDark ? colors.grey_8 : colors.white }}
         >
-          {isLoading ? <LottieView /> : <Test></Test>}
+          {/* {isLoading ? <LottieView /> : <Test></Test>} */}
         </AnimationContainer>
         <Button
           loading={isLoading}

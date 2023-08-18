@@ -22,7 +22,7 @@ export default Scroll = ({ isDark, data, currentRoutine }) => {
   const handleScroll = (event) => {
     const { contentOffset, layoutMeasurement } = event.nativeEvent;
     const pageIndex = Math.round(contentOffset.x / layoutMeasurement.width);
-    console.log("event.nativeEvent : ", event.nativeEvent);
+    // console.log("event.nativeEvent : ", event.nativeEvent);
     setCurrentPage(pageIndex);
   };
   useEffect(() => {

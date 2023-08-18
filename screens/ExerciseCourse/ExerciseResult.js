@@ -219,7 +219,7 @@ export default function ExerciseResult({ navigation }) {
         "https://gpthealth.shop/app/routine/end/update"
       );
       console.log("response.data : ", response.data);
-      setUpdate(response.data.Result);
+      setUpdate(response.data.result);
     } catch (error) {
       console.error("Error :", error);
     }
@@ -227,7 +227,7 @@ export default function ExerciseResult({ navigation }) {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [update]);
 
   return (
     <SafeAreaView
