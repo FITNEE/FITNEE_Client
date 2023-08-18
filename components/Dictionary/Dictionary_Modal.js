@@ -61,7 +61,7 @@ export default function Dictionary_Modal(props){
             Toast.show({
                 type: 'customToast',
                 text1: '해당 운동이 마이루틴에 추가되었습니다.',
-                visibilityTime: 1200,
+                visibilityTime: 2200,
                 topOffset: 56,
                 props: { isDark: isDark }
             })
