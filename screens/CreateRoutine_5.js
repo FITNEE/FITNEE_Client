@@ -107,23 +107,25 @@ export default function CreateRoutine_5({ navigation }) {
 
   return (
     <Container isDark={isDark}>
-      <TitleContainer>
-        <Title isDark={isDark}>루틴이 생성되었어요!</Title>
-        <SubTitle isDark={isDark}>
-          {`회원님의 답변을 기반으로 최적의 플랜을 만들었어요.
+      <SafeAreaView>
+        <TitleContainer>
+          <Title isDark={isDark}>루틴이 생성되었어요!</Title>
+          <SubTitle isDark={isDark}>
+            {`회원님의 답변을 기반으로 최적의 플랜을 만들었어요.
          가장 마음에 드는 플랜을 선택해주세요.`}
-        </SubTitle>
-      </TitleContainer>
-      <ScrollContainer>
-        <Scroll
-          isDark={isDark}
-          data={responseData}
-          currentRoutine={currentRoutine}
-        />
-      </ScrollContainer>
-      <NextButton isDark={isDark} onPress={selectRoutine}>
-        <ButtonText isDark={isDark}>이 루틴으로 결정</ButtonText>
-      </NextButton>
+          </SubTitle>
+        </TitleContainer>
+        <ScrollContainer>
+          <Scroll
+            isDark={isDark}
+            data={responseData}
+            currentRoutine={currentRoutine}
+          />
+        </ScrollContainer>
+        <NextButton isDark={isDark} onPress={selectRoutine}>
+          <ButtonText isDark={isDark}>이 루틴으로 결정</ButtonText>
+        </NextButton>
+      </SafeAreaView>
     </Container>
   );
 }
@@ -132,8 +134,12 @@ const Container = styled.View`
   flex: 1;
   width: 100%;
   align-items: center;
-  justify-content: space-around;
+  justify-content: center;
   background-color: ${(props) => (props.isDark ? colors.black : colors.grey_1)};
+`;
+const SafeAreaView = styled.SafeAreaView`
+  align-items: center;
+  justify-content: center;
 `;
 const TitleContainer = styled.View`
   width: 90%;
@@ -150,7 +156,7 @@ const SubTitle = styled.Text`
   color: ${(props) => (props.isDark ? colors.white : colors.black)};
 `;
 const ScrollContainer = styled.View`
-  height: 615px;
+  /* height: 600px; */
 `;
 
 const NextButton = styled.TouchableOpacity`
@@ -160,7 +166,7 @@ const NextButton = styled.TouchableOpacity`
   justify-content: center;
   background-color: ${colors.d_main};
   border-radius: 10px;
-  margin-bottom: 50px;
+  /* margin-bottom: 50px; */
 `;
 const ButtonText = styled.Text`
   font-weight: bold;
