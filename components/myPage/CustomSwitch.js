@@ -25,7 +25,7 @@ const CustomSwitch = ({ option_left, option_right }) => {
   };
 
   return (
-    <View>
+    <TouchableOpacity activeOpacity={0.5} onPress={() => updatedSwitchData()}>
       <View
         style={{
           activeOpacity: 0.5,
@@ -62,11 +62,11 @@ const CustomSwitch = ({ option_left, option_right }) => {
               lineHeight: 16.5,
             }}
           >
-            {isDark ? option_right : option_left}
+            {isDark ? "ON" : "OFF"}
           </Text>
         </TouchableOpacity>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 export default CustomSwitch;

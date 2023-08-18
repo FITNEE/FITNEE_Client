@@ -60,10 +60,23 @@ export default function Analysis(props) {
 
   const weekData = props.weekData;
 
+  // 오늘이 몇주차인지
+  const date = new Date();
+  const weekday = date.getDay() == 0 ? 7 : date.getDay();
+  const dateOfMonth = date.getDate();
+  const weeksOfMonth = Math.ceil((dateOfMonth + 7 - weekday) / 7);
+  /*
+  console.log(
+    `${date.getMonth() + 1}월 ${date.getDate()}일
+    => ${date.getMonth() + 1}월의 ${weeksOfMonth}번째 주`
+  );
+  */
+
   const firstMonth = weekData.startAndEndExercise[0].firstMonth;
   const firstWeek = weekData.startAndEndExercise[0].firstWeek;
-  const lastMonth = weekData.startAndEndExercise[0].lastMonth;
-  const lastWeek = weekData.startAndEndExercise[0].lastWeek;
+  const lastMonth = date.getMonth() + 1;
+  const lastWeek = weeksOfMonth;
+
   const startingIndex =
     firstMonth != 0 ? (firstMonth - 1) * 6 + firstWeek - 1 : 0;
   const finishingIndex =
@@ -72,6 +85,8 @@ export default function Analysis(props) {
     startingIndex,
     finishingIndex
   );
+  console.log(slicedWeekData);
+
   const calorie = weekData.formattedRows[finishingIndex].weeklyCalories;
   const kilometer = weekData.formattedRows[finishingIndex].weeklyDistance;
   const TimeData = weekData.formattedRows
