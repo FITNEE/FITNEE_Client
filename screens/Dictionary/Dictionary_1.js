@@ -279,6 +279,7 @@ const Container = styled.View`
 const TopContainer = styled.View`
     padding: 8px 24px;
     border-bottom-width: 1px;
+    margin-top: 24px;
 `
 const SearchContainer = styled.View`
     flex-direction: row;
@@ -315,6 +316,7 @@ const Part = styled.TouchableOpacity`
 const PartText = styled.Text`
     font-family: Pretendard-SemiBold;
     font-size: 14px;
+    line-height: 21px;
 `
 const PressedPart = styled.TouchableOpacity`
     border-radius: 100px;
@@ -323,7 +325,8 @@ const PressedPart = styled.TouchableOpacity`
 `
 const PressedPartText = styled.Text`
     font-family: Pretendard-SemiBold;
-    font-size: 14px; 
+    font-size: 14px;
+    line-height: 21px;
 `
 const BottomContainer = styled.View`
     padding: 40px 22px;
@@ -336,6 +339,7 @@ const KeywordTitle = styled.Text`
     font-family: Pretendard-SemiBold;
     font-size: 16px;
     margin-bottom: 16px;
+    line-height: 22.5px;
 `
 const KeywordContainer = styled.View`
     flex-direction: row;
@@ -350,4 +354,5 @@ const KeywordWrapper = styled.TouchableOpacity`
 const Keyword = styled.Text`
     font-family: Pretendard-SemiBold;
     font-size: 13px;
+    line-height: 19.5px;
 `

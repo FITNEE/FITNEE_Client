@@ -333,7 +333,7 @@ const MyMessageWrapper = styled.View`
 const MessageText = styled.Text`
     font-size: 13px;
     font-family: Pretendard-Regular;
-    line-height: 17px;
+    line-height: 19.5px;
 `
 const TextInputBG = styled.View` 
   justify-content: center;

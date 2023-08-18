@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components/native";
 import { colors } from "../../colors";
 import { Button } from "../../Shared";
-import { StyleSheet, Text } from "react-native";
+import { StyleSheet, Text, StatusBar } from "react-native";
 import {
   ScreenLayout,
   Title,
