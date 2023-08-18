@@ -1,7 +1,6 @@
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import { Text, SafeAreaView } from "react-native";
 import { styled } from "styled-components/native";
-import Mode from "../../components/myPage/Mode";
 import { colors } from "../../colors";
 import axios from "axios";
 import {
@@ -15,6 +14,7 @@ import Right from "../../assets/SVGs/Right.svg";
 import { loggedInState } from "../../recoil/AuthAtom";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Alert } from "react-native";
+import CustomSwitch from "../../components/myPage/CustomSwitch";
 
 const Profile = styled.TouchableOpacity`
   width: 100%;
@@ -150,7 +150,7 @@ export default function Setting({ navigation }) {
         <ModeView>
           <BlockText isDark={isDark}>다크화면 모드</BlockText>
           <BlockContent>
-            <Mode />
+            <CustomSwitch />
           </BlockContent>
         </ModeView>
         <Bar isDark={isDark} />
