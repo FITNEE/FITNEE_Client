@@ -7,16 +7,16 @@ import Dictionary_LeftTab from '../../components/Dictionary/Dictionary_LeftTab'
 import Dictionary_RightTab from '../../components/Dictionary/Dictionary_RightTab'
 import Dictionary_Modal from '../../components/Dictionary/Dictionary_Modal'
 import axios from 'axios'
-import { IsDarkAtom, BubbleAtom } from "../../recoil/MyPageAtom"
-import { useRecoilValue, useSetRecoilState } from "recoil"
+import { IsDarkAtom } from "../../recoil/MyPageAtom"
+import { useRecoilValue } from "recoil"
 import LeftIcon from '../../assets/SVGs/Left.svg'
 import AddIcon from '../../assets/SVGs/Add.svg'
 import EditIcon from '../../assets/SVGs/Edit.svg'
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function Dictionary_2({ navigation, route }){
     const isDark = useRecoilValue(IsDarkAtom)
-    const isBubbleOn = useRecoilValue(BubbleAtom)
-    const setIsBubbleOn = useSetRecoilState(BubbleAtom)
+
     const exerciseInfo = route.params.exercise
 
     const leftTab = useRef()
@@ -89,6 +89,45 @@ export default function Dictionary_2({ navigation, route }){
             }
         })
     }, [])
+    
+    const [isBubbleOn, setIsBubbleOn] = useState(false)
+    const checkBubbleData = async () => {
+        try {
+            const keys = await AsyncStorage.getAllKeys()
+            const data = keys.includes("Bubble")
+            if (data !== null) {
+                const bubbleData = await AsyncStorage.getItem("Bubble")
+                console.log(`set new data for bubble (true)`)
+                const bubbleBool = JSON.parse(bubbleData)
+                return bubbleBool
+            } else {
+                const stringValue = JSON.stringify(true)
+                console.log(`no existing data - setItem for true`)
+                await AsyncStorage.setItem("Bubble", stringValue)
+            }
+            return null
+        } 
+        catch (error) {
+            console.error("Bubble Asynce Storage error", error)
+        }
+    }
+
+    useEffect(()=>{
+        checkBubbleData().then((data)=>{
+            if(data !== null) {
+                setIsBubbleOn(data)
+                console.log(`data : ${data}`)
+            }
+        })
+    }, [])
+
+    const setBubbleFalse = async () => {
+        const stringValue = JSON.stringify(false)
+        await AsyncStorage.setItem("Bubble", stringValue)
+    }
+    useEffect(()=>{
+        !isBubbleOn && setBubbleFalse().then(console.log('set bubble for false'))
+    }, [isBubbleOn])
 
     return (
         <>
