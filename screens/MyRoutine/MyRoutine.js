@@ -4,7 +4,7 @@ import {
   Keyboard,
   Alert,
   ScrollView,
-  View,
+  View, StatusBar
 } from "react-native";
 import styled from "styled-components/native";
 import BottomSheet, { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
@@ -293,6 +293,7 @@ export default MyRoutine = ({ navigation, route }) => {
         backgroundColor: isDark ? colors.grey_9 : colors.white,
       }}
     >
+      <StatusBar barStyle={isDark ? "light-content" : "dark-content"} />
       <Header
         isDark={isDark}
         mode={mode}
