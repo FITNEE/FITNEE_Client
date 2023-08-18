@@ -61,7 +61,7 @@ export default function Dictionary_LeftTab(props){
                         <ProcessNum style={{color: isDark? `${colors.d_main}`:`${colors.l_main}`}}>{`0${exerciseinfo.num}`}</ProcessNum>
                         <ProcessContent>
                             <ProcessName style={{color: isDark? `${colors.white}`:`${colors.black}`}}>{exerciseinfo.title}</ProcessName>
-                            <WrappedText textStyle={{lineHeight: 20, fontWeight: 400, fontSize: 13, color: isDark? `${colors.white}`:`${colors.black}`}}>
+                            <WrappedText textStyle={{lineHeight: 19.5, fontFamily: 'Pretendard-Regular', fontSize: 13, color: isDark? `${colors.white}`:`${colors.black}`}}>
                                 {exerciseinfo.content}
                             </WrappedText>
                         </ProcessContent>
@@ -112,6 +112,7 @@ const Process = styled.View`
 const ProcessNum = styled.Text`
     font-family: Pretendard-SemiBold;
     font-size: 15px;
+    line-height: 22.5px;
 `
 const ProcessContent = styled.View`
     align-items: flex-start;
@@ -122,6 +123,7 @@ const ProcessName = styled.Text`
     font-family: Pretendard-SemiBold;
     font-size: 15px;
     margin-bottom: 8px;
+    line-height: 22.5px;
 `
 const CautionContainer = styled.View`
     margin: 36px 24px;
@@ -141,6 +143,7 @@ const CautionTitle = styled.Text`
     color: ${colors.black};
     font-family: Pretendard-SemiBold; 
     font-size: 15px;
+    line-height: 22.5px;
 `
 const CautionContentContainer = styled.View`
     padding: 24px;
@@ -154,11 +157,11 @@ const CautionDetail = styled.Text`
     color: ${colors.black};
     font-family: Pretendard-Regular;
     font-size: 13px;
+    line-height: 19.5px;
 `
 const CautionDot = styled.View`
     width: 12px;
     height: 12px;
     border-radius: 6px;
     margin-right: 4px;
-
 `

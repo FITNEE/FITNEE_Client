@@ -292,13 +292,14 @@ const NameContainer = styled.View`
 const AreaText = styled.Text`
     font-family: Pretendard-Regular;
     font-size: 13px;
+    line-height: 19.5px;
 `
 const TitleWrapper = styled.View`
 `
 const TitleText = styled.Text`
     font-family: Pretendard-SemiBold;
     font-size: 24px;
-    padding-top: 8px;
+    line-height: 33.6px;
 `
 const Bubble = styled.View`
     position: absolute;
@@ -326,7 +327,7 @@ const BubbleText = styled.Text`
     font-size: 11px;
     color: white;
     font-family: Pretendard-Regular;
-    line-height: 18px;
+    line-height: 16.5px;
 `
 const TabContainer = styled.View`
     margin-top: 8px;
@@ -359,6 +360,7 @@ const RightTab = styled.TouchableOpacity`
 const TabText = styled.Text`
     font-size: 15px;
     padding: 10px 0px;
+    line-height: 22.5px;
 `
 const NotReadDot = styled.View`
     background-color: ${colors.red};
@@ -381,4 +383,5 @@ const JoinBtnContainer = styled.TouchableOpacity`
 const JoinText = styled.Text`
     font-family: Pretendard-SemiBold;
     font-size: 13;
+    line-height: 19.5px;
 `
