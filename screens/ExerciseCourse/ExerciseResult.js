@@ -255,19 +255,24 @@ export default function ExerciseResult({ navigation }) {
                 성장속도가 빠른 {"\n"}야망 헬린이
               </ExerciseText>
             </TextBox>
+            {update ? (
+              <>
+                <TextBox>
+                  <ExerciseText DarkMode={isDark}>
+                    다음 운동부터 {"\n"}업데이트 되는 부분이에요
+                  </ExerciseText>
+                </TextBox>
+                {update.map((item) => (
+                  <UpdateExercise item={item} />
+                ))}
+              </>
+            ) : null}
 
-            <TextBox>
-              <ExerciseText DarkMode={isDark}>
-                다음 운동부터 {"\n"}업데이트 되는 부분이에요
-              </ExerciseText>
-            </TextBox>
-
-            <ResultBox>
+            {/* <ResultBox>
               <ExerciseIconCircle DarkMode={isDark}>
                 <ExerciseIcon width={20} height={20} color={colors.l_main} />
               </ExerciseIconCircle>
-            </ResultBox>
-            <UpdateExercise />
+            </ResultBox> */}
           </Container>
         </ViewShot>
         <HomeView>
