@@ -1,5 +1,4 @@
 import React from "react";
-import { View, Text } from "react-native";
 import { styled } from "styled-components/native";
 import { colors } from "../colors";
 import { Dimensions } from "react-native";
@@ -11,7 +10,7 @@ const Container = styled.View`
   width: 100%;
 `;
 const EmptyImage = styled.Image`
-  margin-top: ${windowHeight / 6};
+  margin-top: ${windowHeight / 6}px;
   width: 125px;
   height: 125px;
   margin-left: auto;

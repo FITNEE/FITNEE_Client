@@ -345,7 +345,8 @@ export default function ExerciseCourse({ navigation }) {
     };
 
     if (listIndex + 1 >= dataList.length) {
-      await postTotalData(routineIdx, -1 * totalTime, dataList);
+      console.log(routineIdx);
+      await postTotalData(routineIdx, -1 * totalTime, modifiedDataList);
 
       // 조건이 충족되면 원하는 화면(FinalScreen)으로 이동합니다.
       navigation.dispatch(
@@ -367,15 +368,19 @@ export default function ExerciseCourse({ navigation }) {
     }
   };
 
-  const postTotalData = async (routineIdx, totalTime, dataList) => {
+  const postTotalData = async (
+    routineIdx,
+    totalExerciseTime,
+    routineDetails
+  ) => {
     try {
       let url = "https://gpthealth.shop/";
       let detailAPI = `/app/process/end`;
 
       const response = await axios.post(url + detailAPI, {
-        routineIdx: routineIdx,
-        totalExerciseTime: totalTime,
-        routineDetails: dataList,
+        originRoutineIdx: routineIdx,
+        totalExerciseTime: totalExerciseTime,
+        routineDetails: routineDetails,
       });
 
       const result = response.data;

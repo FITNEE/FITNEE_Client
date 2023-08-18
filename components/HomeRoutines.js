@@ -22,9 +22,10 @@ const TitleBlock = styled.View`
 `;
 const NameText = styled.Text`
   height: 26px;
+  font-family: Pretendard-Regular;
   font-size: 17px;
   font-style: normal;
-  font-weight: 600;
+  /* font-weight: 600; */
   line-height: 25.5px;
   margin-bottom: 4px;
   color: ${(props) => (props.isDark ? colors.white : colors.black)};

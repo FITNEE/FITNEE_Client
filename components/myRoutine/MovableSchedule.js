@@ -128,8 +128,8 @@ export function Schedule({ title, isDark }) {
     >
       <Text
         style={{
-          fontSize: title ? 15 : 12,
-          fontWeight: "400",
+          fontSize: title ? 13 : 11,
+          fontFamily: "Pretendard-Regular",
           color: title ? colors.l_main : colors.grey_6,
         }}
       >

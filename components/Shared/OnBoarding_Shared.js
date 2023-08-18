@@ -7,7 +7,7 @@ import { ScreenWidth } from "../../Shared";
 const TitleText = styled.Text`
   font-size: 24px;
   line-height: 32px;
-  font-weight: bold;
+  font-family: Pretendard-SemiBold;
 `;
 export const Title = ({ isDark, text }) => {
   return (
@@ -20,7 +20,7 @@ export const Title = ({ isDark, text }) => {
 export const _SubText = styled.Text`
   font-size: 13px;
   margin-top: 8px;
-  font-weight: 400;
+  font-family: Pretendard-Regular;
   line-height: 19px;
 `;
 export const SubText = ({ isDark, text }) => {
@@ -38,19 +38,19 @@ export const Input = styled.TextInput`
 `;
 
 export const InputTitle = styled.Text`
-  font-size: 12px;
+  font-size: 11px;
   margin-left: 16px;
   margin-bottom: 2px;
-  font-weight: 400;
+  font-family: Pretendard-Regular;
   line-height: 19px;
   color: ${colors.l_main};
 `;
 export const StatusText = styled.Text`
+  font-family: Pretendard-Regular;
   font-size: 11px;
   text-align: right;
   margin-bottom: 8px;
   margin-right: 8px;
-  font-weight: 300;
 `;
 
 export const ScreenContainer = styled.SafeAreaView`
@@ -94,6 +94,8 @@ const NumberContainer = styled.TouchableOpacity`
 
 const NumberText = styled.Text`
   margin-left: 8px;
+  font-size: 16px;
+  font-family: Pretendard-Regular;
 `;
 
 export const NumberInput = ({
@@ -145,6 +147,7 @@ const BottomSheetHeader = styled.View`
 
 const BottomSheetText = styled.Text`
   color: ${colors.d_main};
+  font-family: Pretendard-Medium;
   font-size: 15px;
 `;
 export const MyBottomSheet = ({

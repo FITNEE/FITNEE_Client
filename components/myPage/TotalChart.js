@@ -6,17 +6,28 @@ import { colors } from "../../colors";
 import { styled } from "styled-components/native";
 import { useRecoilValue } from "recoil";
 import { IsDarkAtom } from "../../recoil/MyPageAtom";
+import { processFontFamily } from "expo-font";
 
 const Container = styled.ScrollView``;
+const BoxContainer = styled.View`
+  margin: 26px 24px 0px 24px;
+  background-color: ${({ isDark }) => (isDark ? colors.grey_7 : colors.grey_1)};
+  border-radius: 20px;
+  padding: 16px 16px 10px 16px;
+`;
+const NoneChartText = styled.Text`
+  padding: 112px 0px;
+  font-size: 11px;
+  font-style: normal;
+  font-family: Pretendard-SemiBold;
+  line-height: 16.5px;
+  opacity: 0.6;
+  text-align: center;
+  color: ${({ isDark }) => (isDark ? colors.grey_2 : colors.grey_7)};
+`;
 
 export default function TotalChart(props) {
   const isDark = useRecoilValue(IsDarkAtom);
-  const BoxContainer = styled.View`
-    margin: 26px 24px 0px 24px;
-    background-color: ${isDark ? colors.grey_7 : colors.grey_1};
-    border-radius: 20px;
-    padding: 16px;
-  `;
 
   const [message, setMessage] = useState({
     x: 0,
@@ -27,7 +38,7 @@ export default function TotalChart(props) {
 
   const chartConfig = {
     color: () => (isDark ? colors.grey_7 : colors.grey_1),
-    labelColor: () => (isDark ? colors.white : colors.black),
+    labelColor: () => (isDark ? colors.grey_2 : colors.grey_7),
     useShadowColorFromDataset: true,
     decimalPlaces: 0,
     fillShadowGradientFromOpacity: 0.3,
@@ -36,8 +47,7 @@ export default function TotalChart(props) {
     backgroundGradientTo: isDark ? "#595F72" : "#F6F8FA",
     propsForLabels: {
       fontSize: 11,
-      fonstWeight: 600,
-      lineHeight: 30,
+      fontFamily: processFontFamily("Pretendard-SemiBold"),
     },
     propsForBackgroundLines: {
       strokeWidth: 1,
@@ -48,31 +58,12 @@ export default function TotalChart(props) {
       r: "5",
     },
   };
-  const timeChartConfig = {
-    color: () => (isDark ? colors.grey_7 : colors.grey_1),
-    labelColor: () => (isDark ? colors.white : colors.black),
-    useShadowColorFromDataset: true,
-    decimalPlaces: 2,
-    fillShadowGradientFromOpacity: 0.3,
-    fillShadowGradientToOpacity: 0,
-    backgroundGradientFrom: isDark ? "#595F72" : "#F6F8FA",
-    backgroundGradientTo: isDark ? "#595F72" : "#F6F8FA",
-    propsForLabels: {
-      fontSize: 11,
-      fonstWeight: 600,
-      lineHeight: 30,
-    },
-    propsForDots: {
-      r: "5",
-    },
-  };
+
   const screenWidth = Dimensions.get("window").width;
 
   const weekData = props.weekData;
-  console.log(weekData);
 
   const KcalData = weekData.map((result) => result.weeklyCalories);
-  const TimeData = weekData.map((result) => result.weeklyExerciseTime);
   const LabelData = weekData.map((result) => result.weekNumber);
   const KmData = weekData.map((result) => result.weeklyDistance);
 
@@ -103,9 +94,7 @@ export default function TotalChart(props) {
     KmMax != 0
       ? KmData.map((value) => value / KmMax)
       : KmData.map((value) => value);
-  const realMax = Math.max(KmMax, KcalMax);
   const [maxData, setMaxData] = useState();
-  const dataLength = KcalData.length;
 
   const data = {
     labels: LabelArray,
@@ -177,8 +166,12 @@ export default function TotalChart(props) {
   );
 
   return (
-    <BoxContainer>
-      {data.labels.length < 2 && <Text>아직 데이터가 충분하지 않아요</Text>}
+    <BoxContainer isDark={isDark}>
+      {data.labels.length < 2 && (
+        <NoneChartText isDark={isDark}>
+          아직 데이터가 충분하지 않아요
+        </NoneChartText>
+      )}
       {data.labels.length > 1 && (
         <Container
           horizontal
@@ -245,7 +238,7 @@ export default function TotalChart(props) {
                     <Text
                       style={{
                         fontSize: 11,
-                        fontWeight: 700,
+                        fontFamily: "Pretendard-Bold",
                         color: isDark ? colors.black : colors.white,
                         textAlign: "center",
                       }}
@@ -256,7 +249,7 @@ export default function TotalChart(props) {
                       <Text
                         style={{
                           fontSize: 11,
-                          fontWeight: 500,
+                          fontFamily: "Pretendard-Medium",
                           color: isDark ? colors.black : colors.white,
                           textAlign: "center",
                         }}

@@ -9,23 +9,19 @@ import { styled } from "styled-components/native";
 import { colors } from "../../colors";
 import { Button } from "../../Shared";
 import axios from "axios";
-import { Alert } from "react-native";
-import { PWToast, showPWToast } from "../../components/myPage/PWToast";
 import { useRecoilValue } from "recoil";
 import { IsDarkAtom } from "../../recoil/MyPageAtom";
 
 const Container = styled.View`
   height: 100%;
-  background-color: ${({ DarkMode }) =>
-    DarkMode ? colors.grey_9 : colors.white};
+  background-color: ${({ isDark }) => (isDark ? colors.grey_9 : colors.white)};
   padding: 32px 24px 0px 24px;
 `;
 const Input = styled.TextInput`
   padding: 15px 16px;
   border-radius: 10px;
-  background-color: ${({ DarkMode }) =>
-    DarkMode ? colors.black : colors.grey_1};
-  color: ${({ DarkMode }) => (DarkMode ? colors.white : colors.black)};
+  background-color: ${({ isDark }) => (isDark ? colors.black : colors.grey_1)};
+  color: ${({ isDark }) => (isDark ? colors.white : colors.black)};
   width: 100%;
   height: 48px;
 `;
@@ -51,7 +47,7 @@ const StatusText = styled.Text`
   margin-top: 3px;
   font-size: 11px;
   font-style: normal;
-  font-weight: 400;
+  font-family: Pretendard-Regular;
   line-height: 16.5px;
   width: 100%;
   margin-bottom: 8px;
@@ -132,30 +128,32 @@ export default function EditPW({ navigation }) {
     }
   };
 
-  const goToUserInfo = () => {
-    navigation.navigate("UserInfo");
-  };
   const handlePress = () => {
     updateUserPW(newPW).then((updateResult) => {
-      updateResult.code === 1000 && goToUserInfo() & showPWToast();
+      updateResult.code === 1000 &&
+        navigation.navigate("UserInfo", {
+          showToast: true,
+          toastMessage: "비밀번호가 변경되었습니다.",
+        });
     });
   };
 
   return (
-    <SafeAreaView>
+    <SafeAreaView backgroundColor={isDark ? colors.grey_9 : colors.grey_1}>
       <TouchableWithoutFeedback
         onPress={() => {
           Keyboard.dismiss();
         }}
       >
-        <Container DarkMode={isDark}>
+        <Container isDark={isDark}>
           <InputContainer>
             <InputRed1 error={errorPW}>
               <Input
-                DarkMode={isDark}
+                isDark={isDark}
                 placeholderTextColor={isDark ? colors.grey_8 : colors.grey_6}
                 placeholder="기존 비밀번호 확인"
                 style={{
+                  fontFamily: "Pretendard-Regular",
                   color: checking
                     ? isDark
                       ? colors.grey_7
@@ -184,9 +182,12 @@ export default function EditPW({ navigation }) {
               on={click}
             >
               <Input
-                DarkMode={isDark}
+                isDark={isDark}
                 placeholderTextColor={isDark ? colors.grey_8 : colors.grey_6}
                 placeholder="새 비밀번호"
+                style={{
+                  fontFamily: "Pretendard-Regular",
+                }}
                 ref={(input) => {
                   this.secondInput = input;
                 }}
@@ -204,12 +205,15 @@ export default function EditPW({ navigation }) {
               on={click}
             >
               <Input
-                DarkMode={isDark}
+                isDark={isDark}
                 placeholderTextColor={isDark ? colors.grey_8 : colors.grey_6}
                 onSubmitEditing={() => {
                   rewrittenNewPW == newPW && handlePress();
                 }}
                 placeholder="새 비밀번호 확인"
+                style={{
+                  fontFamily: "Pretendard-Regular",
+                }}
                 ref={(input) => {
                   this.thirdInput = input;
                 }}
