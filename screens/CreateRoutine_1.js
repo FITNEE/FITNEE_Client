@@ -98,13 +98,15 @@ const TitleContainer = styled.View`
   margin-bottom: 60px;
 `;
 const Title = styled.Text`
-  font-size: 20px;
-  font-weight: 600;
+  font-size: 24px;
+  font-family: Pretendard-SemiBold;
+  line-height: 33.6px; /*  */
   color: ${(props) => (props.isDark ? colors.white : colors.black)};
 `;
 const SubTitle = styled.Text`
-  font-size: 12px;
-  margin-top: 10px;
+  font-size: 13px;
+  margin-top: 8px;
+  line-height: 19.5px; /* 19.5px */
   color: ${(props) => (props.isDark ? colors.white : colors.black)};
 `;
 const SpaceContainer = styled.View`
@@ -128,7 +130,6 @@ const SpaceItem = styled.TouchableOpacity`
       : colors.white};
   border-radius: 10px;
   align-items: center;
-  justify-content: center;
   border: ${(props) => (props.isActive ? "1px" : 0)};
   border-color: ${(props) => (props.isActive ? colors.l_main : colors.white)};
 `;
@@ -137,10 +138,13 @@ const SpaceImage = styled.Image`
   height: 117px;
   background-color: ${colors.grey_7};
   border-radius: 500px;
+  margin-top: 24px;
 `;
 const SpaceName = styled.Text`
-  margin-top: 10px;
-  font-weight: bold;
+  margin-top: 9px;
+  font-family: Pretendard-SemiBold;
+  font-size: 17px;
+  line-height: 25.5px; /*  */
   color: ${(props) =>
     props.isActive
       ? colors.l_main
@@ -162,7 +166,8 @@ const NextButton = styled.TouchableOpacity`
   border-radius: 10px;
 `;
 const ButtonText = styled.Text`
-  font-weight: bold;
+  font-size: 17px;
+  font-family: Pretendard-SemiBold;
   color: ${(props) =>
     props.isActive
       ? props.isDark

@@ -142,18 +142,19 @@ const Container = styled.View`
   flex: 1;
   width: 100%;
   align-items: center;
-  justify-content: space-evenly;
+
   background-color: ${(props) => (props.isDark ? colors.black : colors.grey_1)};
 `;
 
 const TitleContainer = styled.View`
   width: 90%;
-  margin-bottom: 10px;
-  margin-top: 30px;
+  margin-bottom: 32px;
+  margin-top: 52px;
 `;
 const Title = styled.Text`
-  font-size: 25px;
-  font-weight: 600;
+  font-size: 24px;
+  font-family: Pretendard-SemiBold;
+  line-height: 33.6px; /* 33.6px */
   color: ${(props) => (props.isDark ? colors.white : colors.black)};
 `;
 const PartContainer = styled.View`
@@ -165,20 +166,23 @@ const PartContainer = styled.View`
 const PartItem = styled.TouchableOpacity`
   width: 101px;
   height: 124px;
-  border-radius: 10px;
+  border-radius: 12px;
   align-items: center;
-  justify-content: center;
-  margin-top: 10px;
+
+  margin-top: 12px;
 `;
 const PartImage = styled.Image`
   width: 85px;
   height: 85px;
+  margin-top: 8px;
   background-color: ${colors.grey_7};
   border-radius: 300px;
 `;
 const PartName = styled.Text`
-  font-size: 15px;
-  margin-top: 10px;
+  font-size: 17px;
+  font-family: Pretendard-Medium;
+  margin-top: 2px;
+  line-height: 25.5px; /* 25.5px */
 `;
 const AllButton = styled.TouchableOpacity`
   width: 147px;
@@ -189,7 +193,8 @@ const AllButton = styled.TouchableOpacity`
       : props.isDark
       ? colors.grey_7
       : colors.grey_3};
-  margin-bottom: 120px;
+  margin-top: 24px;
+  margin-bottom: 104px;
   border-radius: 100px;
   align-items: center;
   justify-content: center;
@@ -217,7 +222,8 @@ const NextButton = styled.TouchableOpacity`
   border-radius: 10px;
 `;
 const ButtonText = styled.Text`
-  font-weight: bold;
+  font-size: 17px;
+  font-family: Pretendard-SemiBold;
   color: ${(props) =>
     props.isActive
       ? props.isDark

@@ -77,6 +77,7 @@ export default function CreateRoutine_2({ navigation }) {
           backgroundColor: "white",
           width: 288,
           height: 200,
+
           borderRadius: 20,
         }}
         selectedValue="0"
@@ -106,7 +107,7 @@ const Container = styled.View`
   flex: 1;
   width: 100%;
   align-items: center;
-  justify-content: space-evenly;
+  /* justify-content: space-evenly; */
   background-color: ${(props) => (props.isDark ? colors.black : colors.grey_1)};
 `;
 const Bubble = styled.View`
@@ -141,28 +142,34 @@ const BubbleText = styled.Text`
 `;
 const TitleContainer = styled.View`
   width: 90%;
-  margin-bottom: 60px;
+  margin-top: 52px;
+  margin-bottom: 92px;
+  /* margin-bottom: 60px; */
 `;
 const Title = styled.Text`
-  font-size: 25px;
-  font-weight: bold;
+  font-size: 24px;
+  font-family: Pretendard-SemiBold;
+  line-height: 33.6px; /* 33.6px */
   color: ${(props) => (props.isDark ? colors.white : colors.black)};
 `;
 const SubTitle = styled.Text`
-  font-size: 15px;
-  margin-top: 10px;
+  font-size: 13px;
+  font-family: Pretendard-Regular;
+  margin-top: 8px;
+  line-height: 19.5px; /* 19.5px */
   color: ${(props) => (props.isDark ? colors.white : colors.black)};
 `;
 const DontKnowButton = styled.TouchableOpacity`
   width: 99px;
   height: 40px;
+  margin-top: 22px;
   background-color: ${(props) =>
     props.isActive
       ? colors.d_main
       : props.isDark
       ? colors.grey_7
       : colors.grey_3};
-  margin-bottom: 120px;
+  margin-bottom: 104px;
   border-radius: 100px;
   align-items: center;
   justify-content: center;
@@ -184,5 +191,7 @@ const NextButton = styled.TouchableOpacity`
   border-radius: 10px;
 `;
 const ButtonText = styled.Text`
+  font-size: 17px;
+  font-family: Pretendard-SemiBold;
   color: ${(props) => (props.isDark ? colors.black : colors.white)};
 `;

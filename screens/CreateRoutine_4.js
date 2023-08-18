@@ -235,21 +235,25 @@ const Container = styled.View`
   flex: 1;
   width: 100%;
   align-items: center;
-  justify-content: space-around;
+
   background-color: ${(props) => (props.isDark ? colors.black : colors.grey_1)};
 `;
 const TitleContainer = styled.View`
   width: 90%;
-  margin-bottom: 60px;
+  margin-top: 52px;
+  margin-bottom: 150px;
 `;
 const Title = styled.Text`
-  font-size: 20px;
-  font-weight: 600;
+  font-size: 24px;
+  font-family: Pretendard-SemiBold;
+  line-height: 33.6px; /* 33.6px */
   color: ${(props) => (props.isDark ? colors.white : colors.black)};
 `;
 const SubTitle = styled.Text`
-  font-size: 12px;
-  margin-top: 10px;
+  font-size: 13px;
+  line-height: 19.5px; /* 19.5px */
+  margin-top: 8px;
+  font-family: Pretendard-Regular;
   color: ${(props) => (props.isDark ? colors.white : colors.black)};
 `;
 const DayContainer = styled.View`
@@ -259,7 +263,6 @@ const DayContainer = styled.View`
   align-items: center;
   justify-content: center;
   justify-content: space-around;
-  margin-bottom: 70px;
 `;
 const DayItem = styled.TouchableOpacity`
   width: 43px;
@@ -270,7 +273,8 @@ const DayItem = styled.TouchableOpacity`
   justify-content: center;
 `;
 const DayName = styled.Text`
-  color: #757575;
+  font-size: 17px;
+  font-family: Pretendard-Medium;
 `;
 const AllDayButton = styled.TouchableOpacity`
   width: 110px;
@@ -281,13 +285,15 @@ const AllDayButton = styled.TouchableOpacity`
       : props.isDark
       ? colors.grey_7
       : colors.grey_3};
-  margin-bottom: 50px;
+  margin-top: 141px;
+  margin-bottom: 104px;
   border-radius: 100px;
   align-items: center;
   justify-content: center;
 `;
 const AllDayText = styled.Text`
   font-size: 13px;
+  font-family: Pretendard-SemiBold;
   color: ${(props) =>
     props.isActive ? colors.white : props.isDark ? colors.white : colors.black};
 `;
@@ -305,7 +311,8 @@ const NextButton = styled.TouchableOpacity`
   border-radius: 10px;
 `;
 const ButtonText = styled.Text`
-  font-weight: bold;
+  font-size: 17px;
+  font-family: Pretendard-SemiBold;
   color: ${(props) =>
     props.isActive
       ? props.isDark
@@ -331,6 +338,8 @@ const Loading = styled.View`
   background-color: ${(props) => (props.isDark ? colors.grey_9 : colors.white)};
 `;
 const LoadingText = styled.Text`
-  margin-top: 30px;
+  font-size: 11px;
+  font-family: Pretendard-Regular;
+  margin-top: 24px;
   color: ${(props) => (props.isDark ? colors.white : colors.black)};
 `;
