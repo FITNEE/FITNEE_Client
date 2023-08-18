@@ -3,11 +3,11 @@ import styled from "styled-components/native";
 import { colors } from "../../colors";
 import Line from "../../assets/SVGs/Line.svg";
 
-export default function UpdateExercise() {
+export default function UpdateExercise({ item }) {
   return (
     <Container>
       <Title>
-        <TitleText>데드리프트</TitleText>
+        <TitleText>{item.exerciseName}</TitleText>
       </Title>
       <Content>
         <Image />
@@ -15,17 +15,21 @@ export default function UpdateExercise() {
           <Count>
             <CountName>세트</CountName>
             <Line width={70} height={1} />
-            <CountNum>+1회</CountNum>
+            <CountNum count={item.plusSet}>+{item.plusSet}회</CountNum>
           </Count>
           <Count>
             <CountName>횟수</CountName>
             <Line width={70} height={1} />
-            <CountNum>+1회</CountNum>
+            <CountNum count={item.content.plusRep}>
+              +{item.content.plusRep}회
+            </CountNum>
           </Count>
           <Count>
             <CountName>무게</CountName>
             <Line width={70} height={1} />
-            <CountNum>+1kg</CountNum>
+            <CountNum count={item.content.plusWeight}>
+              +{item.content.plusWeight}kg
+            </CountNum>
           </Count>
         </CountBox>
       </Content>
@@ -71,4 +75,5 @@ const CountName = styled.Text`
 `;
 const CountNum = styled.Text`
   margin-left: 15px;
+  color: ${(props) => (props.count ? "#19CFA2" : colors.grey_6)};
 `;
