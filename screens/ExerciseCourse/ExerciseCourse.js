@@ -68,9 +68,8 @@ const ReplaceButtonText = styled.Text`
   color: ${({ isDark }) => (isDark ? colors.white : colors.l_main)};
   text-align: center;
   font-size: 13px;
-  font-style: normal;
-  font-weight: 600;
   line-height: 19.5px;
+  font-family: Pretendard-regular;
 `;
 
 const CurrentExplain = styled.View`
@@ -163,6 +162,13 @@ const SkipExercriseText = styled.Text`
   font-weight: 600;
   line-height: 19.5px;
   text-decoration-line: underline;
+`;
+
+const ExerciseImage = styled.Image`
+  height: 307px;
+  aspect-ratio: 1;
+  border-radius: 999px;
+  justify-self: center;
 `;
 
 export default function ExerciseCourse({ navigation }) {
@@ -406,8 +412,85 @@ export default function ExerciseCourse({ navigation }) {
     );
   };
 
+  const getImage = (healthCategoryIdx) => {
+    switch (healthCategoryIdx) {
+      case 1:
+        return require("../../assets/GIFs/1.gif");
+      case 2:
+        return require("../../assets/GIFs/2.gif");
+      case 3:
+        return require("../../assets/GIFs/3.gif");
+      case 4:
+        return require("../../assets/GIFs/4.gif");
+      case 5:
+        return require("../../assets/GIFs/5.gif");
+      case 6:
+        return require("../../assets/GIFs/6.gif");
+      case 7:
+        return require("../../assets/GIFs/7.gif");
+      case 8:
+        return require("../../assets/GIFs/8.gif");
+      case 9:
+        return require("../../assets/GIFs/9.gif");
+      case 10:
+        return require("../../assets/GIFs/10.gif");
+      case 11:
+        return require("../../assets/GIFs/11.gif");
+      case 12:
+        return require("../../assets/GIFs/12.gif");
+      case 13:
+        return require("../../assets/GIFs/13.gif");
+      case 14:
+        return require("../../assets/GIFs/14.gif");
+      case 15:
+        return require("../../assets/GIFs/15.gif");
+      case 17:
+        return require("../../assets/GIFs/17.gif");
+      case 18:
+        return require("../../assets/GIFs/18.gif");
+      case 20:
+        return require("../../assets/GIFs/20.gif");
+      case 21:
+        return require("../../assets/GIFs/21.gif");
+      case 22:
+        return require("../../assets/GIFs/22.gif");
+      case 23:
+        return require("../../assets/GIFs/23.gif");
+      case 24:
+        return require("../../assets/GIFs/24.gif");
+      case 25:
+        return require("../../assets/GIFs/25.gif");
+      case 26:
+        return require("../../assets/GIFs/26.gif");
+      case 27:
+        return require("../../assets/GIFs/27.gif");
+    }
+  };
+
   return (
     <BottomSheetModalProvider>
+      <Animated.View
+        style={[
+          StyleSheet.absoluteFillObject,
+          {
+            justifyContent: "center",
+            width,
+            height,
+            opacity: timerAnimation,
+            backgroundColor: "rgba(38, 38, 38, 0.40)",
+            zIndex: zIndexAnimation,
+          },
+        ]}
+      >
+        <TextInput
+          ref={inputRef}
+          style={styles.text}
+          defaultValue={"3"}
+          Opacity={"1"}
+          editable={false}
+        />
+      </Animated.View>
+
       <SafeAreaView
         style={{
           flex: 1,
@@ -418,40 +501,13 @@ export default function ExerciseCourse({ navigation }) {
           exerciseName={dataList[listIndex].exerciseInfo.exerciseName}
           isDark={isDark}
         >
-          <ExerciseCircle isDark={isDark}></ExerciseCircle>
-
-          <Animated.View
-            style={[
-              StyleSheet.absoluteFillObject,
-              {
-                justifyContent: "center",
-                width,
-                height,
-                opacity: timerAnimation,
-                backgroundColor: "rgba(38, 38, 38, 0.40)",
-                zIndex: zIndexAnimation,
-              },
-            ]}
+          {/* <ExerciseCircle isDark={isDark}></ExerciseCircle> */}
+          <ExerciseImage
+            source={getImage(
+              dataList[listIndex].exerciseInfo.healthCategoryIdx
+            )}
+            resizeMode="contain"
           />
-
-          <Animated.View
-            style={{
-              position: "absolute",
-              justifyContent: "center",
-              alignItems: "center",
-              height: "92%",
-              opacity: timerAnimation,
-              zIndex: zIndexAnimation,
-            }}
-          >
-            <TextInput
-              ref={inputRef}
-              style={styles.text}
-              defaultValue={"3"}
-              Opacity={"1"}
-              editable={false}
-            />
-          </Animated.View>
 
           <ReplaceButton isDark={isDark} disabled={false} onPress={handleModal}>
             <ReplaceButtonText isDark={isDark}>운동 대체하기</ReplaceButtonText>

@@ -17,6 +17,7 @@ import { IsDarkAtom } from "../../recoil/MyPageAtom";
 import Check from "../../assets/SVGs/Check.svg";
 import Check_disabled from "../../assets/SVGs/Check_Disabled.svg";
 import Close from "../../assets/SVGs/Close.svg";
+import ExerciseCourse_2 from "./ExerciseCourse_2";
 
 const TextBox = styled.View`
   width: 327px;
@@ -48,6 +49,13 @@ const Container = styled.View`
 
 const CurrentText = styled.Text`
   font-size: 20px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 32px;
+`;
+
+const CurrentText2 = styled.Text`
+  font-size: 15px;
   font-style: normal;
   font-weight: 600;
   line-height: 32px;
@@ -103,6 +111,7 @@ const StopExercise = styled.TouchableOpacity`
   top: 20px;
   right: 24px;
 `;
+
 const SkipExercriseText = styled.Text`
   color: ${({ isDark }) => (isDark ? colors.grey_2 : colors.grey_8)};
   text-align: center;
@@ -153,6 +162,11 @@ export default function ExerciseCourse_1({ navigation }) {
 
   const [exerciseData, setExerciseData] = useState([]);
   const [advice, setAdvice] = useState(adviceData[0]);
+
+  const [checkedSets, setCheckedSets] = useState(
+    Array(dataList[listIndex].totalSets).fill(false)
+  );
+  const [showExerciseCourse2, setShowExerciseCourse2] = useState(false);
 
   const goToNextExercise = async () => {
     //스킵
@@ -330,7 +344,9 @@ export default function ExerciseCourse_1({ navigation }) {
             <CurrentText style={{ color: textColor }}>
               {item.weight}
             </CurrentText>
-          ) : null}
+          ) : (
+            <CurrentText2 style={{ color: colors.grey_7 }}>빈 봉</CurrentText2>
+          )}
           {item.weight !== "null" ? (
             <TextLine>
               <CurrentUnit style={{ color: textColor }}>kg</CurrentUnit>
@@ -343,12 +359,13 @@ export default function ExerciseCourse_1({ navigation }) {
             <CurrentUnit style={{ color: textColor }}>회</CurrentUnit>
           </TextLine>
         </Box3>
-        {item.set === dataList[listIndex].totalSets ? null : item.set + 1 <=
-          boxNumber ? (
+        {item.set === dataList[listIndex].totalSets ? null : checkedSets[
+            item.set
+          ] ? (
           <Check
-            color={isDark ? colors.black : colors.white}
             width={24}
             height={24}
+            color={isDark ? colors.black : colors.white}
           />
         ) : (
           <Check_disabled width={24} height={24} />
@@ -381,7 +398,24 @@ export default function ExerciseCourse_1({ navigation }) {
       setIsPlaying(true);
     }, 300);
 
-    this.flatListRef.scrollToIndex({ animated: true, index: boxNumber });
+    const newCheckedSets = [...checkedSets];
+    newCheckedSets[boxNumber - 1] = true;
+    setCheckedSets(newCheckedSets);
+
+    this.flatListRef.scrollToIndex({
+      animated: true,
+      index: boxNumber,
+    });
+
+    if (boxNumber <= dataList[listIndex].totalSets - 1) {
+      setTimeout(() => {
+        setShowExerciseCourse2(true);
+      }, 2000);
+    }
+
+    // setTimeout(() => {
+    //   goToNextExercise();
+    // }, 2000);
   };
 
   useEffect(() => {
@@ -398,85 +432,99 @@ export default function ExerciseCourse_1({ navigation }) {
     };
   }, [isTimerRunning]);
 
-  return (
-    <SafeAreaView
-      style={{
-        flex: 1,
-        backgroundColor: isDark ? colors.grey_9 : colors.grey_2,
-      }}
-    >
-      <ExerciseCard
-        exerciseName={dataList[listIndex].exerciseInfo.exerciseName}
-        isDark={isDark}
+  const OnExerciseCourse2 = () => {
+    setShowExerciseCourse2(true);
+  };
+
+  if (showExerciseCourse2)
+    return (
+      <ExerciseCourse_2
+        navigation={navigation}
+        dataList={dataList}
+        listIndex={listIndex}
+        totalTime={totalTime}
+        routineIdx={routineIdx}
+      />
+    );
+  else
+    return (
+      <SafeAreaView
+        style={{
+          flex: 1,
+          backgroundColor: isDark ? colors.grey_9 : colors.grey_2,
+        }}
       >
-        <StopExercise onPress={() => OpenConfirm()}>
-          <Close
-            width={24}
-            height={24}
-            color={isDark ? colors.white : colors.black}
-          />
-        </StopExercise>
-        <ExerciseCircle isDark={isDark}>
-          <CountdownCircleTimer
-            key={key}
-            isPlaying={isPlaying}
-            //duration={oneDuration}
-            duration={6}
-            colors={colors.l_main}
-            size={315}
-            strokeWidth={8}
-            trailColor={isDark ? colors.grey_7 : colors.grey_3}
-            //onComplete={handleComplete}
-            onComplete={() => ({ shouldRepeat: true })}
-            updateInterval={0.001}
-            isGrowing={true}
-            rotation={"counterclockwise"}
-          >
-            {/* {({ remainingTime }) => <Text>{remainingTime}</Text>} */}
-          </CountdownCircleTimer>
-        </ExerciseCircle>
-
-        <Indicator
-          totalPages={dataList[listIndex].totalSets}
-          currentPage={indicatorNum - 1}
+        <ExerciseCard
+          exerciseName={dataList[listIndex].exerciseInfo.exerciseName}
           isDark={isDark}
-        />
+        >
+          <StopExercise onPress={() => OpenConfirm()}>
+            <Close
+              width={24}
+              height={24}
+              color={isDark ? colors.white : colors.black}
+            />
+          </StopExercise>
+          <ExerciseCircle isDark={isDark}>
+            <CountdownCircleTimer
+              key={key}
+              isPlaying={isPlaying}
+              //duration={oneDuration}
+              duration={6}
+              colors={colors.l_main}
+              size={315}
+              strokeWidth={8}
+              trailColor={isDark ? colors.grey_7 : colors.grey_3}
+              //onComplete={handleComplete}
+              onComplete={() => ({ shouldRepeat: true })}
+              updateInterval={0.001}
+              isGrowing={true}
+              rotation={"counterclockwise"}
+            >
+              {/* {({ remainingTime }) => <Text>{remainingTime}</Text>} */}
+            </CountdownCircleTimer>
+          </ExerciseCircle>
 
-        <BoxList>
-          <FlatList
-            //현재 하고 있는 세트와 다음 세트를 보여주는 리스트
-            style={{}}
-            initialScrollIndex={0}
-            data={exerciseData}
-            renderItem={renderItem}
-            keyExtractor={(item) => item.set}
-            showsVerticalScrollIndicator={false}
-            ref={(ref) => {
-              this.flatListRef = ref;
-            }}
-            onEndReached={goToCompleteExercise}
-            scrollEnabled={false}
+          <Indicator
+            totalPages={dataList[listIndex].totalSets}
+            currentPage={indicatorNum - 1}
+            isDark={isDark}
           />
-        </BoxList>
 
-        <TextBox>
-          <JustText>{advice}</JustText>
-        </TextBox>
+          <BoxList>
+            <FlatList
+              //현재 하고 있는 세트와 다음 세트를 보여주는 리스트
+              style={{}}
+              data={exerciseData}
+              renderItem={renderItem}
+              keyExtractor={(item) => item.set}
+              showsVerticalScrollIndicator={false}
+              ref={(ref) => {
+                this.flatListRef = ref;
+              }}
+              // onEndReached={goToCompleteExercise}
+              scrollEnabled={false}
+            />
+          </BoxList>
 
-        <ExerciseButton //세트 완료 버튼
-          text="세트 완료"
-          disabled={false}
-          //onPress={timeToRest}
-          onPress={scrollBox}
-          isDark={isDark}
-        />
+          <TextBox>
+            <JustText>{advice}</JustText>
+          </TextBox>
 
-        <SkipExercrise onPress={() => OpenConfirm2()}>
-          <SkipExercriseText isDark={isDark}>
-            이 운동 건너뛰기
-          </SkipExercriseText>
-        </SkipExercrise>
-      </ExerciseCard>
-    </SafeAreaView>
-  );
+          <ExerciseButton //세트 완료 버튼
+            text="세트 완료"
+            disabled={false}
+            //onPress={timeToRest}
+            onPress={scrollBox}
+            isDark={isDark}
+          />
+
+          <SkipExercrise onPress={() => OpenConfirm2()}>
+            <SkipExercriseText isDark={isDark}>
+              이 운동 건너뛰기
+            </SkipExercriseText>
+          </SkipExercrise>
+        </ExerciseCard>
+      </SafeAreaView>
+    );
 }
