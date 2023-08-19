@@ -40,8 +40,6 @@ export default function MyPage() {
     isFocus && setIsTabVisible(true);
   }, [isFocus]);
 
-  const now = new Date();
-
   const getDayHealth = async (checkedDate) => {
     try {
       let url = "https://gpthealth.shop/";

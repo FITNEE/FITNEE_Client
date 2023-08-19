@@ -57,7 +57,7 @@ export default function Analysis(props) {
   const weekData = props.weekData;
 
   // 오늘이 몇주차인지
-  const date = new Date();
+  const date = new Date(Date.now() + 9 * 60 * 60 * 1000);
   const weekday = date.getDay() == 0 ? 7 : date.getDay();
   const dateOfMonth = date.getDate();
   const weeksOfMonth = Math.ceil((dateOfMonth + 7 - weekday) / 7);
@@ -73,15 +73,13 @@ export default function Analysis(props) {
   const lastMonth = date.getMonth() + 1;
   const lastWeek = weeksOfMonth;
 
+  const finishingIndex = (lastMonth - 1) * 6 + lastWeek - 1;
   const startingIndex =
-    firstMonth != 0 ? (firstMonth - 1) * 6 + firstWeek - 1 : 0;
-  const finishingIndex =
-    lastMonth != 0 ? (lastMonth - 1) * 6 + lastWeek - 1 : 0;
+    firstMonth != 0 ? (firstMonth - 1) * 6 + firstWeek - 1 : finishingIndex;
   const slicedWeekData = weekData.formattedRows.slice(
     startingIndex,
     finishingIndex
   );
-  console.log(slicedWeekData);
 
   const calorie = weekData.formattedRows[finishingIndex].weeklyCalories;
   const kilometer = weekData.formattedRows[finishingIndex].weeklyDistance;
