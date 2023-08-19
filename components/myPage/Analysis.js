@@ -4,6 +4,9 @@ import TotalChart from "./TotalChart";
 import { useRecoilValue } from "recoil";
 import { IsDarkAtom } from "../../recoil/MyPageAtom";
 import { colors } from "../../colors";
+import Mini_dumbbell from "../../assets/SVGs/Mini_dumbbell.svg";
+import Mini_shoes from "../../assets/SVGs/Mini_shoes.svg";
+import Mini_timer from "../../assets/SVGs/Mini_timer.svg";
 
 const Container = styled.View`
   width: 100%;
@@ -16,13 +19,6 @@ const Block = styled.View`
   padding: 8px 24px;
   align-items: center;
   flex-direction: row;
-`;
-const Circle = styled.View`
-  width: 40px;
-  height: 40px;
-  border-radius: 40px;
-  background-color: #f3f3f3;
-  margin-right: 16px;
 `;
 const BlockContent = styled.View``;
 const Data = styled.View`
@@ -104,7 +100,12 @@ export default function Analysis(props) {
       <Exercise>
         <Title isDark={isDark}>운동 현황</Title>
         <Block>
-          <Circle />
+          <Mini_dumbbell
+            style={{ marginRight: 16 }}
+            width={40}
+            height={40}
+            color={isDark ? colors.grey_8 : colors.grey_1}
+          />
           <BlockContent>
             <Data>
               <CircleText isDark={isDark}>{calorie} </CircleText>
@@ -116,7 +117,12 @@ export default function Analysis(props) {
           </BlockContent>
         </Block>
         <Block>
-          <Circle />
+          <Mini_shoes
+            style={{ marginRight: 16 }}
+            width={40}
+            height={40}
+            color={isDark ? colors.grey_8 : colors.grey_1}
+          />
           <BlockContent>
             <Data>
               <CircleText isDark={isDark}>{kilometer} </CircleText>
@@ -126,7 +132,12 @@ export default function Analysis(props) {
           </BlockContent>
         </Block>
         <Block>
-          <Circle />
+          <Mini_timer
+            style={{ marginRight: 16 }}
+            width={40}
+            height={40}
+            color={isDark ? colors.grey_8 : colors.grey_1}
+          />
           <BlockContent>
             <Data>
               <CircleText isDark={isDark}>{hour} </CircleText>
