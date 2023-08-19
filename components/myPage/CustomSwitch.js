@@ -5,7 +5,7 @@ import { colors } from "../../colors";
 import { useRecoilState } from "recoil";
 import { IsDarkAtom } from "../../recoil/MyPageAtom";
 
-const CustomSwitch = ({ option_left, option_right }) => {
+const CustomSwitch = () => {
   const [isDark, setIsDark] = useRecoilState(IsDarkAtom);
 
   const [animatedValue] = useState(new Animated.Value(isDark ? 0 : 28));
