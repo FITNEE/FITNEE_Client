@@ -151,7 +151,7 @@ export default function Dictionary_2({ navigation, route }) {
                             <LeftIcon width={24} height={24} color={isDark ? colors.white : colors.black} />
                         </TouchableOpacity>
                     </TopBtnContainer>
-                    <ImageContainer>
+                    <ImageContainer style={{paddingBottom: 16}}>
                         <ExerciseImage
                             // source={require("../../assets/GIFs/Test.gif")}
                             resizeMode="cover"
@@ -320,11 +320,8 @@ const ImageContainer = styled.View`
     align-items: center;
 `
 const ExerciseImage = styled.Image`
-    background-color: ${colors.grey_4};
-    /* width: 100%; */
-    width: 301px;
-
-    height: 301px;
+    width: 100%;
+    height: 327px;
 `
 const DictionaryContainer = styled.View`
     flex: 1;
@@ -362,7 +359,6 @@ const Bubble = styled.View`
 `
 const BubbleArrow = styled.View`
     position: absolute;
-    /* display: block; */
     width: 0;
     z-index: 1;
     top: 50px;
