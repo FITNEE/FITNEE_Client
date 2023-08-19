@@ -5,6 +5,7 @@ import {
   Alert,
   ScrollView,
   View,
+  StatusBar,
 } from "react-native";
 import styled from "styled-components/native";
 import BottomSheet, { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
@@ -21,7 +22,6 @@ import WeekCalendar from "../../components/myRoutine/WeekCalendar";
 import { List_Custom } from "../../components/myRoutine/List_Custom";
 import List_Normal from "../../components/myRoutine/List_Normal";
 import {
-  getRoutines,
   getRoutine,
   updateRoutine,
   getRoutineParts,
@@ -91,8 +91,9 @@ export default MyRoutine = ({ navigation, route }) => {
         setSCHEDULE(sortArray(res.result));
         getRoutine(sortArray(res.result), selectedDay, setIsLoading).then(
           (res) => {
-            console.log("getRoutine반응값:", res);
+            console.log("getRoutine반응값:", res.result.routineDetails);
             if (res.result) {
+              console.log(res.result);
               setRoutineData(res.result.routineDetails);
               setNewRoutine(res.result.routineDetails);
             } else {
@@ -285,7 +286,7 @@ export default MyRoutine = ({ navigation, route }) => {
 
   useEffect(() => {
     updateDatas();
-  }, []);
+  }, [isFocus]);
 
   return (
     <ScreenBase
@@ -293,6 +294,7 @@ export default MyRoutine = ({ navigation, route }) => {
         backgroundColor: isDark ? colors.grey_9 : colors.white,
       }}
     >
+      <StatusBar barStyle={isDark ? "light-content" : "dark-content"} />
       <Header
         isDark={isDark}
         mode={mode}
