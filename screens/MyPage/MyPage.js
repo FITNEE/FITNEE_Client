@@ -28,7 +28,6 @@ const Choice = styled.View`
   gap: 16px;
 `;
 const ChoiceButton = styled.TouchableOpacity`
-  display: block;
   padding-bottom: 2px;
 `;
 
