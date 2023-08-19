@@ -67,7 +67,11 @@ const KeyBoardAwareContainer = styled.KeyboardAvoidingView`
   flex: 1;
 `;
 
-export const ScreenLayout = ({ children, isDark, isRelative = false }) => {
+export const ScreenKeyboardLayout = ({
+  children,
+  isDark,
+  isRelative = false,
+}) => {
   return (
     <ScreenContainer
       style={{ backgroundColor: isDark ? colors.grey_9 : colors.grey_1 }}
