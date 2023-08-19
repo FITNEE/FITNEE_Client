@@ -1,45 +1,62 @@
-import React, { useState, useRef, useEffect, useCallback, useMemo, useContext, createContext } from 'react'
-import styled from 'styled-components/native'
-import { colors } from '../../colors'
-import { StatusBar, TouchableOpacity, Dimensions, TouchableWithoutFeedback, SafeAreaView } from 'react-native'
-import BottomSheet, { BottomSheetScrollView, BottomSheetBackdrop } from "@gorhom/bottom-sheet";
-import Dictionary_LeftTab from '../../components/Dictionary/Dictionary_LeftTab'
-import Dictionary_RightTab from '../../components/Dictionary/Dictionary_RightTab'
-import Dictionary_Modal from '../../components/Dictionary/Dictionary_Modal'
-import axios from 'axios'
-import { IsDarkAtom } from "../../recoil/MyPageAtom"
-import { useRecoilValue } from "recoil"
-import LeftIcon from '../../assets/SVGs/Left.svg'
-import AddIcon from '../../assets/SVGs/Add.svg'
-import EditIcon from '../../assets/SVGs/Edit.svg'
+import React, {
+  useState,
+  useRef,
+  useEffect,
+  useCallback,
+  useMemo,
+  useContext,
+  createContext,
+} from "react";
+import styled from "styled-components/native";
+import { colors } from "../../colors";
+import {
+  StatusBar,
+  TouchableOpacity,
+  Dimensions,
+  TouchableWithoutFeedback,
+  SafeAreaView,
+} from "react-native";
+import BottomSheet, {
+  BottomSheetScrollView,
+  BottomSheetBackdrop,
+} from "@gorhom/bottom-sheet";
+import Dictionary_LeftTab from "../../components/Dictionary/Dictionary_LeftTab";
+import Dictionary_RightTab from "../../components/Dictionary/Dictionary_RightTab";
+import Dictionary_Modal from "../../components/Dictionary/Dictionary_Modal";
+import axios from "axios";
+import { IsDarkAtom } from "../../recoil/MyPageAtom";
+import { useRecoilValue } from "recoil";
+import LeftIcon from "../../assets/SVGs/Left.svg";
+import AddIcon from "../../assets/SVGs/Add.svg";
+import EditIcon from "../../assets/SVGs/Edit.svg";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-export default function Dictionary_2({ navigation, route }){
-    const isDark = useRecoilValue(IsDarkAtom)
+export default function Dictionary_2({ navigation, route }) {
+  const isDark = useRecoilValue(IsDarkAtom);
 
-    const exerciseInfo = route.params.exercise
+  const exerciseInfo = route.params.exercise;
 
-    const leftTab = useRef();
-    const rightTab = useRef();
-    const bottomModal = useRef();
+  const leftTab = useRef();
+  const rightTab = useRef();
+  const bottomModal = useRef();
 
-    const snapPoints = useMemo(() => ["45%", "96%"], []); // modal이 가리는 화면%
+  const snapPoints = useMemo(() => ["45%", "96%"], []); // modal이 가리는 화면%
 
-    // LeftTab 누르면 leftTabActivate = true
-    const [leftTabActivate, setLeftTabActivate] = useState(true);
-    const onTabPress = (target) => {
-        setIsBubbleOn(false);
-        target === leftTab ? setLeftTabActivate(true) : setLeftTabActivate(false);
-    };
-    const renderBackdrop = useCallback(
-        (props) => <BottomSheetBackdrop {...props} />,
-        []
-    );
-    // 루틴 추가 말풍선
-    const onPressAddRoutineBtn = () => {
-        setIsBubbleOn(false);
-        setIsModalVisible(true);
-    };
+  // LeftTab 누르면 leftTabActivate = true
+  const [leftTabActivate, setLeftTabActivate] = useState(true);
+  const onTabPress = (target) => {
+    setIsBubbleOn(false);
+    target === leftTab ? setLeftTabActivate(true) : setLeftTabActivate(false);
+  };
+  const renderBackdrop = useCallback(
+    (props) => <BottomSheetBackdrop {...props} />,
+    []
+  );
+  // 루틴 추가 말풍선
+  const onPressAddRoutineBtn = () => {
+    setIsBubbleOn(false);
+    setIsModalVisible(true);
+  };
 
   // RightTab에서 쓰이는 JoinBtnBool, 읽지 않음 버튼
   const [joinBtnBool, setJoinBtnBool] = useState(true); // 참여하기 버튼 나타내기
@@ -67,78 +84,75 @@ export default function Dictionary_2({ navigation, route }){
   };
   useEffect(() => {
     getReadInfo().then((result) => {
-        if (result.chatExist.chatExists == 0) {
-            console.log(`채팅 내역 존재 X`);
-            setIsAllRead(true);
-        } 
-        else {
-            if (result.informationRows.hasUnreadChats == 1) {
-            setIsAllRead(false);
-            console.log(`안 읽은 채팅 있음`);
-            } else {
-            setIsAllRead(true);
-            console.log(`안 읽은 채팅 없음`);
-            }
-        }})
-    })
-    
-    useEffect(()=>{
-        getReadInfo().then((result)=>{
-            if(result.chatExist.chatExists == 0) {
-                console.log(`채팅 내역 존재 X`)
-                setIsAllRead(true)
-            }
-            else {
-                if(result.informationRows.hasUnreadChats == 1){
-                    setIsAllRead(false)
-                    console.log(`안 읽은 채팅 있음`)
-                }
-                else{
-                    setIsAllRead(true)
-                    console.log(`안 읽은 채팅 없음`)
-                }
-            }
-        })
-    }, [])
-    
-    const [isBubbleOn, setIsBubbleOn] = useState(false)
-    const checkBubbleData = async () => {
-        try {
-            const keys = await AsyncStorage.getAllKeys()
-            const data = keys.includes("Bubble")
-            if (data !== null) {
-                const bubbleData = await AsyncStorage.getItem("Bubble")
-                console.log(`set new data for bubble (true)`)
-                const bubbleBool = JSON.parse(bubbleData)
-                return bubbleBool
-            } else {
-                const stringValue = JSON.stringify(true)
-                console.log(`no existing data - setItem for true`)
-                await AsyncStorage.setItem("Bubble", stringValue)
-            }
-            return null
-        } 
-        catch (error) {
-            console.error("Bubble Asynce Storage error", error)
+      if (result.chatExist.chatExists == 0) {
+        console.log(`채팅 내역 존재 X`);
+        setIsAllRead(true);
+      } else {
+        if (result.informationRows.hasUnreadChats == 1) {
+          setIsAllRead(false);
+          console.log(`안 읽은 채팅 있음`);
+        } else {
+          setIsAllRead(true);
+          console.log(`안 읽은 채팅 없음`);
         }
-    }
+      }
+    });
+  });
 
-    useEffect(()=>{
-        checkBubbleData().then((data)=>{
-            if(data !== null) {
-                setIsBubbleOn(data)
-                console.log(`data : ${data}`)
-            }
-        })
-    }, [])
+  useEffect(() => {
+    getReadInfo().then((result) => {
+      if (result.chatExist.chatExists == 0) {
+        console.log(`채팅 내역 존재 X`);
+        setIsAllRead(true);
+      } else {
+        if (result.informationRows.hasUnreadChats == 1) {
+          setIsAllRead(false);
+          console.log(`안 읽은 채팅 있음`);
+        } else {
+          setIsAllRead(true);
+          console.log(`안 읽은 채팅 없음`);
+        }
+      }
+    });
+  }, []);
 
-    const setBubbleFalse = async () => {
-        const stringValue = JSON.stringify(false)
-        await AsyncStorage.setItem("Bubble", stringValue)
+  const [isBubbleOn, setIsBubbleOn] = useState(false);
+  const checkBubbleData = async () => {
+    try {
+      const keys = await AsyncStorage.getAllKeys();
+      const data = keys.includes("Bubble");
+      if (data !== null) {
+        const bubbleData = await AsyncStorage.getItem("Bubble");
+        console.log(`set new data for bubble (true)`);
+        const bubbleBool = JSON.parse(bubbleData);
+        return bubbleBool;
+      } else {
+        const stringValue = JSON.stringify(true);
+        console.log(`no existing data - setItem for true`);
+        await AsyncStorage.setItem("Bubble", stringValue);
+      }
+      return null;
+    } catch (error) {
+      console.error("Bubble Asynce Storage error", error);
     }
-    useEffect(()=>{
-        !isBubbleOn && setBubbleFalse().then(console.log('set bubble for false'))
-    }, [isBubbleOn])
+  };
+
+  useEffect(() => {
+    checkBubbleData().then((data) => {
+      if (data !== null) {
+        setIsBubbleOn(data);
+        console.log(`data : ${data}`);
+      }
+    });
+  }, []);
+
+  const setBubbleFalse = async () => {
+    const stringValue = JSON.stringify(false);
+    await AsyncStorage.setItem("Bubble", stringValue);
+  };
+  useEffect(() => {
+    !isBubbleOn && setBubbleFalse().then(console.log("set bubble for false"));
+  }, [isBubbleOn]);
 
   return (
     <>
@@ -386,17 +400,16 @@ const NameContainer = styled.View`
   margin-right: 40px;
 `;
 const AreaText = styled.Text`
-    font-family: Pretendard-Regular;
-    font-size: 13px;
-    line-height: 19.5px;
-`
-const TitleWrapper = styled.View`
-`
+  font-family: Pretendard-Regular;
+  font-size: 13px;
+  line-height: 19.5px;
+`;
+const TitleWrapper = styled.View``;
 const TitleText = styled.Text`
-    font-family: Pretendard-SemiBold;
-    font-size: 24px;
-    line-height: 33.6px;
-`
+  font-family: Pretendard-SemiBold;
+  font-size: 24px;
+  line-height: 33.6px;
+`;
 const Bubble = styled.View`
   position: absolute;
   width: 154px;
@@ -420,11 +433,11 @@ const BubbleArrow = styled.View`
   border-bottom: 0;
 `;
 const BubbleText = styled.Text`
-    font-size: 11px;
-    color: white;
-    font-family: Pretendard-Regular;
-    line-height: 16.5px;
-`
+  font-size: 11px;
+  color: white;
+  font-family: Pretendard-Regular;
+  line-height: 16.5px;
+`;
 const TabContainer = styled.View`
   margin-top: 8px;
   height: 45px;
@@ -454,10 +467,10 @@ const RightTab = styled.TouchableOpacity`
   width: 155.5px;
 `;
 const TabText = styled.Text`
-    font-size: 15px;
-    padding: 10px 0px;
-    line-height: 22.5px;
-`
+  font-size: 15px;
+  padding: 10px 0px;
+  line-height: 22.5px;
+`;
 const NotReadDot = styled.View`
   background-color: ${colors.red};
   width: 6px;
@@ -477,7 +490,7 @@ const JoinBtnContainer = styled.TouchableOpacity`
   bottom: 24px;
 `;
 const JoinText = styled.Text`
-    font-family: Pretendard-SemiBold;
-    font-size: 13;
-    line-height: 19.5px;
-`
+  font-family: Pretendard-SemiBold;
+  font-size: 13;
+  line-height: 19.5px;
+`;

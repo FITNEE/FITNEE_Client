@@ -56,14 +56,7 @@ const SNSButton = styled.TouchableOpacity`
   background-color: white;
   height: 64px;
 `;
-// const StatusText = styled.Text`
-//   font-size: 12px;
-//   width: 100%;
-//   text-align: right;
-//   margin-right: 8px;
-//   font-weight: 300;
-//   margin-top: 4px;
-// `;
+
 const OnBoarding = ({ navigation }) => {
   const isDark = useRecoilValue(IsDarkAtom);
 
@@ -82,7 +75,10 @@ const OnBoarding = ({ navigation }) => {
       console.error("Failed to fetch data:", error);
     }
   };
-  const isUserId = email.indexOf("@") != -1 && email.length <= 20;
+
+  const isUserId =
+    email.indexOf("@") != -1 && email.length <= 40 && email.indexOf(".") != -1;
+
   const handleSubmit = () => {
     console.log("submitted");
     setIsLoading(true);
@@ -99,6 +95,7 @@ const OnBoarding = ({ navigation }) => {
       }
     });
   };
+
   return (
     <ScreenLayout isDark={isDark}>
       <TextContainer>

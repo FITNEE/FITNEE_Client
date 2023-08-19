@@ -3,6 +3,7 @@ import { colors } from "../../colors";
 import BottomSheet, { BottomSheetModal } from "@gorhom/bottom-sheet";
 import { Picker } from "react-native-wheel-pick";
 import { ScreenWidth } from "../../Shared";
+import { Platform, StatusBar } from "react-native";
 
 const TitleText = styled.Text`
   font-size: 24px;
@@ -54,6 +55,8 @@ export const StatusText = styled.Text`
 `;
 
 export const ScreenContainer = styled.SafeAreaView`
+  padding-top: ${Platform.OS === "android" ? StatusBar.currentHeight : 0}px;
+  /* padding-top: Platform.OS === "android" ? StatusBar.currentHeight : 0 */
   flex: 1;
 `;
 const KeyBoardAwareContainer = styled.KeyboardAvoidingView`

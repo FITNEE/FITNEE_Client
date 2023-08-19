@@ -34,6 +34,7 @@ const MyButton = styled.TouchableOpacity`
   height: 52px;
   border-radius: 16px;
   width: 100%;
+  max-width: 480px;
   margin-bottom: 24px;
 `;
 const ButtonText = styled.Text`

@@ -88,6 +88,7 @@ const Login = ({ route, navigation }) => {
               color: isDark ? colors.white : colors.black,
             },
           ]}
+          autoCapitalize="none"
           placeholderTextColor={colors.grey_5}
           autoFocus
           onSubmitEditing={() => handlePress()}
