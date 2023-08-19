@@ -50,16 +50,14 @@ const Container = styled.View`
 const CurrentText = styled.Text`
   color: ${({ isDark }) => (isDark ? colors.white : colors.black)};
   font-size: 20px;
-  font-style: normal;
-  font-weight: 600;
+  font-family: Pretendard-SemiBold;
   line-height: 32px;
 `;
 
 const CurrentUnit = styled.Text`
   color: ${({ isDark }) => (isDark ? colors.white : colors.black)};
   font-size: 15px;
-  font-style: normal;
-  font-weight: 600;
+  font-family: Pretendard-SemiBold;
 `;
 
 const Container2 = styled.View`
@@ -72,8 +70,7 @@ const Container2 = styled.View`
 
 const CurrentText2 = styled.Text`
   font-size: 15px;
-  font-style: normal;
-  font-weight: 600;
+  font-family: Pretendard-SemiBold;
   line-height: 32px;
   color: ${colors.grey_7};
 `;

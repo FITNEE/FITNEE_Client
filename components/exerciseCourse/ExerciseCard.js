@@ -7,8 +7,7 @@ const ExerciseName = styled.Text`
   color: ${({ isDark }) => (isDark ? colors.white : colors.black)};
   text-align: center;
   font-size: 20px;
-  font-style: normal;
-  font-weight: 600;
+  font-family: Pretendard-SemiBold;
   line-height: 32px;
   width: 327px;
   margin: 16px 24px 32px 24px;

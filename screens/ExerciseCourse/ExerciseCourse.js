@@ -69,7 +69,7 @@ const ReplaceButtonText = styled.Text`
   text-align: center;
   font-size: 13px;
   line-height: 19.5px;
-  font-family: Pretendard-regular;
+  font-family: Pretendard-Regular;
 `;
 
 const CurrentExplain = styled.View`
@@ -90,7 +90,7 @@ const ModalTitleView = styled.View`
 const ModalTitle = styled.Text`
   color: ${({ isDark }) => (isDark ? colors.white : colors.black)};
   font-size: 20px;
-  font-weight: 600;
+  font-family: Pretendard-SemiBold;
   line-height: 32px;
   margin-bottom: 4px;
 `;
@@ -98,8 +98,7 @@ const ModalTitle = styled.Text`
 const ModalTitle2 = styled.Text`
   color: ${({ isDark }) => (isDark ? colors.grey_2 : colors.grey_8)};
   font-size: 15px;
-  font-style: normal;
-  font-weight: 400;
+  font-family: Pretendard-Regular;
   line-height: 22.5px;
 `;
 
@@ -130,15 +129,14 @@ const ReplaceText1 = styled.Text`
   color: ${({ isDark }) => (isDark ? colors.white : colors.black)};
   text-align: center;
   font-size: 17px;
-  font-weight: 500;
+  font-family: Pretendard-Medium;
   line-height: 25.5px;
 `;
 
 const ReplaceText2 = styled.Text`
   color: ${({ isDark }) => (isDark ? colors.grey_3 : colors.grey_7)};
   font-size: 13px;
-  font-style: normal;
-  font-weight: 400;
+  font-family: Pretendard-Regular;
   line-height: 19.5px;
 `;
 
@@ -158,8 +156,7 @@ const SkipExercriseText = styled.Text`
   color: ${({ isDark }) => (isDark ? colors.grey_2 : colors.grey_8)};
   text-align: center;
   font-size: 13px;
-  font-style: normal;
-  font-weight: 600;
+  font-family: Pretendard-SemiBold;
   line-height: 19.5px;
   text-decoration-line: underline;
 `;
