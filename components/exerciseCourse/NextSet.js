@@ -48,22 +48,19 @@ const Container = styled.View`
 const CurrentText = styled.Text`
   color: ${({ isDark }) => (isDark ? colors.white : "#858687")};
   font-size: 20px;
-  font-style: normal;
-  font-weight: 600;
+  font-family: Pretendard-SemiBold;
   line-height: 32px;
 `;
 
 const CurrentUnit = styled.Text`
   color: ${({ isDark }) => (isDark ? colors.white : "#858687")};
   font-size: 15px;
-  font-style: normal;
-  font-weight: 600;
+  font-family: Pretendard-SemiBold;
 `;
 
 const CurrentText2 = styled.Text`
   font-size: 15px;
-  font-style: normal;
-  font-weight: 600;
+  font-family: Pretendard-SemiBold;
   line-height: 32px;
   color: ${({ isDark }) => (isDark ? colors.white : "#858687")};
 `;

@@ -50,8 +50,7 @@ const HomeButton = styled.TouchableOpacity`
 const JustText = styled.Text`
   color: ${colors.l_main};
   font-size: 13px;
-  font-style: normal;
-  font-weight: 400;
+  font-family: Pretendard-Regular;
   line-height: 19.5px;
   margin: 16px 0px 94px 0px;
 `;
@@ -63,14 +62,14 @@ const BlankBox = styled.View`
 const TitleText = styled.Text`
   color: ${colors.black};
   font-size: 17px;
-  font-weight: 500;
+  font-family: Pretendard-Medium;
   line-height: 25.5px;
 `;
 
 const ContentText = styled.Text`
   color: ${colors.grey_6};
   font-size: 13px;
-  font-weight: 400;
+  font-family: Pretendard-Regular;
   line-height: 19.5px;
 `;
 
@@ -95,7 +94,7 @@ const Container = styled.View`
 `;
 
 const ExerciseText = styled.Text`
-  font-weight: 600;
+  font-family: Pretendard-SemiBold;
   font-size: 24px;
   line-height: 33.6px;
   color: ${({ DarkMode }) => (DarkMode ? colors.white : colors.black)};
@@ -104,8 +103,7 @@ const ExerciseText = styled.Text`
 const ExerciseExplainText = styled.Text`
   color: ${({ DarkMode }) => (DarkMode ? colors.white : colors.black)};
   font-size: 13px;
-  font-style: normal;
-  font-weight: 400;
+  font-family: Pretendard-Regular;
   line-height: 19.5px;
 `;
 
@@ -113,8 +111,7 @@ const ButtonText = styled.Text`
   color: ${({ DarkMode }) => (DarkMode ? colors.black : colors.white)};
   text-align: center;
   font-size: 17px;
-  font-style: normal;
-  font-weight: 600;
+  font-family: Pretendard-SemiBold;
 `;
 
 const JustCircle = styled.View`

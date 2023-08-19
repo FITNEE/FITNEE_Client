@@ -46,7 +46,7 @@ const ExerciseButton = styled.TouchableOpacity`
 `;
 
 const ExerciseText = styled.Text`
-  font-weight: 600;
+  font-family: Pretendard-SemiBold;
   font-size: 24px;
   text-align: center;
   line-height: 33.6px;
@@ -67,7 +67,7 @@ const ExerciseRec = styled.View`
 const RecText1 = styled.Text`
   color: ${({ isDark }) => (isDark ? colors.grey_3 : colors.grey_7)};
   font-size: 13px;
-  font-weight: 400;
+  font-family: Pretendard-Regular;
   line-height: 19.5px;
   width: 188px;
 `;
@@ -75,7 +75,7 @@ const RecText1 = styled.Text`
 const RecText2 = styled.Text`
   color: ${({ isDark }) => (isDark ? colors.grey_3 : colors.grey_7)};
   font-size: 13px;
-  font-weight: 400;
+  font-family: Pretendard-Regular;
   line-height: 19.5px;
   width: 55px;
 `;
@@ -83,7 +83,7 @@ const RecText2 = styled.Text`
 const RecText3 = styled.Text`
   color: ${({ isDark }) => (isDark ? colors.grey_3 : colors.grey_7)};
   font-size: 13px;
-  font-weight: 400;
+  font-family: Pretendard-Regular;
   line-height: 19.5px;
   width: 36px;
 `;
@@ -92,8 +92,7 @@ const ExerciseButtonText = styled.Text`
   color: ${({ isDark }) => (isDark ? colors.black : colors.white)};
   text-align: center;
   font-size: 24px;
-  font-style: normal;
-  font-weight: 600;
+  font-family: Pretendard-SemiBold;
   line-height: 33.6px;
 `;
 
@@ -102,8 +101,7 @@ const ExerciseExplainText = styled.Text`
   color: ${colors.l_main};
   text-align: center;
   font-size: 13px;
-  font-style: normal;
-  font-weight: 400;
+  font-family: Pretendard-Regular;
   line-height: 19.5px;
   margin-bottom: 41px;
 `;

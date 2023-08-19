@@ -17,8 +17,7 @@ const ButtonText = styled.Text`
   color: ${({ isDark }) => (isDark ? colors.black : colors.white)};
   text-align: center;
   font-size: 17px;
-  font-style: normal;
-  font-weight: 600;
+  font-family: Pretendard-SemiBold;
   line-height: 25.5px;
 `;
 export default function ExerciseButton({ onPress, disabled, text, isDark }) {

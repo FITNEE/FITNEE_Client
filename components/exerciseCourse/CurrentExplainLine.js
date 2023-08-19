@@ -12,37 +12,28 @@ const CurrentExplain = styled.View`
   flex-direction: row;
 `;
 
+const CurrentExplainCircle = styled.View`
+  width: 12px;
+  height: 12px;
+  border-radius: 12px;
+  background: ${colors.grey_3};
+`;
+
+const CurrentExplainText = styled.Text`
+  width: 263px;
+  flex-shrink: 0;
+  color: ${({ isDark }) => (isDark ? colors.white : colors.black)};
+  font-size: 13px;
+  font-family: Pretendard-Regular;
+  line-height: 19.5px;
+`;
 export default function CurrentExplainLine({ expl }) {
   const isDark = useRecoilValue(IsDarkAtom);
-
-  const CurrentExplainCircle = styled.View`
-    width: 12px;
-    height: 12px;
-    border-radius: 12px;
-    background: ${colors.grey_3};
-  `;
-
-  const CurrentExplainText = styled.Text`
-    width: 263px;
-    flex-shrink: 0;
-    color: ${isDark ? colors.white : colors.black};
-    font-size: 13px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: 19.5px;
-  `;
 
   return (
     <CurrentExplain>
       <CurrentExplainCircle />
-      <CurrentExplainText>{expl}</CurrentExplainText>
+      <CurrentExplainText isDark={isDark}>{expl}</CurrentExplainText>
     </CurrentExplain>
-
-    //     list.map((item)=>{
-    //          <CurrentExplainLine>
-    //              <CurrentExplainCircle/>
-    //              <CurrentExplainText>{item.explain}</CurrentExplainText>
-    //          </CurrentExplainLine>
-    //     })
   );
 }

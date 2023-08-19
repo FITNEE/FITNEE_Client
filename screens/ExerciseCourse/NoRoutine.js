@@ -16,7 +16,7 @@ const Container = styled.View`
 
 const RoutineText = styled.Text`
   font-size: 20px;
-  font-weight: 600;
+  font-family: Pretendard-SemiBold;
   line-height: 32px;
   color: ${({ isDark }) => (isDark ? colors.white : colors.black)};
   padding-bottom: 10px;
@@ -25,8 +25,7 @@ const RoutineText = styled.Text`
 const RoutineExplain = styled.Text`
   color: ${({ isDark }) => (isDark ? colors.white : colors.black)};
   font-size: 13px;
-  font-style: normal;
-  font-weight: 400;
+  font-family: Pretendard-Regular;
   line-height: 19.5px;
 `;
 

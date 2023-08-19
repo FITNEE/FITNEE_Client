@@ -29,7 +29,7 @@ const JustText = styled.Text`
   color: ${colors.d_main};
   text-align: center;
   font-size: 15px;
-  font-weight: 400;
+  font-family: Pretendard-Regular;
   line-height: 22.5px;
 `;
 
@@ -49,22 +49,19 @@ const Container = styled.View`
 
 const CurrentText = styled.Text`
   font-size: 20px;
-  font-style: normal;
-  font-weight: 600;
+  font-family: Pretendard-SemiBold;
   line-height: 32px;
 `;
 
 const CurrentText2 = styled.Text`
   font-size: 15px;
-  font-style: normal;
-  font-weight: 600;
+  font-family: Pretendard-SemiBold;
   line-height: 32px;
 `;
 
 const CurrentUnit = styled.Text`
   font-size: 15px;
-  font-style: normal;
-  font-weight: 600;
+  font-family: Pretendard-SemiBold;
 `;
 
 const TextLine = styled.View`
@@ -116,8 +113,7 @@ const SkipExercriseText = styled.Text`
   color: ${({ isDark }) => (isDark ? colors.grey_2 : colors.grey_8)};
   text-align: center;
   font-size: 13px;
-  font-style: normal;
-  font-weight: 600;
+  font-family: Pretendard-SemiBold;
   line-height: 19.5px;
   text-decoration-line: underline;
 `;
@@ -407,9 +403,10 @@ export default function ExerciseCourse_1({ navigation }) {
       index: boxNumber,
     });
 
-    if (boxNumber <= dataList[listIndex].totalSets - 1) {
+    if (boxNumber === dataList[listIndex].totalSets) {
       setTimeout(() => {
         setShowExerciseCourse2(true);
+        console.log("show", showExerciseCourse2);
       }, 2000);
     }
 
@@ -511,13 +508,23 @@ export default function ExerciseCourse_1({ navigation }) {
             <JustText>{advice}</JustText>
           </TextBox>
 
-          <ExerciseButton //세트 완료 버튼
-            text="세트 완료"
-            disabled={false}
-            //onPress={timeToRest}
-            onPress={scrollBox}
-            isDark={isDark}
-          />
+          {showExerciseCourse2 ? (
+            <ExerciseButton //세트 완료 버튼
+              text="바로 시작하기"
+              disabled={false}
+              //onPress={timeToRest}
+              onPress={setShowExerciseCourse2(false)}
+              isDark={isDark}
+            />
+          ) : (
+            <ExerciseButton //세트 완료 버튼
+              text="세트 완료"
+              disabled={false}
+              //onPress={timeToRest}
+              onPress={scrollBox}
+              isDark={isDark}
+            />
+          )}
 
           <SkipExercrise onPress={() => OpenConfirm2()}>
             <SkipExercriseText isDark={isDark}>
