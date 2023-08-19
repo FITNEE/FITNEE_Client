@@ -3,7 +3,7 @@ import styled from "styled-components/native";
 import { colors } from "../../colors";
 import { Button, BackButton } from "../../Shared";
 //prettier-ignore
-import {Input,Title,ScreenLayout, StatusText,SubText,NumberInput,MyBottomSheet, InputTitle} from "../../components/Shared/OnBoarding_Shared";
+import {Input,Title,ScreenKeyboardLayout, StatusText,SubText,NumberInput,MyBottomSheet, InputTitle} from "../../components/Shared/OnBoarding_Shared";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { Keyboard, Pressable } from "react-native";
 import Check from "../../assets/SVGs/Check.svg";
@@ -141,7 +141,7 @@ const CreateAccount_2 = ({ route, navigation }) => {
         style={{ width: "100%", height: "100%" }}
         onPress={() => hideModal()}
       >
-        <ScreenLayout isDark={isDark}>
+        <ScreenKeyboardLayout isDark={isDark}>
           <BackButton isDark={isDark} onPress={() => navigation.goBack()} />
           <TextContainer>
             <Title
@@ -271,7 +271,7 @@ const CreateAccount_2 = ({ route, navigation }) => {
             defaultVal="2000"
             hideFunc={() => hideModal()}
           />
-        </ScreenLayout>
+        </ScreenKeyboardLayout>
       </Pressable>
     </BottomSheetModalProvider>
   );
