@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
+import { StatusBar } from "react-native";
 import { SafeAreaView } from "react-native";
 import { styled } from "styled-components/native";
 import Records from "../../components/myPage/Records";
@@ -96,6 +97,7 @@ export default function MyPage() {
 
   return (
     <SafeAreaView backgroundColor={isDark ? colors.grey_9 : colors.grey_1}>
+      <StatusBar barStyle={isDark ? "light-content" : "dark-content"} />
       <Container isDark={isDark}>
         <Choice>
           <ChoiceButton

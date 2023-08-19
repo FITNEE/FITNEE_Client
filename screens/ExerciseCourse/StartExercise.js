@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { SafeAreaView, TouchableOpacity } from "react-native";
+import { SafeAreaView, TouchableOpacity, StatusBar } from "react-native";
 import styled from "styled-components/native";
 import ProgressCircle from "../../components/exerciseCourse/ProgressCircle1";
 import GrayCircle from "../../components/exerciseCourse/GrayCircle";
@@ -234,6 +234,7 @@ export default function StartExercise({ navigation }) {
           backgroundColor: isDark ? colors.d_background : colors.grey_1,
         }}
       >
+        <StatusBar barStyle={isDark ? "light-content" : "dark-content"} />
         <Container2 isDark={isDark}>
           <ExerciseCircle isDark={isDark} />
         </Container2>

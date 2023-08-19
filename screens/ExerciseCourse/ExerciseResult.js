@@ -18,6 +18,8 @@ import { useRecoilValue } from "recoil";
 import { IsDarkAtom } from "../../recoil/MyPageAtom";
 import ShareIcon from "../../assets/SVGs/Share.svg";
 import ExerciseIcon from "../../assets/SVGs/Exercise.svg";
+import UpdateExercise from "../../components/exerciseCourse/UpdateExercise";
+import axios from "axios";
 import { useRoute, StackActions } from "@react-navigation/native";
 //import Share from "react-native-share";
 
@@ -152,6 +154,7 @@ export default function ExerciseResult({ navigation }) {
   const ref = useRef();
   const [captureUri, setCaptureUri] = useState(null);
   const [sharing, setSharing] = useState(false); // 공유 진행 중 여부를 상태로 관리
+  const [update, setUpdate] = useState(null);
 
   // useEffect(() => {
   //   // on mount
@@ -210,6 +213,22 @@ export default function ExerciseResult({ navigation }) {
     }
   };
 
+  const fetchData = async () => {
+    try {
+      const response = await axios.get(
+        "https://gpthealth.shop/app/routine/end/update"
+      );
+      console.log("response.data : ", response.data);
+      setUpdate(response.data.Result);
+    } catch (error) {
+      console.error("Error :", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
   return (
     <SafeAreaView
       style={{
@@ -241,18 +260,24 @@ export default function ExerciseResult({ navigation }) {
                 성장속도가 빠른 {"\n"}야망 헬린이
               </ExerciseText>
             </TextBox>
+            {update ? (
+              <>
+                <TextBox>
+                  <ExerciseText DarkMode={isDark}>
+                    다음 운동부터 {"\n"}업데이트 되는 부분이에요
+                  </ExerciseText>
+                </TextBox>
+                {update.map((item) => (
+                  <UpdateExercise item={item} />
+                ))}
+              </>
+            ) : null}
 
-            <TextBox>
-              <ExerciseText DarkMode={isDark}>
-                다음 운동부터 {"\n"}업데이트 되는 부분이에요
-              </ExerciseText>
-            </TextBox>
-
-            <ResultBox>
+            {/* <ResultBox>
               <ExerciseIconCircle DarkMode={isDark}>
                 <ExerciseIcon width={20} height={20} color={colors.l_main} />
               </ExerciseIconCircle>
-            </ResultBox>
+            </ResultBox> */}
           </Container>
         </ViewShot>
         <HomeView>
