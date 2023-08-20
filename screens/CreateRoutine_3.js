@@ -71,7 +71,7 @@ export default function CreateRoutine_3({ navigation }) {
         <Container isDark={isDark}>
             <TitleContainer>
                 <Title isDark={isDark}>{`운동할 부위를
-모두 선택하세요`}</Title>
+모두 선택하세요.`}</Title>
             </TitleContainer>
             <PartContainer>
                 {parts.map((part) => (
@@ -88,8 +88,8 @@ export default function CreateRoutine_3({ navigation }) {
                                 : isDark
                                 ? colors.grey_9
                                 : colors.white,
-                            borderWidth: allPart ? 1 : 0,
-                            borderColor: allPart ? colors.l_main : part.selected ? colors.l_main : colors.white,
+                            borderWidth: 1,
+                            borderColor: allPart ? colors.l_main : 'transparent',
                         }}
                     >
                         <PartImage />

@@ -55,8 +55,8 @@ export default function CreateRoutine_1({ navigation }) {
         <Container isDark={isDark}>
             <StatusBar barStyle={isDark ? 'light-content' : 'dark-content'} />
             <TitleContainer>
-                <Title isDark={isDark}>운동하는 곳을 선택해주세요</Title>
-                <SubTitle isDark={isDark}>장소에 맞게 운동을 추천해 드릴게요</SubTitle>
+                <Title isDark={isDark}>운동하는 곳을 선택해주세요.</Title>
+                <SubTitle isDark={isDark}>장소에 맞게 운동을 추천해 드릴게요.</SubTitle>
             </TitleContainer>
             <SpaceContainer>
                 <SpaceItem
@@ -133,8 +133,8 @@ const SpaceItem = styled.TouchableOpacity`
         props.isActive ? (props.isDark ? '#1E1B29' : colors.l_sub_2) : props.isDark ? colors.grey_8 : colors.white};
     border-radius: 10px;
     align-items: center;
-    border: ${(props) => (props.isActive ? '1px' : 0)};
-    border-color: ${(props) => (props.isActive ? colors.l_main : colors.white)};
+    /* border: ${(props) => (props.isActive ? '1px' : 0)};
+    border-color: ${(props) => (props.isActive ? colors.l_main : colors.white)}; */
 `
 const SpaceImage = styled.Image`
     width: 117px;
