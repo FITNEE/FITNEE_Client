@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect, useCallback, useMemo, useContext, createContext } from 'react'
 import styled from 'styled-components/native'
 import { colors } from '../../colors'
-import { TouchableOpacity, Dimensions, TouchableWithoutFeedback, SafeAreaView } from 'react-native'
+import { ActivityIndicator, TouchableOpacity, Dimensions, TouchableWithoutFeedback, SafeAreaView } from 'react-native'
 import BottomSheet, { BottomSheetScrollView, BottomSheetBackdrop } from '@gorhom/bottom-sheet'
 import Dictionary_LeftTab from '../../components/Dictionary/Dictionary_LeftTab'
 import Dictionary_RightTab from '../../components/Dictionary/Dictionary_RightTab'
@@ -14,6 +14,8 @@ import AddIcon from '../../assets/SVGs/Add.svg'
 import EditIcon from '../../assets/SVGs/Edit.svg'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { ScreenLayout } from '../../Shared'
+import { imagePath } from '../../imagePath'
+
 
 export default function Dictionary_2({ navigation, route }) {
     const isDark = useRecoilValue(IsDarkAtom)
@@ -24,7 +26,9 @@ export default function Dictionary_2({ navigation, route }) {
     const rightTab = useRef()
     const bottomModal = useRef()
 
-    const snapPoints = useMemo(() => ['45%', '96%'], []) // modal이 가리는 화면%
+    const snapPoints = useMemo(() => ['45%', '96%'], []) // modal이 가리는 화면 %
+
+    const [isLoading, setIsLoading] = useState(true) // gif 로딩 완료 여부
 
     // LeftTab 누르면 leftTabActivate = true
     const [leftTabActivate, setLeftTabActivate] = useState(true)
@@ -131,9 +135,8 @@ export default function Dictionary_2({ navigation, route }) {
         const stringValue = JSON.stringify(false)
         await AsyncStorage.setItem('Bubble', stringValue)
     }
-    useEffect(() => {
-        !isBubbleOn && setBubbleFalse().then(console.log('set bubble for false'))
-    }, [isBubbleOn])
+
+    const icon = `img${exerciseInfo.healthCategoryIdx}`
 
     return (
         <ScreenLayout isDark={isDark} darkBack={colors.black} lightBack={colors.grey_1}>
@@ -151,10 +154,14 @@ export default function Dictionary_2({ navigation, route }) {
                             <LeftIcon width={24} height={24} color={isDark ? colors.white : colors.black} />
                         </TouchableOpacity>
                     </TopBtnContainer>
-                    <ImageContainer style={{paddingBottom: 16}}>
+                    <ImageContainer style={{paddingBottom: 20}}>
+                        {
+                            isLoading? <Loading color={colors.l_main}/> : null
+                        }
                         <ExerciseImage
-                            // source={require("../../assets/GIFs/Test.gif")}
-                            resizeMode="cover"
+                            onLoadStart={()=>setIsLoading(true)}
+                            onLoad={()=>setIsLoading(false)}
+                            source={imagePath.path[exerciseInfo.healthCategoryIdx]}
                         />
                     </ImageContainer>
                     {isBubbleOn ? (
@@ -315,13 +322,12 @@ const TopBtnContainer = styled.View`
     height: 56px;
 `
 const ImageContainer = styled.View`
-    height: 326px;
     justify-content: center;
     align-items: center;
 `
 const ExerciseImage = styled.Image`
-    width: 100%;
-    height: 327px;
+    width: 330px;
+    height: 330px;
 `
 const DictionaryContainer = styled.View`
     flex: 1;
@@ -428,4 +434,11 @@ const JoinText = styled.Text`
     font-family: Pretendard-SemiBold;
     font-size: 13px;
     line-height: 19.5px;
+`
+
+const Loading = styled.ActivityIndicator`
+    color: ${colors.l_main};
+    position: absolute;
+    top: 50%;
+    width: 100%;
 `
