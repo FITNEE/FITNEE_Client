@@ -20,10 +20,8 @@ const CurrentExplainCircle = styled.View`
 `;
 
 const CurrentExplainText = styled.Text`
-  width: 263px;
-  flex-shrink: 0;
   color: ${({ isDark }) => (isDark ? colors.white : colors.black)};
-  font-size: 13px;
+  font-size: 12px;
   font-family: Pretendard-Regular;
   line-height: 19.5px;
 `;

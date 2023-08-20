@@ -97,6 +97,7 @@ export default function RegisterRoutine({ navigation }) {
   useEffect(() => {
     isFocus && setIsTabVisible(true);
   }, [isFocus]);
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.white }}>
       <Container isDark={isDark}>

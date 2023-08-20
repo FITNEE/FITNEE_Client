@@ -24,6 +24,7 @@ import { useRoute, StackActions } from "@react-navigation/native";
 import axios from "axios";
 import { useRecoilValue } from "recoil";
 import { IsDarkAtom } from "../../recoil/MyPageAtom";
+import { ScrollView } from "react-native-gesture-handler";
 
 const ReplaceView2 = styled.View`
   flex-direction: row;
@@ -74,10 +75,10 @@ const ReplaceButtonText = styled.Text`
 
 const CurrentExplain = styled.View`
   width: 327px;
-  height: 108px;
+  height: 110px;
   border-radius: 12px;
   background: ${({ isDark }) => (isDark ? colors.grey_8 : colors.grey_1)};
-  padding: 24px;
+  padding: 20px;
   justify-content: center;
 `;
 
@@ -165,7 +166,6 @@ const ExerciseImage = styled.Image`
   height: 307px;
   aspect-ratio: 1;
   border-radius: 999px;
-  justify-self: center;
 `;
 
 export default function ExerciseCourse({ navigation }) {
@@ -409,60 +409,36 @@ export default function ExerciseCourse({ navigation }) {
     );
   };
 
-  const getImage = (healthCategoryIdx) => {
-    switch (healthCategoryIdx) {
-      case 1:
-        return require("../../assets/GIFs/1.gif");
-      case 2:
-        return require("../../assets/GIFs/2.gif");
-      case 3:
-        return require("../../assets/GIFs/3.gif");
-      case 4:
-        return require("../../assets/GIFs/4.gif");
-      case 5:
-        return require("../../assets/GIFs/5.gif");
-      case 6:
-        return require("../../assets/GIFs/6.gif");
-      case 7:
-        return require("../../assets/GIFs/7.gif");
-      case 8:
-        return require("../../assets/GIFs/8.gif");
-      case 9:
-        return require("../../assets/GIFs/9.gif");
-      case 10:
-        return require("../../assets/GIFs/10.gif");
-      case 11:
-        return require("../../assets/GIFs/11.gif");
-      case 12:
-        return require("../../assets/GIFs/12.gif");
-      case 13:
-        return require("../../assets/GIFs/13.gif");
-      case 14:
-        return require("../../assets/GIFs/14.gif");
-      case 15:
-        return require("../../assets/GIFs/15.gif");
-      case 17:
-        return require("../../assets/GIFs/17.gif");
-      case 18:
-        return require("../../assets/GIFs/18.gif");
-      case 20:
-        return require("../../assets/GIFs/20.gif");
-      case 21:
-        return require("../../assets/GIFs/21.gif");
-      case 22:
-        return require("../../assets/GIFs/22.gif");
-      case 23:
-        return require("../../assets/GIFs/23.gif");
-      case 24:
-        return require("../../assets/GIFs/24.gif");
-      case 25:
-        return require("../../assets/GIFs/25.gif");
-      case 26:
-        return require("../../assets/GIFs/26.gif");
-      case 27:
-        return require("../../assets/GIFs/27.gif");
-    }
-  };
+  const getImage = [
+    null,
+    require("../../assets/GIFs/1.gif"),
+    require("../../assets/GIFs/2.gif"),
+    require("../../assets/GIFs/3.gif"),
+    require("../../assets/GIFs/4.gif"),
+    require("../../assets/GIFs/5.gif"),
+    require("../../assets/GIFs/6.gif"),
+    require("../../assets/GIFs/7.gif"),
+    require("../../assets/GIFs/8.gif"),
+    require("../../assets/GIFs/9.gif"),
+    require("../../assets/GIFs/10.gif"),
+    require("../../assets/GIFs/11.gif"),
+    require("../../assets/GIFs/12.gif"),
+    require("../../assets/GIFs/13.gif"),
+    require("../../assets/GIFs/14.gif"),
+    require("../../assets/GIFs/15.gif"),
+    null,
+    require("../../assets/GIFs/17.gif"),
+    require("../../assets/GIFs/18.gif"),
+    null,
+    require("../../assets/GIFs/20.gif"),
+    require("../../assets/GIFs/21.gif"),
+    require("../../assets/GIFs/22.gif"),
+    require("../../assets/GIFs/23.gif"),
+    require("../../assets/GIFs/24.gif"),
+    require("../../assets/GIFs/25.gif"),
+    require("../../assets/GIFs/26.gif"),
+    require("../../assets/GIFs/27.gif"),
+  ];
 
   return (
     <BottomSheetModalProvider>
@@ -500,9 +476,9 @@ export default function ExerciseCourse({ navigation }) {
         >
           {/* <ExerciseCircle isDark={isDark}></ExerciseCircle> */}
           <ExerciseImage
-            source={getImage(
-              dataList[listIndex].exerciseInfo.healthCategoryIdx
-            )}
+            source={
+              getImage[dataList[listIndex].exerciseInfo.healthCategoryIdx]
+            }
             resizeMode="contain"
           />
 
@@ -516,7 +492,9 @@ export default function ExerciseCourse({ navigation }) {
             num={dataList[listIndex].sets[0].rep}
           />
 
-          <CurrentExplain isDark={isDark}>{adviceList}</CurrentExplain>
+          <CurrentExplain isDark={isDark}>
+            <ScrollView>{adviceList}</ScrollView>
+          </CurrentExplain>
 
           <ExerciseButton //운동 시작 버튼
             text="운동 시작"
