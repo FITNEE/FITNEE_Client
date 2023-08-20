@@ -151,7 +151,7 @@ const CautionContentContainer = styled.View`
 `
 const CautionDetailContainer = styled.View`
     flex-direction: row;
-    align-items: center;    
+    align-items: flex-start;    
 `
 const CautionDetail = styled.Text`
     color: ${colors.black};
@@ -164,4 +164,5 @@ const CautionDot = styled.View`
     height: 12px;
     border-radius: 6px;
     margin-right: 4px;
+    margin-top: 2.5px;
 `
