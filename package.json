@@ -51,6 +51,7 @@
     "react-native-toggle-element": "^2.0.1",
     "react-native-view-shot": "3.5.0",
     "react-native-wheel-pick": "^1.2.2",
+    "react-native-wheel-picker-expo": "^0.5.4",
     "react-native-wrapped-text": "^1.2.2",
     "react-navigation": "^4.4.4",
     "recoil": "^0.7.7",
