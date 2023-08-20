@@ -7,7 +7,7 @@ import {
   StatusText,
   Title,
   SubText,
-  ScreenLayout,
+  ScreenKeyboardLayout,
 } from "../../components/Shared/OnBoarding_Shared";
 import { useRecoilValue } from "recoil";
 import { IsDarkAtom } from "../../recoil/MyPageAtom";
@@ -43,7 +43,7 @@ const CreateAccount_1 = ({ route, navigation }) => {
     });
   };
   return (
-    <ScreenLayout isDark={isDark}>
+    <ScreenKeyboardLayout isDark={isDark}>
       <BackButton isDark={isDark} onPress={() => navigation.goBack()} />
       <TextContainer>
         <Title text="환영해요! 계정을 생성할게요." isDark={isDark} />
@@ -107,7 +107,7 @@ const CreateAccount_1 = ({ route, navigation }) => {
         enabled={rewrite ? rewrittenPW == PW : PW.length >= 4}
         onPress={rewrite ? () => handlePress() : () => rewritePW()}
       />
-    </ScreenLayout>
+    </ScreenKeyboardLayout>
   );
 };
 

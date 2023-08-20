@@ -1,7 +1,6 @@
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import { Text, SafeAreaView } from "react-native";
 import { styled } from "styled-components/native";
-import Mode from "../../components/myPage/Mode";
 import { colors } from "../../colors";
 import axios from "axios";
 import {
@@ -15,6 +14,9 @@ import Right from "../../assets/SVGs/Right.svg";
 import { loggedInState } from "../../recoil/AuthAtom";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Alert } from "react-native";
+import CustomSwitch from "../../components/myPage/CustomSwitch";
+import Profile_man from "../../assets/SVGs/Profile_man.svg";
+import Profile_woman from "../../assets/SVGs/Profile_woman.svg";
 
 const Profile = styled.TouchableOpacity`
   width: 100%;
@@ -133,9 +135,21 @@ export default function Setting({ navigation }) {
           }}
         >
           <ProfileInfo>
-            <ProfileImage
-              style={{ backgroundColor: getGender == 1 ? "blue" : "pink" }}
-            />
+            {getGender == 1 ? (
+              <Profile_man
+                style={{ marginRight: 8 }}
+                width={40}
+                height={40}
+                color={isDark ? colors.grey_7 : colors.grey_2}
+              />
+            ) : (
+              <Profile_woman
+                style={{ marginRight: 8 }}
+                width={40}
+                height={40}
+                color={isDark ? colors.grey_7 : colors.grey_2}
+              />
+            )}
             <ProfileContents>
               <Name isDark={isDark}>{getUserName}</Name>
             </ProfileContents>
@@ -150,7 +164,7 @@ export default function Setting({ navigation }) {
         <ModeView>
           <BlockText isDark={isDark}>다크화면 모드</BlockText>
           <BlockContent>
-            <Mode />
+            <CustomSwitch />
           </BlockContent>
         </ModeView>
         <Bar isDark={isDark} />

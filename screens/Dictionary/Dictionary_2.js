@@ -1,48 +1,40 @@
 import React, { useState, useRef, useEffect, useCallback, useMemo, useContext, createContext } from 'react'
 import styled from 'styled-components/native'
 import { colors } from '../../colors'
-import { StatusBar, TouchableOpacity, Dimensions, TouchableWithoutFeedback, SafeAreaView } from 'react-native'
-import BottomSheet, { BottomSheetScrollView, BottomSheetBackdrop } from "@gorhom/bottom-sheet";
+import { TouchableOpacity, Dimensions, TouchableWithoutFeedback, SafeAreaView } from 'react-native'
+import BottomSheet, { BottomSheetScrollView, BottomSheetBackdrop } from '@gorhom/bottom-sheet'
 import Dictionary_LeftTab from '../../components/Dictionary/Dictionary_LeftTab'
 import Dictionary_RightTab from '../../components/Dictionary/Dictionary_RightTab'
 import Dictionary_Modal from '../../components/Dictionary/Dictionary_Modal'
 import axios from 'axios'
-import { IsDarkAtom, BubbleAtom } from "../../recoil/MyPageAtom"
-import { useRecoilValue, useSetRecoilState } from "recoil"
+import { IsDarkAtom } from '../../recoil/MyPageAtom'
+import { useRecoilValue } from 'recoil'
 import LeftIcon from '../../assets/SVGs/Left.svg'
 import AddIcon from '../../assets/SVGs/Add.svg'
 import EditIcon from '../../assets/SVGs/Edit.svg'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import { ScreenLayout } from '../../Shared'
 
-export default function Dictionary_2({ navigation, route }){
+export default function Dictionary_2({ navigation, route }) {
     const isDark = useRecoilValue(IsDarkAtom)
-    const isBubbleOn = useRecoilValue(BubbleAtom)
-    const setIsBubbleOn = useSetRecoilState(BubbleAtom)
+
     const exerciseInfo = route.params.exercise
 
     const leftTab = useRef()
     const rightTab = useRef()
     const bottomModal = useRef()
 
-    const snapPoints = useMemo(()=> ['45%', '96%'], []) // modal이 가리는 화면%
+    const snapPoints = useMemo(() => ['45%', '96%'], []) // modal이 가리는 화면%
 
     // LeftTab 누르면 leftTabActivate = true
-    const [leftTabActivate, setLeftTabActivate ] = useState(true)
+    const [leftTabActivate, setLeftTabActivate] = useState(true)
     const onTabPress = (target) => {
         setIsBubbleOn(false)
-        target===leftTab? 
-            setLeftTabActivate(true)
-        : 
-            setLeftTabActivate(false)
+        target === leftTab ? setLeftTabActivate(true) : setLeftTabActivate(false)
     }
-    const renderBackdrop = useCallback(
-        props => (
-          <BottomSheetBackdrop
-            {...props}
-          />
-        ), []
-    )
+    const renderBackdrop = useCallback((props) => <BottomSheetBackdrop {...props} />, [])
     // 루틴 추가 말풍선
-    const onPressAddRoutineBtn = ()=>{
+    const onPressAddRoutineBtn = () => {
         setIsBubbleOn(false)
         setIsModalVisible(true)
     }
@@ -51,15 +43,15 @@ export default function Dictionary_2({ navigation, route }){
     const [joinBtnBool, setJoinBtnBool] = useState(true) // 참여하기 버튼 나타내기
     const parentSetJoinBtnBool = (newBool) => setJoinBtnBool(newBool)
     const [isAllRead, setIsAllRead] = useState(true)
-    const changeRead = (newBool)=> setIsAllRead(newBool)
+    const changeRead = (newBool) => setIsAllRead(newBool)
 
     const [isModalVisible, setIsModalVisible] = useState(false)
-    const changeModalVisibility = (newBool)=> setIsModalVisible(newBool)
-    
+    const changeModalVisibility = (newBool) => setIsModalVisible(newBool)
+
     const getReadInfo = async () => {
         try {
-            let url = "https://gpthealth.shop/"
-            let detailAPI = "/app/dictionary/readInfo"
+            let url = 'https://gpthealth.shop/'
+            let detailAPI = '/app/dictionary/readInfo'
             const response = await axios.get(url + detailAPI, {
                 params: {
                     name: exerciseInfo.name,
@@ -68,21 +60,36 @@ export default function Dictionary_2({ navigation, route }){
             const result = response.data
             return result.result
         } catch (error) {
-            console.error("Failed to fetch data:", error)
+            console.error('Failed to fetch data:', error)
         }
     }
-    useEffect(()=>{
-        getReadInfo().then((result)=>{
-            if(result.chatExist.chatExists == 0) {
+    useEffect(() => {
+        getReadInfo().then((result) => {
+            if (result.chatExist.chatExists == 0) {
                 console.log(`채팅 내역 존재 X`)
                 setIsAllRead(true)
-            }
-            else {
-                if(result.informationRows.hasUnreadChats == 1){
+            } else {
+                if (result.informationRows.hasUnreadChats == 1) {
                     setIsAllRead(false)
                     console.log(`안 읽은 채팅 있음`)
+                } else {
+                    setIsAllRead(true)
+                    console.log(`안 읽은 채팅 없음`)
                 }
-                else{
+            }
+        })
+    })
+
+    useEffect(() => {
+        getReadInfo().then((result) => {
+            if (result.chatExist.chatExists == 0) {
+                console.log(`채팅 내역 존재 X`)
+                setIsAllRead(true)
+            } else {
+                if (result.informationRows.hasUnreadChats == 1) {
+                    setIsAllRead(false)
+                    console.log(`안 읽은 채팅 있음`)
+                } else {
                     setIsAllRead(true)
                     console.log(`안 읽은 채팅 없음`)
                 }
@@ -90,133 +97,212 @@ export default function Dictionary_2({ navigation, route }){
         })
     }, [])
 
+    const [isBubbleOn, setIsBubbleOn] = useState(false)
+    const checkBubbleData = async () => {
+        try {
+            const keys = await AsyncStorage.getAllKeys()
+            const data = keys.includes('Bubble')
+            if (data !== null) {
+                const bubbleData = await AsyncStorage.getItem('Bubble')
+                console.log(`set new data for bubble (true)`)
+                const bubbleBool = JSON.parse(bubbleData)
+                return bubbleBool
+            } else {
+                const stringValue = JSON.stringify(true)
+                console.log(`no existing data - setItem for true`)
+                await AsyncStorage.setItem('Bubble', stringValue)
+            }
+            return null
+        } catch (error) {
+            console.error('Bubble Asynce Storage error', error)
+        }
+    }
+
+    useEffect(() => {
+        checkBubbleData().then((data) => {
+            if (data !== null) {
+                setIsBubbleOn(data)
+                console.log(`data : ${data}`)
+            }
+        })
+    }, [])
+
+    const setBubbleFalse = async () => {
+        const stringValue = JSON.stringify(false)
+        await AsyncStorage.setItem('Bubble', stringValue)
+    }
+    useEffect(() => {
+        !isBubbleOn && setBubbleFalse().then(console.log('set bubble for false'))
+    }, [isBubbleOn])
+
     return (
-        <>
-        <StatusBar barStyle={isDark? 'light-content': 'dark-content'}/>
-        <TouchableWithoutFeedback
-            onPressIn={()=> setIsBubbleOn(false)}
-        >
-            <SafeAreaView 
-                style={{backgroundColor: isDark? `${colors.black}`:`${colors.grey_1}`, flex: 1}}>
+        <ScreenLayout isDark={isDark} darkBack={colors.black} lightBack={colors.grey_1}>
+            <TouchableWithoutFeedback onPressIn={() => setIsBubbleOn(false)}>
                 <Container>
-                    <Dictionary_Modal 
+                    <Dictionary_Modal
                         isModalVisible={isModalVisible}
                         changeModalVisibility={changeModalVisibility}
-                        exerciseName = {exerciseInfo.name}
-                        exercisePart = {exerciseInfo.parts}
+                        exerciseName={exerciseInfo.name}
+                        exercisePart={exerciseInfo.parts}
                         healthCategoryIdx={exerciseInfo.healthCategoryIdx}
                     />
                     <TopBtnContainer>
-                        <TouchableOpacity 
-                            onPress={()=>navigation.goBack()}
-                            style={{width: 40, height: 40}}    
-                        >
-                            <LeftIcon
-                                width={24}
-                                height={24}
-                                color={isDark? colors.white: colors.black}
-                        /></TouchableOpacity>
+                        <TouchableOpacity onPress={() => navigation.goBack()} style={{ width: 40, height: 40 }}>
+                            <LeftIcon width={24} height={24} color={isDark ? colors.white : colors.black} />
+                        </TouchableOpacity>
                     </TopBtnContainer>
                     <ImageContainer>
-                        <ExerciseImage resizeMode='contain'/>
+                        <ExerciseImage
+                            // source={require("../../assets/GIFs/Test.gif")}
+                            resizeMode="cover"
+                        />
                     </ImageContainer>
-                    {
-                        isBubbleOn?
-                            <Bubble style={{backgroundColor: isDark? `${colors.white}`:`${colors.grey_9}`}}>
-                                <BubbleText style={{color: isDark? `${colors.grey_9}`:`${colors.white}`}}>
-                                    {`+ 버튼을 눌러 마이루틴에 해당\n운동을 추가해보세요!`}
-                                </BubbleText>
-                                <BubbleArrow style={{borderTopColor: isDark? `${colors.white}`:`${colors.grey_9}`}}/>
-                            </Bubble>
-                            :
-                            null
-                    }
+                    {isBubbleOn ? (
+                        <Bubble
+                            style={{
+                                backgroundColor: isDark ? `${colors.white}` : `${colors.grey_9}`,
+                            }}
+                        >
+                            <BubbleText
+                                style={{
+                                    color: isDark ? `${colors.grey_9}` : `${colors.white}`,
+                                }}
+                            >
+                                {`+ 버튼을 눌러 마이루틴에 해당\n운동을 추가해보세요!`}
+                            </BubbleText>
+                            <BubbleArrow
+                                style={{
+                                    borderTopColor: isDark ? `${colors.white}` : `${colors.grey_9}`,
+                                }}
+                            />
+                        </Bubble>
+                    ) : null}
                     <BottomSheet
                         ref={bottomModal}
                         index={0}
                         snapPoints={snapPoints}
                         enablePanDownToClose={false}
-                        keyboardBehavior='extend'
-                        backdropComponent={renderBackdrop}   
-                        backgroundStyle={{backgroundColor: isDark? `${colors.grey_9}`:`${colors.white}`}}                     
+                        keyboardBehavior="extend"
+                        backdropComponent={renderBackdrop}
+                        backgroundStyle={{
+                            backgroundColor: isDark ? `${colors.grey_9}` : `${colors.white}`,
+                        }}
                     >
                         <DictionaryContainer>
                             <TitleContainer>
                                 <NameContainer>
-                                    <AreaText style={{color: isDark? `${colors.d_main}`:`${colors.l_main}`}}>
+                                    <AreaText
+                                        style={{
+                                            color: isDark ? `${colors.d_main}` : `${colors.l_main}`,
+                                        }}
+                                    >
                                         {exerciseInfo.parts} | {exerciseInfo.muscle} | {exerciseInfo.equipment}
                                     </AreaText>
                                     <TitleWrapper>
-                                        <TitleText style={{color: isDark? `${colors.white}`:`${colors.black}`}}>
+                                        <TitleText
+                                            style={{
+                                                color: isDark ? `${colors.white}` : `${colors.black}`,
+                                            }}
+                                        >
                                             {exerciseInfo.name}
                                         </TitleText>
                                     </TitleWrapper>
                                 </NameContainer>
-                                <TouchableOpacity 
-                                    onPress={onPressAddRoutineBtn}>
-                                    <AddIcon
-                                        width={40}
-                                        height={40}
-                                        color={isDark? colors. d_sub_2 : colors.l_sub_2}
-                                /></TouchableOpacity>
+                                <TouchableOpacity onPress={onPressAddRoutineBtn}>
+                                    <AddIcon width={40} height={40} color={isDark ? colors.d_sub_2 : colors.l_sub_2} />
+                                </TouchableOpacity>
                             </TitleContainer>
-                            <TabContainer style={{borderBottomColor: isDark? `${colors.grey_8}`:`${colors.grey_1}`}}> 
-                                <LeftTab 
-                                    ref={leftTab} 
-                                    style={leftTabActivate? {borderBottomColor: `${ isDark ? colors.d_main : colors.l_main}`}: {borderBottomColor: `${ isDark ? colors.grey_8 : colors.grey_1}`}} 
-                                    onPressIn={()=>onTabPress(leftTab)}>
-                                        <TabText style={{color: isDark? `${colors.white}`:`${colors.black}`, fontFamily: leftTabActivate? 'Pretendard-SemiBold' : 'Pretendard-Regular'}}>
-                                            운동 방법
-                                        </TabText>
-                                </LeftTab>          
-                                <RightTab 
-                                    ref={rightTab} 
-                                    style={leftTabActivate? {borderBottomColor: `${ isDark ? colors.grey_8 : colors.grey_1}`}: {borderBottomColor: `${ isDark ? colors.d_main : colors.l_main}`}} 
-                                    onPressIn={()=>onTabPress(rightTab)}>
-                                        <TabText style={{color: isDark? `${colors.white}`:`${colors.black}`, fontFamily: leftTabActivate? 'Pretendard-Regular' : 'Pretendard-SemiBold'}}>
-                                            채팅
-                                        </TabText>
-                                        { isAllRead? null : <NotReadDot/> }
+                            <TabContainer
+                                style={{
+                                    borderBottomColor: isDark ? `${colors.grey_8}` : `${colors.grey_1}`,
+                                }}
+                            >
+                                <LeftTab
+                                    ref={leftTab}
+                                    style={
+                                        leftTabActivate
+                                            ? {
+                                                  borderBottomColor: `${isDark ? colors.d_main : colors.l_main}`,
+                                              }
+                                            : {
+                                                  borderBottomColor: `${isDark ? colors.grey_8 : colors.grey_1}`,
+                                              }
+                                    }
+                                    onPressIn={() => onTabPress(leftTab)}
+                                >
+                                    <TabText
+                                        style={{
+                                            color: isDark ? `${colors.white}` : `${colors.black}`,
+                                            fontFamily: leftTabActivate ? 'Pretendard-SemiBold' : 'Pretendard-Regular',
+                                        }}
+                                    >
+                                        운동 방법
+                                    </TabText>
+                                </LeftTab>
+                                <RightTab
+                                    ref={rightTab}
+                                    style={
+                                        leftTabActivate
+                                            ? {
+                                                  borderBottomColor: `${isDark ? colors.grey_8 : colors.grey_1}`,
+                                              }
+                                            : {
+                                                  borderBottomColor: `${isDark ? colors.d_main : colors.l_main}`,
+                                              }
+                                    }
+                                    onPressIn={() => onTabPress(rightTab)}
+                                >
+                                    <TabText
+                                        style={{
+                                            color: isDark ? `${colors.white}` : `${colors.black}`,
+                                            fontFamily: leftTabActivate ? 'Pretendard-Regular' : 'Pretendard-SemiBold',
+                                        }}
+                                    >
+                                        채팅
+                                    </TabText>
+                                    {isAllRead ? null : <NotReadDot />}
                                 </RightTab>
                             </TabContainer>
-                            {
-                                leftTabActivate? 
-                                    <Dictionary_LeftTab 
-                                        exerciseName = {exerciseInfo.name}
-                                    /> 
-                                    : 
-                                    <Dictionary_RightTab 
-                                        parentJoinBtnBool={joinBtnBool}
-                                        parentSetJoinBtnBool={parentSetJoinBtnBool}
-                                        exerciseName = {exerciseInfo.name}
-                                        leftTabActivate = {leftTabActivate}
-                                        setIsAllRead = {changeRead}
-                                        />
-                            } 
+                            {leftTabActivate ? (
+                                <Dictionary_LeftTab exerciseName={exerciseInfo.name} />
+                            ) : (
+                                <Dictionary_RightTab
+                                    parentJoinBtnBool={joinBtnBool}
+                                    parentSetJoinBtnBool={parentSetJoinBtnBool}
+                                    exerciseName={exerciseInfo.name}
+                                    leftTabActivate={leftTabActivate}
+                                    setIsAllRead={changeRead}
+                                />
+                            )}
                         </DictionaryContainer>
                     </BottomSheet>
-                    {
-                        !leftTabActivate && joinBtnBool?
-                            <JoinBtnContainer 
-                                onPress={()=>setJoinBtnBool(false)}
-                                style={{backgroundColor: isDark? `${colors.d_main}`:`${colors.l_main}`}}
+                    {!leftTabActivate && joinBtnBool ? (
+                        <JoinBtnContainer
+                            onPress={() => setJoinBtnBool(false)}
+                            style={{
+                                backgroundColor: isDark ? `${colors.d_main}` : `${colors.l_main}`,
+                            }}
+                        >
+                            <EditIcon
+                                width={20}
+                                height={20}
+                                style={{ marginRight: 8 }}
+                                color={isDark ? `${colors.black}` : `${colors.white}`}
+                            />
+                            <JoinText
+                                style={{
+                                    color: isDark ? `${colors.black}` : `${colors.white}`,
+                                }}
                             >
-                                <EditIcon
-                                    width={20}
-                                    height={20}
-                                    style={{marginRight: 8}}
-                                    color={isDark? `${colors.black}`:`${colors.white}`}
-                                />
-                                <JoinText style={{color: isDark? `${colors.black}`:`${colors.white}`}}>채팅 참여하기</JoinText>
-                            </JoinBtnContainer>
-                            :
-                            null
-                    }
+                                채팅 참여하기
+                            </JoinText>
+                        </JoinBtnContainer>
+                    ) : null}
                 </Container>
-            </SafeAreaView>
-        </TouchableWithoutFeedback></>
+            </TouchableWithoutFeedback>
+        </ScreenLayout>
     )
-} 
+}
 
 const SCREEN_WIDTH = Dimensions.get('screen').width
 const Container = styled.View`
@@ -229,14 +315,16 @@ const TopBtnContainer = styled.View`
     height: 56px;
 `
 const ImageContainer = styled.View`
-    height: 326px;  
+    height: 326px;
     justify-content: center;
     align-items: center;
 `
 const ExerciseImage = styled.Image`
-    background-color: ${colors.grey_4}; 
-    width: 200px; 
-    height: 200px;
+    background-color: ${colors.grey_4};
+    /* width: 100%; */
+    width: 301px;
+
+    height: 301px;
 `
 const DictionaryContainer = styled.View`
     flex: 1;
@@ -253,13 +341,13 @@ const NameContainer = styled.View`
 const AreaText = styled.Text`
     font-family: Pretendard-Regular;
     font-size: 13px;
+    line-height: 19.5px;
 `
-const TitleWrapper = styled.View`
-`
+const TitleWrapper = styled.View``
 const TitleText = styled.Text`
     font-family: Pretendard-SemiBold;
     font-size: 24px;
-    padding-top: 8px;
+    line-height: 33.6px;
 `
 const Bubble = styled.View`
     position: absolute;
@@ -274,7 +362,7 @@ const Bubble = styled.View`
 `
 const BubbleArrow = styled.View`
     position: absolute;
-    display: block;
+    /* display: block; */
     width: 0;
     z-index: 1;
     top: 50px;
@@ -287,7 +375,7 @@ const BubbleText = styled.Text`
     font-size: 11px;
     color: white;
     font-family: Pretendard-Regular;
-    line-height: 18px;
+    line-height: 16.5px;
 `
 const TabContainer = styled.View`
     margin-top: 8px;
@@ -295,13 +383,13 @@ const TabContainer = styled.View`
     border-bottom-width: 1px;
     flex-direction: row;
     justify-content: space-between;
-    align-items: flex-end; 
+    align-items: flex-end;
 `
 const LeftTab = styled.TouchableOpacity`
     flex: 1;
     align-items: center;
     border-bottom-width: 1px;
-    
+
     left: 24px;
     z-index: 1;
     position: absolute;
@@ -320,6 +408,7 @@ const RightTab = styled.TouchableOpacity`
 const TabText = styled.Text`
     font-size: 15px;
     padding: 10px 0px;
+    line-height: 22.5px;
 `
 const NotReadDot = styled.View`
     background-color: ${colors.red};
@@ -330,16 +419,17 @@ const NotReadDot = styled.View`
     margin-left: 3px;
 `
 const JoinBtnContainer = styled.TouchableOpacity`
-    border-radius:  100px;
+    border-radius: 100px;
     padding: 10px 14px;
     width: 123px;
     flex-direction: row;
     align-items: center;
     position: absolute;
-    left: ${`${SCREEN_WIDTH/2-123/2}px`};
+    left: ${`${SCREEN_WIDTH / 2 - 123 / 2}px`};
     bottom: 24px;
 `
 const JoinText = styled.Text`
     font-family: Pretendard-SemiBold;
-    font-size: 13;
+    font-size: 13px;
+    line-height: 19.5px;
 `

@@ -32,6 +32,7 @@ const ToastText = styled.Text`
   color: ${colors.white};
   font-size: 13px;
   font-weight: 600;
+  line-height: 19.5px;
 `;
 const toastConfig = {
   customToast: ({ text1, props }) => (
