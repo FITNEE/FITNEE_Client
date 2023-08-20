@@ -154,7 +154,7 @@ export default function Dictionary_1({ navigation }) {
                                 <SearchInput
                                     keyboardAppearance={isDark ? 'dark' : 'light'}
                                     autoFocus
-                                    placeholder="운동명, 부위 검색"
+                                    placeholder="운동명 검색"
                                     placeholderTextColor={colors.grey_4}
                                     returnKeyType="search"
                                     onChange={onChangeText}
