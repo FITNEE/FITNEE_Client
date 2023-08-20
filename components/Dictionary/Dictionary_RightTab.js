@@ -227,8 +227,6 @@ export default function Dictionary_RightTab(props) {
         else setSelectedIdx(i)
         
         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
-        
-        {/* 햅틱 효과 넣고 싶다 아님 띠용 이펙트 */}
     }
 
     return (

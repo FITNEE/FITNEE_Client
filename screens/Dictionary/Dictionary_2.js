@@ -107,14 +107,13 @@ export default function Dictionary_2({ navigation, route }) {
             const keys = await AsyncStorage.getAllKeys()
             const data = keys.includes('Bubble')
             if (data !== null) {
-                const bubbleData = await AsyncStorage.getItem('Bubble')
-                console.log(`set new data for bubble (true)`)
-                const bubbleBool = JSON.parse(bubbleData)
-                return bubbleBool
+                console.log(`Bubble already exists`)
+                return false
             } else {
                 const stringValue = JSON.stringify(true)
-                console.log(`no existing data - setItem for true`)
+                console.log(`set new data for bubble (${stringValue})`)
                 await AsyncStorage.setItem('Bubble', stringValue)
+                return false
             }
             return null
         } catch (error) {
@@ -123,20 +122,8 @@ export default function Dictionary_2({ navigation, route }) {
     }
 
     useEffect(() => {
-        checkBubbleData().then((data) => {
-            if (data !== null) {
-                setIsBubbleOn(data)
-                console.log(`data : ${data}`)
-            }
-        })
+        checkBubbleData().then((data) => {if(data !== null) setIsBubbleOn(data)})
     }, [])
-
-    const setBubbleFalse = async () => {
-        const stringValue = JSON.stringify(false)
-        await AsyncStorage.setItem('Bubble', stringValue)
-    }
-
-    const icon = `img${exerciseInfo.healthCategoryIdx}`
 
     return (
         <ScreenLayout isDark={isDark} darkBack={colors.black} lightBack={colors.grey_1}>
@@ -159,7 +146,6 @@ export default function Dictionary_2({ navigation, route }) {
                             isLoading? <Loading color={colors.l_main}/> : null
                         }
                         <ExerciseImage
-                            onLoadStart={()=>setIsLoading(true)}
                             onLoad={()=>setIsLoading(false)}
                             source={imagePath.path[exerciseInfo.healthCategoryIdx-1]}
                         />
