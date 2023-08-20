@@ -1,146 +1,138 @@
-import React, { useContext, useEffect, useState } from "react";
-import styled from "styled-components/native";
-import { colors } from "../../colors";
-import { Title } from "../../components/Shared/OnBoarding_Shared";
-import { Button } from "../../Shared";
-import LottieView from "lottie-react-native";
-import axios from "axios";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { Alert } from "react-native";
-import { useRecoilState, useRecoilValue } from "recoil";
-import { IsDarkAtom } from "../../recoil/MyPageAtom";
-import { loggedInState } from "../../recoil/AuthAtom";
+import React, { useEffect, useState } from 'react'
+import styled from 'styled-components/native'
+import { colors } from '../../colors'
+import { Title } from '../../components/Shared/OnBoarding_Shared'
+import { Button } from '../../Shared'
+import axios from 'axios'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import { Alert } from 'react-native'
+import { useRecoilState, useRecoilValue } from 'recoil'
+import { IsDarkAtom } from '../../recoil/MyPageAtom'
+import { loggedInState } from '../../recoil/AuthAtom'
 
 const SubTitle = styled.Text`
-  font-family: Pretendard-Regular;
-  text-align: center;
-  margin-top: 8px;
-  font-size: 13px;
-  line-height: 18px;
-  color: ${colors.black};
-`;
+    font-family: Pretendard-Regular;
+    text-align: center;
+    margin-top: 8px;
+    font-size: 13px;
+    line-height: 18px;
+    color: ${colors.black};
+`
 const TextContainer = styled.View`
-  margin-top: 124px;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-  justify-content: center;
-`;
+    margin-top: 124px;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    justify-content: center;
+`
 const AnimationContainer = styled.View`
-  margin-top: -80px;
-  width: 80%;
-  border-radius: 9999px;
-  aspect-ratio: 1/1;
-`;
+    margin-top: -80px;
+    width: 80%;
+    border-radius: 9999px;
+    aspect-ratio: 1/1;
+`
 const ScreenBase = styled.SafeAreaView`
-  flex: 1;
-`;
+    flex: 1;
+`
 const ContentBase = styled.SafeAreaView`
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-  width: 90%;
-  margin-left: 5%;
-  flex: 1;
-`;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    width: 90%;
+    margin-left: 5%;
+    flex: 1;
+`
 const CreateAccount_4 = ({ route, navigation }) => {
-  const isDark = useRecoilValue(IsDarkAtom);
-  const [loggedIn, setLoggedIn] = useRecoilState(loggedInState);
-  const [isLoading, setIsLoading] = useState(true);
+    const isDark = useRecoilValue(IsDarkAtom)
+    const [loggedIn, setLoggedIn] = useRecoilState(loggedInState)
+    const [isLoading, setIsLoading] = useState(true)
 
-  const postUser = async (data) => {
-    try {
-      let url = "https://gpthealth.shop/";
-      let detailAPI = "app/user";
-      const response = await axios.post(url + detailAPI, data, {
-        headers: {
-          "Content-Type": `application/json`,
-        },
-      });
-      const result = response.data;
-      return result;
-    } catch (error) {
-      console.error("Failed to fetch data:", error);
+    const postUser = async (data) => {
+        try {
+            let url = 'https://gpthealth.shop/'
+            let detailAPI = 'app/user'
+            const response = await axios.post(url + detailAPI, data, {
+                headers: {
+                    'Content-Type': `application/json`,
+                },
+            })
+            const result = response.data
+            return result
+        } catch (error) {
+            console.error('Failed to fetch data:', error)
+        }
     }
-  };
 
-  const handlePress = () => {
-    let data = {
-      userId: route.params.email, //string
-      userPw: route.params.PW, //string
-      userNickname: route.params.nickname, //string
-      gender: route.params.gender,
-      height: route.params.height,
-      weight: route.params.weight,
-      birthYear: route.params.birthYear,
-    };
-    postUser(data).then((response) => {
-      console.log(response);
-      if (response.isSuccess) {
-        setIsLoading(false);
-        AsyncStorage.setItem("accessToken", response.result.accessToken).then(
-          console.log("accessToken set to AsyncStorage")
-        );
-      } else {
-        Alert.alert("회원가입 오류", response.message, [
-          {
-            text: "다시 회원가입하기",
-            onPress: () => {
-              navigation.navigate("OnBoarding", {});
-            },
-            style: "default",
-          },
-          {
-            text: "취소",
-            onPress: () => console.log("Cancel Pressed"),
-            style: "default",
-          },
-        ]);
-      }
-    });
-  };
+    const handlePress = () => {
+        let data = {
+            userId: route.params.email, //string
+            userPw: route.params.PW, //string
+            userNickname: route.params.nickname, //string
+            gender: route.params.gender,
+            height: route.params.height,
+            weight: route.params.weight,
+            birthYear: route.params.birthYear,
+        }
+        postUser(data).then((response) => {
+            console.log(response)
+            if (response.isSuccess) {
+                setIsLoading(false)
+                AsyncStorage.setItem('accessToken', response.result.accessToken).then(
+                    console.log('accessToken set to AsyncStorage'),
+                )
+            } else {
+                Alert.alert('회원가입 오류', response.message, [
+                    {
+                        text: '다시 회원가입하기',
+                        onPress: () => {
+                            navigation.navigate('OnBoarding', {})
+                        },
+                        style: 'default',
+                    },
+                    {
+                        text: '취소',
+                        onPress: () => console.log('Cancel Pressed'),
+                        style: 'default',
+                    },
+                ])
+            }
+        })
+    }
 
-  useEffect(() => {
-    handlePress();
-  }, []);
-  const goBackHome = () => {
-    setLoggedIn(true);
-  };
+    useEffect(() => {
+        handlePress()
+    }, [])
+    const goBackHome = () => {
+        setLoggedIn(true)
+    }
 
-  return (
-    <ScreenBase
-      style={{ backgroundColor: isDark ? colors.black : colors.grey_1 }}
-    >
-      <ContentBase>
-        <TextContainer>
-          <Title
-            text={isLoading ? "계정을 생성하는 중" : "계정 생성을 완료했어요!"}
-            isDark={isDark}
-          />
+    return (
+        <ScreenBase style={{ backgroundColor: isDark ? colors.black : colors.grey_1 }}>
+            <ContentBase>
+                <TextContainer>
+                    <Title text={isLoading ? '계정을 생성하는 중' : '계정 생성을 완료했어요!'} isDark={isDark} />
 
-          <SubTitle style={{ color: isDark ? colors.white : colors.black }}>
-            {isLoading
-              ? `잠시만 기다려 주세요
+                    <SubTitle style={{ color: isDark ? colors.white : colors.black }}>
+                        {isLoading
+                            ? `잠시만 기다려 주세요
             `
-              : `이제 인공지능이 만들어주는
+                            : `이제 인공지능이 만들어주는
 운동루틴을 경험하러 가볼까요?`}
-          </SubTitle>
-        </TextContainer>
-        <AnimationContainer
-          style={{ backgroundColor: isDark ? colors.grey_8 : colors.white }}
-        >
-          {/* {isLoading ? <LottieView /> : <Test></Test>} */}
-        </AnimationContainer>
-        <Button
-          loading={isLoading}
-          isDark={isDark}
-          enabled={!isLoading}
-          text="시작하기"
-          onPress={() => goBackHome()}
-        />
-      </ContentBase>
-    </ScreenBase>
-  );
-};
+                    </SubTitle>
+                </TextContainer>
+                <AnimationContainer
+                    style={{ backgroundColor: isDark ? colors.grey_8 : colors.white }}
+                ></AnimationContainer>
+                <Button
+                    loading={isLoading}
+                    isDark={isDark}
+                    enabled={!isLoading}
+                    text="시작하기"
+                    onPress={() => goBackHome()}
+                />
+            </ContentBase>
+        </ScreenBase>
+    )
+}
 
-export default CreateAccount_4;
+export default CreateAccount_4

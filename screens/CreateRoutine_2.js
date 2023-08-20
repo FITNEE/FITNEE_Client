@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components/native'
-import { Picker, DatePicker } from 'react-native-wheel-pick'
+// import { Picker, DatePicker } from 'react-native-wheel-pick'
 import { useNavigationState } from '@react-navigation/native'
 import CreateRoutineHeader from '../components/CreateRoutineHeader'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import { CreateRoutineAtom } from '../recoil/CreateRoutineAtom'
 import { colors } from '../colors'
 import { IsDarkAtom } from '../recoil/MyPageAtom'
-import WheelPickerExpo from 'react-native-wheel-picker-expo'
 
 export default function CreateRoutine_2({ navigation }) {
     const [shouldRender, setShouldRender] = useState(true)
@@ -77,14 +76,14 @@ export default function CreateRoutine_2({ navigation }) {
                 </SubTitle>
             </TitleContainer>
             <PickerContainer>
-                <WheelPickerExpo
+                {/* <WheelPickerExpo
                     height={200}
                     width={288}
                     initialSelectedIndex={8}
                     items={data.map((name) => ({ label: name, value: '' }))}
                     onChange={({ item }) => setValue(item)}
                     selectedStyle={{ borderColor: '#E8EBF0', borderWidth: 1 }}
-                />
+                /> */}
             </PickerContainer>
             {/* items={CITIES.map((name) => ({ label: name, value: '' }))} */}
             {/* <Picker
