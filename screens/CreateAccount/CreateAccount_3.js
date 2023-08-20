@@ -3,7 +3,7 @@ import styled from "styled-components/native";
 import { colors } from "../../colors";
 import { Button, BackButton } from "../../Shared";
 //prettier-ignore
-import {Title,SubText, ScreenLayout,NumberInput,MyBottomSheet, InputTitle} from "../../components/Shared/OnBoarding_Shared";
+import {Title,SubText, ScreenKeyboardLayout,NumberInput,MyBottomSheet, InputTitle} from "../../components/Shared/OnBoarding_Shared";
 
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { Pressable } from "react-native";
@@ -301,7 +301,7 @@ const CreateAccount_3 = ({ route, navigation }) => {
         style={{ width: "100%", height: "100%" }}
         onPress={() => hideModal()}
       >
-        <ScreenLayout isDark={isDark}>
+        <ScreenKeyboardLayout isDark={isDark}>
           <BackButton isDark={isDark} onPress={() => navigation.goBack()} />
           <TextContainer>
             <Title text="마지막 단계에요!" isDark={isDark} />
@@ -383,7 +383,7 @@ const CreateAccount_3 = ({ route, navigation }) => {
             hideFunc={() => hideModal()}
             nextFunc={mode == 1 ? () => setMode(2) : () => hideModal()}
           />
-        </ScreenLayout>
+        </ScreenKeyboardLayout>
       </Pressable>
     </BottomSheetModalProvider>
   );

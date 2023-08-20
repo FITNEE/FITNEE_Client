@@ -130,7 +130,7 @@ const BubbleArrow = styled.View`
   border-width: 0 8px 10px;
   border-color: ${(props) => (props.isDark ? colors.white : colors.grey_9)}
     transparent;
-  display: block;
+  /* display: block; */
   width: 0;
   z-index: 1;
   top: -10px;

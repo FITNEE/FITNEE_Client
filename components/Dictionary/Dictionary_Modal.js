@@ -61,7 +61,7 @@ export default function Dictionary_Modal(props){
             Toast.show({
                 type: 'customToast',
                 text1: '해당 운동이 마이루틴에 추가되었습니다.',
-                visibilityTime: 1200,
+                visibilityTime: 2200,
                 topOffset: 56,
                 props: { isDark: isDark }
             })
@@ -229,12 +229,14 @@ const Title = styled.Text`
     font-size: 20px;
     color: ${colors.black};
     margin-top: 28px;
+    line-height: 32px;
 `
 const SubTitle = styled.Text`
     font-family: Pretendard-Regular;
     font-size: 13px;
     color: ${colors.black};
     margin-top: 8px;
+    line-height: 19.5px;
 `
 const DayContainer = styled.View`
     flex-direction: row;
@@ -268,13 +270,14 @@ const DayWrapper = styled.TouchableOpacity`
 const DayText = styled.Text`
     font-family: Pretendard-Medium;
     font-size: 15px;
+    line-height: 22.5px;
 `
 const PartText = styled.Text`
     font-size: 13px;
     font-family: Pretendard-Regular;
     margin-right: 7px;
+    line-height: 19.5px;
 `
-
 const BottomContainer = styled.View`
     flex-direction: row;
 `
@@ -297,6 +300,7 @@ const SelectContainer = styled.TouchableOpacity`
 const BottomText = styled.Text`
     font-family: Pretendard-SemiBold;
     font-size: 17px; 
+    line-height: 25.5px;
 `
 
 
