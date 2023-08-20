@@ -161,7 +161,7 @@ export default function Dictionary_2({ navigation, route }) {
                         <ExerciseImage
                             onLoadStart={()=>setIsLoading(true)}
                             onLoad={()=>setIsLoading(false)}
-                            source={imagePath.path[exerciseInfo.healthCategoryIdx]}
+                            source={imagePath.path[exerciseInfo.healthCategoryIdx-1]}
                         />
                     </ImageContainer>
                     {isBubbleOn ? (

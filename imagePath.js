@@ -15,16 +15,15 @@ export const imagePath = {
         require('./assets/GIFs/13.gif'),
         require('./assets/GIFs/14.gif'),
         require('./assets/GIFs/15.gif'),
-        // img16: require('./assets/GIFs/16.gif'),
+        require('./assets/GIFs/16.gif'),
         require('./assets/GIFs/17.gif'),
         require('./assets/GIFs/18.gif'),
-        //  require('./assets/GIFs/19.gif'),
+        require('./assets/GIFs/19.gif'),
         require('./assets/GIFs/20.gif'),
         require('./assets/GIFs/21.gif'),
         require('./assets/GIFs/22.gif'),
         require('./assets/GIFs/23.gif'),
         require('./assets/GIFs/24.gif'),
         require('./assets/GIFs/25.gif'),
-        require('./assets/GIFs/26.gif'),
-        require('./assets/GIFs/27.gif')]
+]
 }
