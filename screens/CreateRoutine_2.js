@@ -95,7 +95,7 @@ export default function CreateRoutine_2({ navigation }) {
                         height: 200,
                         borderRadius: 20,
                     }}
-                    selectedValue="0"
+                    selectedValue="40"
                     pickerData={data}
                     onValueChange={(value) => {
                         setValue(value)
@@ -184,8 +184,6 @@ const DontKnowButton = styled.TouchableOpacity`
     border-radius: 100px;
     align-items: center;
     justify-content: center;
-    border: ${(props) => (props.isDark ? 0 : '1px')};
-    border-color: ${(props) => (props.isActive ? colors.l_main : colors.l_sub_2)};
 `
 const DontKnowText = styled.Text`
     font-size: 13px;
