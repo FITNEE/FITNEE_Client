@@ -52,7 +52,12 @@ export default Scroll = ({ isDark, data, currentRoutine }) => {
                     <RoutineTitleContainer isDark={isDark}>
                         <RoutineTitle isDark={isDark}>{routines.title}</RoutineTitle>
                     </RoutineTitleContainer>
-                    <ItemConteiner isDark={isDark}>
+                    <ItemConteiner
+                        isDark={isDark}
+                        style={{
+                            borderColor: isDark ? `${colors.grey_8}` : `${colors.grey_3}`,
+                        }}
+                    >
                         <FlatList
                             data={routines.item}
                             keyExtractor={(item) => item.routineIdx}
@@ -134,7 +139,8 @@ const RoutineTitle = styled.Text`
     color: ${colors.white};
 `
 const ItemConteiner = styled.View`
-    width: 327px;
+    /* width: 327px; */
+    width: 107%;
     height: 365px;
     border: 1px;
     border-color: ${(props) => (props.isDark ? colors.grey_8 : colors.grey_3)};
