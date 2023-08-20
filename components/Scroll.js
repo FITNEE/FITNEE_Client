@@ -93,6 +93,12 @@ export default Scroll = ({ isDark, data, currentRoutine }) => {
                 showsHorizontalScrollIndicator={false}
                 pagingEnabled={true}
                 onScroll={handleScroll}
+                contentContainerStyle={
+                    {
+                        // width: '100%',
+                        // margin: 100,
+                    }
+                }
                 // 스크롤이 멈출 때마다 현재 페이지를 계산합니다.
                 // onMomentumScrollEnd={(event) => {
                 //   const offsetX = event.nativeEvent.contentOffset.x;
@@ -115,7 +121,7 @@ const RoutineContainer = styled.View`
     align-items: center;
     justify-content: center;
     margin-left: 30px;
-    margin-right: 30px;
+    margin-right: 55px;
     margin-top: 10px;
 `
 const RoutineBox = styled.View`
