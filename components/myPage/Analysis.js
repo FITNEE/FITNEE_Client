@@ -55,7 +55,6 @@ export default function Analysis(props) {
     const isDark = useRecoilValue(IsDarkAtom)
 
     const weekData = props.weekData
-    console.log(weekData.formattedRows)
 
     // 오늘이 몇주차인지
     const date = new Date(Date.now() + 9 * 60 * 60 * 1000)
