@@ -70,7 +70,6 @@ export default function Dictionary_1({ navigation }) {
         getKeywords().then((result) => {
             let temp = result.recentKeywords
             let temp2 = temp.map((keyword) => keyword.text)
-            console.log(temp2)
             setRecentKeywords(temp2)
 
             temp = result.popularKeywords

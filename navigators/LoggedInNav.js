@@ -16,6 +16,7 @@ import { useRecoilValue } from 'recoil'
 import { IsDarkAtom, TabBarAtom } from '../recoil/MyPageAtom'
 import ExerciseCourseNav from './ExerciseCourseNav'
 import { ScreenWidth } from '../Shared'
+import { Platform } from 'react-native'
 
 const IconText = styled.Text`
     font-size: 10px;
@@ -31,7 +32,7 @@ export default function LoggedInNav() {
     return (
         <Tabs.Navigator
             screenOptions={{
-                tabBarHideOnKeyboard: true,
+                tabBarHideOnKeyboard: Platform.OS === 'android'? true : false,
                 headerShown: false,
                 tabBarShowLabel: false,
                 tabBarStyle: {
