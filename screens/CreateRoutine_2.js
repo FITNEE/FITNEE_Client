@@ -93,7 +93,6 @@ export default function CreateRoutine_2({ navigation }) {
                         backgroundColor: 'white',
                         width: 288,
                         height: 200,
-
                         borderRadius: 20,
                     }}
                     selectedValue="0"
