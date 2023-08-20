@@ -37,7 +37,7 @@ const ExerciseButton = styled.TouchableOpacity`
     width: 111px;
     height: 111px;
     flex-shrink: 0;
-    border-radius: 55px;
+    /* border-radius: 55px;  */
     background: ${({ isDark }) => (isDark ? colors.d_main : colors.l_main)};
     display: flex;
     flex-direction: column;
@@ -56,7 +56,7 @@ const ExerciseText = styled.Text`
 const ExerciseRec = styled.View`
     width: 311px;
     height: 175px;
-    border-radius: 12px;
+    /* border-radius: 12px; */
     background: ${({ isDark }) => (isDark ? colors.grey_8 : colors.grey_1)};
     margin-bottom: 33px;
     justify-content: center;
@@ -119,7 +119,7 @@ const Container2 = styled.View`
 const ExerciseCircle = styled.View`
     width: 307px;
     height: 307px;
-    border-radius: 291px;
+    /* border-radius: 291px; */
     background: ${({ isDark }) => (isDark ? colors.black : colors.white)};
     margin-bottom: 24px;
     justify-content: center;

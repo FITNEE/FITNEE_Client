@@ -40,17 +40,15 @@ const SetsText = styled.Text`
     color: ${colors.grey_8};
     font-family: Pretendard-Regular;
 `
-const EditText = styled.Text`
+const EditBox = styled.TextInput`
     font-size: 17px;
     font-family: Pretendard-Medium;
     text-align: center;
-`
-const EditBox = styled.TextInput`
+    color: ${colors.l_main};
     height: 32px;
     margin-right: 8px;
     flex-direction: row;
     border-radius: 8px;
-
     width: 56px;
 `
 const SubmitText = styled.Text`
@@ -104,39 +102,23 @@ export const BottomSheetContent = ({ isDark, handleClosePress, newRoutine, editi
                             <ContentContainer key={id}>
                                 <SetsText style={isDark && { color: colors.white }}>{id + 1}</SetsText>
                                 <EditBox
-                                    style={[
-                                        Platform.OS === 'android' && { paddingLeft: 16 },
-                                        {
-                                            backgroundColor: isDark ? colors.black : colors.grey_2,
-                                        },
-                                    ]}
+                                    style={{ backgroundColor: isDark ? colors.black : colors.grey_2 }}
                                     keyboardType="numeric"
                                     selectTextOnFocus={item.weight != null}
-                                    // editable={item.weight != null}
                                     onFocus={() => extendModal()}
+                                    defaultValue={item.weight ? item.weight.toString() : '-'}
                                     onChangeText={(value) => editRoutine(id, 'weight', value)}
-                                >
-                                    <EditText style={item.weight && { color: colors.l_main }}>
-                                        {item.weight ? item.weight : '-'}
-                                    </EditText>
-                                </EditBox>
+                                />
                                 <SetsText style={isDark && { color: colors.white }}>kg</SetsText>
                                 <EditBox
-                                    style={[
-                                        Platform.OS === 'android' && { paddingLeft: 16 },
-                                        {
-                                            backgroundColor: isDark ? colors.black : colors.grey_2,
-                                        },
-                                    ]}
+                                    style={{ backgroundColor: isDark ? colors.black : colors.grey_2 }}
                                     keyboardType="numeric"
                                     selectTextOnFocus={item.rep != null}
                                     editable={item.rep != null}
                                     onFocus={() => extendModal()}
-                                    // value={newRoutine[editingID].content[id].rep}
+                                    defaultValue={item.rep?.toString()}
                                     onChangeText={(value) => editRoutine(id, 'repeat', value)}
-                                >
-                                    <EditText style={{ color: colors.l_main }}>{item.rep}</EditText>
-                                </EditBox>
+                                />
                                 <SetsText style={isDark && { color: colors.white }}>회</SetsText>
                             </ContentContainer>
                         </SetContainer>
