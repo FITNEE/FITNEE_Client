@@ -8,7 +8,7 @@ import { BackButton } from "../../Shared";
 import { colors } from "../../colors";
 import axios from "axios";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { useIsFocused } from "@react-navigation/native";
+import { StackActions, useIsFocused } from "@react-navigation/native";
 import { processDayData } from "../../components/myRoutine/Functions";
 import { TabBarAtom, IsDarkAtom } from "../../recoil/MyPageAtom";
 import Left from "../../assets/SVGs/Left.svg";
@@ -206,7 +206,7 @@ export default function StartExercise({ navigation }) {
 
       if (allElementsAreZero) {
         // 모든 요소가 0인 경우
-        navigation.navigate("RegisterRoutine");
+        navigation.dispatch(StackActions.replace("RegisterRoutine"));
         return;
       } else if (dayRoutineIdx === 0) {
         navigation.navigate("NoRoutine");

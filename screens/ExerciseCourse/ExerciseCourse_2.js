@@ -30,7 +30,6 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import { IsDarkAtom } from "../../recoil/MyPageAtom";
 import ArrowCircle from "../../assets/SVGs/ArrowCircle.svg";
 import Close from "../../assets/SVGs/Close.svg";
-import ExerciseButton from "../../components/exerciseCourse/ExerciseButton";
 
 const StartButton = styled.TouchableOpacity`
   padding: 8px 12px;
@@ -213,6 +212,8 @@ export default function ExerciseCourse_2({
   listIndex,
   totalTime,
   routineIdx,
+  setId,
+  toggleShowExerciseCourse2,
 }) {
   const goToStartExercise = () => {
     navigation.navigate("StartExercise");

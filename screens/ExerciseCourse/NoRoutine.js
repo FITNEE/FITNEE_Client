@@ -5,6 +5,8 @@ import { colors } from "../../colors";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { TabBarAtom, IsDarkAtom } from "../../recoil/MyPageAtom";
 import { useIsFocused } from "@react-navigation/native";
+import { processDayData } from "../../components/myRoutine/Functions";
+import axios from "axios";
 
 const Container = styled.View`
   flex: 1;
@@ -37,20 +39,51 @@ const RoutineCircle = styled.View`
   margin-bottom: 8px;
 `;
 
-export default function RegisterRoutine({ navigation }) {
+export default function NoRoutine({ navigation }) {
   const isFocus = useIsFocused();
   const isDark = useRecoilValue(IsDarkAtom);
   const setIsTabVisible = useSetRecoilState(TabBarAtom);
 
+  const now = new Date();
+  let day2 = (now.getDay() + 6) % 7;
+
   useEffect(() => {
+    // async function fetchData() {
+    //   const routineData = await getRoutineData();
+    //   const dayRoutineArr = processDayData(routineData.result);
+    //   const dayRoutineIdx = dayRoutineArr[day2].routineId;
+    //   console.log(dayRoutineIdx);
+    //   if (dayRoutineIdx !== 0)
+    //     navigation.dispatch(StackActions.replace("StartExercise"));
+    // }
+    // fetchData();
     isFocus && setIsTabVisible(true);
-  }, [isFocus]);
+  }, [isFocus, setIsTabVisible]);
+
+  const getRoutineData = async () => {
+    try {
+      let url = "https://gpthealth.shop/";
+      let detailAPI = `/app/routine/calendar`;
+
+      const response = await axios.get(url + detailAPI);
+      const result = response.data;
+      return result;
+    } catch (error) {
+      console.error("Error", error);
+    }
+  };
+
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: colors.grey_1 }}>
+    <SafeAreaView
+      style={{
+        flex: 1,
+        backgroundColor: isDark ? colors.grey_9 : colors.grey_1,
+      }}
+    >
       <Container isDark={isDark}>
         <RoutineCircle isDark={isDark}></RoutineCircle>
         <RoutineText isDark={isDark}>오늘은 운동이 없어요</RoutineText>
-        <RoutineExplain>
+        <RoutineExplain isDark={isDark}>
           오늘 운동을 하시려면 루틴을 수정해주세요.
         </RoutineExplain>
       </Container>
