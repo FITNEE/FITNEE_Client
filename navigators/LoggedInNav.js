@@ -31,11 +31,11 @@ export default function LoggedInNav() {
     return (
         <Tabs.Navigator
             screenOptions={{
+                tabBarHideOnKeyboard: true,
                 headerShown: false,
                 tabBarShowLabel: false,
                 tabBarStyle: {
                     display: isTabVisible ? 'flex' : 'none',
-
                     paddingTop: ScreenWidth < 400 ? 10 : 0,
                     height: ScreenWidth < 400 ? 88 : 68,
                     backgroundColor: isDark ? colors.grey_9 : colors.white,
