@@ -23,9 +23,8 @@ export default function CreateRoutineHeader({ title, index, children }) {
   }, [index, width]);
   return (
     <>
-      {index == 4 ? (
-        <NoHeader isDark={isDark} />
-      ) : (
+      {index == 4 ? //
+      null : (
         <HeaderContainer isDark={isDark}>
           <Header isDark={isDark}>
             <BackButton onPress={() => navigation.goBack()}>
