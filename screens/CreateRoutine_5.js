@@ -169,6 +169,7 @@ const NextButton = styled.TouchableOpacity`
   /* margin-bottom: 50px; */
 `;
 const ButtonText = styled.Text`
-  font-weight: bold;
+  font-size: 17px;
+  font-family: Pretendard-SemiBold;
   color: ${(props) => (props.isDark ? colors.black : colors.white)};
 `;

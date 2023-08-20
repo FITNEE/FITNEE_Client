@@ -90,17 +90,18 @@ const Container = styled.View`
   flex: 1;
   width: 100%;
   align-items: center;
-  justify-content: space-evenly;
+
   background-color: ${(props) => (props.isDark ? colors.black : colors.grey_1)};
 `;
 const TitleContainer = styled.View`
   width: 90%;
-  margin-bottom: 60px;
+  margin-bottom: 121px;
 `;
 const Title = styled.Text`
   font-size: 24px;
   font-family: Pretendard-SemiBold;
   line-height: 33.6px; /*  */
+  margin-top: 52px;
   color: ${(props) => (props.isDark ? colors.white : colors.black)};
 `;
 const SubTitle = styled.Text`
@@ -115,7 +116,6 @@ const SpaceContainer = styled.View`
   align-items: center;
   justify-content: center;
   justify-content: space-around;
-  margin-bottom: 100px;
 `;
 const SpaceItem = styled.TouchableOpacity`
   width: 157px;
@@ -157,6 +157,7 @@ const NextButton = styled.TouchableOpacity`
   height: 52px;
   align-items: center;
   justify-content: center;
+  margin-top: 165px;
   background-color: ${(props) =>
     props.isActive
       ? colors.l_main
