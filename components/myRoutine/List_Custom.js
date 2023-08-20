@@ -166,7 +166,9 @@ export const List_Custom = ({ isDark, SCHEDULE, setNewSCHE, newRoutine, editRout
                 </>
             ) : (
                 <ContentContainer>
-                    <NoRoutineText style={{ marginTop: 160 }}>해당 요일에는 루틴이 없어요</NoRoutineText>
+                    <NoRoutineText style={{ marginTop: 160, color: colors.grey_5 }}>
+                        해당 요일에는 루틴이 없어요
+                    </NoRoutineText>
                 </ContentContainer>
             )}
         </ScrollPressable>
