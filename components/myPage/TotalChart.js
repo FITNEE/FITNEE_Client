@@ -65,43 +65,40 @@ export default function TotalChart(props) {
     const LabelData = weekData.map((result) => result.weekNumber)
     const KcalData = weekData.map((result) => result.weeklyCalories)
     const KmData = weekData.map((result) => result.weeklyDistance)
-    console.log(LabelData)
-    console.log(KcalData)
-    console.log(KmData)
     const isFirstWeek = weekData.map((result) => result.ifWeek1)
-    console.log(isFirstWeek)
-    console.log(typeof weekData[0].numberOfWeeks === 'string')
-    function getWeeksInMonth(year, month) {
-        const firstDayOfMonth = new Date(year, month - 1, 1)
-        const lastDayOfMonth = new Date(year, month, 0)
-        const daysInMonth = lastDayOfMonth.getDate()
-        const firstWeekDays = 7 - firstDayOfMonth.getDay() // 첫 주에서 마지막 주의 일 수
-        const lastWeekDays = lastDayOfMonth.getDay() + 1 // 마지막 주에서 첫 주의 일 수
-        let fullWeeks = Math.floor((daysInMonth - firstWeekDays - lastWeekDays) / 7) // 첫 주와 마지막 주를 제외한 전체 주 수
-        if (firstWeekDays >= 6) {
-            // 첫 주에서 6일 이상 이전 달의 날짜가 포함된 경우 fullWeeks가 1 감소하므로 보정
-            fullWeeks += 1
-        }
-        if (lastWeekDays >= 6) {
-            // 마지막 주에서 6일 이상 다음 달의 날짜가 포함된 경우 fullWeeks가 1 증가하므로 보정
-            fullWeeks += 1
-        }
-        return fullWeeks + 2 // 첫 주와 마지막 주를 합하여 리턴
-    }
-    function getWeeksInYear() {
+
+    function calculateWeeksInMonth(month) {
         const now = new Date()
         const year = now.getFullYear()
-        const weeksInYear = {}
-        for (let month = 1; month <= 12; month++) {
-            const numberOfWeeks = getWeeksInMonth(year, month)
-            weeksInYear[month] = numberOfWeeks
+        const daysInMonth = new Date(year, month, 0).getDate() // 해당 달의 마지막 날짜
+
+        const firstDay = new Date(year, month - 1, 1).getDay() // 해당 달의 첫 번째 날짜의 요일
+        const lastDay = new Date(year, month - 1, daysInMonth).getDay() // 해당 달의 마지막 날짜의 요일
+
+        if ([1, 3, 5, 7, 8, 10, 12].includes(month)) {
+            // 31일
+            if (firstDay === 0 || firstDay === 6) {
+                return 6 // 1일이 토요일 또는 일요일인 경우 6주
+            } else {
+                return 5 // 그 외의 경우 5주
+            }
+        } else if ([4, 6, 9, 11].includes(month)) {
+            // 30일
+            if (firstDay === 0) {
+                return 6 // 1일이 일요일인 경우 6주
+            } else {
+                return 5 // 그 외의 경우 5주
+            }
+        } else if (month === 2) {
+            // 2월
+            if (firstDay === 1) {
+                return 4 // 1일이 월요일인 경우 4주
+            } else {
+                return 5 // 그 외의 경우 5주
+            }
         }
-        return weeksInYear
     }
-    // 각 월마다 몇 주까지 있는지
-    const weeksInYear = getWeeksInYear()
-    console.log(weeksInYear)
-    console.log(weekData)
+
     function combineWeek(isFirstWeek, LabelData, KmData, KcalData, weeksInYear) {
         const LabelArray = []
         const KcalArray = []
@@ -111,13 +108,14 @@ export default function TotalChart(props) {
             if (i === isFirstWeek.length - 1) {
                 LabelArray.push('이번주'), KcalArray.push(`${KcalData[i]}`), KmArray.push(`${KmData[i]}`)
             } else {
-                let month = parseInt(LabelData[i].split('')[0])
-                if (typeof weekData[0].numberOfWeeks === 'string') {
+                const monthIndex = LabelData[i].indexOf('월')
+                let month = parseInt(LabelData[i].slice(0, monthIndex))
+                const year = new Date().getFullYear()
+                let date = new Date(year, month, 1)
+                const dayOfWeek = date.getDay()
+                if (typeof weekData[i].numberOfWeeks === 'string') {
                     if (LabelData[i].includes('5째 주')) {
-                        const year = new Date().getFullYear()
-                        let date = new Date(year, month + 1, 1)
-                        const dayOfWeek = date.getDay()
-                        if (weeksInYear[`${month}`] == 5)
+                        if (calculateWeeksInMonth(month) == 5)
                             if (dayOfWeek != 1) {
                                 LabelArray.push(`5주/${LabelData[i + 1].replace(/째 /g, '')}`)
                                 KcalArray.push(`${KcalData[i] + KcalData[i + 1]}`)
@@ -134,10 +132,7 @@ export default function TotalChart(props) {
                             KmArray.push(`${KmData[i]}`)
                         }
                     } else if (LabelData[i].includes('6째 주')) {
-                        const year = new Date().getFullYear()
-                        let date = new Date(year, month + 1, 1)
-                        const dayOfWeek = date.getDay()
-                        if (weeksInYear[`${month}`] == 6)
+                        if (calculateWeeksInMonth(month) == 6)
                             if (dayOfWeek != 1) {
                                 LabelArray.push(`6주/${LabelData[i + 1].replace(/째 /g, '')}`)
                                 KcalArray.push(`${KcalData[i] + KcalData[i + 1]}`)
@@ -151,10 +146,7 @@ export default function TotalChart(props) {
                     }
                 } else {
                     if (LabelData[i].includes('5째 주')) {
-                        const year = new Date().getFullYear()
-                        let date = new Date(year, month + 1, 1)
-                        const dayOfWeek = date.getDay()
-                        if (weeksInYear[`${month}`] == 5)
+                        if (calculateWeeksInMonth(month) == 5)
                             if (dayOfWeek != 1) {
                                 LabelArray.push(`5주/${LabelData[i + 2].replace(/째 /g, '')}`)
                                 KcalArray.push(`${KcalData[i] + KcalData[i + 2]}`)
@@ -172,10 +164,7 @@ export default function TotalChart(props) {
                             KmArray.push(`${KmData[i]}`)
                         }
                     } else if (LabelData[i].includes('6째 주')) {
-                        const year = new Date().getFullYear()
-                        let date = new Date(year, month + 1, 1)
-                        const dayOfWeek = date.getDay()
-                        if (weeksInYear[`${month}`] == 6)
+                        if (calculateWeeksInMonth(month) == 6)
                             if (dayOfWeek != 1) {
                                 LabelArray.push(`6주/${LabelData[i + 1].replace(/째 /g, '')}`)
                                 KcalArray.push(`${KcalData[i] + KcalData[i + 1]}`)
@@ -199,30 +188,25 @@ export default function TotalChart(props) {
         ]
         return total
     }
-    const totalArray = combineWeek(isFirstWeek, LabelData, KmData, KcalData, weeksInYear)
-    console.log(totalArray)
+    const totalArray = combineWeek(isFirstWeek, LabelData, KmData, KcalData)
 
     const LabelArray = []
-    for (let i = 0; i < LabelData.length; i++) {
-        if (LabelData[i].length > 7) {
-            if (LabelData[i].includes('1째 주')) {
-                LabelArray.push(`${LabelData[i].subString(0, 2)}월 1주`)
-            } else {
-                LabelArray.push(`${LabelData[i].split('')[4]}주`)
-            }
+    for (let i = 0; i < totalArray[0].label.length; i++) {
+        if (i == totalArray[0].label.length - 1) {
+            LabelArray.push('이번주')
+        } else if (totalArray[0].label[i].includes('1주')) {
+            LabelArray.push(`${totalArray[0].label[i]}`)
         } else {
-            if (LabelData[i].includes('1째 주')) {
-                LabelArray.push(`${LabelData[i].split('')[0]}월 1주`)
-            } else {
-                LabelArray.push(`${LabelData[i].split('')[3]}주`)
-            }
+            LabelArray.push(`${totalArray[0].label[i].slice(-2)}`)
         }
     }
+    const KcalArray = totalArray[0].kcaldata
+    const KmArray = totalArray[0].kmdata
 
-    const KcalMax = Math.max(...KcalData)
-    const KmMax = Math.max(...KmData)
-    const calorieData = KcalMax != 0 ? KcalData.map((value) => value / KcalMax) : KcalData.map((value) => value)
-    const distanceData = KmMax != 0 ? KmData.map((value) => value / KmMax) : KmData.map((value) => value)
+    const KcalMax = Math.max(...KcalArray)
+    const KmMax = Math.max(...KmArray)
+    const calorieData = KcalMax != 0 ? KcalArray.map((value) => value / KcalMax) : KcalArray.map((value) => value)
+    const distanceData = KmMax != 0 ? KmArray.map((value) => value / KmMax) : KmArray.map((value) => value)
     const [maxData, setMaxData] = useState()
 
     const data = {
@@ -250,43 +234,6 @@ export default function TotalChart(props) {
             },
         ],
     }
-
-    /* 테스트 데이터
-  const KcalData = [200, 500, 600, 900, 400, 0, 50];
-  const KcalMax = Math.max(...KcalData);
-  const KmData = [4, 3, 7, 6, 2, 0, 2];
-  const KmMax = Math.max(...KmData);
-  const calorieData = KcalData.map((value) => value / KcalMax);
-  const distanceData = KmData.map((value) => value / KmMax);
-  const realMax = Math.max(KmMax, KcalMax);
-  const [maxData, setMaxData] = useState();
-  const dataLength = KcalData.length;
-
-  const data = {
-    labels: ["7월 1주", "2주", "3주", "4주", "8월 1주", "2주", "3주"],
-    datasets: [
-      {
-        data: calorieData,
-        color: () => colors.l_main,
-        strokeWidth: 2,
-      },
-      {
-        data: distanceData,
-        color: () => colors.green,
-        strokeWidth: 2,
-      },
-      {
-        data: [1.2],
-        color: () => "transparent",
-      },
-      {
-        data: [0],
-        color: () => "transparent",
-      },
-    ],
-    //legend: ["kcal", "km"],
-  };
-  */
 
     const [unit, setUnit] = useState('kcal')
 
