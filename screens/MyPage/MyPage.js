@@ -7,7 +7,7 @@ import { colors } from '../../colors'
 import axios from 'axios'
 import { useIsFocused } from '@react-navigation/native'
 import { IsDarkAtom, TabBarAtom } from '../../recoil/MyPageAtom'
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
+import { useRecoilValue, useSetRecoilState } from 'recoil'
 import { ScreenLayout } from '../../Shared'
 
 const Container = styled.ScrollView`
@@ -28,8 +28,8 @@ const Choice = styled.View`
     gap: 16px;
 `
 const ChoiceButton = styled.TouchableOpacity`
-  padding-bottom: 2px;
-`;
+    padding-bottom: 2px;
+`
 
 export default function MyPage() {
     const isFocus = useIsFocused()
@@ -38,18 +38,18 @@ export default function MyPage() {
 
     useEffect(() => {
         isFocus && setIsTabVisible(true)
-    }, [isFocus]);
+    }, [isFocus])
 
-  const getDayHealth = async (checkedDate) => {
-    try {
-      let url = "https://gpthealth.shop/";
-      let detailAPI = `app/mypage/exercise?date=${checkedDate}`;
-      const response = await axios.get(url + detailAPI);
-      const checkResult = response.data;
-      return checkResult;
-    } catch (error) {
-      console.error("Failed to fetch data:", error);
-      
+    const getDayHealth = async (checkedDate) => {
+        try {
+            let url = 'https://gpthealth.shop/'
+            let detailAPI = `app/mypage/exercise?date=${checkedDate}`
+            const response = await axios.get(url + detailAPI)
+            const checkResult = response.data
+            return checkResult
+        } catch (error) {
+            console.error('Failed to fetch data:', error)
+        }
     }
 
     const getMyPageData = async (month) => {
@@ -95,7 +95,7 @@ export default function MyPage() {
     }
 
     return (
-        <ScreenLayout isDark={isDark} darkBack={colors.grey_9} lightBack={colors.grey_1}>
+        <ScreenLayout isDark={isDark} darkBack={colors.grey_9} lightBack={colors.white}>
             <Container isDark={isDark}>
                 <Choice>
                     <ChoiceButton
