@@ -76,32 +76,35 @@ export default function CreateRoutine_2({ navigation }) {
 정확한 트레이닝 중량을 추천해 드릴게요.`}
                 </SubTitle>
             </TitleContainer>
-            <PickerContainer>
-                <WheelPickerExpo
-                    height={200}
-                    width={288}
-                    initialSelectedIndex={8}
-                    items={data.map((name) => ({ label: name, value: '' }))}
-                    onChange={({ item }) => setValue(item)}
-                    selectedStyle={{ borderColor: '#E8EBF0', borderWidth: 1 }}
-                />
-            </PickerContainer>
-            {/* items={CITIES.map((name) => ({ label: name, value: '' }))} */}
-            {/* <Picker
-                style={{
-                    backgroundColor: 'white',
-                    width: 288,
-                    height: 200,
+            {Platform.OS === 'android' ? (
+                <PickerContainer>
+                    <WheelPickerExpo
+                        height={200}
+                        width={288}
+                        initialSelectedIndex={8}
+                        items={data.map((name) => ({ label: name, value: '' }))}
+                        onChange={({ item }) => setValue(item)}
+                        selectedStyle={{ borderColor: '#E8EBF0', borderWidth: 1 }}
+                    />
+                </PickerContainer>
+            ) : (
+                <Picker
+                    style={{
+                        backgroundColor: 'white',
+                        width: 288,
+                        height: 200,
 
-                    borderRadius: 20,
-                }}
-                selectedValue="0"
-                pickerData={data}
-                onValueChange={(value) => {
-                    setValue(value)
-                    console.log(value)
-                }}
-            /> */}
+                        borderRadius: 20,
+                    }}
+                    selectedValue="0"
+                    pickerData={data}
+                    onValueChange={(value) => {
+                        setValue(value)
+                        console.log(value)
+                    }}
+                />
+            )}
+            {/* items={CITIES.map((name) => ({ label: name, value: '' }))} */}
             <DontKnowButton isDark={isDark} isActive={dontKnow} onPress={handleDontKnow}>
                 <DontKnowText isDark={isDark} isActive={dontKnow}>
                     잘 모르겠어요
