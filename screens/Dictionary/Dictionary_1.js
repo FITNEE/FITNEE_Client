@@ -70,6 +70,7 @@ export default function Dictionary_1({ navigation }) {
         getKeywords().then((result) => {
             let temp = result.recentKeywords
             let temp2 = temp.map((keyword) => keyword.text)
+            console.log(temp2)
             setRecentKeywords(temp2)
 
             temp = result.popularKeywords
@@ -154,7 +155,7 @@ export default function Dictionary_1({ navigation }) {
                                 <SearchInput
                                     keyboardAppearance={isDark ? 'dark' : 'light'}
                                     autoFocus
-                                    placeholder="운동명, 부위 검색"
+                                    placeholder="운동명 검색"
                                     placeholderTextColor={colors.grey_4}
                                     returnKeyType="search"
                                     onChange={onChangeText}
@@ -215,7 +216,7 @@ export default function Dictionary_1({ navigation }) {
                                     최근 검색 키워드
                                 </KeywordTitle>
                                 <KeywordContainer>
-                                    {recentKeywords.map((keyword, i) => (
+                                    {/* {recentKeywords.map((keyword, i) => (
                                         <KeywordWrapper
                                             onPress={() => onPressKeyword(keyword)}
                                             key={i}
@@ -229,7 +230,27 @@ export default function Dictionary_1({ navigation }) {
                                                 {keyword}
                                             </Keyword>
                                         </KeywordWrapper>
-                                    ))}
+                                    ))} */}
+                                    {
+                                        recentKeywords.length == 0?
+                                        <NoKeywordText>최근 검색어가 없어요</NoKeywordText>
+                                        :
+                                        (recentKeywords.map((keyword, i) => (
+                                            <KeywordWrapper
+                                                onPress={() => onPressKeyword(keyword)}
+                                                key={i}
+                                                style={{
+                                                    backgroundColor: isDark? colors.grey_8 : colors.grey_1,
+                                                }}
+                                            >
+                                                <Keyword
+                                                    style={{ color: isDark ? colors.grey_3 : colors.grey_7 }}
+                                                >
+                                                    {keyword}
+                                                </Keyword>
+                                            </KeywordWrapper>
+                                        )))
+                                    }
                                 </KeywordContainer>
                             </KeywordBox>
                             <KeywordBox>
@@ -299,12 +320,6 @@ const SearchInput = styled.TextInput`
     font-size: 16px;
     font-family: Pretendard-SemiBold;
 `
-const DeleteAllBtn = styled.TouchableOpacity`
-    width: 24px;
-    height: 24px;
-    background-color: ${colors.red};
-    margin-left: 16px;
-`
 const PartContainer = styled.ScrollView`
     padding-top: 8px;
     margin-top: 8px;
@@ -357,4 +372,12 @@ const Keyword = styled.Text`
     font-family: Pretendard-SemiBold;
     font-size: 13px;
     line-height: 19.5px;
+`
+const NoKeywordText = styled.Text`
+    margin-top: 8px;
+    font-size: 13px;
+    font-family: Pretendard-Regular;
+    color: ${colors.grey_5};
+    text-align: center;
+    width: 100%;
 `

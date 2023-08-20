@@ -251,13 +251,13 @@ export default function Dictionary_RightTab(props) {
                             (<MyMessageWrapper> 
                                 {selectedIdx===i && 
                                 <TouchableOpacity 
-                                    style={{width: 24, height: 24}}
+                                    style={{width: 24, height: 24, marginRight: 8}} 
                                     onPress={()=>onPressMsgDeleteBtn(msg.healthChattingIdx)}
                                     >
                                     <TrashIcon 
                                         width={24}
                                         height={24}
-                                        style={{marginRight: 8}}/>
+                                    />
                                 </TouchableOpacity>}
                                 <MyMessageContainer 
                                     onLongPress={()=>onLongPress(i)}
