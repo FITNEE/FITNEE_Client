@@ -19,12 +19,10 @@ import Check_disabled from '../../assets/SVGs/Check_Disabled.svg'
 import Close from '../../assets/SVGs/Close.svg'
 import ExerciseCourse_2 from './ExerciseCourse_2'
 import ExerciseCourse_2_2 from './ExerciseCourse2_2'
-import { ScrollView } from 'react-native'
-import { Easing } from 'react-native-reanimated'
 
 const TextBox = styled.View`
   width: 327px;
-  //height: 24px;
+  height: 24px;
   margin: 23px 0px 5px 0px;
 `
 
@@ -457,35 +455,6 @@ export default function ExerciseCourse_1({ navigation }) {
     require('../../assets/GIFs/24.gif'),
     require('../../assets/GIFs/25.gif'),
   ]
-
-    return (
-      <View style={styles.container}>
-        <Animated.View style={[styles.animatedText, { transform: [{ translateX: scrollValue }] }]}>
-          <Text
-            onLayout={(event) => setTextWidth(event.nativeEvent.layout.width)}
-            ref={scrollViewRef}
-            style={styles.text}
-          >
-            {text}
-          </Text>
-        </Animated.View>
-      </View>
-    )
-  }
-
-  const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      overflow: 'hidden',
-    },
-    animatedText: {
-      flexDirection: 'row',
-    },
-    text: {
-      fontSize: 20,
-    },
-  })
-
   if (showExerciseCourse2_2)
     return (
       <ExerciseCourse_2_2
@@ -510,85 +479,75 @@ export default function ExerciseCourse_1({ navigation }) {
         toggleShowExerciseCourse2={() => setShowExerciseCourse2(false)} // toggle 함수 추가
       />
     )
-  return (
-    <SafeAreaView
-      style={{
-        flex: 1,
-        backgroundColor: isDark ? colors.grey_9 : colors.grey_2,
-      }}
-    >
-      <ExerciseCard exerciseName={dataList[listIndex].exerciseInfo.exerciseName} isDark={isDark}>
-        <StopExercise onPress={() => OpenConfirm()}>
-          <Close width={24} height={24} color={isDark ? colors.white : colors.black} />
-        </StopExercise>
+  else
+    return (
+      <SafeAreaView
+        style={{
+          flex: 1,
+          backgroundColor: isDark ? colors.grey_9 : colors.grey_2,
+        }}
+      >
+        <ExerciseCard exerciseName={dataList[listIndex].exerciseInfo.exerciseName} isDark={isDark}>
+          <StopExercise onPress={() => OpenConfirm()}>
+            <Close width={24} height={24} color={isDark ? colors.white : colors.black} />
+          </StopExercise>
 
-        <ExerciseCircle>
-          <ComponentWrapper zIndex={1}>
-            <ExerciseImage source={getImage[dataList[listIndex].exerciseInfo.healthCategoryIdx]} resizeMode="contain" />
-          </ComponentWrapper>
-          <ComponentWrapper zIndex={2}>
-            <CountdownCircleTimer
-              key={key}
-              isPlaying={isPlaying}
-              duration={35}
-              colors={colors.l_main}
-              size={315}
-              strokeWidth={8}
-              trailColor={isDark ? colors.grey_7 : colors.grey_3}
-              onComplete={() => ({ shouldRepeat: true })}
-              updateInterval={0.001}
-              isGrowing={true}
-              rotation={'counterclockwise'}
+          <ExerciseCircle>
+            <ComponentWrapper zIndex={1}>
+              <ExerciseImage
+                source={getImage[dataList[listIndex].exerciseInfo.healthCategoryIdx]}
+                resizeMode="contain"
+              />
+            </ComponentWrapper>
+            <ComponentWrapper zIndex={2}>
+              <CountdownCircleTimer
+                key={key}
+                isPlaying={isPlaying}
+                duration={35}
+                colors={colors.l_main}
+                size={315}
+                strokeWidth={8}
+                trailColor={isDark ? colors.grey_7 : colors.grey_3}
+                onComplete={() => ({ shouldRepeat: true })}
+                updateInterval={0.001}
+                isGrowing={true}
+                rotation={'counterclockwise'}
+              />
+            </ComponentWrapper>
+          </ExerciseCircle>
+
+          <Indicator totalPages={dataList[listIndex].totalSets} currentPage={indicatorNum - 1} isDark={isDark} />
+
+          <BoxList>
+            <FlatList
+              data={exerciseData}
+              renderItem={renderItem}
+              keyExtractor={(item) => item.set}
+              showsVerticalScrollIndicator={false}
+              ref={flatListRef}
+              onEndReached={goToCompleteExercise}
+              scrollEnabled={false}
+              getItemLayout={getItemLayout}
+              initialScrollIndex={scrollPosition.current}
             />
-          </ComponentWrapper>
-        </ExerciseCircle>
+          </BoxList>
 
-        <Indicator totalPages={dataList[listIndex].totalSets} currentPage={indicatorNum - 1} isDark={isDark} />
+          <TextBox>
+            <JustText>{advice}</JustText>
+          </TextBox>
 
-        <BoxList>
-          <FlatList
-            data={exerciseData}
-            renderItem={renderItem}
-            keyExtractor={(item) => item.set}
-            showsVerticalScrollIndicator={false}
-            ref={flatListRef}
-            onEndReached={goToCompleteExercise}
-            scrollEnabled={false}
-            // onPressItem={(index) => {
-            //   setSelectedIndex(index);
-            // }}
+          <ExerciseButton //세트 완료 버튼
+            text="세트 완료"
+            disabled={false}
+            //onPress={timeToRest}
+            onPress={scrollBox}
+            isDark={isDark}
           />
-        </BoxList>
-        <BoxList>
-          <FlatList
-            data={exerciseData}
-            renderItem={renderItem}
-            keyExtractor={(item) => item.set}
-            showsVerticalScrollIndicator={false}
-            ref={flatListRef}
-            onEndReached={goToCompleteExercise}
-            scrollEnabled={false}
-            getItemLayout={getItemLayout}
-            initialScrollIndex={scrollPosition.current}
-          />
-        </BoxList>
 
-        <TextBox>
-          <JustText numberOfLines={3}>{advice}</JustText>
-        </TextBox>
-
-        <ExerciseButton //세트 완료 버튼
-          text="세트 완료"
-          disabled={false}
-          //onPress={timeToRest}
-          onPress={scrollBox}
-          isDark={isDark}
-        />
-
-        <SkipExercrise onPress={() => OpenConfirm2()}>
-          <SkipExercriseText isDark={isDark}>이 운동 건너뛰기</SkipExercriseText>
-        </SkipExercrise>
-      </ExerciseCard>
-    </SafeAreaView>
-  )
+          <SkipExercrise onPress={() => OpenConfirm2()}>
+            <SkipExercriseText isDark={isDark}>이 운동 건너뛰기</SkipExercriseText>
+          </SkipExercrise>
+        </ExerciseCard>
+      </SafeAreaView>
+    )
 }
