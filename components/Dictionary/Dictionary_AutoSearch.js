@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components/native'
-import {colors} from '../../colors'
-import { IsDarkAtom } from "../../recoil/MyPageAtom"
-import { useRecoilValue } from "recoil"
+import { colors } from '../../colors'
+import { IsDarkAtom } from '../../recoil/MyPageAtom'
+import { useRecoilValue } from 'recoil'
 
-export default function Dictionary_AutoSearch(props){
-    const isDark = useRecoilValue(IsDarkAtom) 
+export default function Dictionary_AutoSearch(props) {
+    const isDark = useRecoilValue(IsDarkAtom)
 
     const { navigation, parentSearch, parentSearchList } = props
     const [searchList, setSearchList] = useState(parentSearchList)
-    useEffect(()=>{
+    useEffect(() => {
         setSearchList(parentSearchList)
     }, [parentSearchList])
 
@@ -19,36 +19,41 @@ export default function Dictionary_AutoSearch(props){
         const extracted = splitStr.filter((item) => item !== '')
         return extracted
     }
-    const onPress = (exercise) => navigation.navigate('Dictionary_2', {exercise})
+    const onPress = (exercise) => navigation.navigate('Dictionary_2', { exercise })
 
-    return(
-        <AutoSearchContainer> 
-            {
-                searchList === undefined?
-                null
-                :
-                searchList.map((words, i)=>{
-                    let splitedString = splitString(words.name)
-                    return(
-                        <AutoSearch 
-                            onPress={()=> onPress(words)}
-                            style={ i!=0? {borderTopColor: isDark? `${colors.grey_8}`:`${colors.grey_2}`}: {borderTopWidth: 0}}
-                            key={i}
-                        >
-                            <AutoSearchText style={{color: isDark? `${colors.grey_5}`:`${colors.black}`}}>
-                            {
-                                splitedString.map((word) => (
-                                    word == parentSearch?
-                                    <ColoredSearchText style={{color: isDark? `${colors.white}`:`${colors.l_main}`}}>{ word }</ColoredSearchText>
-                                    :
-                                    <AutoSearchText>{ word }</AutoSearchText>
-                                ))
-                            }
-                            </AutoSearchText>
-                        </AutoSearch>
-                    )
-                })
-            }
+    return (
+        <AutoSearchContainer>
+            {searchList === undefined
+                ? null
+                : searchList.map((words, i) => {
+                      let splitedString = splitString(words.name)
+                      return (
+                          <AutoSearch
+                              onPress={() => onPress(words)}
+                              style={
+                                  i != 0
+                                      ? { borderTopColor: isDark ? `${colors.grey_8}` : `${colors.grey_2}` }
+                                      : { borderTopWidth: 0 }
+                              }
+                              key={i}
+                          >
+                              <AutoSearchText style={{ color: isDark ? `${colors.grey_5}` : `${colors.black}` }}>
+                                  {splitedString.map((word, index) =>
+                                      word == parentSearch ? (
+                                          <ColoredSearchText
+                                              key={index}
+                                              style={{ color: isDark ? `${colors.white}` : `${colors.l_main}` }}
+                                          >
+                                              {word}
+                                          </ColoredSearchText>
+                                      ) : (
+                                          <AutoSearchText key={index}>{word}</AutoSearchText>
+                                      ),
+                                  )}
+                              </AutoSearchText>
+                          </AutoSearch>
+                      )
+                  })}
         </AutoSearchContainer>
     )
 }

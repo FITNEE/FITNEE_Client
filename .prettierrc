@@ -1,8 +1,7 @@
 {
-  "editor.formatOnSave": true,
-  "prettier.semi": false,
-  "prettier.javascriptEnable" : ["javascript", "javascriptreact"],
-  "prettier.printWidth" : 2,
-  "prettier.useTabs": false,
-  "prettier.tabWidth": 4
+  "printWidth": 120,
+  "tabWidth": 4,
+  "singleQuote": true,
+  "trailingComma": "all",
+  "semi": false
 }

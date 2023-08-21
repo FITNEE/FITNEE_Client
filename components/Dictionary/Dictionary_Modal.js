@@ -25,6 +25,7 @@ export default function Dictionary_Modal(props){
 
         return sortedArray
     }
+    
     // 일주일간의 요일별 routineIdx, 대표부위(parts)를 받아옴
     const getRoutineInfo = async () => {
         try {

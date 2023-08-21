@@ -8,6 +8,7 @@ import axios from "axios";
 import { IsDarkAtom } from "../../recoil/MyPageAtom"
 import { useRecoilValue } from "recoil"
 import TrashIcon from '../../assets/SVGs/Trash.svg'
+import * as Haptics from 'expo-haptics'
 
 export default function Dictionary_RightTab(props) {
     const isDark = useRecoilValue(IsDarkAtom)
@@ -224,7 +225,9 @@ export default function Dictionary_RightTab(props) {
         // Vibration.vibrate()
         if(i==selectedIdx) setSelectedIdx(-1)
         else setSelectedIdx(i)
-
+        
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
+        
         {/* 햅틱 효과 넣고 싶다 아님 띠용 이펙트 */}
     }
 
@@ -251,13 +254,13 @@ export default function Dictionary_RightTab(props) {
                             (<MyMessageWrapper> 
                                 {selectedIdx===i && 
                                 <TouchableOpacity 
-                                    style={{width: 24, height: 24}}
+                                    style={{width: 24, height: 24, marginRight: 8}} 
                                     onPress={()=>onPressMsgDeleteBtn(msg.healthChattingIdx)}
                                     >
                                     <TrashIcon 
                                         width={24}
                                         height={24}
-                                        style={{marginRight: 8}}/>
+                                    />
                                 </TouchableOpacity>}
                                 <MyMessageContainer 
                                     onLongPress={()=>onLongPress(i)}

@@ -9,11 +9,12 @@ import { styled } from "styled-components/native";
 import { colors } from "../../colors";
 import axios from "axios";
 import { TouchableOpacity } from "react-native";
-import { Image } from "react-native";
 import Left from "../../assets/SVGs/Left.svg";
 import { Alert } from "react-native";
 import { useRecoilValue } from "recoil";
 import { IsDarkAtom } from "../../recoil/MyPageAtom";
+import Profile_man from "../../assets/SVGs/Profile_man.svg";
+import Profile_woman from "../../assets/SVGs/Profile_woman.svg";
 
 const Container = styled.View`
   background-color: ${({ isDark }) => (isDark ? colors.grey_9 : colors.white)};
@@ -25,12 +26,6 @@ const Profile = styled.View`
   align-items: center;
   margin-top: 35px;
   margin-bottom: 32px;
-`;
-const ProfileImage = styled.TouchableOpacity`
-  width: 88px;
-  height: 88px;
-  background-color: ${colors.grey_2};
-  border-radius: 88px;
 `;
 const InputRed = styled.View`
   width: 240px;
@@ -245,9 +240,19 @@ export default function EditUserInfo({ navigation }) {
       >
         <Container isDark={isDark}>
           <Profile>
-            <ProfileImage
-              style={{ backgroundColor: getGender == 1 ? "blue" : "pink" }}
-            ></ProfileImage>
+            {getGender == 1 ? (
+              <Profile_man
+                width={88}
+                height={88}
+                color={isDark ? colors.grey_7 : colors.grey_2}
+              />
+            ) : (
+              <Profile_woman
+                width={88}
+                height={88}
+                color={isDark ? colors.grey_7 : colors.grey_2}
+              />
+            )}
           </Profile>
           <InputContainer>
             <InputRed isDark={isDark} error={error} check={check}>

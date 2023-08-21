@@ -66,6 +66,79 @@ export default function TotalChart(props) {
   const KcalData = weekData.map((result) => result.weeklyCalories);
   const LabelData = weekData.map((result) => result.weekNumber);
   const KmData = weekData.map((result) => result.weeklyDistance);
+  console.log(KcalData);
+  console.log(LabelData);
+  console.log(KmData);
+  const isFirstWeek = weekData.map((result) => result.ifWeek1);
+  console.log(isFirstWeek);
+
+  function getWeeksInMonth(year, month) {
+    const firstDayOfMonth = new Date(year, month - 1, 1);
+    const lastDayOfMonth = new Date(year, month, 0);
+    const daysInMonth = lastDayOfMonth.getDate();
+    const firstWeekDays = 7 - firstDayOfMonth.getDay(); // 첫 주에서 마지막 주의 일 수
+    const lastWeekDays = lastDayOfMonth.getDay() + 1; // 마지막 주에서 첫 주의 일 수
+    let fullWeeks = Math.floor(
+      (daysInMonth - firstWeekDays - lastWeekDays) / 7
+    ); // 첫 주와 마지막 주를 제외한 전체 주 수
+    if (firstWeekDays >= 6) {
+      // 첫 주에서 6일 이상 이전 달의 날짜가 포함된 경우 fullWeeks가 1 감소하므로 보정
+      fullWeeks += 1;
+    }
+    if (lastWeekDays >= 6) {
+      // 마지막 주에서 6일 이상 다음 달의 날짜가 포함된 경우 fullWeeks가 1 증가하므로 보정
+      fullWeeks += 1;
+    }
+    return fullWeeks + 2; // 첫 주와 마지막 주를 합하여 리턴
+  }
+  function getWeeksInYear() {
+    const now = new Date();
+    const year = now.getFullYear();
+    const weeksInYear = {};
+    for (let month = 1; month <= 12; month++) {
+      const numberOfWeeks = getWeeksInMonth(year, month);
+      weeksInYear[month] = numberOfWeeks;
+    }
+    return weeksInYear;
+  }
+  // 각 월마다 몇 주까지 있는지
+  const weeksInYear = getWeeksInYear();
+  console.log(weeksInYear);
+
+  /* 여기는 아직 수정 중..!
+  const LabelArray = [];
+  for( let i = 0; i < isFirstWeek.length; i++){
+    let month = LabelData[i].split("")[0];
+    //1주차
+    if ( isFirstWeek[i] == 1 ) {
+      const year = new Date().getFullYear();
+      let date = new Date(year, month, 1);
+      const dayOfWeek = date.getDay();
+        // 이전 달이 6주까지
+        if ( weeksInYear[`${month-1}`] == 6 ) {
+          console.log('6주');
+          // 1일 월요일
+          (dayOfWeek == 1) && LabelArray.push(`${LabelData[i].replace(/째/g, '')}`);
+          // 월요일 아님
+          (dayOfWeek != 1) &&
+          이전 1개 data 지우기
+        }
+        // 이전 달이 5주까지
+        else if (weeksInYear[`${month-1}`] == 5) {
+           console.log('5주');
+          // 1일 월요일
+          (dayOfWeek == 1) && 이전 1개 data 지우기
+          // 월요일 아님
+          (dayOfWeek != 1) &&
+          이전 2개 data 지우기
+        }
+    }
+    else {
+      LabelArray.push(`${LabelData[i].replace(/째/g, '')}`);
+    }
+    }
+  }
+  */
 
   const LabelArray = [];
   for (let i = 0; i < LabelData.length; i++) {
