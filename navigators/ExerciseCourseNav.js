@@ -32,6 +32,8 @@ export default function ExerciseCourseNav() {
             open: { animation: "timing", config: { duration: 0 } },
             close: { animation: "timing", config: { duration: 0 } },
           },
+          gestureEnabled: false, //안드로이드
+          headerLeft: () => null, //ios
         }}
       />
       <Stack.Screen

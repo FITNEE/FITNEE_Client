@@ -19,7 +19,7 @@ const NumberText = styled.Text`
   color: ${({ DarkMode }) => (DarkMode ? colors.grey_2 : colors.grey_8)};
   text-align: center;
   font-size: 15px;
-  font-weight: 600;
+  font-family: Pretendard-SemiBold;
   letter-spacing: 0.3px;
   line-height: 22.5px;
 `;
