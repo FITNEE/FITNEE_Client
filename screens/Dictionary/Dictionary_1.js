@@ -215,21 +215,6 @@ export default function Dictionary_1({ navigation }) {
                                     최근 검색 키워드
                                 </KeywordTitle>
                                 <KeywordContainer>
-                                    {/* {recentKeywords.map((keyword, i) => (
-                                        <KeywordWrapper
-                                            onPress={() => onPressKeyword(keyword)}
-                                            key={i}
-                                            style={{
-                                                backgroundColor: isDark ? `${colors.grey_8}` : `${colors.grey_1}`,
-                                            }}
-                                        >
-                                            <Keyword
-                                                style={{ color: isDark ? `${colors.grey_3}` : `${colors.grey_7}` }}
-                                            >
-                                                {keyword}
-                                            </Keyword>
-                                        </KeywordWrapper>
-                                    ))} */}
                                     {
                                         recentKeywords.length == 0?
                                         <NoKeywordText>최근 검색어가 없어요</NoKeywordText>
