@@ -175,7 +175,8 @@ export default function Setting({ navigation }) {
                                 },
                                 {
                                     text: '다시 생성하기',
-                                    style: 'cancel',
+                                    style: 'default',
+                                    isPreferred: true,
                                     onPress: () => navigation.dispatch(StackActions.replace('CreateRoutineNav')),
                                 },
                             ],
