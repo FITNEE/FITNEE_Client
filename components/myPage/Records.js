@@ -95,7 +95,7 @@ export default function Records(props) {
     const isDark = useRecoilValue(IsDarkAtom)
 
     const [now, setNow] = useState(new Date(Date.now() + 9 * 60 * 60 * 1000))
-    const date = now.getDate()
+    const date = parseInt(now.toISOString().substring(8, 10))
     const resultMonth = now.getMonth() + 1
     const [exerciseDays, setExerciseDays] = useState([])
     const [month, setMonth] = useState(now.getMonth() + 1)
