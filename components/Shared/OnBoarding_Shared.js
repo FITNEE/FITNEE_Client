@@ -1,9 +1,8 @@
 import styled from 'styled-components/native'
 import { colors } from '../../colors'
-import { BottomSheetModal } from '@gorhom/bottom-sheet'
 import { Picker } from 'react-native-wheel-pick'
 import { ScreenWidth } from '../../Shared'
-import { Platform, Pressable, StatusBar } from 'react-native'
+import { Platform, Pressable, StatusBar, StyleSheet, Text } from 'react-native'
 import WheelPickerExpo from 'react-native-wheel-picker-expo'
 
 const TitleText = styled.Text`
@@ -47,16 +46,16 @@ export const StatusText = styled.Text`
   margin-right: 8px;
 `
 
+//****************** ScreenLayout  *******************************************************/
+
 export const ScreenContainer = styled.SafeAreaView`
   padding-top: ${Platform.OS === 'android' ? StatusBar.currentHeight : 0}px;
-  /* padding-top: Platform.OS === "android" ? StatusBar.currentHeight : 0 */
   flex: 1;
 `
 const KeyBoardAwareContainer = styled.KeyboardAvoidingView`
   flex-direction: column;
   align-items: center;
-  width: 90%;
-  margin-left: 5%;
+  width: 100%;
   flex: 1;
 `
 
@@ -66,6 +65,8 @@ export const ScreenKeyboardLayout = ({ children, isDark, isRelative = false, onP
       <Pressable onPress={onPress} style={{ width: '100%', flex: 1 }}>
         <KeyBoardAwareContainer
           style={{
+            paddingLeft: 24,
+            paddingRight: 24,
             justifyContent: isRelative ? 'flex-start' : 'space-between',
           }}
           behavior={Platform.select({ ios: 'padding' })}
@@ -81,7 +82,8 @@ export const ScreenKeyboardLayout = ({ children, isDark, isRelative = false, onP
 
 const NumberContainer = styled.TouchableOpacity`
   margin-top: 2px;
-  padding: 15px 7px;
+  justify-content: center;
+  padding: 7px;
   border-radius: 4px;
   border-radius: 10px;
   width: 100%;
@@ -122,52 +124,51 @@ export const NumberInput = ({ onPress, value, placeholder, active, isDark }) => 
 
 //****************** BottomSheet  *******************************************************/
 
+const BottomSheetBase = styled.View`
+  width: 100%;
+  height: 100%;
+  padding: 24px;
+  border-radius: 24px 24px 0px 0px;
+  flex-direction: column;
+`
 const BottomButton = styled.TouchableOpacity`
   justify-content: center;
   align-items: center;
-  width: 20%;
+  /* width: 80px; */
+  padding: 0px 24px;
   height: 56px;
 `
 const BottomSheetHeader = styled.View`
   flex-direction: row;
-  justify-content: space-between;
-  width: 100%;
+  justify-content: flex-end;
   height: 56px;
 `
 const BottomContainer = styled.View`
   justify-content: center;
   align-items: center;
   width: 100%;
-  background-color: chartreuse;
 `
 
-const BottomSheetText = styled.Text`
+const SubmitText = styled.Text`
+  font-family: Pretendard-Bold;
+  font-size: 17px;
   color: ${colors.d_main};
-  font-family: Pretendard-Medium;
-  font-size: 15px;
 `
 
 const PickerContainer = styled.View`
-  border-radius: 20px;
   overflow: hidden;
 `
-export const MyBottomSheet = ({ setValue, modalRef, snapPoints, hideFunc, nextFunc = hideFunc, defaultVal }) => {
-  //   let data = []
-  //   for (var i = 1960; i < 2023; i++) {
-  //     data.push(i)
-  //   }
-  let data = []
-  for (var i = 0; i < 201; i += 5) {
-    data.push(i)
-  }
+export const MyBottomSheet = ({ isDark, setValue, nextFunc, defaultVal, selectableDatas }) => {
   return (
-    <BottomSheetModal ref={modalRef} index={0} snapPoints={snapPoints} enablePanDownToClose={false} handleHeight={80}>
+    <BottomSheetBase
+      style={{
+        backgroundColor: isDark ? colors.grey_8 : colors.white,
+        paddingTop: Platform.OS === 'android' ? 8 : 8,
+      }}
+    >
       <BottomSheetHeader>
-        <BottomButton onPress={hideFunc}>
-          <BottomSheetText>숨기기</BottomSheetText>
-        </BottomButton>
         <BottomButton onPress={nextFunc}>
-          <BottomSheetText>다음</BottomSheetText>
+          <SubmitText>다음</SubmitText>
         </BottomButton>
       </BottomSheetHeader>
       <BottomContainer>
@@ -187,15 +188,20 @@ export const MyBottomSheet = ({ setValue, modalRef, snapPoints, hideFunc, nextFu
           <PickerContainer>
             <WheelPickerExpo
               height={200}
-              width={288}
+              width={ScreenWidth - 48}
               initialSelectedIndex={0}
-              items={data.map((name) => ({ label: name, value: '' }))}
-              onChange={({ item }) => setValue(item)}
-              selectedStyle={{ borderColor: '#E8EBF0', borderWidth: 1 }}
+              items={selectableDatas.map((name) => ({ label: name, value: '' }))}
+              onChange={({ item }) => setValue(item.label)}
+              selectedStyle={{ borderColor: colors.grey_5, borderWidth: StyleSheet.hairlineWidth }}
+              renderItem={(props) => (
+                <Text style={{ fontFamily: 'Pretendard-Regular', fontSize: 20, color: colors.black }}>
+                  {props.label}
+                </Text>
+              )}
             />
           </PickerContainer>
         )}
       </BottomContainer>
-    </BottomSheetModal>
+    </BottomSheetBase>
   )
 }
