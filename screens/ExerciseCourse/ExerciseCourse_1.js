@@ -19,10 +19,12 @@ import Check_disabled from '../../assets/SVGs/Check_Disabled.svg'
 import Close from '../../assets/SVGs/Close.svg'
 import ExerciseCourse_2 from './ExerciseCourse_2'
 import ExerciseCourse_2_2 from './ExerciseCourse2_2'
+import { ScrollView } from 'react-native'
+import { Easing } from 'react-native-reanimated'
 
 const TextBox = styled.View`
     width: 327px;
-    height: 24px;
+    //height: 24px;
     margin: 23px 0px 5px 0px;
 `
 
@@ -194,18 +196,22 @@ export default function ExerciseCourse_1({ navigation }) {
             ...modifiedDataList[listIndex],
             skip: 1,
         }
+        const count = modifiedDataList.reduce((sum, elem) => sum + (elem.skip !== undefined ? 1 : 0), 0)
 
         if (listIndex + 1 >= dataList.length) {
-            await postTotalData(routineIdx, -1 * totalTime, modifiedDataList)
-
-            // 조건이 충족되면 원하는 화면(FinalScreen)으로 이동합니다.
-            navigation.dispatch(
-                StackActions.replace('CompleteExercise', {
-                    dataList: modifiedDataList,
-                    totalTime: realTotalTime,
-                    routineIdx: routineIdx,
-                }),
-            )
+            if (count == modifiedDataList.length) {
+                navigation.dispatch(StackActions.replace('StartExercise'))
+            } else {
+                postTotalData(routineIdx, -1 * totalTime, modifiedDataList),
+                    // 조건이 충족되면 원하는 화면(FinalScreen)으로 이동합니다.
+                    navigation.dispatch(
+                        StackActions.replace('CompleteExercise', {
+                            dataList: modifiedDataList,
+                            totalTime: realTotalTime,
+                            routineIdx: routineIdx,
+                        }),
+                    )
+            }
         } else {
             navigation.dispatch(
                 StackActions.replace('ExerciseCourse', {
@@ -474,6 +480,77 @@ export default function ExerciseCourse_1({ navigation }) {
         require('../../assets/GIFs/24.gif'),
         require('../../assets/GIFs/25.gif'),
     ]
+
+    const LongHorizontalText = ({ text }) => {
+        const scrollViewRef = useRef(null)
+        const [scrollValue] = useState(new Animated.Value(0))
+        const [containerWidth, setContainerWidth] = useState(0)
+        const [textWidth, setTextWidth] = useState(0)
+
+        useEffect(() => {
+            if (scrollViewRef.current) {
+                scrollViewRef.current.measure((x, y, width) => {
+                    setContainerWidth(width)
+                })
+            }
+        }, [])
+
+        useEffect(() => {
+            if (containerWidth > 0 && textWidth > containerWidth) {
+                const animation = Animated.timing(scrollValue, {
+                    toValue: -textWidth,
+                    duration: text.length * 50, // 스크롤 속도 조절
+                    useNativeDriver: true,
+                    isInteraction: false,
+                })
+
+                const loopAnimation = Animated.sequence([
+                    animation,
+                    Animated.delay(500),
+                    Animated.timing(scrollValue, {
+                        toValue: 0,
+                        duration: 0,
+                        useNativeDriver: true,
+                        isInteraction: false,
+                    }),
+                ])
+
+                const loop = Animated.loop(loopAnimation)
+
+                loop.start()
+
+                return () => loop.stop()
+            }
+        }, [containerWidth, textWidth])
+
+        return (
+            <View style={styles.container}>
+                <Animated.View style={[styles.animatedText, { transform: [{ translateX: scrollValue }] }]}>
+                    <Text
+                        onLayout={(event) => setTextWidth(event.nativeEvent.layout.width)}
+                        ref={scrollViewRef}
+                        style={styles.text}
+                    >
+                        {text}
+                    </Text>
+                </Animated.View>
+            </View>
+        )
+    }
+
+    const styles = StyleSheet.create({
+        container: {
+            flex: 1,
+            overflow: 'hidden',
+        },
+        animatedText: {
+            flexDirection: 'row',
+        },
+        text: {
+            fontSize: 20,
+        },
+    })
+
     if (showExerciseCourse2_2)
         return (
             <ExerciseCourse_2_2
@@ -498,90 +575,86 @@ export default function ExerciseCourse_1({ navigation }) {
                 toggleShowExerciseCourse2={() => setShowExerciseCourse2(false)} // toggle 함수 추가
             />
         )
-    else
-        return (
-            <SafeAreaView
-                style={{
-                    flex: 1,
-                    backgroundColor: isDark ? colors.grey_9 : colors.grey_2,
-                }}
-            >
-                <ExerciseCard exerciseName={dataList[listIndex].exerciseInfo.exerciseName} isDark={isDark}>
-                    <StopExercise onPress={() => OpenConfirm()}>
-                        <Close width={24} height={24} color={isDark ? colors.white : colors.black} />
-                    </StopExercise>
+    return (
+        <SafeAreaView
+            style={{
+                flex: 1,
+                backgroundColor: isDark ? colors.grey_9 : colors.grey_2,
+            }}
+        >
+            <ExerciseCard exerciseName={dataList[listIndex].exerciseInfo.exerciseName} isDark={isDark}>
+                <StopExercise onPress={() => OpenConfirm()}>
+                    <Close width={24} height={24} color={isDark ? colors.white : colors.black} />
+                </StopExercise>
 
-                    <ExerciseCircle>
-                        <ComponentWrapper zIndex={1}>
-                            <ExerciseImage
-                                source={getImage[dataList[listIndex].exerciseInfo.healthCategoryIdx]}
-                                resizeMode="contain"
-                            />
-                        </ComponentWrapper>
-                        <ComponentWrapper zIndex={2}>
-                            <CountdownCircleTimer
-                                key={key}
-                                isPlaying={isPlaying}
-                                duration={6}
-                                colors={colors.l_main}
-                                size={315}
-                                strokeWidth={8}
-                                trailColor={isDark ? colors.grey_7 : colors.grey_3}
-                                onComplete={() => ({ shouldRepeat: true })}
-                                updateInterval={0.001}
-                                isGrowing={true}
-                                rotation={'counterclockwise'}
-                            />
-                        </ComponentWrapper>
-                    </ExerciseCircle>
+                <ExerciseCircle>
+                    <ComponentWrapper zIndex={1}>
+                        <ExerciseImage
+                            source={getImage[dataList[listIndex].exerciseInfo.healthCategoryIdx]}
+                            resizeMode="contain"
+                        />
+                    </ComponentWrapper>
+                    <ComponentWrapper zIndex={2}>
+                        <CountdownCircleTimer
+                            key={key}
+                            isPlaying={isPlaying}
+                            duration={6}
+                            colors={colors.l_main}
+                            size={315}
+                            strokeWidth={8}
+                            trailColor={isDark ? colors.grey_7 : colors.grey_3}
+                            onComplete={() => ({ shouldRepeat: true })}
+                            updateInterval={0.001}
+                            isGrowing={true}
+                            rotation={'counterclockwise'}
+                        />
+                    </ComponentWrapper>
+                </ExerciseCircle>
 
-                    <Indicator
-                        totalPages={dataList[listIndex].totalSets}
-                        currentPage={indicatorNum - 1}
+                <Indicator totalPages={dataList[listIndex].totalSets} currentPage={indicatorNum - 1} isDark={isDark} />
+
+                <BoxList>
+                    <FlatList
+                        data={exerciseData}
+                        renderItem={renderItem}
+                        keyExtractor={(item) => item.set}
+                        showsVerticalScrollIndicator={false}
+                        ref={flatListRef}
+                        onEndReached={goToCompleteExercise}
+                        scrollEnabled={false}
+                        // onPressItem={(index) => {
+                        //   setSelectedIndex(index);
+                        // }}
+                    />
+                </BoxList>
+                <LongHorizontalText text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed" />
+
+                <TextBox>
+                    <JustText numberOfLines={3}>{advice}</JustText>
+                </TextBox>
+
+                {showExerciseCourse2 ? (
+                    <ExerciseButton //세트 완료 버튼
+                        text="바로 시작하기"
+                        disabled={false}
+                        //onPress={timeToRest}
+                        onPress={setShowExerciseCourse2(false)}
                         isDark={isDark}
                     />
+                ) : (
+                    <ExerciseButton //세트 완료 버튼
+                        text="세트 완료"
+                        disabled={false}
+                        //onPress={timeToRest}
+                        onPress={scrollBox}
+                        isDark={isDark}
+                    />
+                )}
 
-                    <BoxList>
-                        <FlatList
-                            data={exerciseData}
-                            renderItem={renderItem}
-                            keyExtractor={(item) => item.set}
-                            showsVerticalScrollIndicator={false}
-                            ref={flatListRef}
-                            onEndReached={goToCompleteExercise}
-                            scrollEnabled={false}
-                            // onPressItem={(index) => {
-                            //   setSelectedIndex(index);
-                            // }}
-                        />
-                    </BoxList>
-
-                    <TextBox>
-                        <JustText>{advice}</JustText>
-                    </TextBox>
-
-                    {showExerciseCourse2 ? (
-                        <ExerciseButton //세트 완료 버튼
-                            text="바로 시작하기"
-                            disabled={false}
-                            //onPress={timeToRest}
-                            onPress={setShowExerciseCourse2(false)}
-                            isDark={isDark}
-                        />
-                    ) : (
-                        <ExerciseButton //세트 완료 버튼
-                            text="세트 완료"
-                            disabled={false}
-                            //onPress={timeToRest}
-                            onPress={scrollBox}
-                            isDark={isDark}
-                        />
-                    )}
-
-                    <SkipExercrise onPress={() => OpenConfirm2()}>
-                        <SkipExercriseText isDark={isDark}>이 운동 건너뛰기</SkipExercriseText>
-                    </SkipExercrise>
-                </ExerciseCard>
-            </SafeAreaView>
-        )
+                <SkipExercrise onPress={() => OpenConfirm2()}>
+                    <SkipExercriseText isDark={isDark}>이 운동 건너뛰기</SkipExercriseText>
+                </SkipExercrise>
+            </ExerciseCard>
+        </SafeAreaView>
+    )
 }
