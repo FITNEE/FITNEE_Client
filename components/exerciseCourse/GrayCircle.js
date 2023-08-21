@@ -29,8 +29,7 @@ const UnderCircle = styled.Text`
   color: ${({ isDark }) => (isDark ? colors.white : colors.black)};
   text-align: center;
   font-size: 10px;
-  font-style: normal;
-  font-weight: 400;
+  font-family: Pretendard-Regular;
   line-height: 15px;
   margin-bottom: 31px;
   margin-top: 8px;
@@ -39,15 +38,13 @@ const UnderCircle = styled.Text`
 const CircleText = styled.Text`
   color: ${({ isDark }) => (isDark ? colors.white : colors.black)};
   font-size: 20px;
-  font-style: normal;
-  font-weight: 600;
+  font-family: Pretendard-SemiBold;
 `;
 
 const CircleUnit = styled.Text`
   color: ${({ isDark }) => (isDark ? colors.white : colors.black)};
   font-size: 10px;
-  font-style: normal;
-  font-weight: 600;
+  font-family: Pretendard-SemiBold;
 `;
 
 const Bubble2 = styled.View`
@@ -78,7 +75,7 @@ const BubbleArrow2 = styled.View`
 const BubbleText2 = styled.Text`
   color: ${({ isDark }) => (isDark ? colors.black : colors.white)};
   font-size: 11px;
-  font-weight: 700;
+  font-family: Pretendard-Bold;
   top: 10px;
 `;
 
