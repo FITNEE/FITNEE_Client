@@ -194,7 +194,7 @@ export default function ExerciseCourse_1({ navigation }) {
     modifiedDataList[listIndex] = {
       ...modifiedDataList[listIndex],
       skip: 1,
-    }
+
     const count = modifiedDataList.reduce((sum, elem) => sum + (elem.skip !== undefined ? 1 : 0), 0)
 
     if (listIndex + 1 >= dataList.length) {
@@ -236,6 +236,7 @@ export default function ExerciseCourse_1({ navigation }) {
       )
     }
   }
+
 
   const postTotalData = async (routineIdx, totalExerciseTime, routineDetails) => {
     try {
@@ -352,6 +353,9 @@ export default function ExerciseCourse_1({ navigation }) {
     )
   }
 
+
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false)
+
   const scrollBox = () => {
     const next = boxNumber >= dataList[listIndex].totalSets ? boxNumber : boxNumber + 1
     const next2 = indicatorNum > dataList[listIndex].totalSets ? indicatorNum : indicatorNum + 1
@@ -376,6 +380,9 @@ export default function ExerciseCourse_1({ navigation }) {
     newCheckedSets[boxNumber - 1] = true
     setCheckedSets(newCheckedSets)
 
+
+    setIsButtonDisabled(true)
+
     setTimeout(() => {
       if (flatListRef.current) {
         flatListRef.current.scrollToIndex({
@@ -389,12 +396,19 @@ export default function ExerciseCourse_1({ navigation }) {
 
     if (boxNumber < dataList[listIndex].totalSets) {
       setTimeout(() => {
+
+        setSetId(boxNumber)
+        setIsButtonDisabled(false)
+
         setShowExerciseCourse2_2(true)
         console.log('show', showExerciseCourse2_2)
       }, 2000)
     } else if (boxNumber === dataList[listIndex].totalSets && listIndex + 1 !== dataList.length) {
       setTimeout(() => {
         setShowExerciseCourse2(true)
+
+        setIsButtonDisabled(false)
+
         console.log('show', showExerciseCourse2)
       }, 2000)
     }
@@ -474,9 +488,7 @@ export default function ExerciseCourse_1({ navigation }) {
         dataList={dataList}
         listIndex={listIndex}
         totalTime={totalTime}
-        routineIdx={routineIdx}
-        setId={setId}
-        toggleShowExerciseCourse2={() => setShowExerciseCourse2(false)} // toggle 함수 추가
+        routineIdx={routineIdx}   
       />
     )
   else
@@ -538,8 +550,7 @@ export default function ExerciseCourse_1({ navigation }) {
 
           <ExerciseButton //세트 완료 버튼
             text="세트 완료"
-            disabled={false}
-            //onPress={timeToRest}
+            disabled={isButtonDisabled}
             onPress={scrollBox}
             isDark={isDark}
           />
