@@ -8,7 +8,7 @@ import { BackButton } from '../../Shared'
 import { colors } from '../../colors'
 import axios from 'axios'
 import { useRecoilState, useRecoilValue } from 'recoil'
-import { useIsFocused } from '@react-navigation/native'
+import { StackActions, useIsFocused } from '@react-navigation/native'
 import { processDayData } from '../../components/myRoutine/Functions'
 import { TabBarAtom, IsDarkAtom } from '../../recoil/MyPageAtom'
 import Left from '../../assets/SVGs/Left.svg'
@@ -37,7 +37,7 @@ const ExerciseButton = styled.TouchableOpacity`
     width: 111px;
     height: 111px;
     flex-shrink: 0;
-    /* border-radius: 55px;  */
+    border-radius: 55.5px;
     background: ${({ isDark }) => (isDark ? colors.d_main : colors.l_main)};
     display: flex;
     flex-direction: column;
@@ -46,7 +46,7 @@ const ExerciseButton = styled.TouchableOpacity`
 `
 
 const ExerciseText = styled.Text`
-    font-weight: 600;
+    font-family: Pretendard-SemiBold;
     font-size: 24px;
     text-align: center;
     line-height: 33.6px;
@@ -56,7 +56,7 @@ const ExerciseText = styled.Text`
 const ExerciseRec = styled.View`
     width: 311px;
     height: 175px;
-    /* border-radius: 12px; */
+    border-radius: 12px;
     background: ${({ isDark }) => (isDark ? colors.grey_8 : colors.grey_1)};
     margin-bottom: 33px;
     justify-content: center;
@@ -67,7 +67,7 @@ const ExerciseRec = styled.View`
 const RecText1 = styled.Text`
     color: ${({ isDark }) => (isDark ? colors.grey_3 : colors.grey_7)};
     font-size: 13px;
-    font-weight: 400;
+    font-family: Pretendard-Regular;
     line-height: 19.5px;
     width: 188px;
 `
@@ -75,7 +75,7 @@ const RecText1 = styled.Text`
 const RecText2 = styled.Text`
     color: ${({ isDark }) => (isDark ? colors.grey_3 : colors.grey_7)};
     font-size: 13px;
-    font-weight: 400;
+    font-family: Pretendard-Regular;
     line-height: 19.5px;
     width: 55px;
 `
@@ -83,7 +83,7 @@ const RecText2 = styled.Text`
 const RecText3 = styled.Text`
     color: ${({ isDark }) => (isDark ? colors.grey_3 : colors.grey_7)};
     font-size: 13px;
-    font-weight: 400;
+    font-family: Pretendard-Regular;
     line-height: 19.5px;
     width: 36px;
 `
@@ -92,8 +92,7 @@ const ExerciseButtonText = styled.Text`
     color: ${({ isDark }) => (isDark ? colors.black : colors.white)};
     text-align: center;
     font-size: 24px;
-    font-style: normal;
-    font-weight: 600;
+    font-family: Pretendard-SemiBold;
     line-height: 33.6px;
 `
 
@@ -102,8 +101,7 @@ const ExerciseExplainText = styled.Text`
     color: ${colors.l_main};
     text-align: center;
     font-size: 13px;
-    font-style: normal;
-    font-weight: 400;
+    font-family: Pretendard-Regular;
     line-height: 19.5px;
     margin-bottom: 41px;
 `
@@ -119,7 +117,7 @@ const Container2 = styled.View`
 const ExerciseCircle = styled.View`
     width: 307px;
     height: 307px;
-    /* border-radius: 291px; */
+    border-radius: 291px;
     background: ${({ isDark }) => (isDark ? colors.black : colors.white)};
     margin-bottom: 24px;
     justify-content: center;
@@ -206,7 +204,7 @@ export default function StartExercise({ navigation }) {
 
             if (allElementsAreZero) {
                 // 모든 요소가 0인 경우
-                navigation.navigate('RegisterRoutine')
+                navigation.dispatch(StackActions.replace('RegisterRoutine'))
                 return
             } else if (dayRoutineIdx === 0) {
                 navigation.navigate('NoRoutine')

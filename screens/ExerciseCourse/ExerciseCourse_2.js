@@ -47,8 +47,7 @@ const StartButtonText = styled.Text`
   color: ${colors.white};
   text-align: center;
   font-size: 13px;
-  font-style: normal;
-  font-weight: 600;
+  font-family: Pretendard-SemiBold;
   line-height: 19.5px;
 `;
 
@@ -90,8 +89,7 @@ const ReplaceButtonText = styled.Text`
   color: ${({ isDark }) => (isDark ? colors.white : colors.l_main)};
   text-align: center;
   font-size: 13px;
-  font-style: normal;
-  font-weight: 600;
+  font-family: Pretendard-SemiBold;
   line-height: 19.5px;
 `;
 
@@ -116,8 +114,7 @@ const NextTextView = styled.View`
 const NextText = styled.Text`
   color: ${({ isDark }) => (isDark ? colors.black : colors.white)};
   font-size: 15px;
-  font-style: normal;
-  font-weight: 600;
+  font-family: Pretendard-SemiBold;
   line-height: 22.5px;
   width: 230px;
   height: 24px;
@@ -133,7 +130,7 @@ const ModalTitleView = styled.View`
 const ModalTitle = styled.Text`
   color: ${({ isDark }) => (isDark ? colors.white : colors.black)};
   font-size: 20px;
-  font-weight: 600;
+  font-family: Pretendard-SemiBold;
   line-height: 32px;
   margin-bottom: 4px;
 `;
@@ -141,8 +138,7 @@ const ModalTitle = styled.Text`
 const ModalTitle2 = styled.Text`
   color: ${({ isDark }) => (isDark ? colors.grey_2 : colors.grey_8)};
   font-size: 15px;
-  font-style: normal;
-  font-weight: 400;
+  font-family: Pretendard-Regular;
   line-height: 22.5px;
 `;
 
@@ -173,15 +169,14 @@ const ReplaceText1 = styled.Text`
   color: ${({ isDark }) => (isDark ? colors.white : colors.black)};
   text-align: center;
   font-size: 17px;
-  font-weight: 500;
+  font-family: Pretendard-Medium;
   line-height: 25.5px;
 `;
 
 const ReplaceText2 = styled.Text`
   color: ${({ isDark }) => (isDark ? colors.grey_3 : colors.grey_7)};
   font-size: 13px;
-  font-style: normal;
-  font-weight: 400;
+  font-family: Pretendard-Regular;
   line-height: 19.5px;
 `;
 
@@ -200,6 +195,7 @@ const ReplaceButton2 = styled.TouchableOpacity`
 const TimerText = styled.Text`
   color: ${({ isDark }) => (isDark ? colors.white : colors.black)};
   font-size: 56px;
+  font-family: Pretendard-Regular;
 `;
 
 const StopExercise = styled.TouchableOpacity`
@@ -210,7 +206,15 @@ const StopExercise = styled.TouchableOpacity`
   right: 24px;
 `;
 
-export default function ExerciseCourse_2({ navigation }) {
+export default function ExerciseCourse_2({
+  navigation,
+  dataList,
+  listIndex,
+  totalTime,
+  routineIdx,
+  setId,
+  toggleShowExerciseCourse2,
+}) {
   const goToStartExercise = () => {
     navigation.navigate("StartExercise");
   };
@@ -262,13 +266,14 @@ export default function ExerciseCourse_2({ navigation }) {
 
   const [isPlaying, setIsPlaying] = React.useState(true);
   const [duration, setDuration] = React.useState(30);
+  const [isLast, setIsLast] = useState(false);
 
-  //data route
-  const route = useRoute();
-  const dataList = route.params.dataList;
-  const listIndex = route.params.listIndex;
-  const routineIdx = route.params.routineIdx;
-  const totalTime = route.params.totalTime;
+  // //data route
+  // const route = useRoute();
+  // const dataList = route.params.dataList;
+  // const listIndex = route.params.listIndex;
+  // const routineIdx = route.params.routineIdx;
+  // const totalTime = route.params.totalTime;
 
   const [restTime, setRestTime] = useState(0);
 
@@ -438,7 +443,11 @@ export default function ExerciseCourse_2({ navigation }) {
         </ExerciseCard>
         <NextView isDark={isDark}>
           <NextTextView>
-            <ArrowCircle width={24} height={24} />
+            <ArrowCircle
+              width={24}
+              height={24}
+              color={isDark ? colors.black : colors.white}
+            />
             <NextText isDark={isDark}>
               {dataList[listIndex + 1].exerciseInfo.exerciseName}
             </NextText>

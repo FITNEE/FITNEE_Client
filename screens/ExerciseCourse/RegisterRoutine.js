@@ -15,7 +15,7 @@ const Container = styled.View`
 `;
 
 const RoutineText = styled.Text`
-  font-weight: 600;
+  font-family: Pretendard-SemiBold;
   font-size: 24px;
   text-align: center;
   line-height: 33.6px;
@@ -33,8 +33,7 @@ const RoutineExplainText = styled.Text`
   padding: 8px;
   text-align: center;
   font-size: 13px;
-  font-style: normal;
-  font-weight: 400;
+  font-family: Pretendard-Regular;
   line-height: 19.5px;
   margin-bottom: 21px;
 `;
@@ -52,8 +51,7 @@ const CreateRoutineText = styled.Text`
   color: ${({ isDark }) => (isDark ? colors.black : colors.grey_1)};
   text-align: center;
   font-size: 17px;
-  font-style: normal;
-  font-weight: 600;
+  font-family: Pretendard-SemiBold;
 `;
 
 const CircleBox1 = styled.View`
@@ -99,6 +97,7 @@ export default function RegisterRoutine({ navigation }) {
   useEffect(() => {
     isFocus && setIsTabVisible(true);
   }, [isFocus]);
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.white }}>
       <Container isDark={isDark}>
