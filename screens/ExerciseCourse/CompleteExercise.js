@@ -17,8 +17,7 @@ const ExerciseExplainText = styled.Text`
   color: ${colors.l_main};
   text-align: center;
   font-size: 13px;
-  font-style: normal;
-  font-weight: 400;
+  font-family: Pretendard-Regular;
   line-height: 19.5px;
   margin-bottom: 41px;
 `;
@@ -52,7 +51,7 @@ const Container = styled.View`
 `;
 
 const ExerciseText = styled.Text`
-  font-weight: 600;
+  font-family: Pretendard-SemiBold;
   font-size: 24px;
   text-align: center;
   line-height: 33.6px;
@@ -70,16 +69,14 @@ const ButtonText = styled.Text`
   color: ${({ isDark }) => (isDark ? colors.black : colors.white)};
   text-align: center;
   font-size: 17px;
-  font-style: normal;
-  font-weight: 600;
+  font-family: Pretendard-SemiBold;
 `;
 
 const ButtonText2 = styled.Text`
   color: ${({ isDark }) => (isDark ? colors.white : colors.black)};
   text-align: center;
   font-size: 17px;
-  font-style: normal;
-  font-weight: 600;
+  font-family: Pretendard-SemiBold;
 `;
 
 const ExerciseRec = styled.View`
@@ -96,7 +93,7 @@ const ExerciseRec = styled.View`
 const RecText1 = styled.Text`
   color: ${({ isDark }) => (isDark ? colors.white : colors.grey_9)};
   font-size: 13px;
-  font-weight: 400;
+  font-family: Pretendard-Regular;
   line-height: 19.5px;
   width: 188px;
 `;
@@ -186,8 +183,7 @@ export default function CompleteExercise({ navigation }) {
             num={Math.ceil(totalTime / 60)}
             unit="분"
             title="소요시간"
-            bubbleOn={true}
-            bubbleText={Math.ceil(detailData.exerciseTimeChange)}
+            bubbleOn={false}
             isDark={isDark}
           />
           <GrayCircle

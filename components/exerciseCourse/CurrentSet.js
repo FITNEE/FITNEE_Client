@@ -50,16 +50,29 @@ const Container = styled.View`
 const CurrentText = styled.Text`
   color: ${({ isDark }) => (isDark ? colors.white : colors.black)};
   font-size: 20px;
-  font-style: normal;
-  font-weight: 600;
+  font-family: Pretendard-SemiBold;
   line-height: 32px;
 `;
 
 const CurrentUnit = styled.Text`
   color: ${({ isDark }) => (isDark ? colors.white : colors.black)};
   font-size: 15px;
-  font-style: normal;
-  font-weight: 600;
+  font-family: Pretendard-SemiBold;
+`;
+
+const Container2 = styled.View`
+  width: 249px;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 12px 24px 12px;
+`;
+
+const CurrentText2 = styled.Text`
+  font-size: 15px;
+  font-family: Pretendard-SemiBold;
+  line-height: 32px;
+  color: ${colors.grey_7};
 `;
 
 export default function CurrentSet({ set, kg, num }) {
@@ -75,7 +88,11 @@ export default function CurrentSet({ set, kg, num }) {
       </Box1>
 
       <Box2>
-        {kg !== "null" ? <CurrentText isDark={isDark}>{kg}</CurrentText> : null}
+        {kg !== "null" ? (
+          <CurrentText isDark={isDark}>{kg}</CurrentText>
+        ) : (
+          <CurrentText2 isDark={isDark}>빈 봉</CurrentText2>
+        )}
         {kg !== "null" ? (
           <TextLine>
             <CurrentUnit isDark={isDark}>kg</CurrentUnit>
@@ -89,7 +106,6 @@ export default function CurrentSet({ set, kg, num }) {
           <CurrentUnit isDark={isDark}>회</CurrentUnit>
         </TextLine>
       </Box3>
-
       <Check_disabled width={24} height={24} />
     </Container>
   );
