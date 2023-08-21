@@ -1,7 +1,7 @@
 import React, { useState, useRef, useContext, useEffect } from "react";
 import styled from "styled-components/native";
-import { Alert, TouchableWithoutFeedback, TouchableOpacity, Keyboard, View } from "react-native";
-import { BottomSheetScrollView, BottomSheetTextInput } from "@gorhom/bottom-sheet";
+import { Platform, Alert, TouchableWithoutFeedback, TouchableOpacity, Keyboard, View } from "react-native";
+import { BottomSheetScrollView, BottomSheetTextInput, BottomSheetView } from "@gorhom/bottom-sheet";
 import { colors } from "../../colors";
 import WrappedText from "react-native-wrapped-text";
 import axios from "axios";
@@ -30,6 +30,7 @@ export default function Dictionary_RightTab(props) {
     }
     const onFocusInput = () => {
         scrollviewRef.current?.scrollToEnd({ animated: true })
+        if(Platform.OS === "android") handleSnapPress()
     }
 
     const [msg, setMsg] = useState([])
@@ -38,7 +39,7 @@ export default function Dictionary_RightTab(props) {
     const [chatIdx, setChatIdx] = useState([])
 
     // 참여하기 버튼
-    const { parentJoinBtnBool, parentSetJoinBtnBool, exerciseName, leftTabActivate, setIsAllRead } = props
+    const { parentJoinBtnBool, parentSetJoinBtnBool, exerciseName, leftTabActivate, setIsAllRead, handleSnapPress } = props
     const [childJoinBtnBool, setChildJoinBtnBool] = useState(parentJoinBtnBool)
     useEffect(() => {
         setChildJoinBtnBool(parentJoinBtnBool)
@@ -153,9 +154,7 @@ export default function Dictionary_RightTab(props) {
         }
     }
     useEffect(()=>{
-    getNickname().then((result)=>{
-        setMyNickName(result.result[0].userNickname)
-    })
+        getNickname().then((result)=>setMyNickName(result.result[0].userNickname))
     }, [])
 
     // 채팅 삭제 
@@ -222,7 +221,6 @@ export default function Dictionary_RightTab(props) {
 
     //메시지를 꾹 눌렀을 때 메시지 삭제 버튼 토글
     const onLongPress = (i) => {
-        // Vibration.vibrate()
         if(i==selectedIdx) setSelectedIdx(-1)
         else setSelectedIdx(i)
         
@@ -231,70 +229,97 @@ export default function Dictionary_RightTab(props) {
 
     return (
       <>
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-            <BottomSheetScrollView
-                style={{ paddingTop: 28 }}
-                showsVerticalScrollIndicator={false}
-            >
-                {msg.map((msg, i) => (
-                    <ChatContainer key={i}>
-                        {msg.userNickname != myNickName ? 
-                            (<MessageWrapper>
-                                <UserName style={{color: isDark ? `${colors.d_main}` : `${colors.l_main}`}}>{msg.userNickname}</UserName>
-                                <MessageContainer style={{backgroundColor: isDark? `${colors.grey_8}`:`${colors.grey_1}`}}>
-                                    <MessageText 
-                                        style={{color: isDark? `${colors.white}`:`${colors.black}`}}>
-                                        {msg.text}
-                                    </MessageText>
-                                </MessageContainer>
-                            </MessageWrapper>)
-                        : 
-                            (<MyMessageWrapper> 
-                                {selectedIdx===i && 
-                                <TouchableOpacity 
-                                    style={{width: 24, height: 24, marginRight: 8}} 
-                                    onPress={()=>onPressMsgDeleteBtn(msg.healthChattingIdx)}
+
+        {
+            msg.length == 0?
+            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+                <BottomSheetScrollView
+                    style={{ paddingTop: 28 }}
+                    showsVerticalScrollIndicator={false}
+                >
+                    {msg.map((msg, i) => (
+                        <ChatContainer key={i}>
+                            {msg.userNickname != myNickName ? 
+                                (<MessageWrapper>
+                                    <UserName style={{color: isDark ? `${colors.d_main}` : `${colors.l_main}`}}>{msg.userNickname}</UserName>
+                                    <MessageContainer style={{backgroundColor: isDark? `${colors.grey_8}`:`${colors.grey_1}`}}>
+                                        <MessageText 
+                                            style={{color: isDark? `${colors.white}`:`${colors.black}`}}>
+                                            {msg.text}
+                                        </MessageText>
+                                    </MessageContainer>
+                                </MessageWrapper>)
+                            : 
+                                (<MyMessageWrapper> 
+                                    {selectedIdx===i && 
+                                    <TouchableOpacity 
+                                        style={{width: 24, height: 24, marginRight: 8}} 
+                                        onPress={()=>onPressMsgDeleteBtn(msg.healthChattingIdx)}
+                                        >
+                                        <TrashIcon 
+                                            width={24}
+                                            height={24}
+                                        />
+                                    </TouchableOpacity>}
+                                    <MyMessageContainer 
+                                        onLongPress={()=>onLongPress(i)}
+                                        style={{backgroundColor: isDark? `${colors.grey_8}`:`${colors.grey_1}`}}
                                     >
-                                    <TrashIcon 
-                                        width={24}
-                                        height={24}
-                                    />
-                                </TouchableOpacity>}
-                                <MyMessageContainer 
-                                    onLongPress={()=>onLongPress(i)}
-                                    style={{backgroundColor: isDark? `${colors.grey_8}`:`${colors.grey_1}`}}
-                                >
-                                    <MessageText 
-                                        style={{color: isDark? `${colors.white}`:`${colors.black}`}}>
-                                        {msg.text}
-                                    </MessageText>
-                                </MyMessageContainer>
-                            </MyMessageWrapper>)}
-                    </ChatContainer>
-                ))}
-                <View style={{ height: 40 }} />
-            </BottomSheetScrollView>
-        </TouchableWithoutFeedback>
+                                        <MessageText 
+                                            style={{color: isDark? `${colors.white}`:`${colors.black}`}}>
+                                            {msg.text}
+                                        </MessageText>
+                                    </MyMessageContainer>
+                                </MyMessageWrapper>)}
+                        </ChatContainer>
+                    ))}
+                    <View style={{ height: 40 }} />
+                    </BottomSheetScrollView>
+            </TouchableWithoutFeedback>
+            :
+            <NoText>아직 채팅 내역이 없어요</NoText>
+        }
+    
 
         {childJoinBtnBool ? null : (
           <TextInputBG style={{backgroundColor: isDark? `#303235`:`#D1D3D9`}}>
             <TextInputContainer style={{backgroundColor: isDark? `${colors.black}`:`${colors.white}`}}>
-                <BottomSheetTextInput
-                    style={{
-                        color: isDark? `${colors.white}`:`${colors.black}`,
-                        width: 300,
-                        marginLeft: 15,
-                        fontSize: 17,
-                        fontFamily: 'Pretendard-Regular'
-                    }}
-                    type="text"
-                    onChangeText={(text) => setChat(text)}
-                    value={chat}
-                    onSubmitEditing={onSubmitChat}
-                    autoFocus={true}
-                    onFocus={onFocusInput}
-                    keyboardAppearance= {isDark? 'dark':'light'}
-                />
+                {
+                    Platform.OS === 'ios'?
+                    <BottomSheetTextInput
+                        style={{
+                            color: isDark? `${colors.white}`:`${colors.black}`,
+                            width: 300,
+                            marginLeft: 15,
+                            fontSize: 17,
+                            fontFamily: 'Pretendard-Regular'
+                        }}
+                        type="text"
+                        onChangeText={(text) => setChat(text)}
+                        value={chat}
+                        onSubmitEditing={onSubmitChat}
+                        autoFocus={true}
+                        onFocus={onFocusInput}
+                        keyboardAppearance= {isDark? 'dark':'light'}
+                    />
+                    :
+                    <AndroidTextInput
+                        style={{
+                            color: isDark? `${colors.white}`:`${colors.black}`,
+                            width: 300,
+                            marginLeft: 15,
+                            fontSize: 17,
+                            fontFamily: 'Pretendard-Regular'
+                        }}
+                        type="text"
+                        onChangeText={(text) => setChat(text)}
+                        value={chat}
+                        onSubmitEditing={onSubmitChat}
+                        autoFocus={true}
+                        onFocus={onFocusInput}
+                        keyboardAppearance= {isDark? 'dark':'light'}
+                    />
+                }
                 <SendBtn 
                     onPress={onSubmitChat} 
                     style={{backgroundColor: isDark? `${colors.d_main}`:`${colors.l_main}`}}
@@ -346,6 +371,7 @@ const TextInputContainer = styled.View`
   width: 100%;
   flex-direction: row;
   padding: 6px;
+  justify-content: space-between;
 `
 const UserName = styled.Text`
     font-size: 11px;
@@ -357,4 +383,16 @@ const SendBtn = styled.TouchableOpacity`
     width: 32px;
     height: 32px;
     border-radius: 16px;
+`
+const NoText = styled.Text`
+    font-family: Pretendard-Regular;
+    font-size: 11px;
+    color: ${colors.grey_5};
+    width: 100%;
+    text-align: center;
+    margin-top: 30px;
+`
+
+const AndroidTextInput = styled.TextInput`
+
 `
