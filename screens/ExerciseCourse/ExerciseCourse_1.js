@@ -194,6 +194,7 @@ export default function ExerciseCourse_1({ navigation }) {
     modifiedDataList[listIndex] = {
       ...modifiedDataList[listIndex],
       skip: 1,
+    }
 
     const count = modifiedDataList.reduce((sum, elem) => sum + (elem.skip !== undefined ? 1 : 0), 0)
 
@@ -236,7 +237,6 @@ export default function ExerciseCourse_1({ navigation }) {
       )
     }
   }
-
 
   const postTotalData = async (routineIdx, totalExerciseTime, routineDetails) => {
     try {
@@ -353,7 +353,6 @@ export default function ExerciseCourse_1({ navigation }) {
     )
   }
 
-
   const [isButtonDisabled, setIsButtonDisabled] = useState(false)
 
   const scrollBox = () => {
@@ -380,7 +379,6 @@ export default function ExerciseCourse_1({ navigation }) {
     newCheckedSets[boxNumber - 1] = true
     setCheckedSets(newCheckedSets)
 
-
     setIsButtonDisabled(true)
 
     setTimeout(() => {
@@ -396,7 +394,6 @@ export default function ExerciseCourse_1({ navigation }) {
 
     if (boxNumber < dataList[listIndex].totalSets) {
       setTimeout(() => {
-
         setSetId(boxNumber)
         setIsButtonDisabled(false)
 
@@ -488,7 +485,7 @@ export default function ExerciseCourse_1({ navigation }) {
         dataList={dataList}
         listIndex={listIndex}
         totalTime={totalTime}
-        routineIdx={routineIdx}   
+        routineIdx={routineIdx}
       />
     )
   else
