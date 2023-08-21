@@ -341,7 +341,7 @@ export default function ExerciseCourse({ navigation }) {
           navigation.dispatch(
             StackActions.replace('CompleteExercise', {
               dataList: modifiedDataList,
-              totalTime: realTotalTime,
+              totalTime: totalTime,
               routineIdx: routineIdx,
             }),
           )
@@ -352,7 +352,7 @@ export default function ExerciseCourse({ navigation }) {
           dataList: modifiedDataList,
           listIndex: listIndex + 1,
           routineIdx: routineIdx,
-          totalTime: realTotalTime,
+          totalTime: totalTime,
         }),
       )
     }
