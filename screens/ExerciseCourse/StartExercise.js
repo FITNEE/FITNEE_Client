@@ -1,17 +1,17 @@
-import React, { useEffect, useState } from "react";
-import { SafeAreaView, TouchableOpacity, StatusBar } from "react-native";
-import styled from "styled-components/native";
-import ProgressCircle from "../../components/exerciseCourse/ProgressCircle1";
-import GrayCircle from "../../components/exerciseCourse/GrayCircle";
-import { ScrollView } from "react-native-gesture-handler";
-import { BackButton } from "../../Shared";
-import { colors } from "../../colors";
-import axios from "axios";
-import { useRecoilState, useRecoilValue } from "recoil";
-import { StackActions, useIsFocused } from "@react-navigation/native";
-import { processDayData } from "../../components/myRoutine/Functions";
-import { TabBarAtom, IsDarkAtom } from "../../recoil/MyPageAtom";
-import Left from "../../assets/SVGs/Left.svg";
+import React, { useEffect, useState } from 'react'
+import { SafeAreaView, TouchableOpacity, StatusBar } from 'react-native'
+import styled from 'styled-components/native'
+import ProgressCircle from '../../components/exerciseCourse/ProgressCircle1'
+import GrayCircle from '../../components/exerciseCourse/GrayCircle'
+import { ScrollView } from 'react-native-gesture-handler'
+import { BackButton } from '../../Shared'
+import { colors } from '../../colors'
+import axios from 'axios'
+import { useRecoilState, useRecoilValue } from 'recoil'
+import { StackActions, useIsFocused } from '@react-navigation/native'
+import { processDayData } from '../../components/myRoutine/Functions'
+import { TabBarAtom, IsDarkAtom } from '../../recoil/MyPageAtom'
+import Left from '../../assets/SVGs/Left.svg'
 
 const RecTextLine = styled.View`
     flex-direction: row;
@@ -37,7 +37,7 @@ const ExerciseButton = styled.TouchableOpacity`
     width: 111px;
     height: 111px;
     flex-shrink: 0;
-    /* border-radius: 55px;  */
+    border-radius: 55.5px;
     background: ${({ isDark }) => (isDark ? colors.d_main : colors.l_main)};
     display: flex;
     flex-direction: column;
@@ -46,17 +46,17 @@ const ExerciseButton = styled.TouchableOpacity`
 `
 
 const ExerciseText = styled.Text`
-  font-family: Pretendard-SemiBold;
-  font-size: 24px;
-  text-align: center;
-  line-height: 33.6px;
-  color: ${({ isDark }) => (isDark ? colors.white : colors.black)};
-`;
+    font-family: Pretendard-SemiBold;
+    font-size: 24px;
+    text-align: center;
+    line-height: 33.6px;
+    color: ${({ isDark }) => (isDark ? colors.white : colors.black)};
+`
 
 const ExerciseRec = styled.View`
     width: 311px;
     height: 175px;
-    /* border-radius: 12px; */
+    border-radius: 12px;
     background: ${({ isDark }) => (isDark ? colors.grey_8 : colors.grey_1)};
     margin-bottom: 33px;
     justify-content: center;
@@ -65,46 +65,46 @@ const ExerciseRec = styled.View`
 `
 
 const RecText1 = styled.Text`
-  color: ${({ isDark }) => (isDark ? colors.grey_3 : colors.grey_7)};
-  font-size: 13px;
-  font-family: Pretendard-Regular;
-  line-height: 19.5px;
-  width: 188px;
-`;
+    color: ${({ isDark }) => (isDark ? colors.grey_3 : colors.grey_7)};
+    font-size: 13px;
+    font-family: Pretendard-Regular;
+    line-height: 19.5px;
+    width: 188px;
+`
 
 const RecText2 = styled.Text`
-  color: ${({ isDark }) => (isDark ? colors.grey_3 : colors.grey_7)};
-  font-size: 13px;
-  font-family: Pretendard-Regular;
-  line-height: 19.5px;
-  width: 55px;
-`;
+    color: ${({ isDark }) => (isDark ? colors.grey_3 : colors.grey_7)};
+    font-size: 13px;
+    font-family: Pretendard-Regular;
+    line-height: 19.5px;
+    width: 55px;
+`
 
 const RecText3 = styled.Text`
-  color: ${({ isDark }) => (isDark ? colors.grey_3 : colors.grey_7)};
-  font-size: 13px;
-  font-family: Pretendard-Regular;
-  line-height: 19.5px;
-  width: 36px;
-`;
+    color: ${({ isDark }) => (isDark ? colors.grey_3 : colors.grey_7)};
+    font-size: 13px;
+    font-family: Pretendard-Regular;
+    line-height: 19.5px;
+    width: 36px;
+`
 
 const ExerciseButtonText = styled.Text`
-  color: ${({ isDark }) => (isDark ? colors.black : colors.white)};
-  text-align: center;
-  font-size: 24px;
-  font-family: Pretendard-SemiBold;
-  line-height: 33.6px;
-`;
+    color: ${({ isDark }) => (isDark ? colors.black : colors.white)};
+    text-align: center;
+    font-size: 24px;
+    font-family: Pretendard-SemiBold;
+    line-height: 33.6px;
+`
 
 const ExerciseExplainText = styled.Text`
-  padding: 8px;
-  color: ${colors.l_main};
-  text-align: center;
-  font-size: 13px;
-  font-family: Pretendard-Regular;
-  line-height: 19.5px;
-  margin-bottom: 41px;
-`;
+    padding: 8px;
+    color: ${colors.l_main};
+    text-align: center;
+    font-size: 13px;
+    font-family: Pretendard-Regular;
+    line-height: 19.5px;
+    margin-bottom: 41px;
+`
 
 const Container2 = styled.View`
     flex: 1;
@@ -117,7 +117,7 @@ const Container2 = styled.View`
 const ExerciseCircle = styled.View`
     width: 307px;
     height: 307px;
-    /* border-radius: 291px; */
+    border-radius: 291px;
     background: ${({ isDark }) => (isDark ? colors.black : colors.white)};
     margin-bottom: 24px;
     justify-content: center;
@@ -151,7 +151,6 @@ export default function StartExercise({ navigation }) {
             routineIdx: routineIdx,
             totalTime: 0,
         })
-      
 
     const [dataList, setDataList] = useState([])
     const [circleList, setCircleList] = useState([])
@@ -203,20 +202,40 @@ export default function StartExercise({ navigation }) {
             // 모든 요소가 0인지 확인하는 함수를 작성합니다.
             const allElementsAreZero = dayRoutineArr.every((item) => item.routineId === 0)
 
-      if (allElementsAreZero) {
-        // 모든 요소가 0인 경우
-        navigation.dispatch(StackActions.replace("RegisterRoutine"));
-        return;
-      } else if (dayRoutineIdx === 0) {
-        navigation.navigate("NoRoutine");
-        return;
-      } else {
-        getExerciseData(day).then((response) => {
-          setDataList(response.result.routineDetails);
-          setCircleList(response.result);
-        });
-      }
-      setIsLoading(false);
+            if (allElementsAreZero) {
+                // 모든 요소가 0인 경우
+                navigation.dispatch(StackActions.replace('RegisterRoutine'))
+                return
+            } else if (dayRoutineIdx === 0) {
+                navigation.navigate('NoRoutine')
+                return
+            } else {
+                getExerciseData(day).then((response) => {
+                    setDataList(response.result.routineDetails)
+                    setCircleList(response.result)
+                })
+            }
+            setIsLoading(false)
+        }
+        fetchData()
+    }, [isFocused, navigation])
+
+    const routineIdx = circleList?.routineIdx
+
+    function LoadingIndicator() {
+        return (
+            <SafeAreaView
+                style={{
+                    flex: 1,
+                    backgroundColor: isDark ? colors.d_background : colors.grey_1,
+                }}
+            >
+                <StatusBar barStyle={isDark ? 'light-content' : 'dark-content'} />
+                <Container2 isDark={isDark}>
+                    <ExerciseCircle isDark={isDark} />
+                </Container2>
+            </SafeAreaView>
+        )
     }
 
     const exerciseList = dataList.map((result) => (
