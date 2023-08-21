@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect, useCallback, useMemo, useContext, createContext } from 'react'
 import styled from 'styled-components/native'
 import { colors } from '../../colors'
-import { ActivityIndicator, TouchableOpacity, Dimensions, TouchableWithoutFeedback, SafeAreaView } from 'react-native'
+import { Keyboard, ActivityIndicator, TouchableOpacity, Dimensions, TouchableWithoutFeedback, SafeAreaView } from 'react-native'
 import BottomSheet, { BottomSheetScrollView, BottomSheetBackdrop } from '@gorhom/bottom-sheet'
 import Dictionary_LeftTab from '../../components/Dictionary/Dictionary_LeftTab'
 import Dictionary_RightTab from '../../components/Dictionary/Dictionary_RightTab'
@@ -27,7 +27,8 @@ export default function Dictionary_2({ navigation, route }) {
     const bottomModal = useRef()
 
     const snapPoints = useMemo(() => ['45%', '96%'], []) // modal이 가리는 화면 %
-
+    const handleSnapPress = useCallback(() => bottomModal.current?.snapToIndex(1), []);
+    
     const [isLoading, setIsLoading] = useState(true) // gif 로딩 완료 여부
 
     // LeftTab 누르면 leftTabActivate = true
@@ -36,7 +37,12 @@ export default function Dictionary_2({ navigation, route }) {
         setIsBubbleOn(false)
         target === leftTab ? setLeftTabActivate(true) : setLeftTabActivate(false)
     }
-    const renderBackdrop = useCallback((props) => <BottomSheetBackdrop {...props} />, [])
+    const renderBackdrop = useCallback((props) => 
+        <BottomSheetBackdrop 
+            {...props} 
+            pressBehavior='none'
+        />
+    , [])
     // 루틴 추가 말풍선
     const onPressAddRoutineBtn = () => {
         setIsBubbleOn(false)
@@ -107,14 +113,13 @@ export default function Dictionary_2({ navigation, route }) {
             const keys = await AsyncStorage.getAllKeys()
             const data = keys.includes('Bubble')
             if (data !== null) {
-                const bubbleData = await AsyncStorage.getItem('Bubble')
-                console.log(`set new data for bubble (true)`)
-                const bubbleBool = JSON.parse(bubbleData)
-                return bubbleBool
+                console.log(`Bubble already exists`)
+                return false
             } else {
                 const stringValue = JSON.stringify(true)
-                console.log(`no existing data - setItem for true`)
+                console.log(`set new data for bubble (${stringValue})`)
                 await AsyncStorage.setItem('Bubble', stringValue)
+                return false
             }
             return null
         } catch (error) {
@@ -123,20 +128,8 @@ export default function Dictionary_2({ navigation, route }) {
     }
 
     useEffect(() => {
-        checkBubbleData().then((data) => {
-            if (data !== null) {
-                setIsBubbleOn(data)
-                console.log(`data : ${data}`)
-            }
-        })
+        checkBubbleData().then((data) => {if(data !== null) setIsBubbleOn(data)})
     }, [])
-
-    const setBubbleFalse = async () => {
-        const stringValue = JSON.stringify(false)
-        await AsyncStorage.setItem('Bubble', stringValue)
-    }
-
-    const icon = `img${exerciseInfo.healthCategoryIdx}`
 
     return (
         <ScreenLayout isDark={isDark} darkBack={colors.black} lightBack={colors.grey_1}>
@@ -159,7 +152,6 @@ export default function Dictionary_2({ navigation, route }) {
                             isLoading? <Loading color={colors.l_main}/> : null
                         }
                         <ExerciseImage
-                            onLoadStart={()=>setIsLoading(true)}
                             onLoad={()=>setIsLoading(false)}
                             source={imagePath.path[exerciseInfo.healthCategoryIdx-1]}
                         />
@@ -279,6 +271,7 @@ export default function Dictionary_2({ navigation, route }) {
                                     exerciseName={exerciseInfo.name}
                                     leftTabActivate={leftTabActivate}
                                     setIsAllRead={changeRead}
+                                    handleSnapPress={handleSnapPress}
                                 />
                             )}
                         </DictionaryContainer>

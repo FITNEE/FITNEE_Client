@@ -262,7 +262,6 @@ const DayWrapper = styled.TouchableOpacity`
     border-radius: 8px;
     border-width: 1px;
     margin-bottom: 5px;
-
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
