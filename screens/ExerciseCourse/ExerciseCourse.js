@@ -64,11 +64,12 @@ const ReplaceButtonText = styled.Text`
 
 const CurrentExplain = styled.View`
     width: 327px;
-    height: 172px;
-    border-radius: 13px;
+    height: 140px;
+    border-radius: 12px;
     background: ${({ isDark }) => (isDark ? colors.grey_8 : colors.grey_1)};
     padding: 24px;
     justify-content: center;
+    margin-bottom: 20px;
 `
 
 const ModalTitleView = styled.View`
@@ -300,7 +301,9 @@ export default function ExerciseCourse({ navigation }) {
         },
     })
 
-    const adviceList = dataList[listIndex].exerciseInfo.caution.map((item) => <CurrentExplainLine expl={item} />)
+    const adviceList = dataList[listIndex].exerciseInfo.caution.map((item, index) => (
+        <CurrentExplainLine expl={item} num={index + 1} />
+    ))
 
     const pushReplace = async (healthCategoryIdx, name, caution) => {
         let replacedData = [...dataList]
@@ -444,12 +447,6 @@ export default function ExerciseCourse({ navigation }) {
                     <ReplaceButton isDark={isDark} disabled={false} onPress={handleModal}>
                         <ReplaceButtonText isDark={isDark}>운동 대체하기</ReplaceButtonText>
                     </ReplaceButton>
-
-                    {/* <CurrentSet
-                        set={dataList[listIndex].sets[0].set + 1}
-                        kg={dataList[listIndex].sets[0].weight}
-                        num={dataList[listIndex].sets[0].rep}
-                    /> */}
 
                     <CurrentExplain isDark={isDark}>{adviceList}</CurrentExplain>
 
