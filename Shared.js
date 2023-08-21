@@ -9,7 +9,7 @@ export const ScreenHeight = Dimensions.get('screen').height
 const BackButtonContainer = styled.TouchableOpacity`
   position: absolute;
   top: 24px;
-  left: 0px;
+  left: 24px;
   width: 48px;
   height: 48px;
 `

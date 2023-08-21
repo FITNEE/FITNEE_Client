@@ -1,11 +1,11 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useCallback, useRef, useState } from 'react'
 import styled from 'styled-components/native'
 import { colors } from '../../colors'
 import { Button, BackButton } from '../../Shared'
 //prettier-ignore
 import {Input,Title,ScreenKeyboardLayout, StatusText,SubText,NumberInput,MyBottomSheet, InputTitle} from "../../components/Shared/OnBoarding_Shared";
-import { BottomSheetModalProvider } from '@gorhom/bottom-sheet'
-import { Keyboard, Pressable } from 'react-native'
+import BottomSheet, { BottomSheetBackdrop } from '@gorhom/bottom-sheet'
+import { Keyboard, View } from 'react-native'
 import Check from '../../assets/SVGs/Check.svg'
 import axios from 'axios'
 import { useRecoilValue } from 'recoil'
@@ -56,11 +56,10 @@ const CreateAccount_2 = ({ route, navigation }) => {
   const [nickname, setNickname] = useState(null)
   const [birthYear, setBirthYear] = useState(null)
   const [gender, setGender] = useState(null)
-  const [timerData, setTimerData] = useState([])
   const bottomModal = useRef()
   const [modalShown, setModalShown] = useState(false)
   const [status, setStatus] = useState(0)
-  const [snapPoints, setSnapPoints] = useState(['1%'])
+  const [snapPoints, setSnapPoints] = useState(['38%'])
   const email = route.params.email
   const PW = route.params.PW
 
@@ -110,149 +109,164 @@ const CreateAccount_2 = ({ route, navigation }) => {
   }
   const statusTexts = ['', '사용 가능한 닉네임입니다.', '중복된 닉네임입니다.', '닉네임이 2글자 이상이여야합니다.']
   const hideModal = () => {
-    setSnapPoints(['1%'])
+    bottomModal.current.close()
     Keyboard.dismiss()
     setModalShown(false)
   }
   const popModal = () => {
-    setSnapPoints(['38%'])
+    bottomModal.current?.snapToIndex(0)
     setModalShown(true)
   }
-  const onPressBottomModal = () => bottomModal.current?.present()
 
-  useEffect(() => {
-    onPressBottomModal()
-  }, [])
-
+  const renderBackdrop = useCallback(
+    (props) => <BottomSheetBackdrop {...props} pressBehavior="close" appearsOnIndex={0} disappearsOnIndex={-1} />,
+    [],
+  )
+  let data = []
+  for (var i = 1960; i < 2023; i++) {
+    data.push(i)
+  }
   return (
-    <BottomSheetModalProvider>
-      <Pressable style={{ width: '100%', height: '100%' }} onPress={() => hideModal()}>
-        <ScreenKeyboardLayout isDark={isDark}>
-          <BackButton isDark={isDark} onPress={() => navigation.goBack()} />
-          <TextContainer>
-            <Title
-              text={`맞춤 루틴 생성을 위해 
+    <ScreenKeyboardLayout onPress={() => hideModal()} isDark={isDark}>
+      <BackButton isDark={isDark} onPress={() => navigation.goBack()} />
+      <TextContainer>
+        <Title
+          text={`맞춤 루틴 생성을 위해 
 10초만 내어주세요.`}
-              isDark={isDark}
-            />
-            <SubText
-              text={`출생년도와 성별, 간단한 신체정보를 입력하시면, 
+          isDark={isDark}
+        />
+        <SubText
+          text={`출생년도와 성별, 간단한 신체정보를 입력하시면, 
 회원님께 딱 맞는 루틴을 만나보실 수 있어요.`}
-              isDark={isDark}
-            />
-          </TextContainer>
-          <BottomContainer>
-            <SubTextContainer>
-              <InputTitle>닉네임</InputTitle>
-              <StatusText
-                style={{
-                  color: status != 1 ? colors.red : colors.green,
-                  flex: 1,
-                  marginBottom: 2,
-                }}
-              >
-                {statusTexts[status]}
-              </StatusText>
-            </SubTextContainer>
-            <Input
-              style={[
-                status != 1 && status != 0 && { borderWidth: 1, borderColor: colors.red },
-                {
-                  backgroundColor: isDark ? colors.black : colors.white,
-                  color: isDark ? colors.white : colors.black,
-                },
-              ]}
-              autoCapitalize="none"
-              placeholderTextColor={colors.grey_5}
-              autoFocus
-              onSubmitEditing={() => Keyboard.dismiss()}
-              placeholder="닉네임"
-              returnKeyType="next"
-              blurOnSubmit={false}
-              onChangeText={(text) => handleNickName(text)}
-            />
+          isDark={isDark}
+        />
+      </TextContainer>
+      <BottomContainer>
+        <SubTextContainer>
+          <InputTitle>닉네임</InputTitle>
+          <StatusText
+            style={{
+              color: status != 1 ? colors.red : colors.green,
+              flex: 1,
+              marginBottom: 2,
+            }}
+          >
+            {statusTexts[status]}
+          </StatusText>
+        </SubTextContainer>
 
-            <GenderContainer>
-              <GenderButton
-                style={
-                  gender == 2
-                    ? {
-                        backgroundColor: isDark ? colors.d_sub_1 : colors.l_sub_2,
-                        borderColor: colors.l_main,
-                        borderWidth: 1,
-                      }
-                    : {
-                        backgroundColor: isDark ? colors.black : colors.l_sub_2,
-                      }
-                }
-                onPress={() => setGender(2)}
-              >
-                <GenderText
-                  style={
-                    gender == 2
-                      ? {
-                          color: isDark ? colors.d_main : colors.grey_8,
-                        }
-                      : {
-                          color: isDark ? colors.white : colors.grey_8,
-                        }
-                  }
-                >
-                  여성
-                </GenderText>
-                {gender == 2 && <Check width={24} height={24} />}
-              </GenderButton>
-              <GenderButton
-                style={
-                  gender == 1
-                    ? {
-                        backgroundColor: isDark ? colors.d_sub_1 : colors.l_sub_2,
-                        borderColor: colors.l_main,
-                        borderWidth: 1,
-                      }
-                    : {
-                        backgroundColor: isDark ? colors.black : colors.l_sub_2,
-                      }
-                }
-                onPress={() => setGender(1)}
-              >
-                <GenderText
-                  style={
-                    gender == 1
-                      ? {
-                          color: isDark ? colors.d_main : colors.grey_8,
-                        }
-                      : {
-                          color: isDark ? colors.white : colors.grey_8,
-                        }
-                  }
-                >
-                  남성
-                </GenderText>
-                {gender == 1 && <Check width={24} height={24} />}
-              </GenderButton>
-            </GenderContainer>
+        <Input
+          style={[
+            status != 1 && status != 0 && { borderWidth: 1, borderColor: colors.red },
+            {
+              backgroundColor: isDark ? colors.black : colors.white,
+              color: isDark ? colors.white : colors.black,
+            },
+          ]}
+          autoCapitalize="none"
+          placeholderTextColor={colors.grey_5}
+          onSubmitEditing={() => Keyboard.dismiss()}
+          placeholder="닉네임"
+          returnKeyType="next"
+          blurOnSubmit={false}
+          onChangeText={(text) => handleNickName(text)}
+        />
 
-            <NumberInput
-              isDark={isDark}
-              value={birthYear}
-              onPress={() => popModal()}
-              placeholder="태어난 년도"
-              active={modalShown}
-            />
-          </BottomContainer>
-          <Button isDark={isDark} enabled={birthYear && gender != null && status == 1} onPress={() => handlePress()} />
-          <MyBottomSheet
-            setValue={setBirthYear}
-            value={birthYear}
-            modalRef={bottomModal}
-            snapPoints={snapPoints}
-            defaultVal="2000"
-            hideFunc={() => hideModal()}
-          />
-        </ScreenKeyboardLayout>
-      </Pressable>
-    </BottomSheetModalProvider>
+        <GenderContainer>
+          <GenderButton
+            style={
+              gender == 2
+                ? {
+                    backgroundColor: isDark ? colors.d_sub_1 : colors.l_sub_2,
+                    borderColor: colors.l_main,
+                    borderWidth: 1,
+                  }
+                : {
+                    backgroundColor: isDark ? colors.black : colors.l_sub_2,
+                  }
+            }
+            onPress={() => setGender(2)}
+          >
+            <GenderText
+              style={
+                gender == 2
+                  ? {
+                      color: isDark ? colors.d_main : colors.grey_8,
+                    }
+                  : {
+                      color: isDark ? colors.white : colors.grey_8,
+                    }
+              }
+            >
+              여성
+            </GenderText>
+            {gender == 2 && <Check width={24} height={24} color={colors.white} />}
+          </GenderButton>
+          <GenderButton
+            style={
+              gender == 1
+                ? {
+                    backgroundColor: isDark ? colors.d_sub_1 : colors.l_sub_2,
+                    borderColor: colors.l_main,
+                    borderWidth: 1,
+                  }
+                : {
+                    backgroundColor: isDark ? colors.black : colors.l_sub_2,
+                  }
+            }
+            onPress={() => setGender(1)}
+          >
+            <GenderText
+              style={
+                gender == 1
+                  ? {
+                      color: isDark ? colors.d_main : colors.grey_8,
+                    }
+                  : {
+                      color: isDark ? colors.white : colors.grey_8,
+                    }
+              }
+            >
+              남성
+            </GenderText>
+            {gender == 1 && <Check width={24} height={24} color={colors.white} />}
+          </GenderButton>
+        </GenderContainer>
+
+        <NumberInput
+          isDark={isDark}
+          value={birthYear}
+          onPress={() => popModal()}
+          placeholder="태어난 년도"
+          active={modalShown}
+        />
+      </BottomContainer>
+      <Button isDark={isDark} enabled={birthYear && gender != null && status == 1} onPress={() => handlePress()} />
+      <BottomSheet
+        ref={bottomModal}
+        backdropComponent={renderBackdrop}
+        index={-1}
+        backgroundComponent={() => <View />}
+        snapPoints={snapPoints}
+        enablePanDownToClose={false}
+        enableHandlePanningGesture={false}
+        enableContentPanningGesture={false}
+        handleHeight={0}
+        enableDismissOnClose
+        handleIndicatorStyle={{ height: 0 }}
+      >
+        <MyBottomSheet
+          isDark={isDark}
+          setValue={setBirthYear}
+          selectableDatas={data}
+          value={birthYear}
+          modalRef={bottomModal}
+          snapPoints={snapPoints}
+          defaultVal="2000"
+          nextFunc={() => hideModal()}
+        />
+      </BottomSheet>
+    </ScreenKeyboardLayout>
   )
 }
 

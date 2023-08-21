@@ -82,8 +82,8 @@ export default function CreateRoutine_2({ navigation }) {
             height={200}
             width={288}
             initialSelectedIndex={8}
-            items={data.map((name) => ({ label: name, value: '' }))}
-            onChange={({ item }) => setValue(item)}
+            items={data.map((num) => ({ label: num, value: '' }))}
+            onChange={({ index, item }) => setValue(item)}
             selectedStyle={{ borderColor: '#E8EBF0', borderWidth: 1 }}
           />
         </PickerContainer>
