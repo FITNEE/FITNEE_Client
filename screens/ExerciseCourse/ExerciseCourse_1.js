@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { SafeAreaView, Text, TouchableOpacity, View } from 'react-native'
 import { TextInput, Dimensions, Animated, StyleSheet } from 'react-native'
 const { width, height } = Dimensions.get('window')
@@ -10,13 +10,15 @@ import { CountdownCircleTimer } from 'react-native-countdown-circle-timer'
 import { FlatList } from 'react-native-gesture-handler'
 import Indicator from '../../components/exerciseCourse/Indicator'
 import { Alert } from 'react-native'
-import { useRoute, StackActions } from '@react-navigation/native'
+import { useRoute, StackActions, useIsFocused, useFocusEffect } from '@react-navigation/native'
 import axios from 'axios'
 import { useRecoilValue } from 'recoil'
 import { IsDarkAtom } from '../../recoil/MyPageAtom'
 import Check from '../../assets/SVGs/Check.svg'
 import Check_disabled from '../../assets/SVGs/Check_Disabled.svg'
 import Close from '../../assets/SVGs/Close.svg'
+import ExerciseCourse_2 from './ExerciseCourse_2'
+import ExerciseCourse_2_2 from './ExerciseCourse2_2'
 
 const TextBox = styled.View`
     width: 327px;
@@ -28,12 +30,13 @@ const JustText = styled.Text`
     color: ${colors.d_main};
     text-align: center;
     font-size: 15px;
-    font-weight: 400;
+    font-family: Pretendard-Regular;
     line-height: 22.5px;
 `
 
 const BoxList = styled.View`
     height: 120px;
+    padding-bottom: 1px;
 `
 
 const Container = styled.View`
@@ -48,15 +51,19 @@ const Container = styled.View`
 
 const CurrentText = styled.Text`
     font-size: 20px;
-    font-style: normal;
-    font-weight: 600;
+    font-family: Pretendard-SemiBold;
+    line-height: 32px;
+`
+
+const CurrentText2 = styled.Text`
+    font-size: 15px;
+    font-family: Pretendard-SemiBold;
     line-height: 32px;
 `
 
 const CurrentUnit = styled.Text`
     font-size: 15px;
-    font-style: normal;
-    font-weight: 600;
+    font-family: Pretendard-SemiBold;
 `
 
 const TextLine = styled.View`
@@ -103,12 +110,12 @@ const StopExercise = styled.TouchableOpacity`
     top: 20px;
     right: 24px;
 `
+
 const SkipExercriseText = styled.Text`
     color: ${({ isDark }) => (isDark ? colors.grey_2 : colors.grey_8)};
     text-align: center;
     font-size: 13px;
-    font-style: normal;
-    font-weight: 600;
+    font-family: Pretendard-SemiBold;
     line-height: 19.5px;
     text-decoration-line: underline;
 `
@@ -117,10 +124,24 @@ const ExerciseCircle = styled.View`
     width: 307px;
     height: 307px;
     border-radius: 291px;
-    background: ${({ isDark }) => (isDark ? colors.black : colors.grey_1)};
+    /* background-color: ${({ isDark }) => (isDark ? colors.black : colors.grey_1)}; */
+    background-color: rgba(0, 0, 0, 0);
     margin-bottom: 14px;
     justify-content: center;
     align-items: center;
+`
+
+const ExerciseImage = styled.Image`
+    height: 307px;
+    aspect-ratio: 1;
+    border-radius: 999px;
+`
+
+const ComponentWrapper = styled.View`
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    z-index: ${(props) => props.zIndex};
 `
 
 export default function ExerciseCourse_1({ navigation }) {
@@ -153,6 +174,19 @@ export default function ExerciseCourse_1({ navigation }) {
 
     const [exerciseData, setExerciseData] = useState([])
     const [advice, setAdvice] = useState(adviceData[0])
+    const [setId, setSetId] = useState(0)
+
+    const scrollPosition = useRef(0)
+
+    const [checkedSets, setCheckedSets] = useState(Array(dataList[listIndex].totalSets).fill(false))
+    const [showExerciseCourse2, setShowExerciseCourse2] = useState(false)
+    const [showExerciseCourse2_2, setShowExerciseCourse2_2] = useState(false)
+    const [currentFocusedIndex, setCurrentFocusedIndex] = useState(0)
+    const isFocused = useIsFocused()
+
+    useEffect(() => {
+        setCurrentFocusedIndex(scrollPosition.current)
+    }, [boxNumber])
 
     const goToNextExercise = async () => {
         //스킵
@@ -194,15 +228,6 @@ export default function ExerciseCourse_1({ navigation }) {
                     dataList: dataList,
                     totalTime: totalTime + realTotalTime,
                     routineIdx: routineIdx,
-                }),
-            )
-        } else {
-            navigation.dispatch(
-                StackActions.replace('ExerciseCourse_2', {
-                    dataList: dataList,
-                    listIndex: listIndex,
-                    routineIdx: routineIdx,
-                    totalTime: totalTime + realTotalTime,
                 }),
             )
         }
@@ -267,7 +292,6 @@ export default function ExerciseCourse_1({ navigation }) {
             const nextId = currentId + 1 > adviceData.length - 1 ? 0 : currentId + 1
             setCurrentId(nextId)
             // 해당 id에 해당하는 데이터를 가져와 advice를 업데이트
-            // const data = adviceData.find((item) => item.id === nextId);
             setAdvice(adviceData[nextId])
         }, 3500) // 3.5초마다 데이터를 가져오도록 설정
 
@@ -312,7 +336,9 @@ export default function ExerciseCourse_1({ navigation }) {
                 <Box2>
                     {item.weight !== 'null' ? (
                         <CurrentText style={{ color: textColor }}>{item.weight}</CurrentText>
-                    ) : null}
+                    ) : (
+                        <CurrentText2 style={{ color: colors.grey_7 }}>빈 봉</CurrentText2>
+                    )}
                     {item.weight !== 'null' ? (
                         <TextLine>
                             <CurrentUnit style={{ color: textColor }}>kg</CurrentUnit>
@@ -325,8 +351,8 @@ export default function ExerciseCourse_1({ navigation }) {
                         <CurrentUnit style={{ color: textColor }}>회</CurrentUnit>
                     </TextLine>
                 </Box3>
-                {item.set === dataList[listIndex].totalSets ? null : item.set + 1 <= boxNumber ? (
-                    <Check color={isDark ? colors.black : colors.white} width={24} height={24} />
+                {item.set === dataList[listIndex].totalSets ? null : checkedSets[item.set] ? (
+                    <Check width={24} height={24} color={isDark ? colors.black : colors.white} />
                 ) : (
                     <Check_disabled width={24} height={24} />
                 )}
@@ -354,7 +380,45 @@ export default function ExerciseCourse_1({ navigation }) {
             setIsPlaying(true)
         }, 300)
 
-        this.flatListRef.scrollToIndex({ animated: true, index: boxNumber })
+        const newCheckedSets = [...checkedSets]
+        newCheckedSets[boxNumber - 1] = true
+        setCheckedSets(newCheckedSets)
+
+        setTimeout(() => {
+            if (flatListRef.current) {
+                flatListRef.current.scrollToIndex({
+                    animated: true,
+                    index: boxNumber,
+                })
+                scrollPosition.current = boxNumber
+                console.log('scroll', scrollPosition)
+            }
+        }, 1200)
+
+        if (boxNumber < dataList[listIndex].totalSets) {
+            setTimeout(() => {
+                setShowExerciseCourse2_2(true)
+                console.log('show', showExerciseCourse2_2)
+            }, 2000)
+        } else if (boxNumber === dataList[listIndex].totalSets && listIndex + 1 !== dataList.length) {
+            setTimeout(() => {
+                setShowExerciseCourse2(true)
+                console.log('show', showExerciseCourse2)
+            }, 2000)
+        }
+
+        // setTimeout(() => {
+        //   goToNextExercise();
+        // }, 2000);
+    }
+
+    const getItemLayout = (_, index) => {
+        const itemHeight = 64
+        return {
+            length: itemHeight,
+            offset: itemHeight * index,
+            index,
+        }
     }
 
     useEffect(() => {
@@ -371,72 +435,131 @@ export default function ExerciseCourse_1({ navigation }) {
         }
     }, [isTimerRunning])
 
-    return (
-        <SafeAreaView
-            style={{
-                flex: 1,
-                backgroundColor: isDark ? colors.grey_9 : colors.grey_2,
-            }}
-        >
-            <ExerciseCard exerciseName={dataList[listIndex].exerciseInfo.exerciseName} isDark={isDark}>
-                <StopExercise onPress={() => OpenConfirm()}>
-                    <Close width={24} height={24} color={isDark ? colors.white : colors.black} />
-                </StopExercise>
-                <ExerciseCircle isDark={isDark}>
-                    <CountdownCircleTimer
-                        key={key}
-                        isPlaying={isPlaying}
-                        //duration={oneDuration}
-                        duration={6}
-                        colors={colors.l_main}
-                        size={315}
-                        strokeWidth={8}
-                        trailColor={isDark ? colors.grey_7 : colors.grey_3}
-                        //onComplete={handleComplete}
-                        onComplete={() => ({ shouldRepeat: true })}
-                        updateInterval={0.001}
-                        isGrowing={true}
-                        rotation={'counterclockwise'}
-                    >
-                        {/* {({ remainingTime }) => <Text>{remainingTime}</Text>} */}
-                    </CountdownCircleTimer>
-                </ExerciseCircle>
+    const getImage = [
+        null,
+        require('../../assets/GIFs/1.gif'),
+        require('../../assets/GIFs/2.gif'),
+        require('../../assets/GIFs/3.gif'),
+        require('../../assets/GIFs/4.gif'),
+        require('../../assets/GIFs/5.gif'),
+        require('../../assets/GIFs/6.gif'),
+        require('../../assets/GIFs/7.gif'),
+        require('../../assets/GIFs/8.gif'),
+        require('../../assets/GIFs/9.gif'),
+        require('../../assets/GIFs/10.gif'),
+        require('../../assets/GIFs/11.gif'),
+        require('../../assets/GIFs/12.gif'),
+        require('../../assets/GIFs/13.gif'),
+        require('../../assets/GIFs/14.gif'),
+        require('../../assets/GIFs/15.gif'),
+        require('../../assets/GIFs/16.gif'),
+        require('../../assets/GIFs/17.gif'),
+        require('../../assets/GIFs/18.gif'),
+        require('../../assets/GIFs/19.gif'),
+        require('../../assets/GIFs/20.gif'),
+        require('../../assets/GIFs/21.gif'),
+        require('../../assets/GIFs/22.gif'),
+        require('../../assets/GIFs/23.gif'),
+        require('../../assets/GIFs/24.gif'),
+        require('../../assets/GIFs/25.gif'),
+    ]
+    if (showExerciseCourse2_2)
+        return (
+            <ExerciseCourse_2_2
+                navigation={navigation}
+                dataList={dataList}
+                listIndex={listIndex}
+                totalTime={totalTime}
+                routineIdx={routineIdx}
+                setId={setId}
+                toggleShowExerciseCourse2_2={() => setShowExerciseCourse2_2(false)} // toggle 함수 추가
+            />
+        )
+    if (showExerciseCourse2)
+        return (
+            <ExerciseCourse_2
+                navigation={navigation}
+                dataList={dataList}
+                listIndex={listIndex}
+                totalTime={totalTime}
+                routineIdx={routineIdx}
+                setId={setId}
+                toggleShowExerciseCourse2={() => setShowExerciseCourse2(false)} // toggle 함수 추가
+            />
+        )
+    else
+        return (
+            <SafeAreaView
+                style={{
+                    flex: 1,
+                    backgroundColor: isDark ? colors.grey_9 : colors.grey_2,
+                }}
+            >
+                <ExerciseCard exerciseName={dataList[listIndex].exerciseInfo.exerciseName} isDark={isDark}>
+                    <StopExercise onPress={() => OpenConfirm()}>
+                        <Close width={24} height={24} color={isDark ? colors.white : colors.black} />
+                    </StopExercise>
 
-                <Indicator totalPages={dataList[listIndex].totalSets} currentPage={indicatorNum - 1} isDark={isDark} />
+                    <ExerciseCircle>
+                        <ComponentWrapper zIndex={1}>
+                            <ExerciseImage
+                                source={getImage[dataList[listIndex].exerciseInfo.healthCategoryIdx]}
+                                resizeMode="contain"
+                            />
+                        </ComponentWrapper>
+                        <ComponentWrapper zIndex={2}>
+                            <CountdownCircleTimer
+                                key={key}
+                                isPlaying={isPlaying}
+                                duration={35}
+                                colors={colors.l_main}
+                                size={315}
+                                strokeWidth={8}
+                                trailColor={isDark ? colors.grey_7 : colors.grey_3}
+                                onComplete={() => ({ shouldRepeat: true })}
+                                updateInterval={0.001}
+                                isGrowing={true}
+                                rotation={'counterclockwise'}
+                            />
+                        </ComponentWrapper>
+                    </ExerciseCircle>
 
-                <BoxList>
-                    <FlatList
-                        //현재 하고 있는 세트와 다음 세트를 보여주는 리스트
-                        style={{}}
-                        initialScrollIndex={0}
-                        data={exerciseData}
-                        renderItem={renderItem}
-                        keyExtractor={(item) => item.set}
-                        showsVerticalScrollIndicator={false}
-                        ref={(ref) => {
-                            this.flatListRef = ref
-                        }}
-                        onEndReached={goToCompleteExercise}
-                        scrollEnabled={false}
+                    <Indicator
+                        totalPages={dataList[listIndex].totalSets}
+                        currentPage={indicatorNum - 1}
+                        isDark={isDark}
                     />
-                </BoxList>
 
-                <TextBox>
-                    <JustText>{advice}</JustText>
-                </TextBox>
+                    <BoxList>
+                        <FlatList
+                            data={exerciseData}
+                            renderItem={renderItem}
+                            keyExtractor={(item) => item.set}
+                            showsVerticalScrollIndicator={false}
+                            ref={flatListRef}
+                            onEndReached={goToCompleteExercise}
+                            scrollEnabled={false}
+                            getItemLayout={getItemLayout}
+                            initialScrollIndex={scrollPosition.current}
+                        />
+                    </BoxList>
 
-                <ExerciseButton //세트 완료 버튼
-                    text="세트 완료"
-                    disabled={false}
-                    //onPress={timeToRest}
-                    onPress={scrollBox}
-                    isDark={isDark}
-                />
+                    <TextBox>
+                        <JustText>{advice}</JustText>
+                    </TextBox>
 
-                <SkipExercrise onPress={() => OpenConfirm2()}>
-                    <SkipExercriseText isDark={isDark}>이 운동 건너뛰기</SkipExercriseText>
-                </SkipExercrise>
-            </ExerciseCard>
-        </SafeAreaView>
-    )
+                    <ExerciseButton //세트 완료 버튼
+                        text="세트 완료"
+                        disabled={false}
+                        //onPress={timeToRest}
+                        onPress={scrollBox}
+                        isDark={isDark}
+                    />
+
+                    <SkipExercrise onPress={() => OpenConfirm2()}>
+                        <SkipExercriseText isDark={isDark}>이 운동 건너뛰기</SkipExercriseText>
+                    </SkipExercrise>
+                </ExerciseCard>
+            </SafeAreaView>
+        )
 }
