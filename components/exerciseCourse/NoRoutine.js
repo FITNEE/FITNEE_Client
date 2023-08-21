@@ -5,7 +5,7 @@ import { colors } from '../../colors'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 import { TabBarAtom, IsDarkAtom } from '../../recoil/MyPageAtom'
 import { useIsFocused } from '@react-navigation/native'
-import { processDayData } from '../../components/myRoutine/Functions'
+import { processDayData } from '../myRoutine/Functions'
 import axios from 'axios'
 
 const Container = styled.View`
