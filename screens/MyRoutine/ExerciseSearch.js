@@ -10,6 +10,8 @@ import Close from "../../assets/SVGs/Close.svg";
 import { Button } from "../../Shared";
 import { useRecoilValue } from "recoil";
 import { IsDarkAtom } from "../../recoil/MyPageAtom";
+import DeleteIcon from '../../assets/SVGs/Delete.svg'
+import DeleteDarkIcon from '../../assets/SVGs/Delete_Dark.svg'
 
 const Container = styled.View`
   flex: 1;
@@ -243,11 +245,11 @@ export default function ExerciseSearch({ navigation }) {
                 />
               </SearchInputContainer>
               <DeleteAllBtn onPress={onDeleteInput}>
-                <Close
-                  width={24}
-                  height={24}
-                  color={isDark ? colors.white : colors.black}
-                />
+                {isDark ? 
+                  <DeleteDarkIcon width={24} height={24} />
+                : 
+                  <DeleteIcon width={24} height={24} />
+                }
               </DeleteAllBtn>
             </SearchContainer>
           </TopContainer>
@@ -262,7 +264,20 @@ export default function ExerciseSearch({ navigation }) {
                   최근 검색 키워드
                 </RecentTitle>
                 <RecentKeywordContainer>
-                  {recentKeywords == undefined ? (
+                  {recentKeywords.length == 0 ? 
+                  (
+                    <SelectedItemText
+                      style={{
+                        width: "100%",
+                        textAlign: "center",
+                        marginTop: 8,
+                        color: colors.grey_5,
+                      }}
+                    >
+                      최근 검색어가 없어요
+                    </SelectedItemText>
+                  ) :
+                  (
                     recentKeywords.map((keyword, id) => (
                       <KeywordContainer
                         key={id}
@@ -282,18 +297,7 @@ export default function ExerciseSearch({ navigation }) {
                         </Keyword>
                       </KeywordContainer>
                     ))
-                  ) : (
-                    <SelectedItemText
-                      style={{
-                        width: "100%",
-                        textAlign: "center",
-                        marginTop: 8,
-                        color: colors.grey_5,
-                      }}
-                    >
-                      최근 검색어가 없어요
-                    </SelectedItemText>
-                  )}
+                  ) }
                 </RecentKeywordContainer>
               </RecentContainer>
               <HotContainer>

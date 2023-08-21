@@ -3,24 +3,19 @@ import { SafeAreaView } from "react-native";
 import { styled } from "styled-components/native";
 import { colors } from "../../colors";
 import axios from "axios";
-import { Dimensions } from "react-native";
 import { ScreenWidth } from "../../Shared";
 import { useIsFocused } from "@react-navigation/native";
 import Right from "../../assets/SVGs/Right.svg";
 import { useRecoilValue } from "recoil";
 import { IsDarkAtom } from "../../recoil/MyPageAtom";
 import Toast from "react-native-toast-message";
+import Profile_man from "../../assets/SVGs/Profile_man.svg";
+import Profile_woman from "../../assets/SVGs/Profile_woman.svg";
 
 const Profile = styled.View`
   align-items: center;
   margin-top: 35px;
   margin-bottom: 32px;
-`;
-const ProfileImage = styled.TouchableOpacity`
-  width: 88px;
-  height: 88px;
-  background-color: ${colors.grey_2};
-  border-radius: 88px;
 `;
 const Block = styled.View`
   flex-direction: row;
@@ -141,9 +136,19 @@ export default function UserInfo({ route, navigation }) {
     <SafeAreaView backgroundColor={isDark ? colors.grey_9 : colors.grey_1}>
       <Container isDark={isDark}>
         <Profile>
-          <ProfileImage
-            style={{ backgroundColor: getGender == 1 ? "blue" : "pink" }}
-          ></ProfileImage>
+          {getGender == 1 ? (
+            <Profile_man
+              width={88}
+              height={88}
+              color={isDark ? colors.grey_7 : colors.grey_2}
+            />
+          ) : (
+            <Profile_woman
+              width={88}
+              height={88}
+              color={isDark ? colors.grey_7 : colors.grey_2}
+            />
+          )}
         </Profile>
         <NickBlock onPress={() => navigation.navigate("EditUserInfo")}>
           <BlockTitle isDark={isDark}>닉네임</BlockTitle>

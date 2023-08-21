@@ -94,7 +94,7 @@ const MiniText = styled.Text`
 export default function Records(props) {
   const isDark = useRecoilValue(IsDarkAtom);
 
-  const [now, setNow] = useState(new Date());
+  const [now, setNow] = useState(new Date(Date.now() + 9 * 60 * 60 * 1000));
   const date = now.getDate();
   const resultMonth = now.getMonth() + 1;
   const [exerciseDays, setExerciseDays] = useState([]);

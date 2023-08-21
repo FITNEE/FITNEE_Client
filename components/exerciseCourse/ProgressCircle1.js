@@ -54,7 +54,7 @@ const BubbleArrow = styled.View`
   border-width: 12px 8px 0px;
   border-color: ${({ isDark }) => (isDark ? colors.white : colors.black)}
     transparent;
-  display: block;
+  /* display: block; */
   width: 0;
   z-index: 1;
   top: 16px;
