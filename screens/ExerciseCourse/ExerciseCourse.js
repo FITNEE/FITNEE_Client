@@ -64,12 +64,12 @@ const ReplaceButtonText = styled.Text`
 
 const CurrentExplain = styled.View`
   width: 327px;
-  height: 140px;
+  height: 163px;
   border-radius: 12px;
   background: ${({ isDark }) => (isDark ? colors.grey_8 : colors.grey_1)};
-  padding: 24px;
-  justify-content: center;
-  margin-bottom: 20px;
+  padding: 16px;
+  justify-content: flex-start;
+  margin-bottom: 5px;
 `
 
 const ModalTitleView = styled.View`
@@ -329,6 +329,7 @@ export default function ExerciseCourse({ navigation }) {
       ...modifiedDataList[listIndex],
       skip: 1,
     }
+
     const count = modifiedDataList.reduce((sum, elem) => sum + (elem.skip !== undefined ? 1 : 0), 0)
 
     if (listIndex + 1 >= dataList.length) {
