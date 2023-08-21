@@ -51,6 +51,7 @@ export const Button = ({ enabled, onPress, text = '확인', isDark, loading = fa
           : { backgroundColor: isDark ? colors.grey_8 : colors.grey_3 },
         // { marginBottom: ScreenWidth > 400 ? 64 : 64 },
         mode == 'absolute' && {
+          marginBottom: 24,
           width: ScreenWidth - 48,
         },
       ]}

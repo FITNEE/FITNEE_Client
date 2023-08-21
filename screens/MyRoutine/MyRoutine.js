@@ -17,7 +17,6 @@ import { Button, ScreenLayout } from '../../Shared'
 import { IsDarkAtom, TabBarAtom } from '../../recoil/MyPageAtom'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 import { BottomSheetContent } from '../../components/myRoutine/BottomSheetContent'
-import WheelPickerExpo from 'react-native-wheel-picker-expo'
 
 const ScreenBase = styled.SafeAreaView`
   width: 100%;
@@ -63,7 +62,6 @@ export default MyRoutine = ({ navigation, route }) => {
 
   const isDark = useRecoilValue(IsDarkAtom)
   //가장 밑단에서 backgroundColor 제공
-
   const isFocus = useIsFocused()
   const updateDatas = () => {
     getRoutineParts().then((res) => {
@@ -102,7 +100,6 @@ export default MyRoutine = ({ navigation, route }) => {
           satRoutineIdx: SCHEDULE[tempNewSCHE[5]].routineId,
           sunRoutineIdx: SCHEDULE[tempNewSCHE[6]].routineId,
         }
-        // console.log("후가공된 NeswSCHE:", data);
         updateRoutines(data).then((res) => console.log('updateRoutineSchedule api 호출결과:', res))
         setNewSCHE(null)
       } else {
@@ -116,6 +113,7 @@ export default MyRoutine = ({ navigation, route }) => {
         }, //눌렀을 때 mode가 true였을 때, 즉 커스텀모드에서 완료버튼을 눌렀을때.
       )
     }
+    setIsTabVisible(!mode)
     setMode(!mode)
   }
   const popMessage = (id) => {
@@ -205,6 +203,7 @@ export default MyRoutine = ({ navigation, route }) => {
     (props) => <BottomSheetBackdrop {...props} pressBehavior="none" appearsOnIndex={0} disappearsOnIndex={-1} />,
     [],
   )
+
   useEffect(() => {
     if (route.params?.selectedItem) {
       setMode(true)
@@ -250,9 +249,6 @@ export default MyRoutine = ({ navigation, route }) => {
   }, [selectedDay])
 
   const bottomModal = useRef(null)
-  useEffect(() => {
-    setIsTabVisible(!mode)
-  }, [mode])
   return (
     <ScreenLayout isDark={isDark} darkBack={colors.grey_9} lightBack={colors.white}>
       <Header isDark={isDark} mode={mode} toggleMode={toggleMode} onPress={() => pressBack(setMode)} />
