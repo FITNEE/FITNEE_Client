@@ -12,6 +12,8 @@ import { StackActions, useIsFocused } from '@react-navigation/native'
 import { processDayData } from '../../components/myRoutine/Functions'
 import { TabBarAtom, IsDarkAtom } from '../../recoil/MyPageAtom'
 import Left from '../../assets/SVGs/Left.svg'
+import Loading from '../../components/exerciseCourse/Loading'
+import NoRoutine from '../../components/exerciseCourse/NoRoutine'
 
 const RecTextLine = styled.View`
     flex-direction: row;
@@ -135,10 +137,6 @@ export default function StartExercise({ navigation }) {
     const [isTabVisible, setIsTabVisible] = useRecoilState(TabBarAtom)
     const isDark = useRecoilValue(IsDarkAtom)
 
-    useEffect(() => {
-        isFocused && setIsTabVisible(false)
-    }, [isFocused, isTabVisible])
-
     const Week = new Array('sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat')
 
     const now = new Date()
@@ -174,6 +172,7 @@ export default function StartExercise({ navigation }) {
     }
 
     const [isLoading, setIsLoading] = useState(true)
+    const [isNoRoutine, setIsNoRoutine] = useState(false)
 
     const getRoutineData = async () => {
         try {
@@ -190,53 +189,39 @@ export default function StartExercise({ navigation }) {
 
     //fri,mon,sat,sun,thu,tue,wed
     let day2 = (now.getDay() + 6) % 7
+
     useEffect(() => {
         setIsLoading(true)
 
         async function fetchData() {
             const routineData = await getRoutineData()
-            const dayRoutineArr = processDayData(routineData.result)
-            const dayRoutineIdx = dayRoutineArr[day2].routineId
-            console.log(dayRoutineIdx)
 
-            // 모든 요소가 0인지 확인하는 함수를 작성합니다.
-            const allElementsAreZero = dayRoutineArr.every((item) => item.routineId === 0)
-
-            if (allElementsAreZero) {
-                // 모든 요소가 0인 경우
+            if (routineData.isSuccess === false) {
                 navigation.dispatch(StackActions.replace('RegisterRoutine'))
                 return
-            } else if (dayRoutineIdx === 0) {
-                navigation.navigate('NoRoutine')
-                return
             } else {
-                getExerciseData(day).then((response) => {
-                    setDataList(response.result.routineDetails)
-                    setCircleList(response.result)
-                })
+                const dayRoutineArr = processDayData(routineData.result)
+                const dayRoutineIdx = dayRoutineArr[day2].routineId
+                console.log(dayRoutineIdx)
+                if (dayRoutineIdx === 0) {
+                    setIsNoRoutine(true)
+                    setIsLoading(false)
+                    return
+                } else {
+                    setIsNoRoutine(false)
+                    isFocused && setIsTabVisible(false)
+                    getExerciseData(day).then((response) => {
+                        setDataList(response.result.routineDetails)
+                        setCircleList(response.result)
+                    })
+                }
             }
             setIsLoading(false)
         }
         fetchData()
-    }, [isFocused, navigation])
+    }, [isFocused, navigation, setIsTabVisible])
 
     const routineIdx = circleList?.routineIdx
-
-    function LoadingIndicator() {
-        return (
-            <SafeAreaView
-                style={{
-                    flex: 1,
-                    backgroundColor: isDark ? colors.d_background : colors.grey_1,
-                }}
-            >
-                <StatusBar barStyle={isDark ? 'light-content' : 'dark-content'} />
-                <Container2 isDark={isDark}>
-                    <ExerciseCircle isDark={isDark} />
-                </Container2>
-            </SafeAreaView>
-        )
-    }
 
     const exerciseList = dataList.map((result) => (
         <RecTextLine key={result.exerciseInfo.healthCategoryIdx}>
@@ -247,7 +232,9 @@ export default function StartExercise({ navigation }) {
     ))
 
     if (isLoading) {
-        return <LoadingIndicator />
+        return <Loading />
+    } else if (isNoRoutine) {
+        return <NoRoutine />
     } else {
         return (
             <SafeAreaView

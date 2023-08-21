@@ -36,6 +36,7 @@ const JustText = styled.Text`
 
 const BoxList = styled.View`
     height: 120px;
+    padding-bottom: 1px;
 `
 
 const Container = styled.View`
@@ -291,7 +292,6 @@ export default function ExerciseCourse_1({ navigation }) {
             const nextId = currentId + 1 > adviceData.length - 1 ? 0 : currentId + 1
             setCurrentId(nextId)
             // 해당 id에 해당하는 데이터를 가져와 advice를 업데이트
-            // const data = adviceData.find((item) => item.id === nextId);
             setAdvice(adviceData[nextId])
         }, 3500) // 3.5초마다 데이터를 가져오도록 설정
 
@@ -384,12 +384,6 @@ export default function ExerciseCourse_1({ navigation }) {
         newCheckedSets[boxNumber - 1] = true
         setCheckedSets(newCheckedSets)
 
-        // flatListRef.current.scrollToIndex({
-        //   animated: true,
-        //   index: boxNumber,
-        // });
-        // scrollPosition.current = boxNumber;
-
         setTimeout(() => {
             if (flatListRef.current) {
                 flatListRef.current.scrollToIndex({
@@ -399,18 +393,18 @@ export default function ExerciseCourse_1({ navigation }) {
                 scrollPosition.current = boxNumber
                 console.log('scroll', scrollPosition)
             }
-        }, 300)
+        }, 1200)
 
         if (boxNumber < dataList[listIndex].totalSets) {
             setTimeout(() => {
                 setShowExerciseCourse2_2(true)
                 console.log('show', showExerciseCourse2_2)
-            }, 1000)
+            }, 2000)
         } else if (boxNumber === dataList[listIndex].totalSets && listIndex + 1 !== dataList.length) {
             setTimeout(() => {
                 setShowExerciseCourse2(true)
                 console.log('show', showExerciseCourse2)
-            }, 1000)
+            }, 2000)
         }
 
         // setTimeout(() => {
@@ -418,19 +412,14 @@ export default function ExerciseCourse_1({ navigation }) {
         // }, 2000);
     }
 
-    useFocusEffect(
-        useCallback(() => {
-            console.log(scrollPosition)
-            if (showExerciseCourse2_2) {
-                if (flatListRef.current) {
-                    flatListRef.current.scrollToIndex({
-                        animated: false,
-                        index: scrollPosition.current,
-                    })
-                }
-            }
-        }, [showExerciseCourse2_2]),
-    )
+    const getItemLayout = (_, index) => {
+        const itemHeight = 64
+        return {
+            length: itemHeight,
+            offset: itemHeight * index,
+            index,
+        }
+    }
 
     useEffect(() => {
         let timerId
@@ -522,7 +511,7 @@ export default function ExerciseCourse_1({ navigation }) {
                             <CountdownCircleTimer
                                 key={key}
                                 isPlaying={isPlaying}
-                                duration={6}
+                                duration={35}
                                 colors={colors.l_main}
                                 size={315}
                                 strokeWidth={8}
@@ -550,9 +539,8 @@ export default function ExerciseCourse_1({ navigation }) {
                             ref={flatListRef}
                             onEndReached={goToCompleteExercise}
                             scrollEnabled={false}
-                            // onPressItem={(index) => {
-                            //   setSelectedIndex(index);
-                            // }}
+                            getItemLayout={getItemLayout}
+                            initialScrollIndex={scrollPosition.current}
                         />
                     </BoxList>
 
@@ -560,23 +548,13 @@ export default function ExerciseCourse_1({ navigation }) {
                         <JustText>{advice}</JustText>
                     </TextBox>
 
-                    {showExerciseCourse2 ? (
-                        <ExerciseButton //세트 완료 버튼
-                            text="바로 시작하기"
-                            disabled={false}
-                            //onPress={timeToRest}
-                            onPress={setShowExerciseCourse2(false)}
-                            isDark={isDark}
-                        />
-                    ) : (
-                        <ExerciseButton //세트 완료 버튼
-                            text="세트 완료"
-                            disabled={false}
-                            //onPress={timeToRest}
-                            onPress={scrollBox}
-                            isDark={isDark}
-                        />
-                    )}
+                    <ExerciseButton //세트 완료 버튼
+                        text="세트 완료"
+                        disabled={false}
+                        //onPress={timeToRest}
+                        onPress={scrollBox}
+                        isDark={isDark}
+                    />
 
                     <SkipExercrise onPress={() => OpenConfirm2()}>
                         <SkipExercriseText isDark={isDark}>이 운동 건너뛰기</SkipExercriseText>
