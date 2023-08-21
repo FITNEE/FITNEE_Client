@@ -330,25 +330,29 @@ export default function ExerciseCourse({ navigation }) {
       skip: 1,
     }
 
-    if (listIndex + 1 >= dataList.length) {
-      console.log(routineIdx)
-      await postTotalData(routineIdx, -1 * totalTime, modifiedDataList)
+    const count = modifiedDataList.reduce((sum, elem) => sum + (elem.skip !== undefined ? 1 : 0), 0)
 
-      // 조건이 충족되면 원하는 화면(FinalScreen)으로 이동합니다.
-      navigation.dispatch(
-        StackActions.replace('CompleteExercise', {
-          dataList: modifiedDataList,
-          totalTime: totalTime,
-          routineIdx: routineIdx,
-        }),
-      )
+    if (listIndex + 1 >= dataList.length) {
+      if (count == modifiedDataList.length) {
+        navigation.dispatch(StackActions.replace('StartExercise'))
+      } else {
+        postTotalData(routineIdx, -1 * totalTime, modifiedDataList),
+          // 조건이 충족되면 원하는 화면(FinalScreen)으로 이동합니다.
+          navigation.dispatch(
+            StackActions.replace('CompleteExercise', {
+              dataList: modifiedDataList,
+              totalTime: realTotalTime,
+              routineIdx: routineIdx,
+            }),
+          )
+      }
     } else {
       navigation.dispatch(
         StackActions.replace('ExerciseCourse', {
           dataList: modifiedDataList,
           listIndex: listIndex + 1,
           routineIdx: routineIdx,
-          totalTime: totalTime,
+          totalTime: realTotalTime,
         }),
       )
     }

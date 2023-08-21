@@ -194,19 +194,23 @@ export default function ExerciseCourse_1({ navigation }) {
     modifiedDataList[listIndex] = {
       ...modifiedDataList[listIndex],
       skip: 1,
-    }
+
+    const count = modifiedDataList.reduce((sum, elem) => sum + (elem.skip !== undefined ? 1 : 0), 0)
 
     if (listIndex + 1 >= dataList.length) {
-      await postTotalData(routineIdx, -1 * totalTime, modifiedDataList)
-
-      // 조건이 충족되면 원하는 화면(FinalScreen)으로 이동합니다.
-      navigation.dispatch(
-        StackActions.replace('CompleteExercise', {
-          dataList: modifiedDataList,
-          totalTime: realTotalTime,
-          routineIdx: routineIdx,
-        }),
-      )
+      if (count == modifiedDataList.length) {
+        navigation.dispatch(StackActions.replace('StartExercise'))
+      } else {
+        postTotalData(routineIdx, -1 * totalTime, modifiedDataList),
+          // 조건이 충족되면 원하는 화면(FinalScreen)으로 이동합니다.
+          navigation.dispatch(
+            StackActions.replace('CompleteExercise', {
+              dataList: modifiedDataList,
+              totalTime: realTotalTime,
+              routineIdx: routineIdx,
+            }),
+          )
+      }
     } else {
       navigation.dispatch(
         StackActions.replace('ExerciseCourse', {
@@ -232,6 +236,7 @@ export default function ExerciseCourse_1({ navigation }) {
       )
     }
   }
+
 
   const postTotalData = async (routineIdx, totalExerciseTime, routineDetails) => {
     try {
@@ -348,7 +353,9 @@ export default function ExerciseCourse_1({ navigation }) {
     )
   }
 
+
   const [isButtonDisabled, setIsButtonDisabled] = useState(false)
+
   const scrollBox = () => {
     const next = boxNumber >= dataList[listIndex].totalSets ? boxNumber : boxNumber + 1
     const next2 = indicatorNum > dataList[listIndex].totalSets ? indicatorNum : indicatorNum + 1
@@ -373,7 +380,9 @@ export default function ExerciseCourse_1({ navigation }) {
     newCheckedSets[boxNumber - 1] = true
     setCheckedSets(newCheckedSets)
 
+
     setIsButtonDisabled(true)
+
     setTimeout(() => {
       if (flatListRef.current) {
         flatListRef.current.scrollToIndex({
@@ -387,15 +396,19 @@ export default function ExerciseCourse_1({ navigation }) {
 
     if (boxNumber < dataList[listIndex].totalSets) {
       setTimeout(() => {
+
         setSetId(boxNumber)
         setIsButtonDisabled(false)
+
         setShowExerciseCourse2_2(true)
         console.log('show', showExerciseCourse2_2)
       }, 2000)
     } else if (boxNumber === dataList[listIndex].totalSets && listIndex + 1 !== dataList.length) {
       setTimeout(() => {
         setShowExerciseCourse2(true)
+
         setIsButtonDisabled(false)
+
         console.log('show', showExerciseCourse2)
       }, 2000)
     }
@@ -475,7 +488,7 @@ export default function ExerciseCourse_1({ navigation }) {
         dataList={dataList}
         listIndex={listIndex}
         totalTime={totalTime}
-        routineIdx={routineIdx}
+        routineIdx={routineIdx}   
       />
     )
   else
