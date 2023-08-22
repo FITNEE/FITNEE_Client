@@ -60,6 +60,7 @@ const CurrentText = styled.Text`
 
 const CurrentText2 = styled.Text`
   font-size: 15px;
+  padding-top: 4px;
   font-family: Pretendard-SemiBold;
 `
 
