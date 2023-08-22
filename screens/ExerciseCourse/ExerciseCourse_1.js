@@ -124,7 +124,6 @@ const ExerciseCircle = styled.View`
   width: 307px;
   height: 307px;
   border-radius: 291px;
-  /* background-color: ${({ isDark }) => (isDark ? colors.black : colors.grey_1)}; */
   background-color: rgba(0, 0, 0, 0);
   margin-bottom: 14px;
   justify-content: center;
@@ -296,9 +295,8 @@ export default function ExerciseCourse_1({ navigation }) {
       // 다음에 나올 Id를 currentId로 업데이트
       const nextId = currentId + 1 > adviceData.length - 1 ? 0 : currentId + 1
       setCurrentId(nextId)
-      // 해당 id에 해당하는 데이터를 가져와 advice를 업데이트
       setAdvice(adviceData[nextId])
-    }, 3500) // 3.5초마다 데이터를 가져오도록 설정
+    }, 8000) // 3.5초마다 데이터를 가져오도록 설정
 
     return () => clearInterval(interval)
   }, [currentId])
@@ -403,9 +401,7 @@ export default function ExerciseCourse_1({ navigation }) {
     } else if (boxNumber === dataList[listIndex].totalSets && listIndex + 1 !== dataList.length) {
       setTimeout(() => {
         setShowExerciseCourse2(true)
-
         setIsButtonDisabled(false)
-
         console.log('show', showExerciseCourse2)
       }, 2000)
     }
@@ -542,7 +538,21 @@ export default function ExerciseCourse_1({ navigation }) {
           </BoxList>
 
           <TextBox>
-            <JustText>{advice}</JustText>
+            <TextTicker
+              style={{
+                color: colors.d_main,
+                textAlign: 'center',
+                fontSize: 15,
+                fontFamily: 'Pretendard-Regular',
+                lineHeight: 22.5,
+              }}
+              duration={11000}
+              bounce
+              repeatSpacer={1000}
+              marqueeDelay={100}
+            >
+              {advice}
+            </TextTicker>
           </TextBox>
 
           <ExerciseButton //세트 완료 버튼
