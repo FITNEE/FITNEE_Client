@@ -14,6 +14,8 @@ export default function Dictionary_LeftTab(props){
     const exerciseName = props.exerciseName
 
     const [exerciseDetail, setExerciseDetail] = useState()
+    const [caution, setCaution] = useState()
+
     const getExerciseDetail = async () => {
         try {
             let url = "https://gpthealth.shop/"
@@ -34,13 +36,11 @@ export default function Dictionary_LeftTab(props){
           console.error("Failed to fetch data:", error);
         }
     }
-    // const [caution, setCaution] = useState()
+    
     useEffect(()=>{
         getExerciseDetail().then((result)=>{
-            setExerciseDetail(result)
-            // console.log(result.exercisecaution[0])
-            // // const cautions = Object.values(exerciseDetail?.exercisecaution[0]?).map(value=>value)
-            // // setCaution(cautions)
+            setExerciseDetail(result.exerciseinfo)
+            setCaution(result.exercisecaution[0].caution)
         })
     }, [])  
 
@@ -50,10 +50,7 @@ export default function Dictionary_LeftTab(props){
         >        
             <ProcessContainer>
             {                            
-                exerciseDetail === undefined?
-                null
-                :
-                exerciseDetail.exerciseinfo.map((exerciseinfo, i) => (
+                exerciseDetail?.map((exerciseinfo, i) => (
                     <Process 
                         key={i}
                         style={{backgroundColor: isDark? `${colors.grey_8}`:`${colors.grey_1}`}}
@@ -80,22 +77,14 @@ export default function Dictionary_LeftTab(props){
                         />
                         <CautionTitle style={{color: isDark? `${colors.white}`:`${colors.black}`}}>이 부분은 특히 주의해주세요!</CautionTitle>
                     </CautionTitleContainer>
-                    <CautionContentContainer style={{backgroundColor: isDark? `${colors.grey_8}`:`${colors.grey_1}`}}>  
-                         <CautionDetailContainer style={{marginBottom: 4}}>
-                            <CautionDot style={{backgroundColor: isDark? `${colors.d_main}`:`${colors.l_sub_1}`}}/>
-                            <CautionDetail style={{color: isDark? `${colors.white}`:`${colors.black}`}}>{exerciseDetail?.exercisecaution[0].caution1}</CautionDetail>
-                        </CautionDetailContainer>        
-                        <CautionDetailContainer style={{marginBottom: 4}}>
-                            <CautionDot style={{backgroundColor: isDark? `${colors.d_main}`:`${colors.l_sub_1}`}}/>
-                            <CautionDetail style={{color: isDark? `${colors.white}`:`${colors.black}`}}>{exerciseDetail?.exercisecaution[0].caution2}</CautionDetail>
-                        </CautionDetailContainer> 
-                        <CautionDetailContainer>
-                            <CautionDot style={{backgroundColor: isDark? `${colors.d_main}`:`${colors.l_sub_1}`}}/>
-                            <CautionDetail style={{color: isDark? `${colors.white}`:`${colors.black}`}}>{exerciseDetail?.exercisecaution[0].caution3}</CautionDetail>
-                            {/* <CautionDetail style={{color: isDark? `${colors.white}`:`${colors.black}`}}>
-                                팔꿈치 각도는 90도까지만 구부러지는 것이 좋아요.
-                            </CautionDetail> */}
-                        </CautionDetailContainer>                   
+                    <CautionContentContainer style={{backgroundColor: isDark? `${colors.grey_8}`:`${colors.grey_1}`}}> 
+                    {
+                        caution?.map((caution, i) => 
+                            (<CautionDetailContainer style={{marginBottom: 4}} key={i}>
+                                <CautionNum style={{color: isDark? `${colors.d_main}`:`${colors.l_main}`}}>{i+1 }</CautionNum>
+                                <CautionDetail style={{color: isDark? colors.white : colors.black}}>{caution}</CautionDetail>
+                            </CautionDetailContainer>)) 
+                    }
                     </CautionContentContainer>
                 </CautionContainer>
             }
@@ -111,6 +100,7 @@ const Process = styled.View`
     padding: 20px 24px;
     margin-bottom: 8px;
     flex-direction: row;
+    align-items: flex-start;
 `
 const ProcessNum = styled.Text`
     font-family: Pretendard-SemiBold;
@@ -143,31 +133,26 @@ const CautionTitle = styled.Text`
     line-height: 22.5px;
 `
 const CautionContentContainer = styled.View`
-    padding-top: 24px;
-    padding-bottom: 24px;
-    padding-left: 24px;
-    padding-right: 24px;
+    padding: 24px;
     border-radius: 12px;
 `
 const CautionDetailContainer = styled.View`
     flex-direction: row;
-    align-items: flex-start;    
+    align-items: center ;    
 `
 const CautionDetail = styled.Text`
     font-family: Pretendard-Regular;
     font-size: 13px;
     line-height: 19.5px;
-    margin-right: 24px;
 `
 const ProcessDetail = styled.Text`
     font-family: Pretendard-Regular;
     font-size: 13px;
     line-height: 19.5px;
 `
-const CautionDot = styled.View`
-    width: 12px;
-    height: 12px;
-    border-radius: 6px;
-    margin-right: 4px;
-    margin-top: 2.5px;
+const CautionNum = styled.Text`
+    font-family: Pretendard-Regular;
+    font-size: 13px;
+    line-height: 22.5px;
+    margin-right: 8;
 `
