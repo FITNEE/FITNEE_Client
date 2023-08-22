@@ -4,7 +4,7 @@ import { colors } from '../../colors'
 
 import CheckBox_blank from '../../assets/SVGs/CheckBox_blank.svg'
 import CheckBox_checked from '../../assets/SVGs/CheckBox_checked.svg'
-import { imagePath } from '../../imagePath'
+import { imagePath, pngPath } from '../../imagePath'
 const ListContainer = styled.ScrollView`
   width: 100%;
   height: 100%;
@@ -65,7 +65,7 @@ export default function SearchList({ parentSearchList, editSelectedList, selecte
             }}
           >
             <IconContainer
-              source={imagePath.path[words.healthCategoryIdx - 1]}
+              source={pngPath.path[words.healthCategoryIdx - 1]}
               style={{ backgroundColor: isDark ? colors.black : colors.white }}
             />
             <TextContainer>
