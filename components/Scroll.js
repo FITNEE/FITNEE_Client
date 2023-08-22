@@ -121,8 +121,8 @@ const Container = styled.View`
 const RoutineContainer = styled.View`
   align-items: center;
   justify-content: center;
-  margin-left: ${ScreenWidth * 0.07};
-  margin-right: ${ScreenWidth * 0.12};
+  margin-left: ${ScreenWidth * 0.07}px;
+  margin-right: ${ScreenWidth * 0.12}px;
   margin-top: 10px;
 `
 const RoutineBox = styled.View`
@@ -138,7 +138,6 @@ const RoutineTitleContainer = styled.View`
   border-radius: 100px;
   top: -15px;
   left: ${ScreenWidth * 0.43 - 80}px;
-  /* ${ScreenWidth * 0.07} */
   z-index: 1;
 `
 const RoutineTitle = styled.Text`
@@ -147,7 +146,6 @@ const RoutineTitle = styled.Text`
   color: ${colors.white};
 `
 const ItemConteiner = styled.View`
-  /* width: 327px; */
   width: 107%;
   height: 365px;
   border: 1px;
