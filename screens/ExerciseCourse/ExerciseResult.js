@@ -80,7 +80,7 @@ const Container = styled.View`
   flex: 1;
   justify-content: center;
   align-items: center;
-  background-color: ${({ DarkMode }) => (DarkMode ? colors.grey_9 : colors.white)};
+  background-color: ${({ DarkMode }) => (DarkMode ? colors.grey_9 : colors.grey_1)};
 `
 
 const ExerciseText = styled.Text`
@@ -105,10 +105,10 @@ const ButtonText = styled.Text`
 `
 
 const JustCircle = styled.View`
-  border-radius: 100px;
-  width: 160px;
-  height: 160px;
-  background-color: ${({ DarkMode }) => (DarkMode ? colors.grey_8 : colors.grey_2)};
+  border-radius: 120px;
+  width: 201px;
+  height: 201px;
+  background-color: ${({ DarkMode }) => (DarkMode ? colors.black : colors.white)};
   margin-top: 64px;
 `
 
@@ -119,6 +119,14 @@ const ExerciseIconCircle = styled.View`
   height: 20px;
   border-radius: 100px;
   background-color: ${({ DarkMode }) => (DarkMode ? colors.d_sub_3 : colors.l_sub_2)};
+`
+
+const CarImage = styled.Image`
+  width: 184px;
+  height: 184px;
+  aspect-ratio: 1;
+  margin-left: 6px;
+  margin-top: 5px;
 `
 
 export default function ExerciseResult({ navigation }) {
@@ -215,7 +223,7 @@ export default function ExerciseResult({ navigation }) {
     <SafeAreaView
       style={{
         flex: 1,
-        backgroundColor: isDark ? colors.grey_9 : colors.white,
+        backgroundColor: isDark ? colors.grey_9 : colors.grey_1,
       }}
     >
       <ScrollView>
@@ -229,7 +237,9 @@ export default function ExerciseResult({ navigation }) {
               </ExerciseExplainText>
             </TextBox>
 
-            <JustCircle DarkMode={isDark} />
+            <JustCircle DarkMode={isDark}>
+              <CarImage source={require('../../assets/Imgs/car.png')} />
+            </JustCircle>
             <JustText>3300kg</JustText>
 
             <TextBox>
