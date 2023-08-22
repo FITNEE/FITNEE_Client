@@ -1,11 +1,16 @@
-import { atom } from "recoil";
+import { atom } from 'recoil'
 
 export const IsDarkAtom = atom({
-  key: "DarkModeAtom",
+  key: 'DarkModeAtom',
   default: false,
-});
+})
 
 export const TabBarAtom = atom({
-  key: "TabBarAtom",
+  key: 'TabBarAtom',
   default: true,
-});
+})
+
+export const GenderAtom = atom({
+  key: 'GenderAtom',
+  default: null,
+})
