@@ -152,7 +152,7 @@ export const List_Custom = ({ isDark, setNewSCHE, SCHEDULE, newRoutine, editRout
     <ScrollPressable>
       <ComponentTitle title="요일 변경" subTitle="루틴을 원하는 요일에 끌어다 놓을 수 있어요" isDark={isDark} />
       <ScheduleChanger SCHEDULE={SCHEDULE} setNewSCHE={setNewSCHE} days={days} isDark={isDark} />
-      <ComponentTitle title="운동 편집" subTitle="루틴을 원하는 요일에 끌어다 놓을 수 있어요" isDark={isDark} />
+      <ComponentTitle title="운동 편집" subTitle="운동을 꾹 누르면 세부사항을 편집 할 수 있어요" isDark={isDark} />
       {newRoutine ? (
         <>
           {newRoutine?.map((item, id) => (
