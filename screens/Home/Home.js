@@ -31,7 +31,7 @@ const Home = ({ navigation }) => {
   const fetchData = async () => {
     try {
       const response = await axios.get('https://gpthealth.shop/app/routine/today')
-      // console.log('Response : ', response.data)
+      console.log('Response : ', response.data)
       setData(response.data)
     } catch (error) {
       console.error('Error:', error)
@@ -40,7 +40,7 @@ const Home = ({ navigation }) => {
   const fetchGender = async () => {
     try {
       const response = await axios.get('https://gpthealth.shop/app/mypage/userinfo')
-      console.log('Response : ', response.data)
+      // console.log('Response : ', response.data)
       setGender(response.data.result[0].gender)
     } catch (error) {
       console.error('Error:', error)

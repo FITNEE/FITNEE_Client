@@ -5,7 +5,7 @@ import CreateRoutineHeader from '../components/CreateRoutineHeader'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import { CreateRoutineAtom } from '../recoil/CreateRoutineAtom'
 import { colors } from '../colors'
-import { IsDarkAtom } from '../recoil/MyPageAtom'
+import { GenderAtom, IsDarkAtom } from '../recoil/MyPageAtom'
 import Home from '../assets/SVGs/CreateRoutine/Home.svg'
 import Gym from '../assets/SVGs/CreateRoutine/Gym.svg'
 
@@ -14,6 +14,7 @@ export default function CreateRoutine_3({ navigation }) {
   const [allPart, SetAllPart] = useState(false)
   const [routine, setRoutine] = useRecoilState(CreateRoutineAtom)
   const isDark = useRecoilValue(IsDarkAtom)
+  const gender = useRecoilValue(GenderAtom)
   const [parts, setParts] = useState([
     { id: 1, name: '가슴', selected: false, ename: 'chest' },
     { id: 2, name: '등', selected: false, ename: 'back' },
