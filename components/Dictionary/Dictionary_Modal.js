@@ -107,7 +107,7 @@ export default function Dictionary_Modal(props){
     // 선택한 요일에 기존+추가 합쳐서 post 하기
     const updateRoutine = async (routineIdx, changedArray) => {
         if (changedArray == undefined) {
-            let message = "changedArray == undefined여서, updateRoutine 실행취소";
+            let message = "changedArray == undefined 여서, updateRoutine 실행취소";
             return message;
         } 
         else{
@@ -270,13 +270,11 @@ const DayWrapper = styled.TouchableOpacity`
 const DayText = styled.Text`
     font-family: Pretendard-Medium;
     font-size: 15px;
-    line-height: 22.5px;
 `
 const PartText = styled.Text`
     font-size: 13px;
     font-family: Pretendard-Regular;
     margin-right: 7px;
-    line-height: 19.5px;
 `
 const BottomContainer = styled.View`
     flex-direction: row;
@@ -300,30 +298,4 @@ const SelectContainer = styled.TouchableOpacity`
 const BottomText = styled.Text`
     font-family: Pretendard-SemiBold;
     font-size: 17px; 
-    line-height: 25.5px;
 `
-
-
-
-  
-//   export const updateRoutine = async (mySCHEDULE, selectedDay, newRoutine) => {
-//     if (newRoutine == undefined) {
-//       let message = "newRoutine가 undefined여서, updateRoutine 실행취소";
-//       return message;
-//     } else {
-//       try {
-//         let url = "https://gpthealth.shop/";
-//         let detailAPI = `app/routine/${mySCHEDULE[selectedDay].routineId}`;
-//         const response = await axios.put(url + detailAPI, newRoutine, {
-//           headers: {
-//             "Content-Type": "application/json",
-//           },
-//         });
-//         const result = response.data;
-//         return result;
-//       } catch (error) {
-//         console.error("Failed to fetch data:", error);
-//       }
-//     }
-//   };
-  
