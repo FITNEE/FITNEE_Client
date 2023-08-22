@@ -11,8 +11,8 @@ const CircleBox = styled.View`
 
 const CircleLine = styled.View`
   flex-direction: row;
-  height: 20px;
-  align-items: flex-end;
+  line-height: 32px;
+  align-items: baseline;
 `
 const RoutineCircle = styled.View`
   width: 80px;
