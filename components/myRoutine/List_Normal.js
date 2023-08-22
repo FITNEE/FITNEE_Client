@@ -6,6 +6,7 @@ import ToggleDown from '../../assets/SVGs/ToggleDown.svg'
 import ToggleUp from '../../assets/SVGs/ToggleUp.svg'
 import { FlatList } from 'react-native'
 import { SetsText_Normal } from '../Shared/MyRoutine_Shared'
+import { pngPath } from '../../imagePath'
 
 const SetContainer = styled.View`
   flex-direction: row;
@@ -38,7 +39,7 @@ const ExtendedContainer = styled.View`
   width: 100%;
   padding: 8px 16px 0px 16px;
 `
-const ExerciseImg = styled.View`
+const ExerciseImg = styled.Image`
   width: 60px;
   margin-right: 16px;
   height: 60px;
@@ -58,12 +59,18 @@ const DefaultContainer = styled.View`
   align-items: center;
   flex-direction: row;
 `
+const ExerciseView = styled.Image`
+  width: 60px;
+  height: 60px;
+  border-radius: 30px;
+  background-color: ${(props) => (props.isDark ? colors.black : colors.grey_1)};
+  margin-right: 16px;
+`
 
 export default List_Normal = ({ routineData, isDark, selectedArr, setSelectedArr }) => {
   //DropDown 누른 운동 구분하기위함.
   const handlePress = (id) => {
     let newArr = JSON.parse(JSON.stringify(selectedArr))
-    console.log(selectedArr)
     newArr[id] = !newArr[id]
     setSelectedArr(newArr)
   }
@@ -73,7 +80,7 @@ export default List_Normal = ({ routineData, isDark, selectedArr, setSelectedArr
     return (
       <ExerciseContainer style={{ backgroundColor: isDark ? colors.grey_9 : colors.white }}>
         <DefaultContainer>
-          <ExerciseImg style={{ backgroundColor: isDark ? colors.black : colors.grey_1 }} />
+          <ExerciseView isDark={isDark} source={pngPath.path[item.healthCategoryIdx - 1]} />
           <ExerciseTextContainer>
             <ExerciseTitle style={{ color: isDark ? colors.white : colors.black }}>{item.exerciseName}</ExerciseTitle>
             <ExerciseSubText>
