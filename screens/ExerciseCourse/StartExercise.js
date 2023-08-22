@@ -31,14 +31,14 @@ const Container = styled.View`
   flex: 1;
   align-items: center;
   justify-content: center;
-  padding: 0px 23.5px;
+  padding: 0px 24px;
   background: ${({ isDark }) => (isDark ? colors.d_background : colors.white)};
 `
 
 const ExerciseButton = styled.TouchableOpacity`
   width: 111px;
   height: 111px;
-  flex-shrink: 0;
+
   border-radius: 60px;
   background: ${({ isDark }) => (isDark ? colors.d_main : colors.l_main)};
   flex-direction: column;
@@ -105,24 +105,6 @@ const ExerciseExplainText = styled.Text`
   font-family: Pretendard-Regular;
   line-height: 19.5px;
   margin-bottom: 41px;
-`
-
-const Container2 = styled.View`
-  flex: 1;
-  align-items: center;
-  justify-content: center;
-  padding: 0px 23.5px;
-  background: ${({ isDark }) => (isDark ? colors.grey_8 : colors.grey_1)};
-`
-
-const ExerciseCircle = styled.View`
-  width: 307px;
-  height: 307px;
-  border-radius: 291px;
-  background: ${({ isDark }) => (isDark ? colors.black : colors.white)};
-  margin-bottom: 24px;
-  justify-content: center;
-  align-items: center;
 `
 
 const BackIcon = styled.TouchableOpacity`

@@ -1,30 +1,30 @@
-import React, { useEffect, useState } from "react";
-import { Text } from "react-native";
-import PercentageCircle from "react-native-progress-circle";
-import { styled } from "styled-components/native";
-import { colors } from "../../colors";
+import React, { useEffect, useState } from 'react'
+import { Text } from 'react-native'
+import PercentageCircle from 'react-native-progress-circle'
+import { styled } from 'styled-components/native'
+import { colors } from '../../colors'
 
 const CircleLine = styled.View`
   flex-direction: row;
   height: 20px;
   align-items: flex-end;
-`;
+`
 
 const CircleBox = styled.View`
   justify-content: center;
   align-items: center;
-`;
+`
 const CircleText = styled.Text`
   color: ${({ isDark }) => (isDark ? colors.white : colors.black)};
   font-size: 20px;
   font-family: Pretendard-SemiBold;
-`;
+`
 
 const CircleUnit = styled.Text`
   color: ${({ isDark }) => (isDark ? colors.white : colors.black)};
   font-size: 10px;
   font-family: Pretendard-SemiBold;
-`;
+`
 
 const UnderCircle = styled.Text`
   color: ${({ isDark }) => (isDark ? colors.white : colors.black)};
@@ -34,7 +34,7 @@ const UnderCircle = styled.Text`
   line-height: 15px;
   margin-bottom: 31px;
   margin-top: 8px;
-`;
+`
 
 const Bubble = styled.View`
   position: absolute;
@@ -46,46 +46,37 @@ const Bubble = styled.View`
   z-index: 1;
   align-items: center;
   bottom: 124px;
-`;
+`
 
 const BubbleArrow = styled.View`
   position: relative;
   border-style: solid;
   border-width: 12px 8px 0px;
-  border-color: ${({ isDark }) => (isDark ? colors.white : colors.black)}
-    transparent;
-  /* display: block; */
+  border-color: ${({ isDark }) => (isDark ? colors.white : colors.black)} transparent;
   width: 0;
   z-index: 1;
   top: 16px;
-`;
+`
 
 const BubbleText = styled.Text`
   color: ${({ isDark }) => (isDark ? colors.black : colors.white)};
   font-size: 11px;
   font-family: Pretendard-Bold;
   top: 10px;
-`;
-export default function ProgressCircle({
-  num,
-  unit,
-  title,
-  bubbleOn,
-  bubbleText,
-  isDark,
-}) {
-  const percentage = (num / 60) * 100;
+`
+export default function ProgressCircle({ num, unit, title, bubbleOn, bubbleText, isDark }) {
+  const percentage = (num / 60) * 100
 
-  const [shouldRender, setShouldRender] = useState(true);
+  const [shouldRender, setShouldRender] = useState(true)
   useEffect(() => {
-    if (bubbleOn === false) setShouldRender(false);
+    if (bubbleOn === false) setShouldRender(false)
     // 일정 시간(예: 5초) 후에 렌더링 여부를 false로 변경
     const timer = setTimeout(() => {
-      setShouldRender(false);
-    }, 5000);
+      setShouldRender(false)
+    }, 5000)
     // 컴포넌트가 언마운트되면 타이머 클리어
-    return () => clearTimeout(timer);
-  }, []); // 빈 배열을 전달하여 컴포넌트가 마운트될 때만 실행
+    return () => clearTimeout(timer)
+  }, []) // 빈 배열을 전달하여 컴포넌트가 마운트될 때만 실행
 
   return (
     <CircleBox>
@@ -111,5 +102,5 @@ export default function ProgressCircle({
       </PercentageCircle>
       <UnderCircle isDark={isDark}>{title}</UnderCircle>
     </CircleBox>
-  );
+  )
 }
