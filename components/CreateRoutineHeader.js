@@ -91,7 +91,7 @@ const BackButton = styled.TouchableOpacity`
 `
 const Title = styled.Text`
   font-family: Pretendard-SemiBold;
-  font-size: 17;
+  font-size: 17px;
   /* margin-left: 112px; */
   color: ${(props) => (props.isDark ? colors.white : colors.black)};
 `

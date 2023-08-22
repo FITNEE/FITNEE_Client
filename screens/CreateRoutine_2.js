@@ -8,6 +8,8 @@ import { useRecoilState, useRecoilValue } from 'recoil'
 import { CreateRoutineAtom } from '../recoil/CreateRoutineAtom'
 import { colors } from '../colors'
 import { IsDarkAtom } from '../recoil/MyPageAtom'
+import { StyleSheet } from 'react-native'
+import { Text } from 'react-native'
 
 export default function CreateRoutine_2({ navigation }) {
   const [shouldRender, setShouldRender] = useState(true)
@@ -84,13 +86,26 @@ export default function CreateRoutine_2({ navigation }) {
             initialSelectedIndex={8}
             items={data.map((num) => ({ label: num, value: '' }))}
             onChange={({ index, item }) => setValue(item)}
-            selectedStyle={{ borderColor: '#E8EBF0', borderWidth: 1 }}
+            backgroundColor={isDark ? colors.grey_8 : colors.white}
+            selectedStyle={{ borderColor: '#E8EBF0', borderWidth: StyleSheet.hairlineWidth }}
+            renderItem={(props) => (
+              <Text
+                style={{
+                  fontFamily: 'Pretendard-Regular',
+                  fontSize: 20,
+                  color: isDark ? colors.white : colors.black,
+                }}
+              >
+                {props.label}
+              </Text>
+            )}
           />
         </PickerContainer>
       ) : (
         <Picker
+          textColor={isDark ? colors.white : colors.black}
           style={{
-            backgroundColor: 'white',
+            backgroundColor: isDark ? colors.grey_8 : colors.white,
             width: 288,
             height: 200,
             borderRadius: 20,
