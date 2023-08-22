@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components/native'
-// import { Picker, DatePicker } from 'react-native-wheel-pick'
+import { Picker, DatePicker } from 'react-native-wheel-pick'
 import WheelPickerExpo from 'react-native-wheel-picker-expo'
 import { useNavigationState } from '@react-navigation/native'
 import CreateRoutineHeader from '../components/CreateRoutineHeader'
