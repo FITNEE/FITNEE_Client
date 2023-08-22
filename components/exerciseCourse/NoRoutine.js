@@ -9,82 +9,59 @@ import { processDayData } from '../myRoutine/Functions'
 import axios from 'axios'
 
 const Container = styled.View`
-    flex: 1;
-    align-items: center;
-    justify-content: center;
-    padding: 0px 23.5px;
-    background: ${({ isDark }) => (isDark ? colors.grey_9 : colors.grey_1)};
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  padding: 0px 23.5px;
+  background: ${({ isDark }) => (isDark ? colors.grey_9 : colors.grey_1)};
 `
 
 const RoutineText = styled.Text`
-    font-size: 20px;
-    font-family: Pretendard-SemiBold;
-    line-height: 32px;
-    color: ${({ isDark }) => (isDark ? colors.white : colors.black)};
-    padding-bottom: 10px;
+  font-size: 20px;
+  font-family: Pretendard-SemiBold;
+  line-height: 32px;
+  color: ${colors.l_main};
+  padding-bottom: 10px;
 `
 
 const RoutineExplain = styled.Text`
-    color: ${({ isDark }) => (isDark ? colors.white : colors.black)};
-    font-size: 13px;
-    font-family: Pretendard-Regular;
-    line-height: 19.5px;
+  color: ${({ isDark }) => (isDark ? colors.white : colors.black)};
+  font-size: 13px;
+  font-family: Pretendard-Regular;
+  line-height: 19.5px;
 `
 
-const RoutineCircle = styled.View`
-    width: 125px;
-    height: 125px;
-    background: ${({ isDark }) => (isDark ? colors.black : colors.white)};
-    border-radius: 100%;
-    margin-bottom: 8px;
+const NoRoutineImage = styled.Image`
+  width: 125px;
+  height: 125px;
+  margin-bottom: 8px;
+  aspect-ratio: 1;
 `
 
 export default function NoRoutine({ navigation }) {
-    const isFocus = useIsFocused()
-    const isDark = useRecoilValue(IsDarkAtom)
-    const setIsTabVisible = useSetRecoilState(TabBarAtom)
+  const isFocus = useIsFocused()
+  const isDark = useRecoilValue(IsDarkAtom)
+  const setIsTabVisible = useSetRecoilState(TabBarAtom)
 
-    const now = new Date()
-    let day2 = (now.getDay() + 6) % 7
+  const now = new Date()
+  let day2 = (now.getDay() + 6) % 7
 
-    useEffect(() => {
-        // async function fetchData() {
-        //   const routineData = await getRoutineData();
-        //   const dayRoutineArr = processDayData(routineData.result);
-        //   const dayRoutineIdx = dayRoutineArr[day2].routineId;
-        //   console.log(dayRoutineIdx);
-        //   if (dayRoutineIdx !== 0)
-        //     navigation.dispatch(StackActions.replace("StartExercise"));
-        // }
-        // fetchData();
-        isFocus && setIsTabVisible(true)
-    }, [isFocus, setIsTabVisible])
+  useEffect(() => {
+    isFocus && setIsTabVisible(true)
+  }, [isFocus, setIsTabVisible])
 
-    const getRoutineData = async () => {
-        try {
-            let url = 'https://gpthealth.shop/'
-            let detailAPI = `/app/routine/calendar`
-
-            const response = await axios.get(url + detailAPI)
-            const result = response.data
-            return result
-        } catch (error) {
-            console.error('Error', error)
-        }
-    }
-
-    return (
-        <SafeAreaView
-            style={{
-                flex: 1,
-                backgroundColor: isDark ? colors.grey_9 : colors.grey_1,
-            }}
-        >
-            <Container isDark={isDark}>
-                <RoutineCircle isDark={isDark}></RoutineCircle>
-                <RoutineText isDark={isDark}>오늘은 운동이 없어요</RoutineText>
-                <RoutineExplain isDark={isDark}>오늘 운동을 하시려면 루틴을 수정해주세요.</RoutineExplain>
-            </Container>
-        </SafeAreaView>
-    )
+  return (
+    <SafeAreaView
+      style={{
+        flex: 1,
+        backgroundColor: isDark ? colors.grey_9 : colors.grey_1,
+      }}
+    >
+      <Container isDark={isDark}>
+        <NoRoutineImage source={require('../../assets/Imgs/noRoutine.png')} isDark={isDark} />
+        <RoutineText isDark={isDark}>오늘은 운동이 없어요</RoutineText>
+        <RoutineExplain isDark={isDark}>오늘 운동을 하시려면 루틴을 수정해주세요.</RoutineExplain>
+      </Container>
+    </SafeAreaView>
+  )
 }

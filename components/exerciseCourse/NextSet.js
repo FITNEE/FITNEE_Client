@@ -56,7 +56,7 @@ const CurrentUnit = styled.Text`
 const CurrentText2 = styled.Text`
   font-size: 15px;
   font-family: Pretendard-SemiBold;
-  line-height: 32px;
+  padding-top: 4px;
   color: ${({ isDark }) => (isDark ? colors.white : '#858687')};
 `
 
