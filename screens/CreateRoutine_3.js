@@ -16,12 +16,54 @@ export default function CreateRoutine_3({ navigation }) {
   const isDark = useRecoilValue(IsDarkAtom)
   const gender = useRecoilValue(GenderAtom)
   const [parts, setParts] = useState([
-    { id: 1, name: '가슴', selected: false, ename: 'chest' },
-    { id: 2, name: '등', selected: false, ename: 'back' },
-    { id: 3, name: '어깨', selected: false, ename: 'shoulder' },
-    { id: 4, name: '팔', selected: false, ename: 'arm' },
-    { id: 5, name: '코어', selected: false, ename: 'core' },
-    { id: 6, name: '하체', selected: false, ename: 'lower body' },
+    {
+      id: 1,
+      name: '가슴',
+      selected: false,
+      ename: 'chest',
+      f: require('../assets/Imgs/Chest_f.png'),
+      m: require('../assets/Imgs/Chest_m.png'),
+    },
+    {
+      id: 2,
+      name: '등',
+      selected: false,
+      ename: 'back',
+      f: require('../assets/Imgs/Back_f.png'),
+      m: require('../assets/Imgs/Back_m.png'),
+    },
+    {
+      id: 3,
+      name: '어깨',
+      selected: false,
+      ename: 'shoulder',
+      f: require('../assets/Imgs/Shoulder_f.png'),
+      m: require('../assets/Imgs/Shoulder_m.png'),
+    },
+    {
+      id: 4,
+      name: '팔',
+      selected: false,
+      ename: 'arm',
+      f: require('../assets/Imgs/Arm_f.png'),
+      m: require('../assets/Imgs/Arm_m.png'),
+    },
+    {
+      id: 5,
+      name: '코어',
+      selected: false,
+      ename: 'core',
+      f: require('../assets/Imgs/Core_f.png'),
+      m: require('../assets/Imgs/Core_m.png'),
+    },
+    {
+      id: 6,
+      name: '하체',
+      selected: false,
+      ename: 'lower body',
+      f: require('../assets/Imgs/LowerBody_f.png'),
+      m: require('../assets/Imgs/LowerBody_m.png'),
+    },
   ])
   const index = useNavigationState((state) => state.index)
   useEffect(() => {
@@ -93,7 +135,8 @@ export default function CreateRoutine_3({ navigation }) {
               borderColor: allPart ? colors.l_main : 'transparent',
             }}
           >
-            <PartImage source={require('../assets/Imgs/splash_dark.png')} />
+            {gender === 1 ? <PartImage source={part.m} /> : <PartImage source={part.f} />}
+
             <PartName
               style={{
                 color: allPart ? colors.l_main : isDark ? colors.white : part.selected ? colors.white : colors.black,
