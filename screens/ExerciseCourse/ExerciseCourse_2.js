@@ -14,13 +14,13 @@ import { useRecoilState, useRecoilValue } from 'recoil'
 import { IsDarkAtom } from '../../recoil/MyPageAtom'
 import ArrowCircle from '../../assets/SVGs/ArrowCircle.svg'
 import Close from '../../assets/SVGs/Close.svg'
+import { pngPath } from '../../imagePath'
 
 const StartButton = styled.TouchableOpacity`
   padding: 8px 12px;
   height: 36px;
   justify-content: center;
   align-items: center;
-  gap: 8px;
   border-radius: 100px;
   background: ${colors.l_main};
   width: 99px;
@@ -33,15 +33,16 @@ const StartButtonText = styled.Text`
   font-size: 13px;
   font-family: Pretendard-SemiBold;
   line-height: 19.5px;
+  width: 80px;
 `
 
 const ReplaceView2 = styled.View`
   flex-direction: row;
-  align-items: baseline;
+  align-items: center;
 `
 
 const ReplaceTextView = styled.View`
-  align-items: flex-end;
+  align-items: baseline;
 `
 
 const BottomSheetBack = styled.View`
@@ -79,20 +80,22 @@ const ReplaceButtonText = styled.Text`
 
 const NextView = styled.View`
   position: absolute;
-  flex-direction: row;
   bottom: 0;
   width: 100%;
   height: 100px;
   background-color: ${({ isDark }) => (isDark ? colors.white : colors.black)};
   border-radius: 20px;
   justify-content: space-between;
-  padding: 22px 24px 0px 24px;
+  align-items: center;
+  padding: 22px 24px 0px 16px;
   z-index: 0;
 `
 
 const NextTextView = styled.View`
   flex-direction: row;
-  justify-content: center;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
 `
 
 const NextText = styled.Text`
@@ -141,14 +144,6 @@ const ReplaceView = styled.View`
   justify-content: space-between;
 `
 
-const ReplaceCircle = styled.View`
-  width: 60px;
-  height: 60px;
-  border-radius: 30px;
-  background: ${({ isDark }) => (isDark ? colors.grey_9 : colors.grey_2)};
-  margin-right: 16px;
-`
-
 const ReplaceText1 = styled.Text`
   color: ${({ isDark }) => (isDark ? colors.white : colors.black)};
   text-align: center;
@@ -188,6 +183,13 @@ const StopExercise = styled.TouchableOpacity`
   position: absolute;
   top: 20px;
   right: 24px;
+`
+
+const ReplaceImage = styled.Image`
+  height: 60px;
+  width: 60px;
+  aspect-ratio: 1;
+  border-radius: 999px;
 `
 
 export default function ExerciseCourse_2({ navigation, dataList, listIndex, totalTime, routineIdx }) {
@@ -357,7 +359,7 @@ export default function ExerciseCourse_2({ navigation, dataList, listIndex, tota
               {replaceList.map((item, healthCategoryIdx) => (
                 <ReplaceView isDark={isDark}>
                   <ReplaceView2 isDark={isDark}>
-                    <ReplaceCircle isDark={isDark} />
+                    <ReplaceImage source={pngPath.path[healthCategoryIdx]} isDark={isDark} />
                     <ReplaceTextView isDark={isDark} key={healthCategoryIdx}>
                       <ReplaceText1 isDark={isDark}>{item.name}</ReplaceText1>
                       <ReplaceText2 isDark={isDark}>

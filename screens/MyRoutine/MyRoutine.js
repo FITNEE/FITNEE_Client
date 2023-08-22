@@ -13,7 +13,7 @@ import { List_Custom } from '../../components/myRoutine/List_Custom'
 import List_Normal from '../../components/myRoutine/List_Normal'
 import { getRoutine, updateRoutine, getRoutineParts, sortArray } from '../../components/myRoutine/data'
 import { ContentContainer, NoRoutineText } from '../../components/Shared/MyRoutine_Shared'
-import { Button, ScreenLayout, ScreenWidth } from '../../Shared'
+import { ScreenLayout, ScreenWidth } from '../../Shared'
 import { IsDarkAtom, TabBarAtom } from '../../recoil/MyPageAtom'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 import { BottomSheetContent } from '../../components/myRoutine/BottomSheetContent'
@@ -66,11 +66,9 @@ export default MyRoutine = ({ navigation, route }) => {
   const updateDatas = () => {
     getRoutineParts().then((res) => {
       if (res.result) {
-        // console.log('sortArray(res.result):', sortArray(res.result))
         setSCHEDULE(sortArray(res.result))
         getRoutine(sortArray(res.result), selectedDay, setIsLoading).then((res) => {
           if (res.result) {
-            console.log(res.result)
             updateRoutineStates(res.result.routineDetails)
           } else {
             updateRoutineStates(null)
