@@ -19,6 +19,7 @@ import Check_disabled from '../../assets/SVGs/Check_Disabled.svg'
 import Close from '../../assets/SVGs/Close.svg'
 import ExerciseCourse_2 from './ExerciseCourse_2'
 import ExerciseCourse_2_2 from './ExerciseCourse2_2'
+import * as Haptics from 'expo-haptics'
 
 const TextBox = styled.View`
   width: 327px;
@@ -378,6 +379,7 @@ export default function ExerciseCourse_1({ navigation }) {
     setCheckedSets(newCheckedSets)
 
     setIsButtonDisabled(true)
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
 
     setTimeout(() => {
       if (flatListRef.current) {
@@ -405,10 +407,6 @@ export default function ExerciseCourse_1({ navigation }) {
         console.log('show', showExerciseCourse2)
       }, 2000)
     }
-
-    // setTimeout(() => {
-    //   goToNextExercise();
-    // }, 2000);
   }
 
   const getItemLayout = (_, index) => {
@@ -538,21 +536,7 @@ export default function ExerciseCourse_1({ navigation }) {
           </BoxList>
 
           <TextBox>
-            <TextTicker
-              style={{
-                color: colors.d_main,
-                textAlign: 'center',
-                fontSize: 15,
-                fontFamily: 'Pretendard-Regular',
-                lineHeight: 22.5,
-              }}
-              duration={11000}
-              bounce
-              repeatSpacer={1000}
-              marqueeDelay={100}
-            >
-              {advice}
-            </TextTicker>
+            <JustText>{advice}</JustText>
           </TextBox>
 
           <ExerciseButton //세트 완료 버튼
