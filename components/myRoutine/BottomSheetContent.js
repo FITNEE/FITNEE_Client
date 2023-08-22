@@ -104,7 +104,7 @@ export const BottomSheetContent = ({ isDark, handleClosePress, newRoutine, editi
                 <EditBox
                   style={{ backgroundColor: isDark ? colors.black : colors.grey_2 }}
                   keyboardType="numeric"
-                  selectTextOnFocus={item.weight != null}
+                  selectTextOnFocus={true}
                   onFocus={() => extendModal()}
                   defaultValue={item.weight ? item.weight.toString() : '-'}
                   onChangeText={(value) => editRoutine(id, 'weight', value)}

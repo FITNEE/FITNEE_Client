@@ -1,18 +1,18 @@
 import { Alert } from 'react-native'
 
-export const pressBack = (setMode) => {
-  setMode(false)
+export const pressBack = ({ setMode, setNewSCHE, setNewRoutine }) => {
   Alert.alert('이 변경 사항을 폐기하시겠습니까?', '', [
     {
-      text: '계속 편집하기',
-      onPress: () => {
-        setMode(true)
-      },
+      text: '취소',
+      onPress: () => {},
       style: 'default',
     },
     {
       text: '변경사항 폐기',
-      onPress: () => console.log('변경사항 폐기'),
+      onPress: () => {
+        setMode(false), setNewSCHE(null), setNewRoutine(null)
+      },
+
       style: 'destructive',
     },
   ])
