@@ -30,7 +30,7 @@ const Title = styled.Text`
   height: 32px;
   font-size: 20px;
   font-style: normal;
-  font-family: Pretendard-Semibold;
+  font-family: Pretendard-SemiBold;
   line-height: 32px;
   margin-bottom: 4px;
   color: ${(props) => (props.isDark ? colors.white : colors.black)};
@@ -69,7 +69,7 @@ const Section = styled.View`
 const SectionText = styled.Text`
   font-size: 15px;
   font-style: normal;
-  font-family: Pretendard-Semibold;
+  font-family: Pretendard-SemiBold;
   line-height: 22.5px;
   color: ${(props) => (props.isDark ? colors.white : colors.black)};
 `
@@ -105,7 +105,7 @@ const ExerciseView = styled.Image`
 const ExerciseName = styled.Text`
   font-size: 15px;
   font-style: normal;
-  font-size: Pretendard-Semibold;
+  font-family: Pretendard-SemiBold;
   line-height: 22.5px;
   color: ${(props) => (props.isDark ? colors.white : colors.black)};
 `
@@ -123,7 +123,7 @@ const Button = styled.TouchableOpacity`
 const ButtonText = styled.Text`
   font-size: 17px;
   font-style: normal;
-  font-weight: 600;
+  font-family: Pretendard-SemiBold;
   line-height: 25.5px;
   color: ${(props) => (props.isDark ? colors.black : colors.white)};
 `
