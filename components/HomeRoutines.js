@@ -30,7 +30,7 @@ const Title = styled.Text`
   height: 32px;
   font-size: 20px;
   font-style: normal;
-  font-weight: 600;
+  font-family: Pretendard-Semibold;
   line-height: 32px;
   margin-bottom: 4px;
   color: ${(props) => (props.isDark ? colors.white : colors.black)};
@@ -41,7 +41,7 @@ const DayText = styled.Text`
   text-align: center;
   font-size: 13px;
   font-style: normal;
-  font-weight: 400;
+  font-family: Pretendard-Regular;
   line-height: 19.5px;
 `
 const SectionBlock = styled.View`
@@ -69,7 +69,7 @@ const Section = styled.View`
 const SectionText = styled.Text`
   font-size: 15px;
   font-style: normal;
-  font-weight: 600;
+  font-family: Pretendard-Semibold;
   line-height: 22.5px;
   color: ${(props) => (props.isDark ? colors.white : colors.black)};
 `
@@ -77,7 +77,7 @@ const NumText = styled.Text`
   color: ${colors.grey_7};
   font-size: 15px;
   font-style: normal;
-  font-weight: 400;
+  font-family: Pretendard-Regular;
   line-height: 22.5px;
 `
 const Cards = styled.FlatList`
@@ -105,7 +105,7 @@ const ExerciseView = styled.Image`
 const ExerciseName = styled.Text`
   font-size: 15px;
   font-style: normal;
-  font-weight: 600;
+  font-size: Pretendard-Semibold;
   line-height: 22.5px;
   color: ${(props) => (props.isDark ? colors.white : colors.black)};
 `
@@ -129,15 +129,6 @@ const ButtonText = styled.Text`
 `
 
 export default function HomeRoutines({ isDark, data }) {
-  // const [data, setData] = useState("");
-  const ExerciseData = [
-    { id: 1, name: '데드리프트' },
-    { id: 2, name: '덤벨프레스' },
-    { id: 3, name: '바벨 로우' },
-    { id: 4, name: '사이드 레터럴 레이즈' },
-    { id: 5, name: '레그프레스' },
-    { id: 6, name: '크런치' },
-  ]
 
   const postSearch = async (text) => {
     try {
