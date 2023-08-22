@@ -32,6 +32,7 @@ const ErrorContainer = styled.View`
     width: 100%;
     align-items: center;
     justify-content: center;
+    padding-top: 100px;
 `
 
 const Image = styled.Image`
