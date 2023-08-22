@@ -61,14 +61,12 @@ const DefaultContainer = styled.View`
 
 export default List_Normal = ({ routineData, isDark, selectedArr, setSelectedArr }) => {
   //DropDown 누른 운동 구분하기위함.
-
   const handlePress = (id) => {
     let newArr = JSON.parse(JSON.stringify(selectedArr))
     console.log(selectedArr)
     newArr[id] = !newArr[id]
     setSelectedArr(newArr)
   }
-  console.log(routineData[0])
 
   const renderItem = ({ item, index }) => {
     let isCardio = item.healthCategoryIdx == 24 || item.healthCategoryIdx == 25

@@ -66,7 +66,7 @@ export default MyRoutine = ({ navigation, route }) => {
   const updateDatas = () => {
     getRoutineParts().then((res) => {
       if (res.result) {
-        console.log('sortArray(res.result):', sortArray(res.result))
+        // console.log('sortArray(res.result):', sortArray(res.result))
         setSCHEDULE(sortArray(res.result))
         getRoutine(sortArray(res.result), selectedDay, setIsLoading).then((res) => {
           if (res.result) {
@@ -112,6 +112,8 @@ export default MyRoutine = ({ navigation, route }) => {
           showToast()
         }, //눌렀을 때 mode가 true였을 때, 즉 커스텀모드에서 완료버튼을 눌렀을때.
       )
+    } else {
+      setNewRoutine(routineData)
     }
     setMode(!mode)
   }
@@ -253,7 +255,12 @@ export default MyRoutine = ({ navigation, route }) => {
   const bottomModal = useRef(null)
   return (
     <ScreenLayout isDark={isDark} darkBack={colors.grey_9} lightBack={colors.white}>
-      <Header isDark={isDark} mode={mode} toggleMode={toggleMode} onPress={() => pressBack(setMode)} />
+      <Header
+        isDark={isDark}
+        mode={mode}
+        toggleMode={toggleMode}
+        onPress={() => pressBack({ setMode, setNewSCHE, setNewRoutine })}
+      />
       {mode ? (
         <>
           <ScrollView
