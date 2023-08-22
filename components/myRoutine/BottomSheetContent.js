@@ -2,7 +2,6 @@ import { styled } from 'styled-components/native'
 import { colors } from '../../colors'
 import { ContentContainer } from '../Shared/MyRoutine_Shared'
 import { useEffect, useState } from 'react'
-import { Platform } from 'react-native'
 
 const BottomSheetBase = styled.Pressable`
   width: 100%;
