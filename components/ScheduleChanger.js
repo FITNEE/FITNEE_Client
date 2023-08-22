@@ -30,6 +30,7 @@ const ScheduleContainer = styled.SafeAreaView`
 export const ScheduleChanger = ({ SCHEDULE, days, isDark, setNewSCHE }) => {
   /**여기다가 positions 값은 별도로 빼놓아야한다. 이유는 잘 모르겠음.*/
   //후가공된 요일 데이터가 초기값이 된다.
+
   const positions = useSharedValue(listToObject(SCHEDULE))
   return (
     <DaysContainer style={{ backgroundColor: isDark ? colors.grey_8 : colors.white }}>

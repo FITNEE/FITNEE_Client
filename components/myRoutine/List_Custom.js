@@ -147,11 +147,11 @@ const ExerciseItem_Custom = ({ id, content, title, popMessage, editRoutine, isDa
   )
 }
 
-export const List_Custom = ({ isDark, SCHEDULE, setNewSCHE, newRoutine, editRoutine, popMessage }) => {
+export const List_Custom = ({ isDark, setNewSCHE, SCHEDULE, newRoutine, editRoutine, popMessage }) => {
   return (
     <ScrollPressable>
       <ComponentTitle title="요일 변경" subTitle="루틴을 원하는 요일에 끌어다 놓을 수 있어요" isDark={isDark} />
-      <ScheduleChanger setNewSCHE={setNewSCHE} SCHEDULE={SCHEDULE} days={days} isDark={isDark} />
+      <ScheduleChanger SCHEDULE={SCHEDULE} setNewSCHE={setNewSCHE} days={days} isDark={isDark} />
       <ComponentTitle title="운동 편집" subTitle="루틴을 원하는 요일에 끌어다 놓을 수 있어요" isDark={isDark} />
       {newRoutine ? (
         <>
