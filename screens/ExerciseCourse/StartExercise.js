@@ -38,7 +38,6 @@ const Container = styled.View`
 const ExerciseButton = styled.TouchableOpacity`
   width: 111px;
   height: 111px;
-
   border-radius: 60px;
   background: ${({ isDark }) => (isDark ? colors.d_main : colors.l_main)};
   flex-direction: column;

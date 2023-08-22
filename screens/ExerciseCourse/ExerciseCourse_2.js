@@ -21,7 +21,7 @@ const StartButton = styled.TouchableOpacity`
   justify-content: center;
   align-items: center;
   gap: 8px;
-  border-radius: 100%;
+  border-radius: 100px;
   background: ${colors.l_main};
   width: 99px;
   margin-right: 24px;
@@ -37,7 +37,7 @@ const StartButtonText = styled.Text`
 
 const ReplaceView2 = styled.View`
   flex-direction: row;
-  align-items: center;
+  align-items: baseline;
 `
 
 const ReplaceTextView = styled.View`

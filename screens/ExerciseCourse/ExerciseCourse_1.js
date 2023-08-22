@@ -25,6 +25,8 @@ const TextBox = styled.View`
   width: 327px;
   height: 24px;
   margin: 23px 0px 5px 0px;
+  justify-content: center;
+  align-items: center;
 `
 
 const JustText = styled.Text`
