@@ -159,7 +159,7 @@ export default function HomeRoutines({ isDark, data }) {
     postSearch(name)
   }
   const renderItem = ({ item }) => (
-    <Card isDark={isDark} onPress={() => itemPress(item)}>
+    <Card isDark={isDark} onPress={() => itemPress(item.name)}>
       <ExerciseView isDark={isDark} source={pngPath.path[item.idx - 1]} />
       <ExerciseName isDark={isDark}>{item.name}</ExerciseName>
     </Card>
