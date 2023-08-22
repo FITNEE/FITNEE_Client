@@ -286,7 +286,7 @@ const Loading = styled.Image`
   background-color: ${(props) => (props.isDark ? colors.grey_9 : colors.white)};
 `
 const LoadingText = styled.Text`
-  font-size: 11px;
+  font-size: 13px;
   font-family: Pretendard-Regular;
   margin-top: 24px;
   color: ${(props) => (props.isDark ? colors.white : colors.black)};
