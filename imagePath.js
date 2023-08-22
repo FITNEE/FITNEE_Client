@@ -25,6 +25,7 @@ export const imagePath = {
     require('./assets/GIFs/23.gif'),
     require('./assets/GIFs/24.gif'),
     require('./assets/GIFs/25.gif'),
+    require('./assets/GIFs/creatingRoutine.gif'),
   ],
 }
 

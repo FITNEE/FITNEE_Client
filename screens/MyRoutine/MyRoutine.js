@@ -171,7 +171,17 @@ export default MyRoutine = ({ navigation, route }) => {
         newArr[id].content.splice(value, 1)
       }
     } else if (type == 'deleteExercise') {
-      newArr.splice(id, 1)
+      console.log('전:', newArr)
+      if (newArr.length > 1) {
+        newArr.splice(id, 1)
+      } else {
+        Alert.alert('운동이 최소 1개 있어야 해요', '', [
+          {
+            text: '확인',
+            style: 'default',
+          },
+        ])
+      }
     } else if (type == 'addExercise') {
       console.log('newArr:', newArr)
       for (let i = 0; i < value.length; i++) {
