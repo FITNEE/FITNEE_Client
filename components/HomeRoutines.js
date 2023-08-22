@@ -129,7 +129,6 @@ const ButtonText = styled.Text`
 `
 
 export default function HomeRoutines({ isDark, data }) {
-
   const postSearch = async (text) => {
     try {
       let url = 'https://gpthealth.shop/'
