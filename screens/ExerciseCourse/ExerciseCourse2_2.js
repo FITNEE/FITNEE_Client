@@ -16,26 +16,6 @@ import Close from '../../assets/SVGs/Close.svg'
 import ExerciseButton from '../../components/exerciseCourse/ExerciseButton'
 import { useFocusEffect } from '@react-navigation/native'
 
-const StartButton = styled.TouchableOpacity`
-  padding: 8px 12px;
-  height: 36px;
-  justify-content: center;
-  align-items: center;
-  gap: 8px;
-  border-radius: 100%;
-  background: ${colors.l_main};
-  width: 99px;
-  margin-right: 24px;
-`
-
-const StartButtonText = styled.Text`
-  color: ${colors.white};
-  text-align: center;
-  font-size: 13px;
-  font-family: Pretendard-SemiBold;
-  line-height: 19.5px;
-`
-
 const ExerciseCircle = styled.View`
   width: 307px;
   height: 307px;
@@ -61,7 +41,7 @@ const StopExercise = styled.TouchableOpacity`
 `
 
 const BlankBox = styled.View`
-  height: 131px;
+  height: 120px;
 `
 
 export default function ExerciseCourse_2_2({
@@ -143,10 +123,7 @@ export default function ExerciseCourse_2_2({
             updateInterval={0.001}
             rotation={'counterclockwise'}
           >
-            {({ remainingTime }) => (
-              //RestTime({ remainingTime }),
-              <TimerText isDark={isDark}>{children({ remainingTime })}</TimerText>
-            )}
+            {({ remainingTime }) => <TimerText isDark={isDark}>{children({ remainingTime })}</TimerText>}
           </CountdownCircleTimer>
         </ExerciseCircle>
 

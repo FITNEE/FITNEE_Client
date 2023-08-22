@@ -236,10 +236,9 @@ export default function StartExercise({ navigation }) {
               num={Math.ceil(circleList?.totalTime / 60)}
               unit="분"
               title="예상 소요시간"
-              bubbleOn={false}
               isDark={isDark}
             />
-            <ProgressCircle num="30" unit="초" title="세트간 휴식" bubbleOn={false} isDark={isDark} />
+            <ProgressCircle num="30" unit="초" title="세트간 휴식" isDark={isDark} />
 
             <GrayCircle
               num={circleList?.totalCalories}

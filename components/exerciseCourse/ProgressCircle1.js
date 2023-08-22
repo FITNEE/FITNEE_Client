@@ -6,8 +6,8 @@ import { colors } from '../../colors'
 
 const CircleLine = styled.View`
   flex-direction: row;
-  height: 20px;
-  align-items: flex-end;
+  line-height: 32px;
+  align-items: baseline;
 `
 
 const CircleBox = styled.View`
@@ -36,57 +36,11 @@ const UnderCircle = styled.Text`
   margin-top: 8px;
 `
 
-const Bubble = styled.View`
-  position: absolute;
-  background: ${({ isDark }) => (isDark ? colors.white : colors.black)};
-  width: 60px;
-  height: 32px;
-  padding: 0px;
-  border-radius: 12px;
-  z-index: 1;
-  align-items: center;
-  bottom: 124px;
-`
-
-const BubbleArrow = styled.View`
-  position: relative;
-  border-style: solid;
-  border-width: 12px 8px 0px;
-  border-color: ${({ isDark }) => (isDark ? colors.white : colors.black)} transparent;
-  width: 0;
-  z-index: 1;
-  top: 16px;
-`
-
-const BubbleText = styled.Text`
-  color: ${({ isDark }) => (isDark ? colors.black : colors.white)};
-  font-size: 11px;
-  font-family: Pretendard-Bold;
-  top: 10px;
-`
-export default function ProgressCircle({ num, unit, title, bubbleOn, bubbleText, isDark }) {
+export default function ProgressCircle({ num, unit, title, isDark }) {
   const percentage = (num / 60) * 100
-
-  const [shouldRender, setShouldRender] = useState(true)
-  useEffect(() => {
-    if (bubbleOn === false) setShouldRender(false)
-    // 일정 시간(예: 5초) 후에 렌더링 여부를 false로 변경
-    const timer = setTimeout(() => {
-      setShouldRender(false)
-    }, 5000)
-    // 컴포넌트가 언마운트되면 타이머 클리어
-    return () => clearTimeout(timer)
-  }, []) // 빈 배열을 전달하여 컴포넌트가 마운트될 때만 실행
 
   return (
     <CircleBox>
-      {shouldRender ? (
-        <Bubble isDark={isDark}>
-          <BubbleText isDark={isDark}>{bubbleText}초</BubbleText>
-          <BubbleArrow isDark={isDark} />
-        </Bubble>
-      ) : null}
-
       <PercentageCircle
         percent={percentage}
         radius={40}
