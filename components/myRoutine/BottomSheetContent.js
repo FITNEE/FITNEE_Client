@@ -7,19 +7,20 @@ import { Platform } from 'react-native'
 const BottomSheetBase = styled.Pressable`
   width: 100%;
   height: 100%;
-  padding: 24px;
+  padding: 12px 24px;
   border-radius: 24px;
   flex-direction: column;
 `
 const BottomSheetHeader = styled.View`
   flex-direction: row;
+  width: 100%;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 16px;
-  height: 24px;
 `
 const ExerciseTitle = styled.Text`
   font-size: 17px;
+  margin-left: 8px;
   font-family: Pretendard-SemiBold;
 `
 const SetContainer = styled.View`
@@ -58,8 +59,7 @@ const SubmitText = styled.Text`
   text-align: center;
 `
 const SubmitButton = styled.TouchableOpacity`
-  width: 56px;
-  margin-left: 20px;
+  padding: 8px 4px 8px 16px;
 `
 
 export const BottomSheetContent = ({ isDark, handleClosePress, newRoutine, editingID, extendModal }) => {
@@ -100,7 +100,14 @@ export const BottomSheetContent = ({ isDark, handleClosePress, newRoutine, editi
               key={id}
             >
               <ContentContainer key={id}>
-                <SetsText style={isDark && { color: colors.white }}>{id + 1}</SetsText>
+                <SetsText
+                  style={[
+                    { fontSize: 17, fontFamily: 'Pretendard-Medium', color: colors.grey_6 },
+                    isDark && { color: colors.white },
+                  ]}
+                >
+                  {id + 1}
+                </SetsText>
                 <EditBox
                   style={{ backgroundColor: isDark ? colors.black : colors.grey_2 }}
                   keyboardType="numeric"
