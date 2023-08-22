@@ -9,6 +9,7 @@ import { Alert } from 'react-native'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import { IsDarkAtom } from '../../recoil/MyPageAtom'
 import { loggedInState } from '../../recoil/AuthAtom'
+import routineSuccess from '../../assets/Imgs/routineSuccess.png'
 
 const SubTitle = styled.Text`
   font-family: Pretendard-Regular;
@@ -25,13 +26,18 @@ const TextContainer = styled.View`
   width: 100%;
   justify-content: center;
 `
-const AnimationContainer = styled.View`
+const ImageContainer = styled.View`
   margin-top: -80px;
   width: 80%;
+  justify-content: center;
+  align-items: center;
   max-width: 320px;
   max-height: 320px;
   border-radius: 9999px;
   aspect-ratio: 1/1;
+`
+const Thumbnail = styled.Image`
+  width: 80%;
 `
 const ScreenBase = styled.SafeAreaView`
   flex: 1;
@@ -102,7 +108,7 @@ const CreateAccount_4 = ({ route, navigation }) => {
   }
 
   useEffect(() => {
-    // handlePress()
+    handlePress()
   }, [])
   const goBackHome = () => {
     setLoggedIn(true)
@@ -122,7 +128,9 @@ const CreateAccount_4 = ({ route, navigation }) => {
 운동루틴을 경험하러 가볼까요?`}
           </SubTitle>
         </TextContainer>
-        <AnimationContainer style={{ backgroundColor: isDark ? colors.grey_8 : colors.white }}></AnimationContainer>
+        <ImageContainer source={routineSuccess} style={{ backgroundColor: isDark ? colors.grey_8 : colors.white }}>
+          <Thumbnail resizeMode="contain" source={routineSuccess} />
+        </ImageContainer>
         <Button loading={isLoading} isDark={isDark} enabled={!isLoading} text="시작하기" onPress={() => goBackHome()} />
       </ContentBase>
     </ScreenBase>
