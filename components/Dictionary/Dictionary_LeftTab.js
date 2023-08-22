@@ -61,9 +61,9 @@ export default function Dictionary_LeftTab(props){
                         <ProcessNum style={{color: isDark? `${colors.d_main}`:`${colors.l_main}`}}>{`0${exerciseinfo.num}`}</ProcessNum>
                         <ProcessContent>
                             <ProcessName style={{color: isDark? `${colors.white}`:`${colors.black}`}}>{exerciseinfo.title}</ProcessName>
-                            <WrappedText textStyle={{lineHeight: 19.5, fontFamily: 'Pretendard-Regular', fontSize: 13, color: isDark? `${colors.white}`:`${colors.black}`}}>
+                            <ProcessDetail style={{lineHeight: 19.5, fontFamily: 'Pretendard-Regular', fontSize: 13, color: isDark? `${colors.white}`:`${colors.black}`}}>
                                 {exerciseinfo.content}
-                            </WrappedText>
+                            </ProcessDetail>
                         </ProcessContent>
                     </Process>
                 ))
@@ -92,6 +92,9 @@ export default function Dictionary_LeftTab(props){
                         <CautionDetailContainer>
                             <CautionDot style={{backgroundColor: isDark? `${colors.d_main}`:`${colors.l_sub_1}`}}/>
                             <CautionDetail style={{color: isDark? `${colors.white}`:`${colors.black}`}}>{exerciseDetail?.exercisecaution[0].caution3}</CautionDetail>
+                            {/* <CautionDetail style={{color: isDark? `${colors.white}`:`${colors.black}`}}>
+                                팔꿈치 각도는 90도까지만 구부러지는 것이 좋아요.
+                            </CautionDetail> */}
                         </CautionDetailContainer>                   
                     </CautionContentContainer>
                 </CautionContainer>
@@ -133,12 +136,6 @@ const CautionTitleContainer = styled.View`
     align-items: center;
     margin-bottom: 16px;
 `
-const CautionImage = styled.Image`
-    background-color: ${colors.red};
-    width: 20px;
-    height: 20px;
-    margin-right: 4px;
-`
 const CautionTitle = styled.Text`
     color: ${colors.black};
     font-family: Pretendard-SemiBold; 
@@ -146,7 +143,10 @@ const CautionTitle = styled.Text`
     line-height: 22.5px;
 `
 const CautionContentContainer = styled.View`
-    padding: 24px;
+    padding-top: 24px;
+    padding-bottom: 24px;
+    padding-left: 24px;
+    padding-right: 24px;
     border-radius: 12px;
 `
 const CautionDetailContainer = styled.View`
@@ -154,7 +154,12 @@ const CautionDetailContainer = styled.View`
     align-items: flex-start;    
 `
 const CautionDetail = styled.Text`
-    color: ${colors.black};
+    font-family: Pretendard-Regular;
+    font-size: 13px;
+    line-height: 19.5px;
+    margin-right: 24px;
+`
+const ProcessDetail = styled.Text`
     font-family: Pretendard-Regular;
     font-size: 13px;
     line-height: 19.5px;
