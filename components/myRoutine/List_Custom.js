@@ -31,7 +31,7 @@ const BottomContainer = styled.View`
 `
 const Blank = styled.View`
   width: 100%;
-  height: 40px;
+  height: 160px;
 `
 const ScrollPressable = styled.Pressable`
   width: ${ScreenWidth - 48}px;
