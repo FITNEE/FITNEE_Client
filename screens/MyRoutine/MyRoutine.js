@@ -13,7 +13,7 @@ import { List_Custom } from '../../components/myRoutine/List_Custom'
 import List_Normal from '../../components/myRoutine/List_Normal'
 import { getRoutine, updateRoutine, getRoutineParts, sortArray } from '../../components/myRoutine/data'
 import { ContentContainer, NoRoutineText } from '../../components/Shared/MyRoutine_Shared'
-import { Button, ScreenLayout } from '../../Shared'
+import { Button, ScreenLayout, ScreenWidth } from '../../Shared'
 import { IsDarkAtom, TabBarAtom } from '../../recoil/MyPageAtom'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 import { BottomSheetContent } from '../../components/myRoutine/BottomSheetContent'
@@ -277,13 +277,14 @@ export default MyRoutine = ({ navigation, route }) => {
               popMessage={popMessage}
             />
           </ScrollView>
-          <Button
+          <MyButton
+            style={{
+              backgroundColor: isDark ? colors.d_main : colors.l_main,
+            }}
             onPress={() => navigation.navigate('ExerciseSearch', {})}
-            text="운동 추가하기"
-            enabled={true}
-            isDark={isDark}
-            mode="absolute"
-          />
+          >
+            <ButtonText style={{ color: isDark ? colors.black : colors.white }}>운동 추가하기</ButtonText>
+          </MyButton>
         </>
       ) : (
         <ContentBase
@@ -344,3 +345,19 @@ export default MyRoutine = ({ navigation, route }) => {
     </ScreenLayout>
   )
 }
+const MyButton = styled.TouchableOpacity`
+  flex-direction: row;
+  justify-content: center;
+  position: absolute;
+  align-items: center;
+  height: 52px;
+  bottom: 64px;
+  border-radius: 16px;
+  align-self: center;
+  width: ${ScreenWidth - 48}px;
+  max-width: 480px;
+`
+const ButtonText = styled.Text`
+  font-size: 17px;
+  font-family: Pretendard-SemiBold;
+`

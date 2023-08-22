@@ -102,7 +102,7 @@ const CreateAccount_4 = ({ route, navigation }) => {
   }
 
   useEffect(() => {
-    handlePress()
+    // handlePress()
   }, [])
   const goBackHome = () => {
     setLoggedIn(true)
