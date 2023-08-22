@@ -163,6 +163,7 @@ const CreateAccount_2 = ({ route, navigation }) => {
               color: isDark ? colors.white : colors.black,
             },
           ]}
+          autoFocus
           autoCapitalize="none"
           placeholderTextColor={colors.grey_5}
           onSubmitEditing={() => Keyboard.dismiss()}

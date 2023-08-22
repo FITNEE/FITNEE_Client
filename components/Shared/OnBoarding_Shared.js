@@ -174,8 +174,9 @@ export const MyBottomSheet = ({ isDark, setValue, nextFunc, defaultVal, selectab
       <BottomContainer>
         {Platform.OS === 'ios' ? (
           <Picker
+            textColor={isDark ? colors.white : colors.black}
             style={{
-              backgroundColor: colors.white,
+              backgroundColor: isDark ? colors.grey_8 : colors.white,
               width: ScreenWidth,
             }}
             selectedValue={defaultVal}
@@ -192,9 +193,16 @@ export const MyBottomSheet = ({ isDark, setValue, nextFunc, defaultVal, selectab
               initialSelectedIndex={0}
               items={selectableDatas.map((name) => ({ label: name, value: '' }))}
               onChange={({ item }) => setValue(item.label)}
+              backgroundColor={isDark ? colors.grey_8 : colors.white}
               selectedStyle={{ borderColor: colors.grey_5, borderWidth: StyleSheet.hairlineWidth }}
               renderItem={(props) => (
-                <Text style={{ fontFamily: 'Pretendard-Regular', fontSize: 20, color: colors.black }}>
+                <Text
+                  style={{
+                    fontFamily: 'Pretendard-Regular',
+                    fontSize: 20,
+                    color: isDark ? colors.white : colors.black,
+                  }}
+                >
                   {props.label}
                 </Text>
               )}
