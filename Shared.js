@@ -44,6 +44,7 @@ export const Button = ({ enabled, onPress, text = '확인', isDark, loading = fa
       disabled={!enabled}
       onPress={onPress}
       style={[
+        { marginBottom: Platform.OS == 'android' ? 24 : 64 },
         enabled
           ? {
               backgroundColor: isDark ? colors.d_main : colors.l_main,
