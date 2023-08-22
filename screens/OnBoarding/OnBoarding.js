@@ -113,8 +113,8 @@ const OnBoarding = ({ navigation }) => {
           blurOnSubmit={false}
           onChangeText={(text) => setEmail(text)}
         />
-        {email.length > 20 && (
-          <StatusText style={{ color: colors.red, marginTop: 4, width: '100%' }}>20자 이하로 설정해주세요.</StatusText>
+        {email.length > 40 && (
+          <StatusText style={{ color: colors.red, marginTop: 4, width: '100%' }}>40자 이하로 설정해주세요.</StatusText>
         )}
         {/* <ORContainer>
           <Line />
