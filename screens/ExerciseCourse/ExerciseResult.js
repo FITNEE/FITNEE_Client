@@ -105,7 +105,7 @@ const ButtonText = styled.Text`
 `
 
 const JustCircle = styled.View`
-  border-radius: 100%;
+  border-radius: 100px;
   width: 160px;
   height: 160px;
   background-color: ${({ DarkMode }) => (DarkMode ? colors.grey_8 : colors.grey_2)};
@@ -117,7 +117,7 @@ const ExerciseIconCircle = styled.View`
   align-items: center;
   width: 20px;
   height: 20px;
-  border-radius: 100%;
+  border-radius: 100px;
   background-color: ${({ DarkMode }) => (DarkMode ? colors.d_sub_3 : colors.l_sub_2)};
 `
 

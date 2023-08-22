@@ -21,7 +21,7 @@ const ReplaceView2 = styled.View`
 `
 
 const ReplaceTextView = styled.View`
-  align-items: flex-end;
+  align-items: baseline;
 `
 
 const BottomSheetBack = styled.View`
