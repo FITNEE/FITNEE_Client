@@ -416,11 +416,12 @@ const NotReadDot = styled.View`
 const JoinBtnContainer = styled.TouchableOpacity`
     border-radius: 100px;
     padding: 10px 14px;
-    width: 123px;
+    width: 127px;
     flex-direction: row;
     align-items: center;
+    justify-content: space-between;
     position: absolute;
-    left: ${`${SCREEN_WIDTH / 2 - 123 / 2}px`};
+    left: ${`${SCREEN_WIDTH / 2 - 127 / 2}px`};
     bottom: 24px;
 `
 const JoinText = styled.Text`

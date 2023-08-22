@@ -1,6 +1,6 @@
 import React, { useState, useRef, useContext, useEffect } from "react";
 import styled from "styled-components/native";
-import { Platform, Alert, TouchableWithoutFeedback, TouchableOpacity, Keyboard, View } from "react-native";
+import { Dimensions, Platform, Alert, TouchableWithoutFeedback, TouchableOpacity, Keyboard, View } from "react-native";
 import { BottomSheetScrollView, BottomSheetTextInput, BottomSheetView } from "@gorhom/bottom-sheet";
 import { colors } from "../../colors";
 import WrappedText from "react-native-wrapped-text";
@@ -9,6 +9,7 @@ import { IsDarkAtom } from "../../recoil/MyPageAtom"
 import { useRecoilValue } from "recoil"
 import TrashIcon from '../../assets/SVGs/Trash.svg'
 import * as Haptics from 'expo-haptics'
+import SendIcon from '../../assets/SVGs/Send.svg'
 
 export default function Dictionary_RightTab(props) {
     const isDark = useRecoilValue(IsDarkAtom)
@@ -231,7 +232,7 @@ export default function Dictionary_RightTab(props) {
       <>
 
         {
-            msg.length == 0?
+            msg.length != 0?
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                 <BottomSheetScrollView
                     style={{ paddingTop: 28 }}
@@ -282,7 +283,7 @@ export default function Dictionary_RightTab(props) {
     
 
         {childJoinBtnBool ? null : (
-          <TextInputBG style={{backgroundColor: isDark? `#303235`:`#D1D3D9`}}>
+          <TextInputBG style={{backgroundColor: Platform.OS === 'ios'? isDark? `#303235`:`#D1D3D9` : isDark? `#262626`:`#E3E2EA`}}>
             <TextInputContainer style={{backgroundColor: isDark? `${colors.black}`:`${colors.white}`}}>
                 {
                     Platform.OS === 'ios'?
@@ -304,13 +305,7 @@ export default function Dictionary_RightTab(props) {
                     />
                     :
                     <AndroidTextInput
-                        style={{
-                            color: isDark? `${colors.white}`:`${colors.black}`,
-                            width: 300,
-                            marginLeft: 15,
-                            fontSize: 17,
-                            fontFamily: 'Pretendard-Regular'
-                        }}
+                        style={{color: isDark? `${colors.white}`:`${colors.black}`}}
                         type="text"
                         onChangeText={(text) => setChat(text)}
                         value={chat}
@@ -320,10 +315,9 @@ export default function Dictionary_RightTab(props) {
                         keyboardAppearance= {isDark? 'dark':'light'}
                     />
                 }
-                <SendBtn 
-                    onPress={onSubmitChat} 
-                    style={{backgroundColor: isDark? `${colors.d_main}`:`${colors.l_main}`}}
-                />
+                <TouchableOpacity onPress={onSubmitChat}>
+                    <SendIcon color= {isDark? colors.d_main : colors.l_main}/>
+                </TouchableOpacity>
             </TextInputContainer>
           </TextInputBG>
         )}
@@ -333,6 +327,7 @@ export default function Dictionary_RightTab(props) {
 
 {/*textinputbg 색 변경하기*/}
 
+const SCREEN_WIDTH = Dimensions.get('screen').width
 const ChatContainer = styled.View`
   margin-left: 24px;
   margin-bottom: 16px;
@@ -342,19 +337,19 @@ const MessageWrapper = styled.View`
   align-items: flex-start;
 `
 const MessageContainer = styled.View`
-  border-radius: 12px 12px 12px 0px;
-  padding: 8px 16px;
-  max-width: 200px;
+    border-radius: 12px 12px 12px 0px;
+    padding: 8px 16px;
+    max-width: 200px;
 `
 const MyMessageContainer = styled.TouchableOpacity`
-  border-radius: 12px 12px 0px 12px;
-  padding: 8px 16px;
-  max-width: 200px;
+    border-radius: 12px 12px 0px 12px;
+    padding: 8px 16px;
+    max-width: 200px;
 `
 const MyMessageWrapper = styled.View`
-  justify-content: flex-end;
-  align-items: center;
-  flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    flex-direction: row;
 `
 const MessageText = styled.Text`
     font-size: 13px;
@@ -394,5 +389,8 @@ const NoText = styled.Text`
 `
 
 const AndroidTextInput = styled.TextInput`
-
+    margin-left: 15px;
+    font-size: 17px;
+    font-family: Pretendard-Regular;
+    width: ${`${SCREEN_WIDTH - 90 }px`};
 `
