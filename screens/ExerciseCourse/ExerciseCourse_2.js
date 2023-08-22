@@ -41,7 +41,7 @@ const ReplaceView2 = styled.View`
 `
 
 const ReplaceTextView = styled.View`
-  align-items: baseline;
+  align-items: flex-end;
 `
 
 const BottomSheetBack = styled.View`
@@ -66,7 +66,7 @@ const ReplaceButton = styled.TouchableOpacity`
   background: ${({ isDark }) => (isDark ? colors.grey_7 : colors.grey_3)};
   margin-top: 18px;
   margin-bottom: 12px;
-  margin-right: 242.5px;
+  margin-right: 243px;
 `
 
 const ReplaceButtonText = styled.Text`
@@ -255,8 +255,6 @@ export default function ExerciseCourse_2({ navigation, dataList, listIndex, tota
 
   const bottomSheetRef = useRef(null)
   const snapPoints = useMemo(() => ['65%'], [])
-
-  const handleClosePress = () => bottomSheetRef.current.close()
 
   const handleModal = () => {
     bottomSheetRef.current?.present()

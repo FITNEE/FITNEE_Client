@@ -21,7 +21,7 @@ const ReplaceView2 = styled.View`
 `
 
 const ReplaceTextView = styled.View`
-  align-items: baseline;
+  align-items: flex-end;
 `
 
 const BottomSheetBack = styled.View`
@@ -33,6 +33,7 @@ const SkipExercrise = styled.TouchableOpacity`
   height: 20px;
   position: relative;
   margin-top: 16px;
+  align-items: center;
 `
 
 const ExerciseCircle = styled.View`
@@ -150,6 +151,7 @@ const SkipExercriseText = styled.Text`
   font-family: Pretendard-SemiBold;
   line-height: 19.5px;
   text-decoration-line: underline;
+  width: 100px;
 `
 
 const ExerciseImage = styled.Image`
@@ -267,7 +269,7 @@ export default function ExerciseCourse({ navigation }) {
       ]),
 
       //1이 더 오래 보이게
-      Animated.delay('300'),
+      Animated.delay(300),
 
       Animated.parallel([
         Animated.timing(timerAnimation, {
@@ -298,6 +300,7 @@ export default function ExerciseCourse({ navigation }) {
       textAlign: 'center',
       fontSize: 80,
       fontWeight: '600',
+      justifyContent: 'center',
     },
   })
 
@@ -455,7 +458,6 @@ export default function ExerciseCourse({ navigation }) {
             text="운동 시작"
             disabled={false}
             onPress={animation}
-            //onPress={goToCompleteExercise}
             isDark={isDark}
           />
           <SkipExercrise onPress={() => OpenConfirm2()}>

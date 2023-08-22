@@ -46,20 +46,19 @@ const Container = styled.View`
   border-radius: 12px;
   flex-direction: row;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
   margin-bottom: 8px;
+  padding: 24px;
 `
 
 const CurrentText = styled.Text`
   font-size: 20px;
   font-family: Pretendard-SemiBold;
-  line-height: 32px;
 `
 
 const CurrentText2 = styled.Text`
   font-size: 15px;
   font-family: Pretendard-SemiBold;
-  line-height: 32px;
 `
 
 const CurrentUnit = styled.Text`
@@ -67,34 +66,28 @@ const CurrentUnit = styled.Text`
   font-family: Pretendard-SemiBold;
 `
 
-const TextLine = styled.View`
-  flex-direction: row;
-  height: 20px;
-  align-items: flex-end;
-`
-
 const Box1 = styled.View`
   width: 130px;
   flex-direction: row;
-  align-items: center;
-  justify-content: baseline;
+  align-items: baseline;
   height: 32px;
+  padding-top: 3px;
 `
 
 const Box2 = styled.View`
   width: 84px;
   flex-direction: row;
-  align-items: center;
-  justify-content: baseline;
+  align-items: baseline;
   height: 32px;
+  padding-top: 3px;
 `
 
 const Box3 = styled.View`
   width: 49px;
   flex-direction: row;
-  align-items: center;
-  justify-content: baseline;
+  align-items: baseline;
   height: 32px;
+  padding-top: 3px;
 `
 
 const SkipExercrise = styled.TouchableOpacity`
@@ -119,6 +112,7 @@ const SkipExercriseText = styled.Text`
   font-family: Pretendard-SemiBold;
   line-height: 19.5px;
   text-decoration-line: underline;
+  width: 100px;
 `
 
 const ExerciseCircle = styled.View`
@@ -141,6 +135,7 @@ const ComponentWrapper = styled.View`
   width: 100%;
   height: 100%;
   position: absolute;
+  justify-content: center;
   z-index: ${(props) => props.zIndex};
 `
 
@@ -181,12 +176,7 @@ export default function ExerciseCourse_1({ navigation }) {
   const [checkedSets, setCheckedSets] = useState(Array(dataList[listIndex].totalSets).fill(false))
   const [showExerciseCourse2, setShowExerciseCourse2] = useState(false)
   const [showExerciseCourse2_2, setShowExerciseCourse2_2] = useState(false)
-  const [currentFocusedIndex, setCurrentFocusedIndex] = useState(0)
   const isFocused = useIsFocused()
-
-  useEffect(() => {
-    setCurrentFocusedIndex(scrollPosition.current)
-  }, [boxNumber])
 
   const goToNextExercise = async () => {
     //스킵
@@ -320,9 +310,7 @@ export default function ExerciseCourse_1({ navigation }) {
       <Container style={{ backgroundColor: backgroundColor }}>
         <Box1>
           <CurrentText style={{ color: textColor }}>{item.set + 1}</CurrentText>
-          <TextLine>
-            <CurrentUnit style={{ color: textColor }}>세트</CurrentUnit>
-          </TextLine>
+          <CurrentUnit style={{ color: textColor }}>세트</CurrentUnit>
         </Box1>
 
         <Box2>
@@ -331,17 +319,11 @@ export default function ExerciseCourse_1({ navigation }) {
           ) : (
             <CurrentText2 style={{ color: colors.grey_7 }}>빈 봉</CurrentText2>
           )}
-          {item.weight !== 'null' ? (
-            <TextLine>
-              <CurrentUnit style={{ color: textColor }}>kg</CurrentUnit>
-            </TextLine>
-          ) : null}
+          {item.weight !== 'null' ? <CurrentUnit style={{ color: textColor }}>kg</CurrentUnit> : null}
         </Box2>
         <Box3>
           <CurrentText style={{ color: textColor }}>{item.rep}</CurrentText>
-          <TextLine>
-            <CurrentUnit style={{ color: textColor }}>회</CurrentUnit>
-          </TextLine>
+          <CurrentUnit style={{ color: textColor }}>회</CurrentUnit>
         </Box3>
         {item.set === dataList[listIndex].totalSets ? null : checkedSets[item.set] ? (
           <Check width={24} height={24} color={isDark ? colors.black : colors.white} />
