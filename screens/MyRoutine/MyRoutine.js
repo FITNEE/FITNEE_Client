@@ -113,7 +113,6 @@ export default MyRoutine = ({ navigation, route }) => {
         }, //눌렀을 때 mode가 true였을 때, 즉 커스텀모드에서 완료버튼을 눌렀을때.
       )
     }
-    setIsTabVisible(!mode)
     setMode(!mode)
   }
   const popMessage = (id) => {
@@ -247,6 +246,9 @@ export default MyRoutine = ({ navigation, route }) => {
       })
     }
   }, [selectedDay])
+  useEffect(() => {
+    setIsTabVisible(!mode)
+  }, [mode])
 
   const bottomModal = useRef(null)
   return (
