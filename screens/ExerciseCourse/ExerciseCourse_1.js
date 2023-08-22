@@ -479,7 +479,6 @@ export default function ExerciseCourse_1({ navigation }) {
           <StopExercise onPress={() => OpenConfirm()}>
             <Close width={24} height={24} color={isDark ? colors.white : colors.black} />
           </StopExercise>
-
           <ExerciseCircle>
             <ComponentWrapper zIndex={1}>
               <ExerciseImage
