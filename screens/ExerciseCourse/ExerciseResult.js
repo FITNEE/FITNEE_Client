@@ -178,7 +178,7 @@ export default function ExerciseResult({ navigation }) {
       setSharing(true) // 공유 시작 시 상태를 true로 설정
       const result = await Share.share({
         message: '운동 역량 분석 결과',
-        url: Platform.OS === 'ios' ? `file://${captureUri}` : uri,
+        url: Platform.OS === 'ios' ? `file://${captureUri}` : captureUri,
       })
       setSharing(false) // 공유 완료 시 상태를 false로 설정
 
