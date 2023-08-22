@@ -14,6 +14,7 @@ import axios from 'axios'
 import { useRecoilValue } from 'recoil'
 import { IsDarkAtom } from '../../recoil/MyPageAtom'
 import { ScrollView } from 'react-native-gesture-handler'
+import { imagePath, pngPath } from '../../imagePath'
 
 const ReplaceView2 = styled.View`
   flex-direction: row;
@@ -109,14 +110,6 @@ const ReplaceView = styled.View`
   justify-content: space-between;
 `
 
-const ReplaceCircle = styled.View`
-  width: 60px;
-  height: 60px;
-  border-radius: 30px;
-  background: ${({ isDark }) => (isDark ? colors.grey_9 : colors.grey_2)};
-  margin-right: 16px;
-`
-
 const ReplaceText1 = styled.Text`
   color: ${({ isDark }) => (isDark ? colors.white : colors.black)};
   text-align: center;
@@ -156,6 +149,13 @@ const SkipExercriseText = styled.Text`
 
 const ExerciseImage = styled.Image`
   height: 307px;
+  aspect-ratio: 1;
+  border-radius: 999px;
+`
+
+const ReplaceImage = styled.Image`
+  height: 60px;
+  width: 60px;
   aspect-ratio: 1;
   border-radius: 999px;
 `
@@ -445,7 +445,6 @@ export default function ExerciseCourse({ navigation }) {
         }}
       >
         <ExerciseCard exerciseName={dataList[listIndex].exerciseInfo.exerciseName} isDark={isDark}>
-          {/* <ExerciseCircle isDark={isDark}></ExerciseCircle> */}
           <ExerciseImage source={getImage[dataList[listIndex].exerciseInfo.healthCategoryIdx]} resizeMode="contain" />
 
           <ReplaceButton isDark={isDark} disabled={false} onPress={handleModal}>
@@ -484,7 +483,7 @@ export default function ExerciseCourse({ navigation }) {
               {replaceList.map((item, healthCategoryIdx) => (
                 <ReplaceView isDark={isDark}>
                   <ReplaceView2 isDark={isDark}>
-                    <ReplaceCircle isDark={isDark} />
+                    <ReplaceImage source={pngPath.path[healthCategoryIdx]} isDark={isDark} />
                     <ReplaceTextView isDark={isDark} key={healthCategoryIdx}>
                       <ReplaceText1 isDark={isDark}>{item.name}</ReplaceText1>
                       <ReplaceText2 isDark={isDark}>
