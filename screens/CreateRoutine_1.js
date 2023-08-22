@@ -7,7 +7,8 @@ import { CreateRoutineAtom } from '../recoil/CreateRoutineAtom'
 import { colors } from '../colors'
 import { IsDarkAtom, TabBarAtom } from '../recoil/MyPageAtom'
 import { StatusBar } from 'react-native'
-import Add from '../assets/SVGs/Add.svg'
+import Home from '../assets/SVGs/CreateRoutine/Home.svg'
+import Gym from '../assets/SVGs/CreateRoutine/Gym.svg'
 
 export default function CreateRoutine_1({ navigation }) {
   const [home, SetHome] = useState(false)
@@ -69,7 +70,7 @@ export default function CreateRoutine_1({ navigation }) {
           }}
         >
           <SpaceImage>
-            <Add />
+            <Home width={117} height={117} />
           </SpaceImage>
           <SpaceName isDark={isDark} isActive={home}>
             집
@@ -83,7 +84,9 @@ export default function CreateRoutine_1({ navigation }) {
             borderColor: fitness ? `${colors.d_main}` : 'transparent',
           }}
         >
-          <SpaceImage />
+          <SpaceImage>
+            <Gym width={117} height={117} />
+          </SpaceImage>
           <SpaceName isDark={isDark} isActive={fitness}>
             헬스장
           </SpaceName>
@@ -136,6 +139,7 @@ const SpaceItem = styled.TouchableOpacity`
     props.isActive ? (props.isDark ? '#1E1B29' : colors.l_sub_2) : props.isDark ? colors.grey_8 : colors.white};
   border-radius: 10px;
   align-items: center;
+  border: 1px;
   /* border: ${(props) => (props.isActive ? '1px' : 0)};
     border-color: ${(props) => (props.isActive ? colors.l_main : colors.white)}; */
 `
