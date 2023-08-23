@@ -35,6 +35,7 @@ const JustText = styled.Text`
   font-size: 15px;
   font-family: Pretendard-Regular;
   line-height: 22.5px;
+  width: 100%;
 `
 
 const BoxList = styled.View`
@@ -91,10 +92,12 @@ const Box3 = styled.View`
 `
 
 const SkipExercrise = styled.TouchableOpacity`
-  width: 85px;
+  width: 100px;
   height: 20px;
   position: relative;
   margin-top: 16px;
+  align-content: center;
+  justify-content: center;
 `
 
 const StopExercise = styled.TouchableOpacity`
