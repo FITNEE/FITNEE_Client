@@ -66,11 +66,11 @@ const ReplaceButtonText = styled.Text`
 
 const CurrentExplain = styled.View`
   width: 327px;
-  height: 163px;
+  height: 108px;
   border-radius: 12px;
   background: ${({ isDark }) => (isDark ? colors.grey_8 : colors.grey_1)};
   padding: 16px;
-  justify-content: flex-start;
+  justify-content: center;
   margin-bottom: 5px;
 `
 
@@ -450,6 +450,8 @@ export default function ExerciseCourse({ navigation }) {
           <ReplaceButton isDark={isDark} disabled={false} onPress={handleModal}>
             <ReplaceButtonText isDark={isDark}>운동 대체하기</ReplaceButtonText>
           </ReplaceButton>
+
+          <CurrentSet set={1} kg={dataList[listIndex].sets[0].weight} num={dataList[listIndex].sets[0].rep} />
 
           <CurrentExplain isDark={isDark}>{adviceList}</CurrentExplain>
 

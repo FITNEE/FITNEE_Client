@@ -9,26 +9,22 @@ const Box1 = styled.View`
   width: 130px;
   flex-direction: row;
   align-items: baseline;
-  height: 32px;
-  padding-top: 3px;
+  height: 25px;
 `
 
 const Box2 = styled.View`
   width: 84px;
   flex-direction: row;
   align-items: baseline;
-  height: 32px;
-  padding-top: 3px;
+  height: 25px;
 `
 
 const Box3 = styled.View`
   width: 49px;
   flex-direction: row;
   align-items: baseline;
-  height: 32px;
-  padding-top: 3px;
+  height: 25px;
 `
-
 const Container = styled.View`
   width: 327px;
   height: 56px;
@@ -56,8 +52,8 @@ const CurrentUnit = styled.Text`
 const CurrentText2 = styled.Text`
   font-size: 15px;
   font-family: Pretendard-SemiBold;
-  padding-top: 4px;
-  color: ${({ isDark }) => (isDark ? colors.white : '#858687')};
+  line-height: 25px;
+  color: ${({ isDark }) => (isDark ? colors.grey_4 : '#858687')};
 `
 
 export default function NextSet({ set, kg, num, isDark }) {
@@ -69,7 +65,11 @@ export default function NextSet({ set, kg, num, isDark }) {
       </Box1>
 
       <Box2>
-        {kg !== 'null' ? <CurrentText isDark={isDark}>{kg}</CurrentText> : <CurrentText2>빈 봉</CurrentText2>}
+        {kg !== 'null' ? (
+          <CurrentText isDark={isDark}>{kg}</CurrentText>
+        ) : (
+          <CurrentText2 isDark={isDark}>빈 봉</CurrentText2>
+        )}
         {kg !== 'null' ? <CurrentUnit isDark={isDark}>kg</CurrentUnit> : null}
       </Box2>
 
