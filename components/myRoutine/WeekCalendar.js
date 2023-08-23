@@ -73,7 +73,7 @@ export default WeekCalendar = ({ setSelectedDay, selectedDay, SCHEDULE, isDark }
                           backgroundColor: isDark
                             ? SCHEDULE[id]?.routineId === 0
                               ? colors.grey_8
-                              : colors.d_main
+                              : colors.grey_9
                             : colors.white,
                         }
                   }
