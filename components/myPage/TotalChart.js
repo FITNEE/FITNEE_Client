@@ -11,7 +11,7 @@ import { processFontFamily } from 'expo-font'
 const Container = styled.ScrollView``
 const BoxContainer = styled.View`
   margin: 26px 24px 0px 24px;
-  background-color: ${({ isDark }) => (isDark ? colors.grey_7 : colors.grey_1)};
+  background-color: ${({ isDark }) => (isDark ? colors.black : colors.grey_1)};
   border-radius: 20px;
   padding: 16px 16px 10px 16px;
 `
@@ -43,15 +43,15 @@ export default function TotalChart(props) {
     decimalPlaces: 0,
     fillShadowGradientFromOpacity: 0.3,
     fillShadowGradientToOpacity: 0,
-    backgroundGradientFrom: isDark ? '#595F72' : '#F6F8FA',
-    backgroundGradientTo: isDark ? '#595F72' : '#F6F8FA',
+    backgroundGradientFrom: isDark ? '#141414' : '#F6F8FA',
+    backgroundGradientTo: isDark ? '#141414' : '#F6F8FA',
     propsForLabels: {
       fontSize: 11,
       fontFamily: processFontFamily('Pretendard-SemiBold'),
     },
     propsForBackgroundLines: {
       strokeWidth: 1,
-      stroke: isDark ? colors.grey_6 : colors.grey_2,
+      stroke: isDark ? colors.grey_8 : colors.grey_2,
       strokeDasharray: '0',
     },
     propsForDots: {
@@ -276,7 +276,7 @@ export default function TotalChart(props) {
             decorator={() => {
               return message.visible ? (
                 <>
-                  <Circle cx={message.x} cy={message.y} r={3} fill={isDark ? colors.grey_7 : colors.white} />
+                  <Circle cx={message.x} cy={message.y} r={3} fill={isDark ? colors.black : colors.white} />
                   {message.value != 0 ? (
                     <Line
                       x1={message.x}
