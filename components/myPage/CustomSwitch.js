@@ -20,11 +20,15 @@ const CustomSwitch = () => {
     }).start()
   }, [isDark, animatedValue])
 
-  const updatedSwitchData = () => {
+  const updatedSwitchData = async () => {
     setIsDark(!isDark)
-    AsyncStorage.setItem('darkMode', JSON.stringify(!isDark)).catch((error) => {
-      console.error('Error saving dark mode state:', error)
-    })
+    const darkMode = !isDark
+    await AsyncStorage.removeItem('darkMode')
+    if (darkMode) {
+      await AsyncStorage.setItem('darkMode', JSON.stringify(true))
+    } else {
+      await AsyncStorage.setItem('darkMode', JSON.stringify(false))
+    }
   }
 
   return (
