@@ -1,14 +1,15 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { Calendar, LocaleConfig } from 'react-native-calendars'
 import { colors } from '../../colors'
 import { Image, Dimensions } from 'react-native'
 import { format } from 'date-fns'
 import Left from '../../assets/SVGs/Left.svg'
 import Right from '../../assets/SVGs/Right.svg'
-import { useRecoilValue } from 'recoil'
+import { useRecoilState, useRecoilValue } from 'recoil'
 import { IsDarkAtom } from '../../recoil/MyPageAtom'
 import { processFontFamily } from 'expo-font'
 import { StyleSheet } from 'react-native'
+import { useFocusEffect, useIsFocused } from '@react-navigation/native'
 
 LocaleConfig.locales['ko'] = {
   monthNames: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'],
@@ -19,8 +20,15 @@ LocaleConfig.locales['ko'] = {
 LocaleConfig.defaultLocale = 'ko'
 
 export default function CalendarView(props) {
-  const isDark = useRecoilValue(IsDarkAtom)
+  const isDark = props.isDark
+  const [key, setKey] = useState(0)
   const windowWidth = Dimensions.get('window').width
+
+  useFocusEffect(
+    useCallback(() => {
+      setKey((prevKey) => prevKey + 1)
+    }, []),
+  )
 
   const today = format(new Date(), 'yyyy-MM-dd')
   const days = props.exerciseDays.map((day) => format(new Date(day.day), 'yyyy-MM-dd'))
@@ -34,6 +42,7 @@ export default function CalendarView(props) {
 
   return (
     <Calendar
+      key={key}
       monthFormat="yyyy. MM"
       renderArrow={(direction) => {
         if (direction == 'left')
