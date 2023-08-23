@@ -8,13 +8,15 @@ import { useRecoilState, useRecoilValue } from 'recoil'
 import { CreateRoutineAtom } from '../recoil/CreateRoutineAtom'
 import { colors } from '../colors'
 import { IsDarkAtom } from '../recoil/MyPageAtom'
-import { StyleSheet } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import { Text } from 'react-native'
+import { Ionicons } from '@expo/vector-icons'
 
 export default function CreateRoutine_2({ navigation }) {
-  const [shouldRender, setShouldRender] = useState(true)
+  const [shouldRender, setShouldRender] = useState(false)
   const [dontKnow, setDontKnow] = useState(false)
   const [value, setValue] = useState(0)
+  const [bubble, setBubble] = useState(false)
   const [routine, setRoutine] = useRecoilState(CreateRoutineAtom)
   const index = useNavigationState((state) => state.index)
   const isDark = useRecoilValue(IsDarkAtom)
@@ -47,25 +49,32 @@ export default function CreateRoutine_2({ navigation }) {
   const handleDontKnow = () => {
     setDontKnow(!dontKnow)
   }
-  useEffect(() => {
-    // 일정 시간(예: 5초) 후에 렌더링 여부를 false로 변경
-    const timer = setTimeout(() => {
-      setShouldRender(false)
-    }, 5000) // 5초
+  // useEffect(() => {
+  //   // 일정 시간(예: 5초) 후에 렌더링 여부를 false로 변경
+  //   const timer = setTimeout(() => {
+  //     setShouldRender(false)
+  //   }, 5000) // 5초
 
-    // 컴포넌트가 언마운트되면 타이머 클리어
-    return () => clearTimeout(timer)
-  }, []) // 빈 배열을 전달하여 컴포넌트가 마운트될 때만 실행
+  //   // 컴포넌트가 언마운트되면 타이머 클리어
+  //   return () => clearTimeout(timer)
+  // }, [])
 
   let data = []
   for (var i = 0; i < 201; i += 5) {
     data.push(i)
   }
-
+  const handleBubble = () => {
+    setShouldRender(!shouldRender)
+  }
   return (
     <Container isDark={isDark}>
       <TitleContainer>
-        <Title isDark={isDark}>나의 예상 스쿼트 1RM은?</Title>
+        <TitleBox>
+          <Title isDark={isDark}>나의 예상 스쿼트 1RM은?</Title>
+          <Icon onPress={handleBubble}>
+            <Ionicons name="help-circle" size={24} color={'#595F72'}></Ionicons>
+          </Icon>
+        </TitleBox>
         {shouldRender ? (
           <Bubble isDark={isDark}>
             <BubbleText isDark={isDark}>{`정확한 동작으로 한 번 들어 올릴 
@@ -173,6 +182,11 @@ const TitleContainer = styled.View`
   margin-bottom: 92px;
   /* margin-bottom: 60px; */
 `
+const TitleBox = styled.View`
+  flex-direction: row;
+  align-items: center;
+`
+const Icon = styled.TouchableOpacity``
 const PickerContainer = styled.View`
   border-radius: 20px;
   overflow: hidden;
@@ -182,6 +196,7 @@ const Title = styled.Text`
   font-family: Pretendard-SemiBold;
   line-height: 33.6px; /* 33.6px */
   color: ${(props) => (props.isDark ? colors.white : colors.black)};
+  margin-right: 8px;
 `
 const SubTitle = styled.Text`
   font-size: 13px;
