@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from "react";
-
-import { Text, View, TouchableOpacity, Animated, Easing } from "react-native";
-import { colors } from "../../colors";
-import { useRecoilState } from "recoil";
-import { IsDarkAtom } from "../../recoil/MyPageAtom";
+import React, { useEffect, useState } from 'react'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import { Text, View, TouchableOpacity, Animated, Easing } from 'react-native'
+import { colors } from '../../colors'
+import { useRecoilState } from 'recoil'
+import { IsDarkAtom } from '../../recoil/MyPageAtom'
 
 const CustomSwitch = () => {
-  const [isDark, setIsDark] = useRecoilState(IsDarkAtom);
+  const [isDark, setIsDark] = useRecoilState(IsDarkAtom)
 
-  const [animatedValue] = useState(new Animated.Value(isDark ? 0 : 28));
+  const [animatedValue] = useState(new Animated.Value(isDark ? 0 : 28))
 
   useEffect(() => {
     Animated.timing(animatedValue, {
@@ -17,12 +17,15 @@ const CustomSwitch = () => {
       easing: Easing.linear,
       delay: 0,
       useNativeDriver: true,
-    }).start();
-  }, [isDark, animatedValue]);
+    }).start()
+  }, [isDark, animatedValue])
 
   const updatedSwitchData = () => {
-    setIsDark(!isDark);
-  };
+    setIsDark(!isDark)
+    AsyncStorage.setItem('darkMode', JSON.stringify(!isDark)).catch((error) => {
+      console.error('Error saving dark mode state:', error)
+    })
+  }
 
   return (
     <TouchableOpacity activeOpacity={0.5} onPress={() => updatedSwitchData()}>
@@ -33,7 +36,7 @@ const CustomSwitch = () => {
           width: 64,
           backgroundColor: isDark ? colors.d_main : colors.grey_2,
           borderRadius: 1000,
-          flexDirection: "row",
+          flexDirection: 'row',
           padding: 4,
         }}
       >
@@ -45,8 +48,8 @@ const CustomSwitch = () => {
             width: 28,
             height: 28,
             borderRadius: 25,
-            justifyContent: "center",
-            alignItems: "center",
+            justifyContent: 'center',
+            alignItems: 'center',
             transform: [
               {
                 translateX: animatedValue,
@@ -58,15 +61,15 @@ const CustomSwitch = () => {
             style={{
               color: isDark ? colors.white : colors.black,
               fontSize: 11,
-              fontFamily: "Pretendard-SemiBold",
+              fontFamily: 'Pretendard-SemiBold',
               lineHeight: 16.5,
             }}
           >
-            {isDark ? "ON" : "OFF"}
+            {isDark ? 'ON' : 'OFF'}
           </Text>
         </TouchableOpacity>
       </View>
     </TouchableOpacity>
-  );
-};
-export default CustomSwitch;
+  )
+}
+export default CustomSwitch
