@@ -63,6 +63,7 @@ export default Scroll = ({ isDark, data, currentRoutine }) => {
               data={routines.item}
               keyExtractor={(item) => item.routineIdx}
               renderItem={renderItem2}
+              showsVerticalScrollIndicator={false}
             />
             {/* {routines.item.map((routine, id) => (
                             <RoutineItem

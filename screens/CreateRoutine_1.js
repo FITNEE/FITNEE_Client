@@ -144,11 +144,13 @@ const SpaceItem = styled.TouchableOpacity`
     border-color: ${(props) => (props.isActive ? colors.l_main : colors.white)}; */
 `
 const SpaceImage = styled.View`
-  width: 117px;
-  height: 117px;
+  width: 116px;
+  height: 116px;
   background-color: ${colors.grey_7};
   border-radius: 500px;
   margin-top: 24px;
+  align-items: center;
+  justify-content: center;
 `
 const SpaceName = styled.Text`
   margin-top: 9px;

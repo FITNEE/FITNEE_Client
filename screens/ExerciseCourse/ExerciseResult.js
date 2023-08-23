@@ -17,9 +17,8 @@ import { useRoute, StackActions } from '@react-navigation/native'
 const TextBox = styled.View`
   align-items: baseline;
   gap: 8px;
-  left: 24px;
   height: 96px;
-  width: 375px;
+  width: 327px;
 `
 
 const HomeView = styled.View`
@@ -35,7 +34,7 @@ const HomeButton = styled.TouchableOpacity`
   border-radius: 12px;
   justify-content: center;
   background: ${colors.l_main};
-  margin-top: 191px;
+  margin-top: 87px;
 `
 
 const JustText = styled.Text`
@@ -49,25 +48,36 @@ const JustText = styled.Text`
 const BlankBox = styled.View`
   margin-top: 132px;
 `
+const BlankBox2 = styled.View`
+  width: 32px;
+`
 
 const TitleText = styled.Text`
-  color: ${colors.black};
+  color: ${({ DarkMode }) => (DarkMode ? colors.white : colors.black)};
   font-size: 17px;
   font-family: Pretendard-Medium;
   line-height: 25.5px;
 `
 
+const ContentView = styled.View`
+  width: 267px;
+  margin-left: 16px;
+`
+
 const ContentText = styled.Text`
-  color: ${colors.grey_6};
+  color: ${({ DarkMode }) => (DarkMode ? colors.grey_4 : colors.grey_6)};
   font-size: 13px;
   font-family: Pretendard-Regular;
   line-height: 19.5px;
+  margin-top: 8px;
 `
 
 const ResultBox = styled.View`
   height: 94px;
-  width: 298px;
+  width: 327px;
   margin-bottom: 32px;
+  flex-direction: row;
+  justify-content: baseline;
 `
 
 const ShareIconView = styled.TouchableOpacity`
@@ -118,7 +128,8 @@ const ExerciseIconCircle = styled.View`
   width: 20px;
   height: 20px;
   border-radius: 100px;
-  background-color: ${({ DarkMode }) => (DarkMode ? colors.d_sub_3 : colors.l_sub_2)};
+  margin-top: 3px;
+  background-color: ${({ DarkMode }) => (DarkMode ? colors.grey_9 : colors.l_sub_2)};
 `
 
 const CarImage = styled.Image`
@@ -126,7 +137,6 @@ const CarImage = styled.Image`
   height: 184px;
   aspect-ratio: 1;
   margin-left: 6px;
-  margin-top: 5px;
 `
 
 export default function ExerciseResult({ navigation }) {
@@ -137,6 +147,11 @@ export default function ExerciseResult({ navigation }) {
   const now = new Date()
   const day = Week[now.getDay()]
   let formatDate = format(now, 'yyyy. MM. dd')
+
+  const route = useRoute()
+  const timeChange = route.params.timeChange
+  const totalCount = route.params.totalCount
+  const totalWeight = route.params.totalWeight
 
   const goToHome = () => {
     const replaceAction = StackActions.replace('HomeNav')
@@ -205,19 +220,19 @@ export default function ExerciseResult({ navigation }) {
     }
   }
 
-  const fetchData = async () => {
-    try {
-      const response = await axios.get('https://gpthealth.shop/app/routine/end/update')
-      console.log('response.data : ', response.data)
-      setUpdate(response.data.result)
-    } catch (error) {
-      console.error('Error :', error)
-    }
-  }
+  // const fetchData = async () => {
+  //   try {
+  //     const response = await axios.get('https://gpthealth.shop/app/routine/end/update')
+  //     console.log('response.data : ', response.data)
+  //     setUpdate(response.data.result)
+  //   } catch (error) {
+  //     console.error('Error :', error)
+  //   }
+  // }
 
-  useEffect(() => {
-    fetchData()
-  }, [update])
+  // useEffect(() => {
+  //   fetchData()
+  // }, [update])
 
   return (
     <SafeAreaView
@@ -226,7 +241,7 @@ export default function ExerciseResult({ navigation }) {
         backgroundColor: isDark ? colors.grey_9 : colors.grey_1,
       }}
     >
-      <ScrollView>
+      <ScrollView showsVerticalScrollIndicator={false}>
         <ViewShot ref={ref} options={{ fileName: 'Your-File-Name', format: 'jpg', quality: 0.9 }}>
           <Container DarkMode={isDark}>
             <BlankBox />
@@ -240,14 +255,52 @@ export default function ExerciseResult({ navigation }) {
             <JustCircle DarkMode={isDark}>
               <CarImage source={require('../../assets/Imgs/car.png')} />
             </JustCircle>
-            <JustText>3300kg</JustText>
+            <JustText>{totalWeight} kg</JustText>
 
             <TextBox>
               <ExerciseText DarkMode={isDark}>성장속도가 빠른 {'\n'}야망 헬린이</ExerciseText>
             </TextBox>
+
+            <ResultBox>
+              <ExerciseIconCircle DarkMode={isDark}>
+                <ExerciseIcon width={20} height={20} color={colors.l_main} />
+              </ExerciseIconCircle>
+              <ContentView>
+                <TitleText DarkMode={isDark}>
+                  {timeChange < 0
+                    ? '운동 시간이 단축되었어요'
+                    : timeChange === 0
+                    ? '저번 운동과 비슷한 시간동안 운동했어요'
+                    : '운동시간이 증가했어요'}
+                </TitleText>
+                <ContentText DarkMode={isDark}>
+                  {timeChange < 0
+                    ? '운동 시간이 단축되었다면 성장이 이루어졌다고 볼 수 있어요. 무게 혹은 횟수 등의 난이도를 높여서 성장한 몸에 맞는 운동량으로 바꿔보세요.'
+                    : timeChange === 0
+                    ? '적절한 난이도로 수행중이에요. 무리하지 않고 차근차근 운동하면 더 건강해질거에요.'
+                    : '운동 시간이 증가했다면 현재 운동의 강도가 조금 강할 수 있어요. 무게 혹은 횟수 등의 난이도를 낮춰서 안전하게 수행해보세요.'}
+                </ContentText>
+              </ContentView>
+            </ResultBox>
+
+            <BlankBox2 />
+
+            <ResultBox>
+              <ExerciseIconCircle DarkMode={isDark}>
+                <ExerciseIcon width={20} height={20} color={colors.l_main} />
+              </ExerciseIconCircle>
+              <ContentView>
+                <TitleText DarkMode={isDark}>한 달 동안 {totalCount}회 운동했어요</TitleText>
+                <ContentText>
+                  근력운동은 연속으로 운동하는 것 보다, 격일로 운동했을 때 효과가 좋아요. 매일 운동하고싶다면 유산소
+                  운동과 병행하는 것을 추천드릴게요.
+                </ContentText>
+              </ContentView>
+            </ResultBox>
+
             {update ? (
               <>
-                <TextBox>
+                <TextBox style={{ marginTop: 58 }}>
                   <ExerciseText DarkMode={isDark}>다음 운동부터 {'\n'}업데이트 되는 부분이에요</ExerciseText>
                 </TextBox>
                 {update.map((item) => (
@@ -255,12 +308,6 @@ export default function ExerciseResult({ navigation }) {
                 ))}
               </>
             ) : null}
-
-            {/* <ResultBox>
-              <ExerciseIconCircle DarkMode={isDark}>
-                <ExerciseIcon width={20} height={20} color={colors.l_main} />
-              </ExerciseIconCircle>
-            </ResultBox> */}
           </Container>
         </ViewShot>
         <HomeView>
