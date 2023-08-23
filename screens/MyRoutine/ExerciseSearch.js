@@ -203,7 +203,6 @@ export default function ExerciseSearch({ navigation }) {
   }
   // 사용자가 키보드에서 검색 버튼 눌렀을 때
   const onSubmitEditing = () => {
-    setIsSubmit(true)
     setIsSearching(false)
   }
   // 검색될때마다 키워드 기록
