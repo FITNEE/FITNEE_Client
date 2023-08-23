@@ -82,9 +82,17 @@ export default function Analysis(props) {
 
   const slicedWeekData = weekData.formattedRows.slice(startIndex, endIndex + 1)
 
-  const calorie = slicedWeekData[slicedWeekData.length - 1].weeklyCalories
-  const kilometer = slicedWeekData[slicedWeekData.length - 1].weeklyDistance
-  const TimeData = slicedWeekData.map((value) => value.weeklyExerciseTime)
+  const [calorie, setCalorie] = useState(0)
+  const [kilometer, setKilometer] = useState(0)
+  const [TimeData, setTimedata] = useState([0])
+
+  useEffect(() => {
+    slicedWeekData.length != 0 &&
+      (setCalorie(slicedWeekData[slicedWeekData.length - 1].weeklyCalories),
+      setKilometer(slicedWeekData[slicedWeekData.length - 1].weeklyDistance),
+      setTimedata(slicedWeekData.map((value) => value.weeklyExerciseTime)))
+  }, [])
+
   let sum = 0
   for (let i = 0; i < TimeData.length; i++) {
     sum += TimeData[i]
