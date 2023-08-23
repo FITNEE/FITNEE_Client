@@ -5,6 +5,7 @@ import { IsDarkAtom } from '../../recoil/MyPageAtom'
 import { useRecoilValue } from 'recoil'
 import RightIcon from '../../assets/SVGs/Right.svg'
 import { TouchableOpacity } from 'react-native'
+import { pngPath } from '../../imagePath'
 
 export default function Dictionary_List(props) {
     const isDark = useRecoilValue(IsDarkAtom)
@@ -34,6 +35,13 @@ export default function Dictionary_List(props) {
         filterList()
     }, [part, searchList])
 
+    const editMuscle = (muscle) => {
+        if(muscle.length >= 9){
+            return muscle.substring(0, 9) + '...'
+        }
+        else return muscle
+    }
+
     return (
         <ListContainer
             showsVerticalScrollIndicator={false}
@@ -48,15 +56,16 @@ export default function Dictionary_List(props) {
                           style={{ backgroundColor: isDark ? `${colors.d_background}` : `${colors.l_background}` }}
                       >
                           <ExerciseLeftContainer>
-                              <ExerciseImg
-                                  style={{ backgroundColor: isDark ? `${colors.black}` : `${colors.grey_1}` }}
-                              />
+                                <ExerciseImg
+                                    style={{ backgroundColor: isDark ? `${colors.black}` : `${colors.grey_1}` }}
+                                    source={pngPath.path[exercise.healthCategoryIdx-1]}
+                                />
                               <ExerciseDetailContainer>
                                   <ExerciseName style={{ color: isDark ? `${colors.grey_3}` : `${colors.black}` }}>
                                       {exercise.name}
                                   </ExerciseName>
                                   <ExerciseArea style={{ color: isDark ? `${colors.grey_3}` : `${colors.grey_7}` }}>
-                                      {exercise.parts} | {exercise.muscle} | {exercise.equipment}
+                                      {exercise.parts} | {editMuscle(exercise.muscle)} | {exercise.equipment}
                                   </ExerciseArea>
                               </ExerciseDetailContainer>
                           </ExerciseLeftContainer>

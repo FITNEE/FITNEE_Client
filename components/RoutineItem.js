@@ -43,7 +43,7 @@ export default function RoutineItem({ day, parts, exercises, onPress, select, is
           {exercises.map((exercise) => (
             <ExerciseItem isDark={isDark} key={exercise.healthCategoryIdx}>
               <ExerciseName isDark={isDark}>{exercise.name}</ExerciseName>
-              <ExerciseSet isDark={isDark}>{exercise.set} set</ExerciseSet>
+              <ExerciseSet isDark={isDark}>{exercise.set} 세트</ExerciseSet>
             </ExerciseItem>
           ))}
         </ExerciseContainer>

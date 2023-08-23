@@ -60,8 +60,8 @@ const CurrentText = styled.Text`
 
 const CurrentText2 = styled.Text`
   font-size: 15px;
-  padding-top: 4px;
   font-family: Pretendard-SemiBold;
+  line-height: 25px;
 `
 
 const CurrentUnit = styled.Text`
@@ -73,24 +73,21 @@ const Box1 = styled.View`
   width: 130px;
   flex-direction: row;
   align-items: baseline;
-  height: 32px;
-  padding-top: 3px;
+  height: 25px;
 `
 
 const Box2 = styled.View`
   width: 84px;
   flex-direction: row;
   align-items: baseline;
-  height: 32px;
-  padding-top: 3px;
+  height: 25px;
 `
 
 const Box3 = styled.View`
   width: 49px;
   flex-direction: row;
   align-items: baseline;
-  height: 32px;
-  padding-top: 3px;
+  height: 25px;
 `
 
 const SkipExercrise = styled.TouchableOpacity`
@@ -306,7 +303,13 @@ export default function ExerciseCourse_1({ navigation }) {
       backgroundColor =
         item.set + 1 === boxNumber ? (isDark ? colors.grey_8 : colors.white) : isDark ? colors.grey_8 : colors.grey_1
       textColor =
-        item.set + 1 === boxNumber ? (isDark ? colors.white : colors.black) : isDark ? '#858687' : 'rgba(0, 0, 0, 0.50)'
+        item.set + 1 === boxNumber
+          ? isDark
+            ? colors.white
+            : colors.black
+          : isDark
+          ? colors.grey_6
+          : 'rgba(0, 0, 0, 0.50)'
     }
 
     return (
@@ -320,7 +323,20 @@ export default function ExerciseCourse_1({ navigation }) {
           {item.weight !== 'null' ? (
             <CurrentText style={{ color: textColor }}>{item.weight}</CurrentText>
           ) : (
-            <CurrentText2 style={{ color: colors.grey_7 }}>빈 봉</CurrentText2>
+            <CurrentText2
+              style={{
+                color:
+                  item.set + 1 === boxNumber
+                    ? isDark
+                      ? colors.grey_4
+                      : colors.grey_7
+                    : isDark
+                    ? colors.grey_6
+                    : 'rgba(0, 0, 0, 0.50)',
+              }}
+            >
+              빈 봉
+            </CurrentText2>
           )}
           {item.weight !== 'null' ? <CurrentUnit style={{ color: textColor }}>kg</CurrentUnit> : null}
         </Box2>
