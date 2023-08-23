@@ -39,6 +39,11 @@ export default function CreateRoutine_4({ navigation }) {
           useNativeDriver: true,
         }),
         Animated.timing(opacity, {
+          toValue: 1,
+          duration: 4000,
+          useNativeDriver: true,
+        }),
+        Animated.timing(opacity, {
           toValue: 0,
           duration: 2000,
           useNativeDriver: true,
