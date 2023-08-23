@@ -220,19 +220,19 @@ export default function ExerciseResult({ navigation }) {
     }
   }
 
-  // const fetchData = async () => {
-  //   try {
-  //     const response = await axios.get('https://gpthealth.shop/app/routine/end/update')
-  //     console.log('response.data : ', response.data)
-  //     setUpdate(response.data.result)
-  //   } catch (error) {
-  //     console.error('Error :', error)
-  //   }
-  // }
+  const fetchData = async () => {
+    try {
+      const response = await axios.get('https://gpthealth.shop/app/routine/end/update')
+      console.log('response.data : ', response.data)
+      setUpdate(response.data.result)
+    } catch (error) {
+      console.error('Error :', error)
+    }
+  }
 
-  // useEffect(() => {
-  //   fetchData()
-  // }, [update])
+  useEffect(() => {
+    fetchData()
+  }, [update])
 
   return (
     <SafeAreaView

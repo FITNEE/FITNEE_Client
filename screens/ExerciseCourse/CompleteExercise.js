@@ -179,8 +179,7 @@ export default function CompleteExercise({ navigation }) {
         <CirclesLine>
           <ProgressCircle num={Math.ceil(totalTime / 60)} unit="분" title="소요시간" isDark={isDark} />
           <GrayCircle
-            // num={resultData.todayTotalWeight}
-            num={90}
+            num={resultData.todayTotalWeight}
             unit="kg"
             title="오늘 든 무게"
             bubbleOn={true}
