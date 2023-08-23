@@ -137,11 +137,8 @@ export default function Dictionary_Modal(props){
                 isVisible={isModalVisible} 
                 onBackdropPress={()=>changeModalVisibility(false)}
                 backdropTransitionOutTiming={0}
-                // animationIn="slideInRight"
-                // animationOut="slideOutRight"
-                // animationInTiming={400}
-                // animationOutTiming={400}
-                style={{alignItems: 'center', justifyContent: 'center'}}>
+                style={{alignItems: 'center', justifyContent: 'center'}}
+            >
                 <Container style={{backgroundColor: isDark?`${colors.grey_8}`: `${colors.white}`}}>
                     <TopContainer>
                         <Title style={{color: isDark? `${colors.white}` : `${colors.black}`}}>루틴에 운동 추가하기</Title> 
@@ -167,27 +164,27 @@ export default function Dictionary_Modal(props){
                                             style={{
                                                 marginRight: i%2==0? 5: null, 
                                                 backgroundColor: 
-                                                    selectedIdx == i? 
-                                                        isDark? `${colors.l_p50}`:`${colors.l_sub_2}`
+                                                    selectedIdx == i?  
+                                                        isDark? colors.l_p50 : colors.l_sub_2
                                                     :
-                                                        isDark? `${colors.grey_9}`:`${colors.grey_1}`,
-                                                borderColor: selectedIdx == i? isDark? `${colors.d_main}`:`${colors.l_main}`: 'transparent',
+                                                        isDark? colors.grey_9 : colors.grey_1,
+                                                borderColor: selectedIdx == i? isDark? colors.d_main : colors.l_main : 'transparent',
                                             }}
                                         >
-                                            <DayText style={{color: isDark? `${colors.white}` : `${colors.black}`}}>
+                                            <DayText 
+                                                style={{
+                                                    color: selectedIdx == i? isDark? colors.d_main: colors.l_main : isDark? colors.white : colors.black
+                                                }}>
                                                 {info.day}
                                             </DayText>
-                                            <PartText>
-                                                {info.parts}
-                                            </PartText>
+                                            <PartText>{info.parts}</PartText>
                                         </DayWrapper>
                                     )
                                 }
-                            })
+                            }) 
                         }
-                        
                         </DayContainer>
-                     </TopContainer>
+                    </TopContainer>
                     <BottomContainer>
                         <CancelContainer 
                             onPress={()=>changeModalVisibility(false)}
@@ -275,6 +272,7 @@ const PartText = styled.Text`
     font-size: 13px;
     font-family: Pretendard-Regular;
     margin-right: 7px;
+    color: ${colors.grey_6}
 `
 const BottomContainer = styled.View`
     flex-direction: row;
