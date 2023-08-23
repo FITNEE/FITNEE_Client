@@ -27,9 +27,7 @@ export default function AppBase() {
           }
         })
         await AsyncStorage.getItem('darkMode').then((darkMode) => {
-          if (darkMode) {
-            setIsDark(darkMode)
-          }
+          setIsDark(JSON.parse(darkMode))
         })
         await Font.loadAsync({
           'Pretendard-Light': require('./assets/fonts/Pretendard-Light.otf'),
