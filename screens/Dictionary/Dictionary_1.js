@@ -13,13 +13,13 @@ import DeleteDarkIcon from '../../assets/SVGs/Delete_Dark.svg'
 import { ScreenLayout } from '../../Shared'
 
 export default function Dictionary_1({ navigation }) {
+
     const isDark = useRecoilValue(IsDarkAtom)
 
     const [search, setSearch] = useState('')
     const [isSearching, setIsSearching] = useState(false)
     const [isSubmit, setIsSubmit] = useState(false)
     const [part, setPart] = useState([
-        ['유산소', false],
         ['어깨', false],
         ['상체', false],
         ['가슴', false],
@@ -27,6 +27,7 @@ export default function Dictionary_1({ navigation }) {
         ['복근', false],
         ['하체', false],
         ['엉덩이', false],
+        ['유산소', false],
     ])
     const [popularKeywords, setPopularKeywords] = useState([])
     const [recentKeywords, setRecentKeywords] = useState([])
@@ -155,21 +156,28 @@ export default function Dictionary_1({ navigation }) {
                                     keyboardAppearance={isDark ? 'dark' : 'light'}
                                     autoFocus
                                     placeholder="운동명 검색"
-                                    placeholderTextColor={colors.grey_4}
+                                    placeholderTextColor={isDark ? colors.grey_3 : colors.grey_7}
                                     returnKeyType="search"
                                     onChange={onChangeText}
                                     value={search}
                                     onSubmitEditing={onSubmitEditing}
                                     onFocus={onFocusInput}
-                                    style={{ color: isDark ? `${colors.grey_3}` : `${colors.black}` }}
+                                    style={{ color: isDark ? `${colors.white}` : `${colors.black}` }}
                                 />
-                                <TouchableOpacity style={{ marginLeft: 16 }} onPress={onDeleteInput}>
-                                    {isDark ? (
-                                        <DeleteDarkIcon width={24} height={24} />
-                                    ) : (
-                                        <DeleteIcon width={24} height={24} />
-                                    )}
-                                </TouchableOpacity>
+                                {
+                                    search.length == 0?
+                                    null
+                                    :
+                                    <TouchableOpacity style={{ marginLeft: 16 }} onPress={onDeleteInput}>
+                                    {
+                                        isDark ? (
+                                            <DeleteDarkIcon width={24} height={24} />
+                                        ) : (
+                                            <DeleteIcon width={24} height={24} />
+                                        )
+                                    }
+                                    </TouchableOpacity>
+                                }
                             </SearchInputContainer>
                         </SearchContainer>
                         {isSubmit && (
@@ -302,7 +310,7 @@ const SearchInput = styled.TextInput`
     flex-direction: row;
     padding: 0;
     font-size: 16px;
-    font-family: Pretendard-SemiBold;
+    font-family: Pretendard-Regular;
 `
 const PartContainer = styled.ScrollView`
     padding-top: 8px;

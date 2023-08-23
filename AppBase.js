@@ -4,16 +4,18 @@ import LoggedInNav from './navigators/LoggedInNav'
 import { useCallback, useEffect, useState } from 'react'
 import * as Font from 'expo-font'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import { useRecoilState } from 'recoil'
+import { useRecoilState, useSetRecoilState } from 'recoil'
 import { loggedInState } from './recoil/AuthAtom'
 import * as SplashScreen from 'expo-splash-screen'
 import { View } from 'react-native'
+import { IsDarkAtom } from './recoil/MyPageAtom'
 
 SplashScreen.preventAutoHideAsync()
 
 export default function AppBase() {
   const [appIsReady, setAppIsReady] = useState(false)
   const [loggedIn, setLoggedIn] = useRecoilState(loggedInState)
+  const setIsDark = useSetRecoilState(IsDarkAtom)
 
   useEffect(() => {
     async function prepare() {
@@ -22,6 +24,11 @@ export default function AppBase() {
           if (accessToken) {
             setLoggedIn(true)
             console.log('자동으로 로그인됨')
+          }
+        })
+        await AsyncStorage.getItem('darkMode').then((darkMode) => {
+          if (darkMode) {
+            setIsDark(!darkMode)
           }
         })
         await Font.loadAsync({
@@ -35,7 +42,7 @@ export default function AppBase() {
           'Pretendard-Regular': require('./assets/fonts/Pretendard-Regular.otf'),
           'Pretendard-Medium': require('./assets/fonts/Pretendard-Medium.otf'),
         })
-        // await new Promise((resolve) => setTimeout(resolve, 3000));
+        await new Promise((resolve) => setTimeout(resolve, 3000))
       } catch (e) {
         console.warn(e)
       } finally {
