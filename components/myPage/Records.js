@@ -49,7 +49,7 @@ const Circle = styled.View`
   width: 80px;
   height: 80px;
   border-radius: 40px;
-  background-color: ${({ isDark }) => (isDark ? colors.grey_7 : colors.grey_1)};
+  background-color: ${({ isDark }) => (isDark ? colors.grey_8 : colors.grey_1)};
   align-items: center;
   justify-content: center;
   flex-direction: row;
@@ -70,7 +70,7 @@ const CircleTitle = styled.Text`
 `
 const List = styled.View`
   border-radius: 12px;
-  background-color: ${({ isDark }) => (isDark ? colors.grey_7 : colors.grey_1)};
+  background-color: ${({ isDark }) => (isDark ? colors.grey_8 : colors.grey_1)};
   margin: 0px 32px;
   padding: 16px;
   gap: 7px;
