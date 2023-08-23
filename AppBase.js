@@ -28,6 +28,7 @@ export default function AppBase() {
         })
         await AsyncStorage.getItem('darkMode').then((darkMode) => {
           setIsDark(JSON.parse(darkMode))
+
         })
         await Font.loadAsync({
           'Pretendard-Light': require('./assets/fonts/Pretendard-Light.otf'),
@@ -40,7 +41,7 @@ export default function AppBase() {
           'Pretendard-Regular': require('./assets/fonts/Pretendard-Regular.otf'),
           'Pretendard-Medium': require('./assets/fonts/Pretendard-Medium.otf'),
         })
-        // await new Promise((resolve) => setTimeout(resolve, 3000));
+        await new Promise((resolve) => setTimeout(resolve, 3000))
       } catch (e) {
         console.warn(e)
       } finally {

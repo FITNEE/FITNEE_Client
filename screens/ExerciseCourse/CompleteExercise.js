@@ -105,7 +105,12 @@ export default function CompleteExercise({ navigation }) {
     const replaceAction = StackActions.replace('HomeNav')
     navigation.dispatch(replaceAction)
   }
-  const goToResult = () => navigation.navigate('ExerciseResult')
+  const goToResult = () =>
+    navigation.navigate('ExerciseResult', {
+      timeChange: detailData.exerciseTimeChange,
+      totalCount: resultData.monthCountHealth,
+      totalWeight: resultData.todayTotalWeight,
+    })
 
   const route = useRoute()
   const dataList = route.params.dataList
@@ -191,10 +196,10 @@ export default function CompleteExercise({ navigation }) {
         </CirclesLine>
 
         <ExerciseRec isDark={isDark}>
-          <ScrollView>
+          <ScrollView showsVerticalScrollIndicator={false}>
             {dataList.map((item) => (
               <RecTextLine key={item.exerciseInfo.healthCategoryIdx}>
-                <RecText1>{item.exerciseInfo.exerciseName}</RecText1>
+                <RecText1 isDark={isDark}>{item.exerciseInfo.exerciseName}</RecText1>
                 {item.skip === 1 ? (
                   <Check_disabled width={20} height={20} />
                 ) : (
