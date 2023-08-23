@@ -28,8 +28,6 @@ const InputRed = styled.View`
   border-radius: 8px;
   margin-bottom: 3px;
   border: 1px;
-  border-color: ${({ isDark, check, error }) =>
-    check ? (error ? colors.red : colors.green) : isDark ? colors.black : colors.grey_2};
 `
 const InputBlock = styled.TextInput`
   width: 238px;
@@ -220,7 +218,14 @@ export default function EditUserInfo({ navigation }) {
             )}
           </Profile>
           <InputContainer>
-            <InputRed isDark={isDark} error={error} check={check}>
+            <InputRed
+              isDark={isDark}
+              error={error}
+              check={check}
+              style={{
+                borderColor: check ? (error ? colors.red : colors.green) : isDark ? colors.black : colors.grey_2,
+              }}
+            >
               <InputBlock
                 editable
                 autoFocus
