@@ -10,6 +10,7 @@ import { colors } from '../colors'
 import CreateRoutineError from '../components/CreateRoutineError'
 import { IsDarkAtom } from '../recoil/MyPageAtom'
 import { imagePath } from '../imagePath'
+import { Animated } from 'react-native'
 
 export default function CreateRoutine_4({ navigation }) {
   const [select, SetSelect] = useState(false)
@@ -18,6 +19,7 @@ export default function CreateRoutine_4({ navigation }) {
   const [error, SetError] = useState(false)
   const [routine, setRoutine] = useRecoilState(CreateRoutineAtom)
   const isDark = useRecoilValue(IsDarkAtom)
+  const [opacity] = useState(new Animated.Value(0)) // 초기값은 0
   const [days, setDays] = useState([
     { id: 1, name: '일', selected: false, ename: 'Sunday' },
     { id: 2, name: '월', selected: false, ename: 'Monday' },
@@ -28,6 +30,22 @@ export default function CreateRoutine_4({ navigation }) {
     { id: 7, name: '토', selected: false, ename: 'Saturday' },
   ])
   const index = useNavigationState((state) => state.index)
+  const startOpacityAnimation = () => {
+    Animated.loop(
+      Animated.sequence([
+        Animated.timing(opacity, {
+          toValue: 1,
+          duration: 2000,
+          useNativeDriver: true,
+        }),
+        Animated.timing(opacity, {
+          toValue: 0,
+          duration: 2000,
+          useNativeDriver: true,
+        }),
+      ]),
+    ).start()
+  }
 
   const LoadingTexts = [
     '트레이닝 루틴을 생성 중입니다',
@@ -50,6 +68,10 @@ export default function CreateRoutine_4({ navigation }) {
   // useEffect(() => {
   //   console.log("atom4 : ", routine);
   // }, [routine]);
+  useEffect(() => {
+    if (loading) startOpacityAnimation()
+  }, [loading])
+
   useEffect(() => {
     if (loading) {
       handleSubmit()
@@ -142,7 +164,9 @@ export default function CreateRoutine_4({ navigation }) {
       ) : loading ? (
         <LoadingContainer isDark={isDark}>
           <Loading source={imagePath.path[25]} />
-          <LoadingText isDark={isDark}>{loadingText}</LoadingText>
+          <Animated.Text style={{ opacity }}>{loadingText}</Animated.Text>
+
+          {/* <LoadingText isDark={isDark}>{loadingText}</LoadingText> */}
         </LoadingContainer>
       ) : (
         <Container isDark={isDark}>
@@ -283,6 +307,7 @@ const Loading = styled.Image`
   height: 306px;
   background-color: white;
   border-radius: 153px;
+  margin-bottom: 24px;
   background-color: ${(props) => (props.isDark ? colors.grey_9 : colors.white)};
 `
 const LoadingText = styled.Text`
