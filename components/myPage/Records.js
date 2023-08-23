@@ -147,7 +147,7 @@ export default function Records(props) {
   return (
     <Container>
       <CalendarBox>
-        <CalendarView dayFunction={dayLoad} exerciseDays={exerciseDays} setMonth={setMonth} />
+        <CalendarView dayFunction={dayLoad} exerciseDays={exerciseDays} setMonth={setMonth} isDark={isDark} />
       </CalendarBox>
       <Bar isDark={isDark} />
       <Exercise>

@@ -67,10 +67,18 @@ export default WeekCalendar = ({ setSelectedDay, selectedDay, SCHEDULE, isDark }
                   style={
                     id == selectedDay //만일 선택된 날짜랑 운동있는 요일이랑 겹치면 색상을 변경해야하기 때문에 css 예외처리
                       ? {
-                          backgroundColor: isDark ? colors.d_main : colors.white,
+                          backgroundColor: isDark
+                            ? SCHEDULE[id]?.routineId === 0
+                              ? colors.black
+                              : colors.d_main
+                            : colors.white,
                         }
                       : {
-                          backgroundColor: isDark ? colors.d_main : colors.white,
+                          backgroundColor: isDark
+                            ? SCHEDULE[id]?.routineId === 0
+                              ? colors.grey_8
+                              : colors.grey_9
+                            : colors.white,
                         }
                   }
                 >
