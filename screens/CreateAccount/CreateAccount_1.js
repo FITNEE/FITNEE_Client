@@ -49,7 +49,7 @@ const CreateAccount_1 = ({ route, navigation }) => {
             {rewrite ? (
                 <InputContainer style={{ marginTop: 54 }}>
                     <StatusText style={{ color: rewrittenPW == PW ? colors.green : colors.red }}>
-                        {rewrittenPW == PW ? '비밀번호가 일치합니다' : '비밀번호가 일치하지 않습니다'}
+                        {rewrittenPW.length == 0? '': rewrittenPW == PW ? '비밀번호가 일치합니다' : '비밀번호가 일치하지 않습니다'}
                     </StatusText>
                     <Input
                         style={{
