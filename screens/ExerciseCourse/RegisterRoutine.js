@@ -102,7 +102,7 @@ export default function RegisterRoutine({ navigation }) {
   }, [isFocus])
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: colors.white }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: isDark ? colors.grey_9 : colors.white }}>
       <Container isDark={isDark}>
         <RoutineText isDark={isDark}>루틴을 생성해 주세요!</RoutineText>
         <RoutineExplain>
