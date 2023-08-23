@@ -98,7 +98,7 @@ const OnBoarding = ({ navigation }) => {
       <BottomContainer>
         <Input
           style={[
-            email.length > 20 && { borderWidth: 1, borderColor: colors.red },
+            email.length > 40 && { borderWidth: 1, borderColor: colors.red },
             {
               backgroundColor: isDark ? colors.black : colors.white,
               color: isDark ? colors.white : colors.black,
