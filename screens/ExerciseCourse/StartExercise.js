@@ -249,7 +249,7 @@ export default function StartExercise({ navigation }) {
           </CirclesLine>
 
           <ExerciseRec isDark={isDark}>
-            <ScrollView>{exerciseList}</ScrollView>
+            <ScrollView showsVerticalScrollIndicator={false}>{exerciseList}</ScrollView>
           </ExerciseRec>
 
           <ExerciseButton isDark={isDark} onPress={goToExerciseCourse}>

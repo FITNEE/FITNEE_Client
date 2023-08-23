@@ -9,24 +9,21 @@ const Box1 = styled.View`
   width: 130px;
   flex-direction: row;
   align-items: baseline;
-  height: 32px;
-  padding-top: 3px;
+  height: 25px;
 `
 
 const Box2 = styled.View`
   width: 84px;
   flex-direction: row;
   align-items: baseline;
-  height: 32px;
-  padding-top: 3px;
+  height: 25px;
 `
 
 const Box3 = styled.View`
   width: 49px;
   flex-direction: row;
   align-items: baseline;
-  height: 32px;
-  padding-top: 3px;
+  height: 25px;
 `
 
 const Container = styled.View`
@@ -45,7 +42,6 @@ const CurrentText = styled.Text`
   color: ${({ isDark }) => (isDark ? colors.white : colors.black)};
   font-size: 20px;
   font-family: Pretendard-SemiBold;
-  line-height: 32px;
 `
 
 const CurrentUnit = styled.Text`
@@ -54,19 +50,11 @@ const CurrentUnit = styled.Text`
   font-family: Pretendard-SemiBold;
 `
 
-const Container2 = styled.View`
-  width: 249px;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  padding: 24px 12px 24px 12px;
-`
-
 const CurrentText2 = styled.Text`
   font-size: 15px;
   font-family: Pretendard-SemiBold;
-  line-height: 32px;
-  color: ${colors.grey_7};
+  line-height: 25px;
+  color: ${({ isDark }) => (isDark ? colors.grey_4 : colors.grey_7)};
 `
 
 export default function CurrentSet({ set, kg, num }) {
@@ -76,7 +64,6 @@ export default function CurrentSet({ set, kg, num }) {
     <Container isDark={isDark}>
       <Box1>
         <CurrentText isDark={isDark}>{set}</CurrentText>
-
         <CurrentUnit isDark={isDark}>세트</CurrentUnit>
       </Box1>
 
