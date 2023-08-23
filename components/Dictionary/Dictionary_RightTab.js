@@ -325,8 +325,6 @@ export default function Dictionary_RightTab(props) {
     )
 }
 
-{/*textinputbg 색 변경하기*/}
-
 const SCREEN_WIDTH = Dimensions.get('screen').width
 const ChatContainer = styled.View`
   margin-left: 24px;
@@ -339,7 +337,7 @@ const MessageWrapper = styled.View`
 const MessageContainer = styled.View`
     border-radius: 12px 12px 12px 0px;
     padding: 8px 16px;
-    max-width: 200px;
+    max-width: ${SCREEN_WIDTH * 0.52}px;
 `
 const MyMessageContainer = styled.TouchableOpacity`
     border-radius: 12px 12px 0px 12px;
