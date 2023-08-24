@@ -77,7 +77,7 @@ const ResultBox = styled.View`
   width: 327px;
   margin-bottom: 32px;
   flex-direction: row;
-  justify-content: baseline;
+  align-items: baseline;
 `
 
 const ShareIconView = styled.TouchableOpacity`
@@ -232,7 +232,7 @@ export default function ExerciseResult({ navigation }) {
 
   useEffect(() => {
     fetchData()
-  }, [update])
+  }, [])
 
   return (
     <SafeAreaView
