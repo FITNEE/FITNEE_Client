@@ -169,7 +169,7 @@ export default function CreateRoutine_4({ navigation }) {
       ) : loading ? (
         <LoadingContainer isDark={isDark}>
           <Loading source={imagePath.path[25]} />
-          <Animated.Text style={{ opacity }}>{loadingText}</Animated.Text>
+          <Animated.Text style={{ opacity, color: isDark ? colors.white : colors.black }}>{loadingText}</Animated.Text>
 
           {/* <LoadingText isDark={isDark}>{loadingText}</LoadingText> */}
         </LoadingContainer>
