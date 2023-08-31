@@ -59,13 +59,6 @@ export default function Dictionary_Modal(props){
     const onPressDone = () => {
         if(selectedIdx != -1){
             changeModalVisibility(false)
-            Toast.show({
-                type: 'customToast',
-                text1: '해당 운동이 마이루틴에 추가되었습니다.',
-                visibilityTime: 2200,
-                topOffset: 56,
-                props: { isDark: isDark }
-            })
             getRoutineDetail(routineInfo[selectedIdx].routineIdx).then((result)=>{
                 let content = result.routineDetails
                 let addInfo = {
@@ -82,10 +75,21 @@ export default function Dictionary_Modal(props){
                     ]
                 }
                 content.push(addInfo)
-                updateRoutine(routineInfo[selectedIdx].routineIdx, content)
+                setIsSuccess(updateRoutine(routineInfo[selectedIdx].routineIdx, content))
             })
         } 
     }
+
+    const [isSuccess, setIsSuccess] = useState()
+    useEffect(()=>{
+        isSuccess && Toast.show({
+            type: 'customToast',
+            text1: isSuccess? '해당 운동이 마이루틴에 추가되었습니다.': '루틴 추가에 실패하였습니다.',
+            visibilityTime: 2200,
+            topOffset: 56,
+            props: { isDark: isDark }
+        })        
+    }, [isSuccess])
 
     // 선택한 요일의 기존에 저장되어 있던 루틴 내용을 가져옴
     const getRoutineDetail = async (routineIdx) => {
@@ -120,10 +124,11 @@ export default function Dictionary_Modal(props){
                     },
             })
             const result = response.data
+            console.log(result)
 
             if(result.isSuccess) console.log(`추가된 운동 등록 성공`)
             else console.log(`추가된 운동 등록 실패`)
-            return result
+            return result.isSuccess
         } 
             catch (error) {
                 console.error("Failed to fetch data:", error)

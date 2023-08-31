@@ -35,7 +35,32 @@ const ToastText = styled.Text`
   line-height: 19.5px;
   font-family: Pretendard-SemiBold;
 `
+const ToastBase = styled.View`
+  height: 44px;
+  width: 90%;
+  border-radius: 12px;
+  justify-content: center;
+  flex-direction: row;
+  align-items: center;
+  padding: 0px 16px;
+`;
+const SuccessToastText = styled.Text`
+  font-size: 13px;
+  font-family: Pretendard-SemiBold;
+  flex: 1;
+`;
 const toastConfig = {
+  success: ({props}) => (
+    <ToastBase
+      style={{ backgroundColor: props.isDark ? colors.white : colors.black }}
+    >
+      <SuccessToastText style={{ color: props.isDark ? colors.black : colors.white }}>
+        루틴이 수정되었습니다.
+      </SuccessToastText>
+      <CheckIcon width={24} height={24} color={props.isDark ? `${colors.grey_7}` : `${colors.white}`} />
+    </ToastBase>
+  ),
+
   customToast: ({ text1, props }) => (
     <ToastBG
       style={{
