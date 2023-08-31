@@ -8,7 +8,6 @@ import { Image, Text, TouchableOpacity } from "react-native";
 import LoggedInNav from "./LoggedInNav";
 import Login from "../screens/OnBoarding/Login";
 import EditPW from "../screens/MyPage/EditPW";
-import { WithLocalSvg } from "react-native-svg";
 import SettingIcon from "../assets/SVGs/Setting.svg";
 import Left from "../assets/SVGs/Left.svg";
 import { colors } from "../colors";

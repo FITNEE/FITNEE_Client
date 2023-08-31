@@ -7,6 +7,7 @@ import { Title, SubText, Input, StatusText, ScreenKeyboardLayout } from '../../c
 import axios from 'axios'
 import { useRecoilValue } from 'recoil'
 import { IsDarkAtom } from '../../recoil/MyPageAtom'
+import {EMAIL_API_KEY} from '@env'
 
 const TextContainer = styled.View`
   margin-top: 124px;
@@ -56,6 +57,7 @@ const OnBoarding = ({ navigation }) => {
 
   const [email, setEmail] = useState('')
   const [isLoading, setIsLoading] = useState(false)
+  const [isValid, setIsValid] = useState(false)
 
   const fetchResult = async (email) => {
     try {
@@ -88,51 +90,93 @@ const OnBoarding = ({ navigation }) => {
       }
     })
   }
+  
+    // 이메일 유효성 검증
+    const checkEmailVerification = async (email) => {
+        try {
+            let url = 'https://api.hunter.io/v2/email-verifier'
+            const response = await axios.get(url, {
+                params: {
+                    email: email,
+                    api_key: EMAIL_API_KEY
+                },
+            })
+            const result = response.data.data
+            return result.status
+        } catch (error) {
+        console.error('Failed to fetch data:', error)
+        }
+    }
+    const verifyEmail = ()=>{
+        checkEmailVerification(email).then((status)=>{            
+            switch (status) {
+                case 'valid':
+                case 'webmail':
+                    console.log('유효한 이메일')
+                    break
+                case 'invalid':
+                case 'disposable':
+                    console.log('사용자가 이메일 재입력 해야 함')
+                    break
+                case 'accept_all':
+                    console.log('유효성 검사 재시도해야 함')
+                    break
+                default:
+                    console.log('exceptional case for email verifier')
+                    break;
+            }
+        })
+    }
+    // https://help.hunter.io/en/articles/6103281-what-are-the-possible-verification-statuses-for-an-email
+    // https://hunter.io/api-documentation/v2#email-verifier
 
   return (
     <ScreenKeyboardLayout onPress={() => Keyboard.dismiss()} isDark={isDark}>
-      <TextContainer>
-        <Title text="이메일을 입력해주세요." isDark={isDark} />
-        <SubText text="로그인 또는 회원가입에 필요합니다." isDark={isDark} />
-      </TextContainer>
-      <BottomContainer>
-        <Input
-          style={[
-            email.length > 40 && { borderWidth: 1, borderColor: colors.red },
-            {
-              backgroundColor: isDark ? colors.black : colors.white,
-              color: isDark ? colors.white : colors.black,
-            },
-          ]}
-          autoCapitalize="none"
-          keyboardType="url"
-          placeholderTextColor={colors.grey_5}
-          onSubmitEditing={() => handleSubmit()}
-          placeholder="이메일 입력"
-          returnKeyType="next"
-          blurOnSubmit={false}
-          onChangeText={(text) => setEmail(text)}
-        />
-        {email.length > 40 && (
-          <StatusText style={{ color: colors.red, marginTop: 4, width: '100%' }}>40자 이하로 설정해주세요.</StatusText>
-        )}
-        {/* <ORContainer>
-          <Line />
-          <ORText>또는</ORText>
-        </ORContainer>
-        <SNSContainer>
-          <SNSButton>
-            <Text>Google</Text>
-          </SNSButton>
-          <SNSButton>
-            <Text>Kakao</Text>
-          </SNSButton>
-          <SNSButton>
-            <Text>Naver</Text>
-          </SNSButton>
-        </SNSContainer> */}
-      </BottomContainer>
-      <Button loading={isLoading} isDark={isDark} enabled={isUserId && !isLoading} onPress={() => handleSubmit()} />
+        <TextContainer>
+            <Title text="이메일을 입력해주세요." isDark={isDark} />
+            <SubText text="로그인 또는 회원가입에 필요합니다." isDark={isDark} />
+        </TextContainer>
+        <BottomContainer>
+        {
+            email.length > 40 && (
+            <StatusText style={{ color: colors.red, marginTop: 4, width: '100%' }}>40자 이하로 설정해주세요.</StatusText>
+            )
+        }
+            <Input
+            style={[
+                email.length > 40 && { borderWidth: 1, borderColor: colors.red },
+                {
+                backgroundColor: isDark ? colors.black : colors.white,
+                color: isDark ? colors.white : colors.black,
+                },
+            ]}
+            autoCapitalize="none"
+            keyboardType="url"
+            placeholderTextColor={colors.grey_5}
+            onSubmitEditing={() => handleSubmit()}
+            placeholder="이메일 입력"
+            returnKeyType="next"
+            blurOnSubmit={false}
+            onChangeText={(text) => setEmail(text)}
+            />
+            {/* <ORContainer>
+            <Line />
+            <ORText>또는</ORText>
+            </ORContainer>
+            <SNSContainer>
+            <SNSButton>
+                <Text>Google</Text>
+            </SNSButton>
+            <SNSButton>
+                <Text>Kakao</Text>
+            </SNSButton>
+            <SNSButton>
+                <Text>Naver</Text>
+            </SNSButton>
+            </SNSContainer> */}
+        </BottomContainer>
+        {/* <Button enabled={true} onPress={verifyEmail}/> */}
+        <Button loading={isLoading} isDark={isDark} enabled={isUserId && !isLoading && isValid} onPress={() => handleSubmit()} />
     </ScreenKeyboardLayout>
   )
 }
