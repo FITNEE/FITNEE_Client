@@ -16,8 +16,7 @@ import { ScreenLayout, ScreenWidth } from '../../Shared'
 import { IsDarkAtom, TabBarAtom } from '../../recoil/MyPageAtom'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 import { BottomSheetContent } from '../../components/myRoutine/BottomSheetContent'
-import Toast from "react-native-toast-message";
-
+import Toast from 'react-native-toast-message'
 
 const ScreenBase = styled.SafeAreaView`
   width: 100%;
@@ -83,13 +82,13 @@ export default MyRoutine = ({ navigation, route }) => {
 
   const showToast = () => {
     Toast.show({
-      type: "success",
-      position: "bottom",
+      type: 'success',
+      position: 'bottom',
       visibilityTime: 2200,
       bottomOffset: 101,
-      props: { isDark: isDark }
-    });
-  };
+      props: { isDark: isDark },
+    })
+  }
 
   const toggleMode = () => {
     if (mode) {
@@ -118,7 +117,9 @@ export default MyRoutine = ({ navigation, route }) => {
         (res) => {
           console.log('updateRoutine api 호출결과:', res)
           updateDatas()
-          showToast()
+          {
+            routineData ? showToast() : ''
+          }
         }, //눌렀을 때 mode가 true였을 때, 즉 커스텀모드에서 완료버튼을 눌렀을때.
       )
     } else {
@@ -296,14 +297,18 @@ export default MyRoutine = ({ navigation, route }) => {
               popMessage={popMessage}
             />
           </ScrollView>
-          <MyButton
-            style={{
-              backgroundColor: isDark ? colors.d_main : colors.l_main,
-            }}
-            onPress={() => navigation.navigate('ExerciseSearch', {})}
-          >
-            <ButtonText style={{ color: isDark ? colors.black : colors.white }}>운동 추가하기</ButtonText>
-          </MyButton>
+          {routineData ? (
+            <MyButton
+              style={{
+                backgroundColor: isDark ? colors.d_main : colors.l_main,
+              }}
+              onPress={() => navigation.navigate('ExerciseSearch', {})}
+            >
+              <ButtonText style={{ color: isDark ? colors.black : colors.white }}>운동 추가하기</ButtonText>
+            </MyButton>
+          ) : (
+            ''
+          )}
         </>
       ) : (
         <ContentBase
