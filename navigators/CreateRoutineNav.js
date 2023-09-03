@@ -1,27 +1,27 @@
-import React, { useEffect, useState } from "react";
-import { createStackNavigator } from "@react-navigation/stack";
-import { useNavigationState } from "@react-navigation/native";
-import CreateRoutine_1 from "../screens/CreateRoutine_1";
-import CreateRoutine_2 from "../screens/CreateRoutine_2";
-import CreateRoutine_3 from "../screens/CreateRoutine_3";
-import CreateRoutine_4 from "../screens/CreateRoutine_4";
-import CreateRoutine_5 from "../screens/CreateRoutine_5";
-import CreateRoutineHeader from "../components/CreateRoutineHeader";
-import styled from "styled-components/native";
-import HomeNav from "./HomeNav";
-import { colors } from "../colors";
+import React, { useEffect, useState } from 'react'
+import { createStackNavigator } from '@react-navigation/stack'
+import { useNavigationState } from '@react-navigation/native'
+import CreateRoutine_1 from '../screens/CreateRoutine/CreateRoutine_1'
+import CreateRoutine_2 from '../screens/CreateRoutine/CreateRoutine_2'
+import CreateRoutine_3 from '../screens/CreateRoutine/CreateRoutine_3'
+import CreateRoutine_4 from '../screens/CreateRoutine/CreateRoutine_4'
+import CreateRoutine_5 from '../screens/CreateRoutine/CreateRoutine_5'
+import CreateRoutineHeader from '../components/CreateRoutineHeader'
+import styled from 'styled-components/native'
+import HomeNav from './HomeNav'
+import { colors } from '../colors'
 
-const Stack = createStackNavigator();
+const Stack = createStackNavigator()
 
 export default function CreateRoutineNav() {
   // const index = useNavigationState((state) => state.index);
   return (
     <Stack.Navigator
       screenOptions={{
-        headerTitleAlign: "center",
+        headerTitleAlign: 'center',
         headerBackTitleVisible: false,
         headerTitleStyle: {
-          fontWeight: "bold",
+          fontWeight: 'bold',
           fontSize: 16,
         },
         // animation: fade,
@@ -44,11 +44,7 @@ export default function CreateRoutineNav() {
       <Stack.Screen name="CreateRoutine_2" component={CreateRoutine_2} />
       <Stack.Screen name="CreateRoutine_3" component={CreateRoutine_3} />
       <Stack.Screen name="CreateRoutine_4" component={CreateRoutine_4} />
-      <Stack.Screen
-        name="CreateRoutine_5"
-        options={{ headerShown: false }}
-        component={CreateRoutine_5}
-      />
+      <Stack.Screen name="CreateRoutine_5" options={{ headerShown: false }} component={CreateRoutine_5} />
       <Stack.Screen
         name="Home"
         options={{
@@ -57,7 +53,7 @@ export default function CreateRoutineNav() {
         component={HomeNav}
       />
     </Stack.Navigator>
-  );
+  )
 }
 
 const StackBar = styled.View`
@@ -66,28 +62,28 @@ const StackBar = styled.View`
   background-color: #dddddd;
 
   border-radius: 10px;
-`;
+`
 const StackBarPin1 = styled.View`
   width: 25%;
   height: 100%;
   background-color: #757575;
   border-radius: 10px;
-`;
+`
 const StackBarPin2 = styled.View`
   width: 50%;
   height: 100%;
   background-color: #757575;
   border-radius: 10px;
-`;
+`
 const StackBarPin3 = styled.View`
   width: 75%;
   height: 100%;
   background-color: #757575;
   border-radius: 10px;
-`;
+`
 const StackBarPin4 = styled.View`
   width: 100%;
   height: 100%;
   background-color: #757575;
   border-radius: 10px;
-`;
+`

@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components/native'
-import { colors } from '../colors'
-import RoutineItem from '../components/RoutineItem'
-import Scroll from '../components/Scroll'
+import { colors } from '../../colors'
+import RoutineItem from '../../components/RoutineItem'
+import Scroll from '../../components/Scroll'
 import { useNavigationState, useRoute } from '@react-navigation/native'
-import CreateRoutineHeader from '../components/CreateRoutineHeader'
+import CreateRoutineHeader from '../../components/CreateRoutineHeader'
 import axios from 'axios'
-import { IsDarkAtom } from '../recoil/MyPageAtom'
+import { IsDarkAtom } from '../../recoil/MyPageAtom'
 import { useRecoilValue } from 'recoil'
 
 export default function CreateRoutine_5({ navigation }) {
