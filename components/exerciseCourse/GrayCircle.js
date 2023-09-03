@@ -64,7 +64,7 @@ const BubbleArrow2 = styled.View`
   border-color: ${({ isDark }) => (isDark ? colors.white : colors.black)} transparent;
   width: 0;
   z-index: 1;
-  top: 16px;
+  top: 13px;
 `
 
 const BubbleText2 = styled.Text`

@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "healthGPT-native",
-    "slug": "healthGPT-native",
+    "name": "fitnee",
+    "slug": "fitnee",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/Splash.png",
@@ -11,11 +11,16 @@
       "resizeMode": "contain",
       "backgroundColor": "#F6F8FA"
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "co.gpthealth.fitnee"
     },
     "android": {
+      "package": "co.gpthealth.fitnee",
+      "versionCode": 1,
       "adaptiveIcon": {
         "foregroundImage": "./assets/Splash.png",
         "backgroundColor": "#F6F8FA"
@@ -23,6 +28,11 @@
     },
     "web": {
       "favicon": "./assets/Splash.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "a9c237c7-a7f7-4d65-bf88-de7f15664409"
+      }
     }
   }
 }
