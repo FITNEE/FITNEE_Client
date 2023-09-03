@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components/native'
 import { useNavigationState } from '@react-navigation/native'
-import CreateRoutineHeader from '../components/CreateRoutineHeader'
+import CreateRoutineHeader from '../../components/CreateRoutineHeader'
 import { useRecoilState, useRecoilValue } from 'recoil'
-import { CreateRoutineAtom } from '../recoil/CreateRoutineAtom'
-import { colors } from '../colors'
-import { GenderAtom, IsDarkAtom } from '../recoil/MyPageAtom'
-import Home from '../assets/SVGs/CreateRoutine/Home.svg'
-import Gym from '../assets/SVGs/CreateRoutine/Gym.svg'
+import { CreateRoutineAtom } from '../../recoil/CreateRoutineAtom'
+import { colors } from '../../colors'
+import { GenderAtom, IsDarkAtom } from '../../recoil/MyPageAtom'
 
 export default function CreateRoutine_3({ navigation }) {
   const [select, SetSelect] = useState(false)
@@ -21,48 +19,48 @@ export default function CreateRoutine_3({ navigation }) {
       name: '가슴',
       selected: false,
       ename: 'chest',
-      f: require('../assets/Imgs/Chest_f.png'),
-      m: require('../assets/Imgs/Chest_m.png'),
+      f: require('../../assets/Imgs/Chest_f.png'),
+      m: require('../../assets/Imgs/Chest_m.png'),
     },
     {
       id: 2,
       name: '등',
       selected: false,
       ename: 'back',
-      f: require('../assets/Imgs/Back_f.png'),
-      m: require('../assets/Imgs/Back_m.png'),
+      f: require('../../assets/Imgs/Back_f.png'),
+      m: require('../../assets/Imgs/Back_m.png'),
     },
     {
       id: 3,
       name: '어깨',
       selected: false,
       ename: 'shoulder',
-      f: require('../assets/Imgs/Shoulder_f.png'),
-      m: require('../assets/Imgs/Shoulder_m.png'),
+      f: require('../../assets/Imgs/Shoulder_f.png'),
+      m: require('../../assets/Imgs/Shoulder_m.png'),
     },
     {
       id: 4,
       name: '팔',
       selected: false,
       ename: 'arm',
-      f: require('../assets/Imgs/Arm_f.png'),
-      m: require('../assets/Imgs/Arm_m.png'),
+      f: require('../../assets/Imgs/Arm_f.png'),
+      m: require('../../assets/Imgs/Arm_m.png'),
     },
     {
       id: 5,
       name: '코어',
       selected: false,
       ename: 'core',
-      f: require('../assets/Imgs/Core_f.png'),
-      m: require('../assets/Imgs/Core_m.png'),
+      f: require('../../assets/Imgs/Core_f.png'),
+      m: require('../../assets/Imgs/Core_m.png'),
     },
     {
       id: 6,
       name: '하체',
       selected: false,
       ename: 'lower body',
-      f: require('../assets/Imgs/LowerBody_f.png'),
-      m: require('../assets/Imgs/LowerBody_m.png'),
+      f: require('../../assets/Imgs/LowerBody_f.png'),
+      m: require('../../assets/Imgs/LowerBody_m.png'),
     },
   ])
   const index = useNavigationState((state) => state.index)

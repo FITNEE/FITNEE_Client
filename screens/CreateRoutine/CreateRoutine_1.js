@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components/native'
 import { useIsFocused, useNavigationState } from '@react-navigation/native'
-import CreateRoutineHeader from '../components/CreateRoutineHeader'
+import CreateRoutineHeader from '../../components/CreateRoutineHeader'
 import { useRecoilState, useRecoilValue } from 'recoil'
-import { CreateRoutineAtom } from '../recoil/CreateRoutineAtom'
-import { colors } from '../colors'
-import { IsDarkAtom, TabBarAtom } from '../recoil/MyPageAtom'
+import { CreateRoutineAtom } from '../../recoil/CreateRoutineAtom'
+import { colors } from '../../colors'
+import { IsDarkAtom, TabBarAtom } from '../../recoil/MyPageAtom'
 import { StatusBar } from 'react-native'
-import Home from '../assets/SVGs/CreateRoutine/Home.svg'
-import Gym from '../assets/SVGs/CreateRoutine/Gym.svg'
+import Home from '../../assets/SVGs/CreateRoutine/Home.svg'
+import Gym from '../../assets/SVGs/CreateRoutine/Gym.svg'
 
 export default function CreateRoutine_1({ navigation }) {
   const [home, SetHome] = useState(false)
