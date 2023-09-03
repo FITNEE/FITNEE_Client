@@ -232,7 +232,7 @@ export default function ExerciseResult({ navigation }) {
 
   useEffect(() => {
     fetchData()
-  }, [update])
+  }, [])
 
   return (
     <SafeAreaView
