@@ -10,7 +10,7 @@ import { IsDarkAtom } from '../../recoil/MyPageAtom'
 import { useRecoilValue } from 'recoil'
 
 export default function CreateRoutine_5({ navigation }) {
-  const [routine, SetRoutine] = useState('')
+  const [routine, SetRoutine] = useState('0')
   const index = useNavigationState((state) => state.index)
   const isDark = useRecoilValue(IsDarkAtom)
   const [dayId, setDayId] = useState({
@@ -31,6 +31,7 @@ export default function CreateRoutine_5({ navigation }) {
   const responseData = route.params?.responseData
   const currentRoutine = (routine) => {
     SetRoutine(routine)
+    console.log('실행됨')
   }
   const handleSubmit = async () => {
     try {
@@ -48,6 +49,7 @@ export default function CreateRoutine_5({ navigation }) {
     navigation.push('Home')
   }
   useEffect(() => {
+    console.log('routine :', routine)
     if (routine) {
       responseData[routine].item.map((item) => {
         switch (item.day) {
@@ -93,12 +95,12 @@ export default function CreateRoutine_5({ navigation }) {
               satRoutineIdx: item.routineIdx,
             }))
             break
-
           default:
             break
         }
       })
     }
+    console.log('dayId : ', dayId)
   }, [routine])
 
   return (
