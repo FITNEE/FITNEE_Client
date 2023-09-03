@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components/native'
 import { useIsFocused, useNavigationState } from '@react-navigation/native'
-import CreateRoutineHeader from '../../components/CreateRoutineHeader'
+import CreateRoutineHeader from '../../components/CreateRoutine/CreateRoutineHeader'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import { CreateRoutineAtom } from '../../recoil/CreateRoutineAtom'
 import { colors } from '../../colors'

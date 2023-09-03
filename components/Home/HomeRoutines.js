@@ -1,10 +1,10 @@
 import React from 'react'
 import { styled } from 'styled-components/native'
-import { colors } from '../colors'
+import { colors } from '../../colors'
 import { useNavigation } from '@react-navigation/native'
 import axios from 'axios'
-import { ScreenWidth } from '../Shared'
-import { imagePath, pngPath } from '../imagePath'
+import { ScreenWidth } from '../../Shared'
+import { imagePath, pngPath } from '../../imagePath'
 
 const Container = styled.View`
   width: 100%;
