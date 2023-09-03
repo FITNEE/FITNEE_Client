@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import styled from 'styled-components/native'
-import { colors } from '../colors'
-import { ScreenWidth } from '../Shared'
+import { colors } from '../../colors'
+import { ScreenWidth } from '../../Shared'
 export default function RoutineItem({ day, parts, exercises, onPress, select, isDark }) {
   const [kday, setKday] = useState('')
   useEffect(() => {
