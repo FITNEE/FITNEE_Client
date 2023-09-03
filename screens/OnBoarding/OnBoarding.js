@@ -57,7 +57,8 @@ const OnBoarding = ({ navigation }) => {
 
   const [email, setEmail] = useState('')
   const [isLoading, setIsLoading] = useState(false)
-  const [isValid, setIsValid] = useState(false)
+  const [isValid, setIsValid] = useState()
+  const [emailWarning, setEmailWarning] = useState('')
 
   const fetchResult = async (email) => {
     try {
@@ -72,24 +73,21 @@ const OnBoarding = ({ navigation }) => {
     }
   }
 
-  const isUserId = email.indexOf('@') != -1 && email.length <= 40 && email.indexOf('.') != -1
-
-  const handleSubmit = () => {
-    console.log('submitted')
-    setIsLoading(true)
-    fetchResult(email).then((data) => {
-      setIsLoading(false)
-      if (data.code == 3003) {
-        navigation.navigate('CreateAccount_1', {
-          email,
+    const isUserId = email.indexOf('@') != -1 && email.length <= 40 && email.indexOf('.') != -1
+    const handleSubmit = () => {
+        console.log('submitted')
+        setIsLoading(true)
+        fetchResult(email).then((data) => {
+            if (data.code == 3003) { // 회원가입인 경우
+                verifyEmail(email)
+            } 
+            else { // 로그인인 경우
+                navigation.navigate('Login', {
+                email,
+                })
+            }
         })
-      } else {
-        navigation.navigate('Login', {
-          email,
-        })
-      }
-    })
-  }
+    }
   
     // 이메일 유효성 검증
     const checkEmailVerification = async (email) => {
@@ -108,22 +106,31 @@ const OnBoarding = ({ navigation }) => {
         }
     }
     const verifyEmail = ()=>{
-        checkEmailVerification(email).then((status)=>{            
+        checkEmailVerification(email).then((status)=>{  
+            setIsLoading(false)          
             switch (status) {
                 case 'valid':
                 case 'webmail':
                     console.log('유효한 이메일')
+                    navigation.navigate('CreateAccount_1', {
+                        email,
+                    })
                     break
                 case 'invalid':
                 case 'disposable':
                     console.log('사용자가 이메일 재입력 해야 함')
+                    setEmailWarning('유효하지 않은 이메일이에요.')
+                    return false
                     break
                 case 'accept_all':
                     console.log('유효성 검사 재시도해야 함')
+                    setEmailWarning('다시 시도해주세요.')
+                    return false
                     break
                 default:
                     console.log('exceptional case for email verifier')
-                    break;
+                    return false
+                    break
             }
         })
     }
@@ -138,9 +145,12 @@ const OnBoarding = ({ navigation }) => {
         </TextContainer>
         <BottomContainer>
         {
+            !isValid && email.length <= 40 && (
+            <StatusText style={{ color: colors.red, marginTop: 4, width: '100%' }}>{emailWarning}</StatusText>)
+        }
+        {
             email.length > 40 && (
-            <StatusText style={{ color: colors.red, marginTop: 4, width: '100%' }}>40자 이하로 설정해주세요.</StatusText>
-            )
+            <StatusText style={{ color: colors.red, marginTop: 4, width: '100%' }}>40자 이하로 설정해주세요.</StatusText>)
         }
             <Input
             style={[
@@ -176,7 +186,7 @@ const OnBoarding = ({ navigation }) => {
             </SNSContainer> */}
         </BottomContainer>
         {/* <Button enabled={true} onPress={verifyEmail}/> */}
-        <Button loading={isLoading} isDark={isDark} enabled={isUserId && !isLoading && isValid} onPress={() => handleSubmit()} />
+        <Button loading={isLoading} isDark={isDark} enabled={isUserId && !isLoading} onPress={() => handleSubmit()} />
     </ScreenKeyboardLayout>
   )
 }
