@@ -21,6 +21,9 @@
     "android": {
       "package": "co.gpthealth.fitnee",
       "versionCode": 2,
+      "binaryOptions":{
+        "apkPath": "./builds/my-app.apk"
+      },
       "adaptiveIcon": {
         "foregroundImage": "./assets/Splash.png",
         "backgroundColor": "#F6F8FA"
