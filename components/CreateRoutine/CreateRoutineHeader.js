@@ -3,11 +3,11 @@ import { Ionicons } from '@expo/vector-icons'
 import styled from 'styled-components/native'
 import { useNavigation } from '@react-navigation/native'
 import { Animated } from 'react-native'
-import { colors } from '../colors'
-import { IsDarkAtom } from '../recoil/MyPageAtom'
+import { colors } from '../../colors'
+import { IsDarkAtom } from '../../recoil/MyPageAtom'
 import { useRecoilValue } from 'recoil'
-import Left from '../assets/SVGs/Left.svg'
-import { ScreenWidth } from '../Shared'
+import Left from '../../assets/SVGs/Left.svg'
+import { ScreenWidth } from '../../Shared'
 
 export default function CreateRoutineHeader({ title, index, children }) {
   const [width, setWidth] = useState(0)

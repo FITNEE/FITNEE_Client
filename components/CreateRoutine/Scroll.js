@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react'
 import { FlatList } from 'react-native'
 import styled from 'styled-components/native'
 import RoutineItem from './RoutineItem'
-import { ScreenHeight, ScreenWidth } from '../Shared'
-import { colors } from '../colors'
+import { ScreenHeight, ScreenWidth } from '../../Shared'
+import { colors } from '../../colors'
 
 const PageIndicator = ({ isDark, totalPages, currentPage }) => {
   return (

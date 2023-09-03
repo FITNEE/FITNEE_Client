@@ -1,9 +1,9 @@
 import React from 'react'
 import { styled } from 'styled-components/native'
-import { colors } from '../colors'
+import { colors } from '../../colors'
 import { Dimensions } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
-import noRoutine from '../assets/Imgs/noRoutine.png'
+import noRoutine from '../../assets/Imgs/noRoutine.png'
 
 const Container = styled.View`
   width: 100%;
