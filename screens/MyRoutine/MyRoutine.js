@@ -7,7 +7,6 @@ import { useIsFocused } from '@react-navigation/native'
 import { colors } from '../../colors'
 import { Header } from '../../components/Shared/MyRoutine_Shared'
 import { pressBack } from '../../components/myRoutine/Functions'
-import { MyToast, showToast } from '../../components/myRoutine/MyToast'
 import WeekCalendar from '../../components/myRoutine/WeekCalendar'
 import { List_Custom } from '../../components/myRoutine/List_Custom'
 import List_Normal from '../../components/myRoutine/List_Normal'
@@ -17,6 +16,8 @@ import { ScreenLayout, ScreenWidth } from '../../Shared'
 import { IsDarkAtom, TabBarAtom } from '../../recoil/MyPageAtom'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 import { BottomSheetContent } from '../../components/myRoutine/BottomSheetContent'
+import Toast from "react-native-toast-message";
+
 
 const ScreenBase = styled.SafeAreaView`
   width: 100%;
@@ -79,6 +80,16 @@ export default MyRoutine = ({ navigation, route }) => {
       }
     })
   }
+
+  const showToast = () => {
+    Toast.show({
+      type: "success",
+      position: "bottom",
+      visibilityTime: 2200,
+      bottomOffset: 101,
+      props: { isDark: isDark }
+    });
+  };
 
   const toggleMode = () => {
     if (mode) {
@@ -324,7 +335,6 @@ export default MyRoutine = ({ navigation, route }) => {
               </NoRoutineText>
             </ContentContainer>
           )}
-          <MyToast isDark={isDark} />
         </ContentBase>
       )}
 
