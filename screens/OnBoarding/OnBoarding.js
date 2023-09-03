@@ -7,6 +7,7 @@ import { Title, SubText, Input, StatusText, ScreenKeyboardLayout } from '../../c
 import axios from 'axios'
 import { useRecoilValue } from 'recoil'
 import { IsDarkAtom } from '../../recoil/MyPageAtom'
+import {EMAIL_API_KEY} from '@env'
 
 const TextContainer = styled.View`
   margin-top: 124px;
@@ -56,6 +57,8 @@ const OnBoarding = ({ navigation }) => {
 
   const [email, setEmail] = useState('')
   const [isLoading, setIsLoading] = useState(false)
+  const [isValid, setIsValid] = useState()
+  const [emailWarning, setEmailWarning] = useState('')
 
   const fetchResult = async (email) => {
     try {
@@ -70,69 +73,120 @@ const OnBoarding = ({ navigation }) => {
     }
   }
 
-  const isUserId = email.indexOf('@') != -1 && email.length <= 40 && email.indexOf('.') != -1
-
-  const handleSubmit = () => {
-    console.log('submitted')
-    setIsLoading(true)
-    fetchResult(email).then((data) => {
-      setIsLoading(false)
-      if (data.code == 3003) {
-        navigation.navigate('CreateAccount_1', {
-          email,
+    const isUserId = email.indexOf('@') != -1 && email.length <= 40 && email.indexOf('.') != -1
+    const handleSubmit = () => {
+        console.log('submitted')
+        setIsLoading(true)
+        fetchResult(email).then((data) => {
+            if (data.code == 3003) { // 회원가입인 경우
+                verifyEmail(email)
+            } 
+            else { // 로그인인 경우
+                navigation.navigate('Login', {
+                email,
+                })
+            }
         })
-      } else {
-        navigation.navigate('Login', {
-          email,
+    }
+  
+    // 이메일 유효성 검증
+    const checkEmailVerification = async (email) => {
+        try {
+            let url = 'https://api.hunter.io/v2/email-verifier'
+            const response = await axios.get(url, {
+                params: {
+                    email: email,
+                    api_key: EMAIL_API_KEY
+                },
+            })
+            const result = response.data.data
+            return result.status
+        } catch (error) {
+        console.error('Failed to fetch data:', error)
+        }
+    }
+    const verifyEmail = ()=>{
+        checkEmailVerification(email).then((status)=>{  
+            setIsLoading(false)          
+            switch (status) {
+                case 'valid':
+                case 'webmail':
+                    console.log('유효한 이메일')
+                    navigation.navigate('CreateAccount_1', {
+                        email,
+                    })
+                    break
+                case 'invalid':
+                case 'disposable':
+                    console.log('사용자가 이메일 재입력 해야 함')
+                    setEmailWarning('유효하지 않은 이메일이에요.')
+                    return false
+                    break
+                case 'accept_all':
+                    console.log('유효성 검사 재시도해야 함')
+                    setEmailWarning('다시 시도해주세요.')
+                    return false
+                    break
+                default:
+                    console.log('exceptional case for email verifier')
+                    return false
+                    break
+            }
         })
-      }
-    })
-  }
+    }
+    // https://help.hunter.io/en/articles/6103281-what-are-the-possible-verification-statuses-for-an-email
+    // https://hunter.io/api-documentation/v2#email-verifier
 
   return (
     <ScreenKeyboardLayout onPress={() => Keyboard.dismiss()} isDark={isDark}>
-      <TextContainer>
-        <Title text="이메일을 입력해주세요." isDark={isDark} />
-        <SubText text="로그인 또는 회원가입에 필요합니다." isDark={isDark} />
-      </TextContainer>
-      <BottomContainer>
-        <Input
-          style={[
-            email.length > 40 && { borderWidth: 1, borderColor: colors.red },
-            {
-              backgroundColor: isDark ? colors.black : colors.white,
-              color: isDark ? colors.white : colors.black,
-            },
-          ]}
-          autoCapitalize="none"
-          keyboardType="url"
-          placeholderTextColor={colors.grey_5}
-          onSubmitEditing={() => handleSubmit()}
-          placeholder="이메일 입력"
-          returnKeyType="next"
-          blurOnSubmit={false}
-          onChangeText={(text) => setEmail(text)}
-        />
-        {email.length > 40 && (
-          <StatusText style={{ color: colors.red, marginTop: 4, width: '100%' }}>40자 이하로 설정해주세요.</StatusText>
-        )}
-        {/* <ORContainer>
-          <Line />
-          <ORText>또는</ORText>
-        </ORContainer>
-        <SNSContainer>
-          <SNSButton>
-            <Text>Google</Text>
-          </SNSButton>
-          <SNSButton>
-            <Text>Kakao</Text>
-          </SNSButton>
-          <SNSButton>
-            <Text>Naver</Text>
-          </SNSButton>
-        </SNSContainer> */}
-      </BottomContainer>
-      <Button loading={isLoading} isDark={isDark} enabled={isUserId && !isLoading} onPress={() => handleSubmit()} />
+        <TextContainer>
+            <Title text="이메일을 입력해주세요." isDark={isDark} />
+            <SubText text="로그인 또는 회원가입에 필요합니다." isDark={isDark} />
+        </TextContainer>
+        <BottomContainer>
+        {
+            !isValid && email.length <= 40 && (
+            <StatusText style={{ color: colors.red, marginTop: 4, width: '100%' }}>{emailWarning}</StatusText>)
+        }
+        {
+            email.length > 40 && (
+            <StatusText style={{ color: colors.red, marginTop: 4, width: '100%' }}>40자 이하로 설정해주세요.</StatusText>)
+        }
+            <Input
+            style={[
+                email.length > 40 && { borderWidth: 1, borderColor: colors.red },
+                {
+                backgroundColor: isDark ? colors.black : colors.white,
+                color: isDark ? colors.white : colors.black,
+                },
+            ]}
+            autoCapitalize="none"
+            keyboardType="url"
+            placeholderTextColor={colors.grey_5}
+            onSubmitEditing={() => handleSubmit()}
+            placeholder="이메일 입력"
+            returnKeyType="next"
+            blurOnSubmit={false}
+            onChangeText={(text) => setEmail(text)}
+            />
+            {/* <ORContainer>
+            <Line />
+            <ORText>또는</ORText>
+            </ORContainer>
+            <SNSContainer>
+            <SNSButton>
+                <Text>Google</Text>
+            </SNSButton>
+            <SNSButton>
+                <Text>Kakao</Text>
+            </SNSButton>
+            <SNSButton>
+                <Text>Naver</Text>
+            </SNSButton>
+            </SNSContainer> */}
+        </BottomContainer>
+        {/* <Button enabled={true} onPress={verifyEmail}/> */}
+        <Button loading={isLoading} isDark={isDark} enabled={isUserId && !isLoading} onPress={() => handleSubmit()} />
     </ScreenKeyboardLayout>
   )
 }
