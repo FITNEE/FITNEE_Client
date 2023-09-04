@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "healthGPT-native",
-    "slug": "healthGPT-native",
+    "name": "fitnee",
+    "slug": "fitnee",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/Splash.png",
