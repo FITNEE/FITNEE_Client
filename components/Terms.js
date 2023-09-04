@@ -3,7 +3,7 @@ import { Ionicons } from '@expo/vector-icons'
 import { colors } from '../colors'
 import { useEffect, useState } from 'react'
 
-export default function Terms({ handleSubmit }) {
+export default function Terms({ handleSubmit, navigation }) {
   const [all, setAll] = useState(false)
   const [serviceTerms, setServiceTerms] = useState(false)
   const [dataTerms, setDataTerms] = useState(false)
@@ -18,6 +18,7 @@ export default function Terms({ handleSubmit }) {
   const pressCheck = () => {
     handleSubmit()
   }
+
   return (
     <TermsContainer>
       <CheckContainer>
@@ -35,14 +36,18 @@ export default function Terms({ handleSubmit }) {
         <Agree onPress={() => setServiceTerms(!serviceTerms)}>
           <Ionicons name="checkbox" size={28} color={serviceTerms ? colors.grey_5 : '#D9D9D9'} />
         </Agree>
-        <Text>서비스 이용약관</Text>
+        <ClickTerms onPress={() => navigation.navigate('Terms_1')}>
+          <Text>서비스 이용약관</Text>
+        </ClickTerms>
         <Essential>필수</Essential>
       </TermsOfService>
       <TermsOfService>
         <Agree onPress={() => setDataTerms(!dataTerms)}>
           <Ionicons name="checkbox" size={28} color={dataTerms ? colors.grey_5 : '#D9D9D9'} />
         </Agree>
-        <Text>개인정보 수집 및 목적</Text>
+        <ClickTerms onPress={() => navigation.navigate('Terms_2')}>
+          <Text>개인정보 수집 및 목적</Text>
+        </ClickTerms>
         <Essential>필수</Essential>
       </TermsOfService>
     </TermsContainer>
@@ -52,12 +57,13 @@ export default function Terms({ handleSubmit }) {
 const TermsContainer = styled.View`
   align-items: center;
 `
-const CheckContainer = styled.View``
-const Check = styled.TouchableOpacity`
-  margin-top: 20px;
-  margin-left: 313px;
-  margin-bottom: 16px;
+const CheckContainer = styled.View`
+  align-items: flex-end;
+  width: 327px;
+  height: 50px;
+  padding: 8px;
 `
+const Check = styled.TouchableOpacity``
 const Agree = styled.TouchableOpacity``
 const CheckText = styled.Text`
   font-size: 17px;
@@ -83,11 +89,13 @@ const TermsOfService = styled.View`
   border-radius: 12px;
   padding: 8px;
 `
+const ClickTerms = styled.TouchableOpacity``
 
 const Text = styled.Text`
   margin-left: 8px;
   font-size: 17px;
   font-weight: 500;
+  line-height: 25.5px; /* 25.5px */
 `
 const Essential = styled.Text`
   color: ${colors.red};
