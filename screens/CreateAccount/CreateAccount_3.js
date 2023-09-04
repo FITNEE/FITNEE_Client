@@ -9,6 +9,7 @@ import Animated, { useAnimatedStyle, withSpring } from 'react-native-reanimated'
 import { useRecoilValue } from 'recoil'
 import { IsDarkAtom } from '../../recoil/MyPageAtom'
 import { View } from 'react-native'
+import Terms from '../../components/Terms'
 
 const TextContainer = styled.View`
   margin-top: 124px;
@@ -97,7 +98,7 @@ const BMIText = styled.Text`
 
 const InnerBottomSheet = styled.View`
   flex: 1;
-  background-color: purple;
+  background-color: ${colors.white};
 `
 
 export const BMIBase = ({ BMIMode, isDark }) => {
@@ -324,7 +325,7 @@ const CreateAccount_3 = ({ route, navigation }) => {
         </Animated.View>
         <BMIBase isDark={isDark} BMIMode={BMIMode} />
       </BMIContainer>
-      <Button isDark={isDark} enabled={height && weight} onPress={clickToRule}/>
+      <Button isDark={isDark} enabled={height && weight} onPress={clickToRule} />
       <BottomSheet
         ref={bottomModal}
         backdropComponent={renderBackdrop}
@@ -359,11 +360,12 @@ const CreateAccount_3 = ({ route, navigation }) => {
           backgroundColor: isDark ? `${colors.grey_9}` : `${colors.white}`,
         }}
       >
-        <InnerBottomSheet></InnerBottomSheet>
+        <InnerBottomSheet>
+          <Terms handleSubmit={handleSubmit} />
+        </InnerBottomSheet>
       </BottomSheet>
     </ScreenKeyboardLayout>
   )
 }
 
 export default CreateAccount_3
-
