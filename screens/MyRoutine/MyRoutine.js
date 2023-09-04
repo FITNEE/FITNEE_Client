@@ -86,6 +86,7 @@ export default MyRoutine = ({ navigation, route }) => {
       text1: '루틴이 수정되었습니다.',
       visibilityTime: 2000,
       position: 'bottom',
+      bottomOffset: 101,
       props: { isDark: isDark },
     })
   }
