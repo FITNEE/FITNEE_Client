@@ -23,7 +23,7 @@ export default function OnBoardingNav() {
       <Stack.Screen name="CreateAccount_1" component={CreateAccount_1} />
       <Stack.Screen name="CreateAccount_2" component={CreateAccount_2} />
       <Stack.Screen name="CreateAccount_3" component={CreateAccount_3} />
-      <Stack.Screen name="CreateAccount_4" component={CreateAccount_4} />
+      <Stack.Screen name="CreateAccount_4" options={{ gestureEnabled: false }} component={CreateAccount_4} />
       <Stack.Screen name="Login" component={Login} />
       <Stack.Screen name="Terms_1" component={Terms_1} />
       <Stack.Screen name="Terms_2" component={Terms_2} />
