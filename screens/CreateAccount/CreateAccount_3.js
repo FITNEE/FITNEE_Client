@@ -268,11 +268,17 @@ const CreateAccount_3 = ({ route, navigation }) => {
     [],
   )
 
+  const renderRuleBackdrop = useCallback(
+    (props) => (
+      <BottomSheetBackdrop {...props} opacity={0.3} pressBehavior="none" appearsOnIndex={0} disappearsOnIndex={-1} />
+    ),
+    [],
+  )
+
   // 키, 몸무게 입력 후 확인버튼 누르면 bottom sheet 뜨게
   const clickToRule = () => ruleBottomRef.current?.snapToIndex(0)
   const ruleBottomRef = useRef()
   const ruleSnapPoints = useMemo(() => ['45%'], [])
-  const renderRuleBackdrop = useCallback((props) => <BottomSheetBackdrop {...props} pressBehavior="none" />, [])
 
   return (
     <ScreenKeyboardLayout onPress={() => hideModal()} isDark={isDark}>
@@ -359,6 +365,7 @@ const CreateAccount_3 = ({ route, navigation }) => {
         backgroundStyle={{
           backgroundColor: isDark ? `${colors.grey_9}` : `${colors.white}`,
         }}
+        handleIndicatorStyle={{ height: 0 }}
       >
         <InnerBottomSheet>
           <Terms handleSubmit={handleSubmit} navigation={navigation} />
