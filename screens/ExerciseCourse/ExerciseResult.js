@@ -77,7 +77,6 @@ const ResultBox = styled.View`
   width: 327px;
   margin-bottom: 32px;
   flex-direction: row;
-  align-items: baseline;
 `
 
 const ShareIconView = styled.TouchableOpacity`
@@ -120,6 +119,8 @@ const JustCircle = styled.View`
   height: 201px;
   background-color: ${({ DarkMode }) => (DarkMode ? colors.black : colors.white)};
   margin-top: 64px;
+  align-items: center;
+  justify-content: center;
 `
 
 const ExerciseIconCircle = styled.View`
@@ -132,11 +133,10 @@ const ExerciseIconCircle = styled.View`
   background-color: ${({ DarkMode }) => (DarkMode ? colors.grey_9 : colors.l_sub_2)};
 `
 
-const CarImage = styled.Image`
+const Image = styled.Image`
   width: 184px;
   height: 184px;
   aspect-ratio: 1;
-  margin-left: 6px;
 `
 
 export default function ExerciseResult({ navigation }) {
@@ -246,14 +246,37 @@ export default function ExerciseResult({ navigation }) {
           <Container DarkMode={isDark}>
             <BlankBox />
             <TextBox>
-              <ExerciseText DarkMode={isDark}>소형차 한 대 만큼의 {'\n'}무게를 들어올렸어요</ExerciseText>
+              <ExerciseText DarkMode={isDark}>
+                {totalWeight <= 100
+                  ? '오늘도 열심히 운동한 당신,\n대단해요!'
+                  : totalWeight <= 500
+                  ? '열기구 한 대 만큼의\n무게를 들어올렸어요'
+                  : totalWeight <= 1000
+                  ? '소형차 한 대 만큼의\n무게를 들어올렸어요'
+                  : totalWeight <= 1200
+                  ? '트럭 한 대 만큼의\n무게를 들어올렸어요'
+                  : totalWeight <= 1600
+                  ? '대형버스 한 대 만큼의\n무게를 들어올렸어요'
+                  : totalWeight <= 2000
+                  ? '기차 한 칸 만큼의\n무게를 들어올렸어요'
+                  : totalWeight <= 10000
+                  ? '우주선 한 대 만큼의\n무게를 들어올렸어요'
+                  : '인간의 경지를 벗어난 당신,\n대단해요!'}
+              </ExerciseText>
+
               <ExerciseExplainText DarkMode={isDark}>
                 {formatDate} ({day})에 분석된 운동 역량 분석 결과입니다.
               </ExerciseExplainText>
             </TextBox>
 
             <JustCircle DarkMode={isDark}>
-              <CarImage source={require('../../assets/Imgs/car.png')} />
+              <Image
+                source={
+                  totalWeight > 500 && totalWeight <= 1000
+                    ? require('../../assets/Imgs/car.png')
+                    : require('../../assets/Imgs/dumbBell.png')
+                }
+              />
             </JustCircle>
             <JustText>{totalWeight} kg</JustText>
 
@@ -277,7 +300,7 @@ export default function ExerciseResult({ navigation }) {
                   {timeChange < 0
                     ? '운동 시간이 단축되었다면 성장이 이루어졌다고 볼 수 있어요. 무게 혹은 횟수 등의 난이도를 높여서 성장한 몸에 맞는 운동량으로 바꿔보세요.'
                     : timeChange === 0
-                    ? '적절한 난이도로 수행중이에요. 무리하지 않고 차근차근 운동하면 더 건강해질거에요.'
+                    ? '적절한 난이도로 수행중이에요. 무리하지 않고 차근차근 운동강도를 조절하세요.'
                     : '운동 시간이 증가했다면 현재 운동의 강도가 조금 강할 수 있어요. 무게 혹은 횟수 등의 난이도를 낮춰서 안전하게 수행해보세요.'}
                 </ContentText>
               </ContentView>
