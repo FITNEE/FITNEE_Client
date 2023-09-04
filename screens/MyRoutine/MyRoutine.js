@@ -82,10 +82,10 @@ export default MyRoutine = ({ navigation, route }) => {
 
   const showToast = () => {
     Toast.show({
-      type: 'success',
+      type: 'customToast',
+      text1: '루틴이 수정되었습니다.',
+      visibilityTime: 2000,
       position: 'bottom',
-      visibilityTime: 2200,
-      bottomOffset: 101,
       props: { isDark: isDark },
     })
   }
