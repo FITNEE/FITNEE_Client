@@ -2,6 +2,7 @@ import styled from 'styled-components/native'
 import { Ionicons } from '@expo/vector-icons'
 import { colors } from '../colors'
 import { useEffect, useState } from 'react'
+import { ScreenWidth } from '../Shared'
 
 export default function Terms({ handleSubmit, navigation }) {
   const [all, setAll] = useState(false)
@@ -56,25 +57,30 @@ export default function Terms({ handleSubmit, navigation }) {
 
 const TermsContainer = styled.View`
   align-items: center;
+  padding: 0px 24px;
+  flex: 1;
 `
 const CheckContainer = styled.View`
+  display: flex;
+  width: ${ScreenWidth - 48}px;
   align-items: flex-end;
-  width: 327px;
-  height: 50px;
-  padding: 8px;
 `
-const Check = styled.TouchableOpacity``
+const Check = styled.TouchableOpacity`
+  margin-bottom: 16px;
+  margin-right: 8px;
+`
+
 const Agree = styled.TouchableOpacity``
 const CheckText = styled.Text`
   font-size: 17px;
   color: ${colors.l_main};
   font-weight: 600;
-  line-height: 25.5px; /* 25.5px */
+  line-height: 25.5px;
 `
 const TermsAll = styled.View`
   flex-direction: row;
   align-items: center;
-  width: 327px;
+  width: ${ScreenWidth - 48}px;
   height: 50px;
   background-color: ${(props) => (props.all ? colors.l_sub_2 : colors.grey_1)};
   border-radius: 12px;
@@ -84,7 +90,7 @@ const TermsOfService = styled.View`
   flex-direction: row;
   flex-direction: row;
   align-items: center;
-  width: 327px;
+  width: ${ScreenWidth - 48}px;
   height: 50px;
   border-radius: 12px;
   padding: 8px;
