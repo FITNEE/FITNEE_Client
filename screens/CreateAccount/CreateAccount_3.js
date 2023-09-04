@@ -361,7 +361,7 @@ const CreateAccount_3 = ({ route, navigation }) => {
         }}
       >
         <InnerBottomSheet>
-          <Terms handleSubmit={handleSubmit} />
+          <Terms handleSubmit={handleSubmit} navigation={navigation} />
         </InnerBottomSheet>
       </BottomSheet>
     </ScreenKeyboardLayout>
