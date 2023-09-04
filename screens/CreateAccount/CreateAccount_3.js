@@ -359,6 +359,7 @@ const CreateAccount_3 = ({ route, navigation }) => {
         backgroundStyle={{
           backgroundColor: isDark ? `${colors.grey_9}` : `${colors.white}`,
         }}
+        handleIndicatorStyle={{ height: 0 }}
       >
         <InnerBottomSheet>
           <Terms handleSubmit={handleSubmit} />
