@@ -16,6 +16,8 @@
       "supportsTablet": true
     },
     "android": {
+      "package": "co.gpthealth.fitnee",
+      "versionCode": 2,
       "adaptiveIcon": {
         "foregroundImage": "./assets/Splash.png",
         "backgroundColor": "#F6F8FA"
