@@ -54,6 +54,7 @@ const CreateAccount_4 = ({ route, navigation }) => {
   const isDark = useRecoilValue(IsDarkAtom)
   const [loggedIn, setLoggedIn] = useRecoilState(loggedInState)
   const [isLoading, setIsLoading] = useState(true)
+  // const routesParams = useRoute()
 
   const postUser = async (data) => {
     try {
