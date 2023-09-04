@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState, useMemo } from 'react'
 import styled from 'styled-components/native'
 import { colors } from '../../colors'
 import { Button, BackButton } from '../../Shared'
@@ -9,6 +9,7 @@ import Animated, { useAnimatedStyle, withSpring } from 'react-native-reanimated'
 import { useRecoilValue } from 'recoil'
 import { IsDarkAtom } from '../../recoil/MyPageAtom'
 import { View } from 'react-native'
+import Terms from '../../components/Terms'
 
 const TextContainer = styled.View`
   margin-top: 124px;
@@ -93,6 +94,11 @@ const BMIText = styled.Text`
   font-size: 11px;
   font-family: Pretendard-Regular;
   margin-top: 4px;
+`
+
+const InnerBottomSheet = styled.View`
+  flex: 1;
+  background-color: ${colors.white};
 `
 
 export const BMIBase = ({ BMIMode, isDark }) => {
@@ -262,6 +268,18 @@ const CreateAccount_3 = ({ route, navigation }) => {
     [],
   )
 
+  const renderRuleBackdrop = useCallback(
+    (props) => (
+      <BottomSheetBackdrop {...props} opacity={0.3} pressBehavior="none" appearsOnIndex={0} disappearsOnIndex={-1} />
+    ),
+    [],
+  )
+
+  // 키, 몸무게 입력 후 확인버튼 누르면 bottom sheet 뜨게
+  const clickToRule = () => ruleBottomRef.current?.snapToIndex(0)
+  const ruleBottomRef = useRef()
+  const ruleSnapPoints = useMemo(() => ['45%'], [])
+
   return (
     <ScreenKeyboardLayout onPress={() => hideModal()} isDark={isDark}>
       <BackButton isDark={isDark} onPress={() => navigation.goBack()} />
@@ -313,7 +331,7 @@ const CreateAccount_3 = ({ route, navigation }) => {
         </Animated.View>
         <BMIBase isDark={isDark} BMIMode={BMIMode} />
       </BMIContainer>
-      <Button isDark={isDark} enabled={height && weight} onPress={() => handleSubmit()} />
+      <Button isDark={isDark} enabled={height && weight} onPress={clickToRule} />
       <BottomSheet
         ref={bottomModal}
         backdropComponent={renderBackdrop}
@@ -337,6 +355,21 @@ const CreateAccount_3 = ({ route, navigation }) => {
           hideFunc={() => hideModal()}
           nextFunc={mode == 1 ? () => setMode(2) : () => hideModal()}
         />
+      </BottomSheet>
+      <BottomSheet
+        ref={ruleBottomRef}
+        index={-1}
+        snapPoints={ruleSnapPoints} // bottom sheet가 화면을 얼마나 가릴지 비율 설정
+        enablePanDownToClose={false} // 사라지지 않게
+        backdropComponent={renderRuleBackdrop}
+        backgroundStyle={{
+          backgroundColor: isDark ? `${colors.grey_9}` : `${colors.white}`,
+        }}
+        handleIndicatorStyle={{ height: 0 }}
+      >
+        <InnerBottomSheet>
+          <Terms handleSubmit={handleSubmit} />
+        </InnerBottomSheet>
       </BottomSheet>
     </ScreenKeyboardLayout>
   )
