@@ -78,17 +78,19 @@ const Box1 = styled.View`
 `
 
 const Box2 = styled.View`
-  width: 84px;
+  width: 80px;
   flex-direction: row;
   align-items: baseline;
   height: 25px;
 `
 
 const Box3 = styled.View`
-  width: 49px;
+  width: 45px;
   flex-direction: row;
   align-items: baseline;
+  justify-content: flex-end;
   height: 25px;
+  right: 14px;
 `
 
 const SkipExercrise = styled.TouchableOpacity`
@@ -338,14 +340,27 @@ export default function ExerciseCourse_1({ navigation }) {
                     : 'rgba(0, 0, 0, 0.50)',
               }}
             >
-              빈 봉
+              {dataList[listIndex].exerciseInfo.healthCategoryIdx === 24 ||
+              dataList[listIndex].exerciseInfo.healthCategoryIdx === 25
+                ? null
+                : '빈 봉'}
             </CurrentText2>
           )}
           {item.weight !== 'null' ? <CurrentUnit style={{ color: textColor }}>kg</CurrentUnit> : null}
         </Box2>
         <Box3>
-          <CurrentText style={{ color: textColor }}>{item.rep}</CurrentText>
-          <CurrentUnit style={{ color: textColor }}>회</CurrentUnit>
+          <CurrentText style={{ color: textColor }}>
+            {dataList[listIndex].exerciseInfo.healthCategoryIdx === 24 ||
+            dataList[listIndex].exerciseInfo.healthCategoryIdx === 25
+              ? item.rep * 10
+              : item.rep}
+          </CurrentText>
+          <CurrentUnit style={{ color: textColor }}>
+            {dataList[listIndex].exerciseInfo.healthCategoryIdx === 24 ||
+            dataList[listIndex].exerciseInfo.healthCategoryIdx === 25
+              ? 'm'
+              : '회'}
+          </CurrentUnit>
         </Box3>
         {item.set === dataList[listIndex].totalSets ? null : checkedSets[item.set] ? (
           <Check width={24} height={24} color={isDark ? colors.black : colors.white} />

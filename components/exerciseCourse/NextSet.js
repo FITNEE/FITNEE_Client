@@ -11,19 +11,20 @@ const Box1 = styled.View`
   align-items: baseline;
   height: 25px;
 `
-
 const Box2 = styled.View`
-  width: 84px;
+  width: 80px;
   flex-direction: row;
   align-items: baseline;
   height: 25px;
 `
 
 const Box3 = styled.View`
-  width: 49px;
+  width: 45px;
   flex-direction: row;
   align-items: baseline;
+  justify-content: flex-end;
   height: 25px;
+  right: 14px;
 `
 const Container = styled.View`
   width: 327px;
@@ -56,7 +57,7 @@ const CurrentText2 = styled.Text`
   color: ${({ isDark }) => (isDark ? colors.grey_4 : '#858687')};
 `
 
-export default function NextSet({ set, kg, num, isDark }) {
+export default function NextSet({ set, kg, num, isDark, run }) {
   return (
     <Container isDark={isDark}>
       <Box1>
@@ -67,15 +68,15 @@ export default function NextSet({ set, kg, num, isDark }) {
       <Box2>
         {kg !== 'null' ? (
           <CurrentText isDark={isDark}>{kg}</CurrentText>
-        ) : (
+        ) : run ? null : (
           <CurrentText2 isDark={isDark}>빈 봉</CurrentText2>
         )}
         {kg !== 'null' ? <CurrentUnit isDark={isDark}>kg</CurrentUnit> : null}
       </Box2>
 
       <Box3>
-        <CurrentText isDark={isDark}>{num}</CurrentText>
-        <CurrentUnit isDark={isDark}>회</CurrentUnit>
+        <CurrentText isDark={isDark}>{run ? num * 10 : num}</CurrentText>
+        <CurrentUnit isDark={isDark}>{run ? 'm' : '회'}</CurrentUnit>
       </Box3>
 
       <Check_disabled width={24} height={24} />
