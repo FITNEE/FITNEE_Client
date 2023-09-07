@@ -11,9 +11,12 @@
       "resizeMode": "contain",
       "backgroundColor": "#F6F8FA"
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "co.gpthealth.fitnee"
     },
     "android": {
       "package": "co.gpthealth.fitnee",
