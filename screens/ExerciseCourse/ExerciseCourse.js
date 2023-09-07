@@ -451,7 +451,17 @@ export default function ExerciseCourse({ navigation }) {
             <ReplaceButtonText isDark={isDark}>운동 대체하기</ReplaceButtonText>
           </ReplaceButton>
 
-          <CurrentSet set={1} kg={dataList[listIndex].sets[0].weight} num={dataList[listIndex].sets[0].rep} />
+          <CurrentSet
+            set={1}
+            kg={dataList[listIndex].sets[0].weight}
+            num={dataList[listIndex].sets[0].rep}
+            run={
+              dataList[listIndex].exerciseInfo.healthCategoryIdx === 24 ||
+              dataList[listIndex].exerciseInfo.healthCategoryIdx === 25
+                ? true
+                : false
+            }
+          />
 
           <CurrentExplain isDark={isDark}>{adviceList}</CurrentExplain>
 

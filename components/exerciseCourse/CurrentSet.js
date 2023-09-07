@@ -23,7 +23,9 @@ const Box3 = styled.View`
   width: 49px;
   flex-direction: row;
   align-items: baseline;
+  justify-content: flex-end;
   height: 25px;
+  right: 14px;
 `
 
 const Container = styled.View`
@@ -57,7 +59,7 @@ const CurrentText2 = styled.Text`
   color: ${({ isDark }) => (isDark ? colors.grey_4 : colors.grey_7)};
 `
 
-export default function CurrentSet({ set, kg, num }) {
+export default function CurrentSet({ set, kg, num, run }) {
   const isDark = useRecoilValue(IsDarkAtom)
 
   return (
@@ -70,15 +72,15 @@ export default function CurrentSet({ set, kg, num }) {
       <Box2>
         {kg !== 'null' ? (
           <CurrentText isDark={isDark}>{kg}</CurrentText>
-        ) : (
+        ) : run ? null : (
           <CurrentText2 isDark={isDark}>빈 봉</CurrentText2>
         )}
         {kg !== 'null' ? <CurrentUnit isDark={isDark}>kg</CurrentUnit> : null}
       </Box2>
 
       <Box3>
-        <CurrentText isDark={isDark}>{num}</CurrentText>
-        <CurrentUnit isDark={isDark}>회</CurrentUnit>
+        <CurrentText isDark={isDark}>{run ? num * 10 : num}</CurrentText>
+        <CurrentUnit isDark={isDark}>{run ? 'm' : '회'}</CurrentUnit>
       </Box3>
       <Check_disabled width={24} height={24} />
     </Container>

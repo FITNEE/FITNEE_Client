@@ -57,18 +57,6 @@ export default function ExerciseCourse_2_2({
     navigation.navigate('StartExercise')
   }
 
-  const goToNextExercise = () => {
-    setIsPlaying(false)
-    navigation.dispatch(
-      StackActions.replace('ExerciseCourse', {
-        dataList: dataList,
-        listIndex: listIndex + 1,
-        totalTime: totalTime - restTime,
-        routineIdx: routineIdx,
-      }),
-    )
-  }
-
   const OpenConfirm = () => {
     Alert.alert('현재 진행중인 운동루틴을 중단하시겠습니까?', '현재까지 운동하신 내용은 저장되지 않습니다.', [
       { text: '취소', onPress: () => console.log('Cancel Stop') },
@@ -132,6 +120,12 @@ export default function ExerciseCourse_2_2({
           kg={dataList[listIndex].sets[setId].weight}
           num={dataList[listIndex].sets[setId].rep}
           isDark={isDark}
+          run={
+            dataList[listIndex].exerciseInfo.healthCategoryIdx === 24 ||
+            dataList[listIndex].exerciseInfo.healthCategoryIdx === 25
+              ? true
+              : false
+          }
         />
         <BlankBox />
 

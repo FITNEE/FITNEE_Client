@@ -343,6 +343,12 @@ export default function ExerciseCourse_2({ navigation, dataList, listIndex, tota
             kg={dataList[listIndex + 1].sets[0].weight}
             num={dataList[listIndex + 1].sets[0].rep}
             isDark={isDark}
+            run={
+              dataList[listIndex + 1].exerciseInfo.healthCategoryIdx === 24 ||
+              dataList[listIndex + 1].exerciseInfo.healthCategoryIdx === 25
+                ? true
+                : false
+            }
           />
 
           <BottomSheetModal
