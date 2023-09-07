@@ -256,6 +256,7 @@ export default MyRoutine = ({ navigation, route }) => {
     setNewRoutine(data)
     data ? setSelectedArr(new Array(data).fill(false)) : setSelectedArr([])
   }
+
   useEffect(() => {
     if (SCHEDULE[selectedDay] != undefined) {
       getRoutine(SCHEDULE, selectedDay, setIsLoading).then((res) => {

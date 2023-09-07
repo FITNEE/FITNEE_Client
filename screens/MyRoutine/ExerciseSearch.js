@@ -10,8 +10,6 @@ import Close from '../../assets/SVGs/Close.svg'
 import { Button } from '../../Shared'
 import { useRecoilValue } from 'recoil'
 import { IsDarkAtom } from '../../recoil/MyPageAtom'
-import DeleteIcon from '../../assets/SVGs/Delete.svg'
-import DeleteDarkIcon from '../../assets/SVGs/Delete_Dark.svg'
 
 const Container = styled.View`
   flex: 1;
@@ -140,9 +138,10 @@ export default function ExerciseSearch({ navigation }) {
     setSelectedItem(newArr)
   }
   // 검색창 옆 X 버튼 눌렀을 때
-  const onDeleteInput = () => {
-    setSearch('')
-    setIsSearching(false) // 키워드들 보이게
+  const onPressX = () => {
+    navigation.goBack()
+    // setSearch('')
+    // setIsSearching(false) // 키워드들 보이게
   }
 
   // 검색어(search)가 비어있으면 IsSearching = true / 아니면 false
@@ -230,7 +229,7 @@ export default function ExerciseSearch({ navigation }) {
                 <SearchInput
                   style={{ color: isDark ? colors.white : colors.black }}
                   autoFocus={true}
-                  placeholder="운동명, 부위 검색"
+                  placeholder="추가할 운동명 검색"
                   placeholderTextColor={colors.grey_4}
                   returnKeyType="search"
                   onChange={onChangeText}
@@ -239,8 +238,8 @@ export default function ExerciseSearch({ navigation }) {
                   onFocus={onFocusInput}
                 />
               </SearchInputContainer>
-              <DeleteAllBtn onPress={onDeleteInput}>
-                {isDark ? <DeleteDarkIcon width={24} height={24} /> : <DeleteIcon width={24} height={24} />}
+              <DeleteAllBtn onPress={onPressX}>
+                <Close width={24} height={24} color={isDark ? colors.white : colors.black} />
               </DeleteAllBtn>
             </SearchContainer>
           </TopContainer>
@@ -336,11 +335,7 @@ export default function ExerciseSearch({ navigation }) {
         <SelectedListContainer horizontal showsHorizontalScrollIndicator={false}>
           {selectedItem?.map((item, id) => (
             <ItemContainer key={id} onPress={() => editSelectedList('delete', id, 'none')}>
-              <Delete
-                height={24}
-                width={24}
-                // color={isDark ? colors.black : colors.black}
-              />
+              <Delete height={24} width={24} />
               <SelectedItemText style={{ color: isDark ? colors.white : colors.black }}>
                 {item.exerciseName}
               </SelectedItemText>
@@ -349,9 +344,9 @@ export default function ExerciseSearch({ navigation }) {
         </SelectedListContainer>
         <Button
           onPress={() => navigation.navigate('MyRoutine', { selectedItem })}
-          text="다음"
+          text="추가하기"
           isDark={isDark}
-          enabled={true}
+          enabled={selectedItem.length > 0}
           mode="absolute"
         />
       </BottomContainer>
