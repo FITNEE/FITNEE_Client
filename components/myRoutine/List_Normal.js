@@ -115,7 +115,7 @@ export default List_Normal = ({ routineData, isDark, selectedArr, setSelectedArr
                   </SetsText_Normal>
                 )}
                 <SetsText_Normal style={{ color: isDark ? colors.white : colors.grey_8 }}>
-                  {Contentitem.rep} {isCardio ? '분' : '회'}
+                  {isCardio ? `${Contentitem.rep * 100} m` : `${Contentitem.rep} 회`}
                 </SetsText_Normal>
               </SetContainer>
             ))}
