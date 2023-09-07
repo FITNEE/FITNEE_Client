@@ -127,9 +127,9 @@ const ExerciseItem_Custom = ({ id, content, title, popMessage, editRoutine, isDa
                   marginLeft: 20,
                 }}
               >
-                {item.rep}
+                {isCardio ? item.rep * 100 : item.rep}
               </SetCount>
-              <SetsText style={{ color: isDark ? colors.grey_4 : colors.grey_8 }}> {isCardio ? '분' : '회'}</SetsText>
+              <SetsText style={{ color: isDark ? colors.grey_4 : colors.grey_8 }}> {isCardio ? 'm' : '회'}</SetsText>
             </TextContainer>
             <DeleteButton onPress={() => editRoutine(id, 'deleteSet', contentId)}>
               <Trash width={24} height={24} />
