@@ -67,16 +67,18 @@ export default function NextSet({ set, kg, num, isDark, run }) {
 
       <Box2>
         {kg !== 'null' ? (
-          <CurrentText isDark={isDark}>{kg}</CurrentText>
+          run ? null : (
+            <CurrentText isDark={isDark}>{kg}</CurrentText>
+          )
         ) : run ? null : (
           <CurrentText2 isDark={isDark}>빈 봉</CurrentText2>
         )}
-        {kg !== 'null' ? <CurrentUnit isDark={isDark}>kg</CurrentUnit> : null}
+        {kg !== 'null' ? <CurrentUnit isDark={isDark}>{run ? null : kg}</CurrentUnit> : null}
       </Box2>
 
       <Box3>
-        <CurrentText isDark={isDark}>{run ? num * 10 : num}</CurrentText>
-        <CurrentUnit isDark={isDark}>{run ? 'm' : '회'}</CurrentUnit>
+        <CurrentText isDark={isDark}>{run ? num * 100 : num}</CurrentText>
+        <CurrentUnit isDark={isDark}>{run ? ' m' : '회'}</CurrentUnit>
       </Box3>
 
       <Check_disabled width={24} height={24} />
