@@ -218,7 +218,7 @@ export default MyRoutine = ({ navigation, route }) => {
     } else {
       console.log('무슨 타입입니까...?')
     }
-    console.log('newArr & setNewRoutine:', newArr)
+
     setNewRoutine(newArr)
   }
   const renderBackdrop = useCallback(
