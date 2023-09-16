@@ -109,6 +109,7 @@ const OnBoarding = ({ navigation }) => {
   const verifyEmail = () => {
     checkEmailVerification(email).then((result) => {
       setIsLoading(false)
+      console.log(result)
       switch (result) {
         case 'deliverable':
           console.log('유효한 이메일')
