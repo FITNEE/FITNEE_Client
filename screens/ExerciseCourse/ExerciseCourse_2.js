@@ -371,8 +371,8 @@ export default function ExerciseCourse_2({ navigation, dataList, listIndex, tota
               {replaceList.map((item, healthCategoryIdx) => (
                 <ReplaceView isDark={isDark}>
                   <ReplaceView2 isDark={isDark}>
-                    <ReplaceImage source={pngPath.path[healthCategoryIdx]} isDark={isDark} />
-                    <ReplaceTextView isDark={isDark} key={healthCategoryIdx}>
+                    <ReplaceImage source={pngPath.path[item.healthCategoryIdx]} isDark={isDark} />
+                    <ReplaceTextView isDark={isDark} key={item.healthCategoryIdx}>
                       <ReplaceText1 isDark={isDark}>{item.name}</ReplaceText1>
                       <ReplaceText2 isDark={isDark}>
                         {item.parts} | {item.muscle} | {item.equipment}
