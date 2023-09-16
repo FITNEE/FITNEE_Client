@@ -498,7 +498,7 @@ export default function ExerciseCourse({ navigation }) {
                 <ReplaceView isDark={isDark}>
                   <ReplaceView2 isDark={isDark}>
                     <ReplaceImage source={pngPath.path[item.healthCategoryIdx]} isDark={isDark} />
-                    <ReplaceTextView isDark={isDark} key={healthCategoryIdx}>
+                    <ReplaceTextView isDark={isDark} key={item.healthCategoryIdx}>
                       <ReplaceText1 isDark={isDark}>{item.name}</ReplaceText1>
                       <ReplaceText2 isDark={isDark}>
                         {item.parts} | {item.muscle} | {item.equipment}
