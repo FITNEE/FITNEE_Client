@@ -82,6 +82,7 @@ const OnBoarding = ({ navigation }) => {
                 verifyEmail(email)
             } 
             else { // 로그인인 경우
+                setIsLoading(false)
                 navigation.navigate('Login', {
                 email,
                 })
@@ -100,36 +101,34 @@ const OnBoarding = ({ navigation }) => {
                 },
             })
             const result = response.data.data
-            return result.status
+            return result.result
         } catch (error) {
-        console.error('Failed to fetch data:', error)
+        console.error('Failed to fetch email api:', error)
         }
     }
     const verifyEmail = ()=>{
-        checkEmailVerification(email).then((status)=>{  
+        checkEmailVerification(email).then((result)=>{  
             setIsLoading(false)          
-            switch (status) {
-                case 'valid':
-                case 'webmail':
+            switch (result) {
+                case 'deliverable':
                     console.log('유효한 이메일')
                     navigation.navigate('CreateAccount_1', {
                         email,
                     })
                     break
-                case 'invalid':
-                case 'disposable':
-                    console.log('사용자가 이메일 재입력 해야 함')
+                case 'undeliverable':
+                    console.log('유효하지 않은 이메일')
                     setEmailWarning('유효하지 않은 이메일이에요.')
-                    return false
+                    // return false
                     break
-                case 'accept_all':
-                    console.log('유효성 검사 재시도해야 함')
+                case 'risky':
+                    console.log('api 에러 - 재시도 필요')
                     setEmailWarning('다시 시도해주세요.')
-                    return false
+                    // return false
                     break
                 default:
                     console.log('exceptional case for email verifier')
-                    return false
+                    // return false
                     break
             }
         })
@@ -185,7 +184,6 @@ const OnBoarding = ({ navigation }) => {
             </SNSButton>
             </SNSContainer> */}
         </BottomContainer>
-        {/* <Button enabled={true} onPress={verifyEmail}/> */}
         <Button loading={isLoading} isDark={isDark} enabled={isUserId && !isLoading} onPress={() => handleSubmit()} />
     </ScreenKeyboardLayout>
   )

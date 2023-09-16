@@ -242,7 +242,12 @@ export default function Dictionary_RightTab(props) {
                         <ChatContainer key={i}>
                             {msg.userNickname != myNickName ? 
                                 (<MessageWrapper>
-                                    <UserName style={{color: isDark ? `${colors.d_main}` : `${colors.l_main}`}}>{msg.userNickname}</UserName>
+                                    {
+                                        msg.userNickname === null?
+                                        <UserName style={{color: isDark ? colors.grey_3 : colors.grey_7}}>알 수 없음</UserName>
+                                        :
+                                        <UserName style={{color: isDark ? colors.d_main : colors.l_main}}>{msg.userNickname}</UserName>
+                                    }
                                     <MessageContainer style={{backgroundColor: isDark? `${colors.grey_8}`:`${colors.grey_1}`}}>
                                         <MessageText 
                                             style={{color: isDark? `${colors.white}`:`${colors.black}`}}>
