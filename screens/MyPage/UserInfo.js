@@ -193,21 +193,25 @@ export default function UserInfo({ route, navigation }) {
             <ClickText
               isDark={isDark}
               onPress={() => {
-                Alert.alert('정말로 탈퇴하시겠습니까?', '현재 이용 중인 계정은 삭제되며\n다시 불러올 수 없습니다.', [
-                  {
-                    text: '취소',
-                    style: 'default',
-                  },
-                  {
-                    text: '탈퇴하기',
-                    style: 'destructive',
-                    onPress: () => {
-                      deleteUserInfo()
-                      Logout()
-                      navigation.dispatch(CommonActions.reset({ index: 0, routes: [{ name: 'Setting' }] }))
+                Alert.alert(
+                  '정말로 탈퇴하시겠습니까?',
+                  '현재 이용 중인 계정은 삭제되며\n 15일간 동일 계정으로 가입할 수 없습니다.',
+                  [
+                    {
+                      text: '취소',
+                      style: 'default',
                     },
-                  },
-                ])
+                    {
+                      text: '탈퇴하기',
+                      style: 'destructive',
+                      onPress: () => {
+                        deleteUserInfo()
+                        Logout()
+                        navigation.dispatch(CommonActions.reset({ index: 0, routes: [{ name: 'Setting' }] }))
+                      },
+                    },
+                  ],
+                )
               }}
             >
               회원 탈퇴하기
