@@ -495,7 +495,7 @@ export default function ExerciseCourse({ navigation }) {
               {replaceList.map((item, healthCategoryIdx) => (
                 <ReplaceView isDark={isDark}>
                   <ReplaceView2 isDark={isDark}>
-                    <ReplaceImage source={pngPath.path[healthCategoryIdx]} isDark={isDark} />
+                    <ReplaceImage source={pngPath.path[item.healthCategoryIdx]} isDark={isDark} />
                     <ReplaceTextView isDark={isDark} key={healthCategoryIdx}>
                       <ReplaceText1 isDark={isDark}>{item.name}</ReplaceText1>
                       <ReplaceText2 isDark={isDark}>
