@@ -4,7 +4,7 @@ import { styled } from 'styled-components/native'
 import { colors } from '../../colors'
 import axios from 'axios'
 import { ScreenWidth } from '../../Shared'
-import { useIsFocused } from '@react-navigation/native'
+import { CommonActions, useIsFocused } from '@react-navigation/native'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import Right from '../../assets/SVGs/Right.svg'
 import { useRecoilState, useRecoilValue } from 'recoil'
@@ -204,6 +204,7 @@ export default function UserInfo({ route, navigation }) {
                     onPress: () => {
                       deleteUserInfo()
                       Logout()
+                      navigation.dispatch(CommonActions.reset({ index: 0, routes: [{ name: 'Setting' }] }))
                     },
                   },
                 ])
