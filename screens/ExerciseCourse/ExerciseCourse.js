@@ -158,6 +158,8 @@ const ReplaceImage = styled.Image`
   width: 60px;
   aspect-ratio: 1;
   border-radius: 999px;
+  align-items: center;
+  justify-content: center;
 `
 
 export default function ExerciseCourse({ navigation }) {
