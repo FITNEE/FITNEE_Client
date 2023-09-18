@@ -158,6 +158,8 @@ const ReplaceImage = styled.Image`
   width: 60px;
   aspect-ratio: 1;
   border-radius: 999px;
+  align-items: center;
+  justify-content: center;
 `
 
 export default function ExerciseCourse({ navigation }) {
@@ -420,6 +422,12 @@ export default function ExerciseCourse({ navigation }) {
     require('../../assets/GIFs/25.gif'),
   ]
 
+  const editMuscle = (muscle) => {
+    if (muscle.length >= 9) {
+      return muscle.substring(0, 9) + '...'
+    } else return muscle
+  }
+
   return (
     <BottomSheetModalProvider>
       <Animated.View
@@ -495,11 +503,11 @@ export default function ExerciseCourse({ navigation }) {
               {replaceList.map((item, healthCategoryIdx) => (
                 <ReplaceView isDark={isDark}>
                   <ReplaceView2 isDark={isDark}>
-                    <ReplaceImage source={pngPath.path[healthCategoryIdx]} isDark={isDark} />
+                    <ReplaceImage source={pngPath.path[item.healthCategoryIdx - 1]} isDark={isDark} />
                     <ReplaceTextView isDark={isDark} key={healthCategoryIdx}>
                       <ReplaceText1 isDark={isDark}>{item.name}</ReplaceText1>
                       <ReplaceText2 isDark={isDark}>
-                        {item.parts} | {item.muscle} | {item.equipment}
+                        {item.parts} | {editMuscle(item.muscle)} | {item.equipment}
                       </ReplaceText2>
                     </ReplaceTextView>
                   </ReplaceView2>
