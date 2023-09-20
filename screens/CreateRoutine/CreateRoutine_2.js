@@ -38,9 +38,10 @@ export default function CreateRoutine_2({ navigation }) {
         RM: 0,
       }))
     } else {
+      console.log('RM :', value)
       setRoutine((prev) => ({
         ...prev,
-        RM: value.label,
+        RM: value,
       }))
     }
 
@@ -123,7 +124,6 @@ export default function CreateRoutine_2({ navigation }) {
           pickerData={data}
           onValueChange={(value) => {
             setValue(value)
-            console.log(value)
           }}
         />
       )}

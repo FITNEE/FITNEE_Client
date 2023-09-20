@@ -8,8 +8,9 @@ import CreateRoutineHeader from '../../components/CreateRoutine/CreateRoutineHea
 import axios from 'axios'
 import { IsDarkAtom } from '../../recoil/MyPageAtom'
 import { useRecoilValue } from 'recoil'
+import { useNavigation } from '@react-navigation/native'
 
-export default function CreateRoutine_5({ navigation }) {
+export default function CreateRoutine_5() {
   const [routine, SetRoutine] = useState('0')
   const index = useNavigationState((state) => state.index)
   const isDark = useRecoilValue(IsDarkAtom)
@@ -22,6 +23,7 @@ export default function CreateRoutine_5({ navigation }) {
     satRoutineIdx: 0,
     sunRoutineIdx: 0,
   })
+  const navigation = useNavigation()
   useEffect(() => {
     navigation.setOptions({
       header: () => <CreateRoutineHeader title="루틴 등록" index={index} />,
@@ -46,11 +48,12 @@ export default function CreateRoutine_5({ navigation }) {
   }
   const selectRoutine = () => {
     handleSubmit()
-    navigation.push('Home')
+    navigation.navigate('MyPage')
+    navigation.navigate('HomeNav')
   }
   useEffect(() => {
     console.log('routine :', routine)
-    if (routine) {
+    if (routine + 1) {
       responseData[routine].item.map((item) => {
         switch (item.day) {
           case 'Sunday':
