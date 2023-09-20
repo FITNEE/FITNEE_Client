@@ -356,7 +356,7 @@ export default function ExerciseCourse_1({ navigation }) {
               {dataList[listIndex].exerciseInfo.healthCategoryIdx === 24 ||
               dataList[listIndex].exerciseInfo.healthCategoryIdx === 25
                 ? null
-                : kg}
+                : 'kg'}
             </CurrentUnit>
           ) : null}
         </Box2>
