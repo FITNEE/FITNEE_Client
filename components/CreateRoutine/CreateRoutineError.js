@@ -14,7 +14,7 @@ export default function CreateRoutineError({ isDark, retryPress, navigation }) {
         <RetryText>다시 시도</RetryText>
       </Retry>
       <Home
-        onPress={() => navigation.navigate('Home')}
+        onPress={() => navigation.navigate('HomeNav')}
         style={{
           borderColor: `${colors.l_main}`,
         }}
