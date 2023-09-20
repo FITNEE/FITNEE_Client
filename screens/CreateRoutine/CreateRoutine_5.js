@@ -51,57 +51,73 @@ export default function CreateRoutine_5() {
     navigation.navigate('MyPage')
     navigation.navigate('HomeNav')
   }
+  const setUp = () => {
+    responseData[routine].item.map((item) => {
+      switch (item.day) {
+        case 'Sunday':
+          setDayId((prev) => ({
+            ...prev,
+            sunRoutineIdx: item.routineIdx,
+          }))
+          break
+        case 'Monday':
+          setDayId((prev) => ({
+            ...prev,
+            monRoutineIdx: item.routineIdx,
+          }))
+          break
+        case 'Tuesday':
+          setDayId((prev) => ({
+            ...prev,
+            tueRoutineIdx: item.routineIdx,
+          }))
+          break
+        case 'Wednesday':
+          setDayId((prev) => ({
+            ...prev,
+            wedRoutineIdx: item.routineIdx,
+          }))
+          break
+        case 'Thursday':
+          setDayId((prev) => ({
+            ...prev,
+            thuRoutineIdx: item.routineIdx,
+          }))
+          break
+        case 'Friday':
+          setDayId((prev) => ({
+            ...prev,
+            friRoutineIdx: item.routineIdx,
+          }))
+          break
+        case 'Saturday':
+          setDayId((prev) => ({
+            ...prev,
+            satRoutineIdx: item.routineIdx,
+          }))
+          break
+        default:
+          break
+      }
+    })
+  }
+  const reset = () => {
+    setDayId({
+      monRoutineIdx: 0,
+      tueRoutineIdx: 0,
+      wedRoutineIdx: 0,
+      thuRoutineIdx: 0,
+      friRoutineIdx: 0,
+      satRoutineIdx: 0,
+      sunRoutineIdx: 0,
+    })
+  }
   useEffect(() => {
     console.log('routine :', routine)
+
     if (routine + 1) {
-      responseData[routine].item.map((item) => {
-        switch (item.day) {
-          case 'Sunday':
-            setDayId((prev) => ({
-              ...prev,
-              sunRoutineIdx: item.routineIdx,
-            }))
-            break
-          case 'Monday':
-            setDayId((prev) => ({
-              ...prev,
-              monRoutineIdx: item.routineIdx,
-            }))
-            break
-          case 'Tuesday':
-            setDayId((prev) => ({
-              ...prev,
-              tueRoutineIdx: item.routineIdx,
-            }))
-            break
-          case 'Wednesday':
-            setDayId((prev) => ({
-              ...prev,
-              wedRoutineIdx: item.routineIdx,
-            }))
-            break
-          case 'Thursday':
-            setDayId((prev) => ({
-              ...prev,
-              thuRoutineIdx: item.routineIdx,
-            }))
-            break
-          case 'Friday':
-            setDayId((prev) => ({
-              ...prev,
-              friRoutineIdx: item.routineIdx,
-            }))
-            break
-          case 'Saturday':
-            setDayId((prev) => ({
-              ...prev,
-              satRoutineIdx: item.routineIdx,
-            }))
-            break
-          default:
-            break
-        }
-      })
+      reset()
+      setUp()
     }
     console.log('dayId : ', dayId)
   }, [routine])
