@@ -168,7 +168,7 @@ export default function CreateRoutine_4({ navigation }) {
         <CreateRoutineError isDark={isDark} retryPress={retryPress} navigation={navigation} />
       ) : loading ? (
         <LoadingContainer isDark={isDark}>
-          <Loading source={imagePath.path[25]} />
+          <Loading isDark={isDark} source={imagePath.path[25]} />
           <Animated.Text style={{ opacity, color: isDark ? colors.white : colors.black }}>{loadingText}</Animated.Text>
 
           {/* <LoadingText isDark={isDark}>{loadingText}</LoadingText> */}
@@ -310,7 +310,7 @@ const LoadingContainer = styled.View`
 const Loading = styled.Image`
   width: 306px;
   height: 306px;
-  background-color: white;
+  /* background-color: white; */
   border-radius: 153px;
   margin-bottom: 24px;
   background-color: ${(props) => (props.isDark ? colors.grey_9 : colors.white)};

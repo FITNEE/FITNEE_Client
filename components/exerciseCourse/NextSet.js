@@ -19,7 +19,7 @@ const Box2 = styled.View`
 `
 
 const Box3 = styled.View`
-  width: 45px;
+  width: 49px;
   flex-direction: row;
   align-items: baseline;
   justify-content: flex-end;
@@ -67,15 +67,15 @@ export default function NextSet({ set, kg, num, isDark, run }) {
 
       <Box2>
         {kg !== 'null' ? (
-          <CurrentText isDark={isDark}>{kg}</CurrentText>
+          <CurrentText isDark={isDark}>{run ? null : kg}</CurrentText>
         ) : run ? null : (
           <CurrentText2 isDark={isDark}>빈 봉</CurrentText2>
         )}
-        {kg !== 'null' ? <CurrentUnit isDark={isDark}>kg</CurrentUnit> : null}
+        {kg !== 'null' ? <CurrentUnit isDark={isDark}> {run ? null : 'kg'}</CurrentUnit> : null}
       </Box2>
 
       <Box3>
-        <CurrentText isDark={isDark}>{run ? num * 10 : num}</CurrentText>
+        <CurrentText isDark={isDark}>{run ? num * 100 : num}</CurrentText>
         <CurrentUnit isDark={isDark}>{run ? 'm' : '회'}</CurrentUnit>
       </Box3>
 

@@ -7,7 +7,7 @@ import { Title, SubText, Input, StatusText, ScreenKeyboardLayout } from '../../c
 import axios from 'axios'
 import { useRecoilValue } from 'recoil'
 import { IsDarkAtom } from '../../recoil/MyPageAtom'
-import {EMAIL_API_KEY} from '@env'
+import { EMAIL_API_KEY } from '@env'
 
 const TextContainer = styled.View`
   margin-top: 124px;
@@ -89,86 +89,86 @@ const OnBoarding = ({ navigation }) => {
             }
         })
     }
-  
-    // 이메일 유효성 검증
-    const checkEmailVerification = async (email) => {
-        try {
-            let url = 'https://api.hunter.io/v2/email-verifier'
-            const response = await axios.get(url, {
-                params: {
-                    email: email,
-                    api_key: EMAIL_API_KEY
-                },
-            })
-            const result = response.data.data
-            return result.result
-        } catch (error) {
-        console.error('Failed to fetch email api:', error)
-        }
+
+
+  // 이메일 유효성 검증
+  const checkEmailVerification = async (email) => {
+    try {
+      let url = 'https://api.hunter.io/v2/email-verifier'
+      const response = await axios.get(url, {
+        params: {
+          email: email,
+          api_key: EMAIL_API_KEY,
+        },
+      })
+      const result = response.data.data
+      return result.result
+    } catch (error) {
+      console.error('Failed to fetch email api:', error)
     }
-    const verifyEmail = ()=>{
-        checkEmailVerification(email).then((result)=>{  
-            setIsLoading(false)          
-            switch (result) {
-                case 'deliverable':
-                    console.log('유효한 이메일')
-                    navigation.navigate('CreateAccount_1', {
-                        email,
-                    })
-                    break
-                case 'undeliverable':
-                    console.log('유효하지 않은 이메일')
-                    setEmailWarning('유효하지 않은 이메일이에요.')
-                    // return false
-                    break
-                case 'risky':
-                    console.log('api 에러 - 재시도 필요')
-                    setEmailWarning('다시 시도해주세요.')
-                    // return false
-                    break
-                default:
-                    console.log('exceptional case for email verifier')
-                    // return false
-                    break
-            }
-        })
-    }
-    // https://help.hunter.io/en/articles/6103281-what-are-the-possible-verification-statuses-for-an-email
-    // https://hunter.io/api-documentation/v2#email-verifier
+  }
+  const verifyEmail = () => {
+    checkEmailVerification(email).then((result) => {
+      setIsLoading(false)
+      console.log(result)
+      switch (result) {
+        case 'deliverable':
+          console.log('유효한 이메일')
+          navigation.navigate('CreateAccount_1', {
+            email,
+          })
+          break
+        case 'undeliverable':
+          console.log('유효하지 않은 이메일')
+          setEmailWarning('유효하지 않은 이메일이에요.')
+          // return false
+          break
+        case 'risky':
+          console.log('api 에러 - 재시도 필요')
+          setEmailWarning('다시 시도해주세요.')
+          // return false
+          break
+        default:
+          console.log('exceptional case for email verifier')
+          // return false
+          break
+      }
+    })
+  }
+  // https://help.hunter.io/en/articles/6103281-what-are-the-possible-verification-statuses-for-an-email
+  // https://hunter.io/api-documentation/v2#email-verifier
 
   return (
     <ScreenKeyboardLayout onPress={() => Keyboard.dismiss()} isDark={isDark}>
-        <TextContainer>
-            <Title text="이메일을 입력해주세요." isDark={isDark} />
-            <SubText text="로그인 또는 회원가입에 필요합니다." isDark={isDark} />
-        </TextContainer>
-        <BottomContainer>
-        {
-            !isValid && email.length <= 40 && (
-            <StatusText style={{ color: colors.red, marginTop: 4, width: '100%' }}>{emailWarning}</StatusText>)
-        }
-        {
-            email.length > 40 && (
-            <StatusText style={{ color: colors.red, marginTop: 4, width: '100%' }}>40자 이하로 설정해주세요.</StatusText>)
-        }
-            <Input
-            style={[
-                email.length > 40 && { borderWidth: 1, borderColor: colors.red },
-                {
-                backgroundColor: isDark ? colors.black : colors.white,
-                color: isDark ? colors.white : colors.black,
-                },
-            ]}
-            autoCapitalize="none"
-            keyboardType="url"
-            placeholderTextColor={colors.grey_5}
-            onSubmitEditing={() => handleSubmit()}
-            placeholder="이메일 입력"
-            returnKeyType="next"
-            blurOnSubmit={false}
-            onChangeText={(text) => setEmail(text)}
-            />
-            {/* <ORContainer>
+      <TextContainer>
+        <Title text="이메일을 입력해주세요." isDark={isDark} />
+        <SubText text="로그인 또는 회원가입에 필요합니다." isDark={isDark} />
+      </TextContainer>
+      <BottomContainer>
+        {!isValid && email.length <= 40 && (
+          <StatusText style={{ color: colors.red, marginTop: 4, width: '100%' }}>{emailWarning}</StatusText>
+        )}
+        {email.length > 40 && (
+          <StatusText style={{ color: colors.red, marginTop: 4, width: '100%' }}>40자 이하로 설정해주세요.</StatusText>
+        )}
+        <Input
+          style={[
+            email.length > 40 && { borderWidth: 1, borderColor: colors.red },
+            {
+              backgroundColor: isDark ? colors.black : colors.white,
+              color: isDark ? colors.white : colors.black,
+            },
+          ]}
+          autoCapitalize="none"
+          keyboardType="url"
+          placeholderTextColor={colors.grey_5}
+          onSubmitEditing={() => handleSubmit()}
+          placeholder="이메일 입력"
+          returnKeyType="next"
+          blurOnSubmit={false}
+          onChangeText={(text) => setEmail(text)}
+        />
+        {/* <ORContainer>
             <Line />
             <ORText>또는</ORText>
             </ORContainer>

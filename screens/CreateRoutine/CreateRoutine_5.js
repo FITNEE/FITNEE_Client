@@ -8,8 +8,9 @@ import CreateRoutineHeader from '../../components/CreateRoutine/CreateRoutineHea
 import axios from 'axios'
 import { IsDarkAtom } from '../../recoil/MyPageAtom'
 import { useRecoilValue } from 'recoil'
+import { useNavigation } from '@react-navigation/native'
 
-export default function CreateRoutine_5({ navigation }) {
+export default function CreateRoutine_5() {
   const [routine, SetRoutine] = useState('0')
   const index = useNavigationState((state) => state.index)
   const isDark = useRecoilValue(IsDarkAtom)
@@ -22,6 +23,7 @@ export default function CreateRoutine_5({ navigation }) {
     satRoutineIdx: 0,
     sunRoutineIdx: 0,
   })
+  const navigation = useNavigation()
   useEffect(() => {
     navigation.setOptions({
       header: () => <CreateRoutineHeader title="루틴 등록" index={index} />,
@@ -46,59 +48,76 @@ export default function CreateRoutine_5({ navigation }) {
   }
   const selectRoutine = () => {
     handleSubmit()
-    navigation.push('Home')
+    navigation.navigate('MyPage')
+    navigation.navigate('HomeNav')
+  }
+  const setUp = () => {
+    responseData[routine].item.map((item) => {
+      switch (item.day) {
+        case 'Sunday':
+          setDayId((prev) => ({
+            ...prev,
+            sunRoutineIdx: item.routineIdx,
+          }))
+          break
+        case 'Monday':
+          setDayId((prev) => ({
+            ...prev,
+            monRoutineIdx: item.routineIdx,
+          }))
+          break
+        case 'Tuesday':
+          setDayId((prev) => ({
+            ...prev,
+            tueRoutineIdx: item.routineIdx,
+          }))
+          break
+        case 'Wednesday':
+          setDayId((prev) => ({
+            ...prev,
+            wedRoutineIdx: item.routineIdx,
+          }))
+          break
+        case 'Thursday':
+          setDayId((prev) => ({
+            ...prev,
+            thuRoutineIdx: item.routineIdx,
+          }))
+          break
+        case 'Friday':
+          setDayId((prev) => ({
+            ...prev,
+            friRoutineIdx: item.routineIdx,
+          }))
+          break
+        case 'Saturday':
+          setDayId((prev) => ({
+            ...prev,
+            satRoutineIdx: item.routineIdx,
+          }))
+          break
+        default:
+          break
+      }
+    })
+  }
+  const reset = () => {
+    setDayId({
+      monRoutineIdx: 0,
+      tueRoutineIdx: 0,
+      wedRoutineIdx: 0,
+      thuRoutineIdx: 0,
+      friRoutineIdx: 0,
+      satRoutineIdx: 0,
+      sunRoutineIdx: 0,
+    })
   }
   useEffect(() => {
     console.log('routine :', routine)
-    if (routine) {
-      responseData[routine].item.map((item) => {
-        switch (item.day) {
-          case 'Sunday':
-            setDayId((prev) => ({
-              ...prev,
-              sunRoutineIdx: item.routineIdx,
-            }))
-            break
-          case 'Monday':
-            setDayId((prev) => ({
-              ...prev,
-              monRoutineIdx: item.routineIdx,
-            }))
-            break
-          case 'Tuesday':
-            setDayId((prev) => ({
-              ...prev,
-              tueRoutineIdx: item.routineIdx,
-            }))
-            break
-          case 'Wednesday':
-            setDayId((prev) => ({
-              ...prev,
-              wedRoutineIdx: item.routineIdx,
-            }))
-            break
-          case 'Thursday':
-            setDayId((prev) => ({
-              ...prev,
-              thuRoutineIdx: item.routineIdx,
-            }))
-            break
-          case 'Friday':
-            setDayId((prev) => ({
-              ...prev,
-              friRoutineIdx: item.routineIdx,
-            }))
-            break
-          case 'Saturday':
-            setDayId((prev) => ({
-              ...prev,
-              satRoutineIdx: item.routineIdx,
-            }))
-            break
-          default:
-            break
-        }
-      })
+
+    if (routine + 1) {
+      reset()
+      setUp()
     }
     console.log('dayId : ', dayId)
   }, [routine])
