@@ -78,14 +78,20 @@ const OnBoarding = ({ navigation }) => {
         console.log('submitted')
         setIsLoading(true)
         fetchResult(email).then((data) => {
-            if (data.code == 3003) { // 회원가입인 경우
-                verifyEmail(email)
-            } 
-            else { // 로그인인 경우
-                setIsLoading(false)
-                navigation.navigate('Login', {
-                email,
-                })
+            switch(data.code){
+                case 3003:
+                    verifyEmail(email)
+                    break
+                case 1000:
+                    setIsLoading(false)
+                    navigation.navigate('Login', {email})
+                    break
+                case 3007:
+                    setIsLoading(false)
+                    setEmailWarning('이미 탈퇴한 아이디는 재가입할수 없어요')
+                    break
+                default:
+                    break
             }
         })
     }
