@@ -3,6 +3,7 @@ import styled from 'styled-components/native'
 import { colors } from '../../colors'
 import { IsDarkAtom } from '../../recoil/MyPageAtom'
 import { useRecoilValue } from 'recoil'
+import axios from 'axios'
 
 export default function Dictionary_AutoSearch(props) {
     const isDark = useRecoilValue(IsDarkAtom)
@@ -19,7 +20,32 @@ export default function Dictionary_AutoSearch(props) {
         const extracted = splitStr.filter((item) => item !== '')
         return extracted
     }
-    const onPress = (exercise) => navigation.navigate('Dictionary_2', { exercise })
+    
+
+    // 자동완성 리스트 클릭시 검색어 저장 후 상세페이지로 이동
+    const onPress = (exercise) => {
+        postKeywords(parentSearch)
+        navigation.navigate('Dictionary_2', { exercise })
+    }
+
+    // 검색한 단어를 최근 검색 키워드에 저장하는 API
+    const postKeywords = async (search) => {
+        try {
+            let url = 'https://gpthealth.shop/'
+            let detailAPI = '/app/dictionary/usersearch'
+            const response = await axios.post(url + detailAPI, null, {
+                params: {
+                    search: search,
+                },
+            })
+            const result = response.data
+
+            if (result.isSuccess) console.log(`검색기록 저장 성공(검색어: ${search})`)
+            else console.log(`검색기록 저장 실패(검색어: ${search})`)
+        } catch (error) {
+            console.error('Failed to fetch data:', error)
+        }
+    }
 
     return (
         <AutoSearchContainer>
