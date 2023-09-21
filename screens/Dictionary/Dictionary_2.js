@@ -10,6 +10,7 @@ import {
   SafeAreaView,
 } from 'react-native'
 import BottomSheet, { BottomSheetScrollView, BottomSheetBackdrop } from '@gorhom/bottom-sheet'
+import { ScrollView } from 'react-native-gesture-handler';
 import Dictionary_LeftTab from '../../components/Dictionary/Dictionary_LeftTab'
 import Dictionary_RightTab from '../../components/Dictionary/Dictionary_RightTab'
 import Dictionary_Modal from '../../components/Dictionary/Dictionary_Modal'
@@ -22,6 +23,8 @@ import EditIcon from '../../assets/SVGs/Edit.svg'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { ScreenLayout, ScreenWidth } from '../../Shared'
 import { imagePath } from '../../imagePath'
+
+const MyScrollView = Platform.OS === 'ios' ? BottomSheetScrollView : ScrollView;
 
 export default function Dictionary_2({ navigation, route }) {
   const isDark = useRecoilValue(IsDarkAtom)
@@ -428,7 +431,6 @@ const JoinText = styled.Text`
   font-family: Pretendard-SemiBold;
   font-size: 13px;
   line-height: 19.5px;
-  background-color: red;
 `
 
 const Loading = styled.ActivityIndicator`
