@@ -1,15 +1,15 @@
-import React, { useState, useRef, useContext, useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import styled from "styled-components/native";
-import { Dimensions, Platform, Alert, TouchableWithoutFeedback, TouchableOpacity, Keyboard, View } from "react-native";
-import { BottomSheetScrollView, BottomSheetTextInput, BottomSheetView } from "@gorhom/bottom-sheet";
+import { Dimensions, Platform, Alert, Keyboard, View, TouchableWithoutFeedback } from "react-native";
+import { BottomSheetScrollView, BottomSheetTextInput, BottomSheetView, TouchableOpacity } from "@gorhom/bottom-sheet";
+import { ScrollView } from 'react-native-gesture-handler'
 import { colors } from "../../colors";
-import WrappedText from "react-native-wrapped-text";
 import axios from "axios";
 import { IsDarkAtom } from "../../recoil/MyPageAtom"
 import { useRecoilValue } from "recoil"
-import TrashIcon from '../../assets/SVGs/Trash.svg'
 import * as Haptics from 'expo-haptics'
 import SendIcon from '../../assets/SVGs/Send.svg'
+import TrashIcon from '../../assets/SVGs/Trash.svg'
 
 export default function Dictionary_RightTab(props) {
     const isDark = useRecoilValue(IsDarkAtom)
@@ -50,6 +50,7 @@ export default function Dictionary_RightTab(props) {
         parentSetJoinBtnBool(newBool)
     }
 
+
     // 채팅 불러오기
     const getChat = async () => {
         try {
@@ -74,6 +75,8 @@ export default function Dictionary_RightTab(props) {
     useEffect(() => {
         !leftTabActivate && getChat().then((result) => {
             setMsg(result.chattinginfo)
+            scrollviewRef.current?.scrollToEnd() // scrollview 가장 하단으로 스크롤
+            console.log(`scroll to end`)
         })
     }, [parentJoinBtnBool,chatUpdate, leftTabActivate])
 
@@ -280,7 +283,7 @@ export default function Dictionary_RightTab(props) {
                         </ChatContainer>
                     ))}
                     <View style={{ height: 40 }} />
-                    </BottomSheetScrollView>
+                </BottomSheetScrollView>
             </TouchableWithoutFeedback>
             :
             <NoText>아직 채팅 내역이 없어요</NoText>
@@ -288,7 +291,15 @@ export default function Dictionary_RightTab(props) {
     
 
         {childJoinBtnBool ? null : (
-          <TextInputBG style={{backgroundColor: Platform.OS === 'ios'? isDark? `#303235`:`#D1D3D9` : isDark? `#262626`:`#E3E2EA`}}>
+          <TextInputBG 
+            style={{
+                backgroundColor: 
+                    Platform.OS === 'ios'? 
+                        isDark? `#303235`:`#D1D3D9` 
+                        : 
+                        isDark? `#262626`:`#E3E2EA`,
+                paddingBottom: Platform.OS === 'ios'? 6 : 12
+            }}>
             <TextInputContainer style={{backgroundColor: isDark? `${colors.black}`:`${colors.white}`}}>
                 {
                     Platform.OS === 'ios'?
@@ -320,9 +331,9 @@ export default function Dictionary_RightTab(props) {
                         keyboardAppearance= {isDark? 'dark':'light'}
                     />
                 }
-                <TouchableOpacity onPress={onSubmitChat}>
+                <SendBtn onPress={onSubmitChat}>
                     <SendIcon color= {isDark? colors.d_main : colors.l_main}/>
-                </TouchableOpacity>
+                </SendBtn>
             </TextInputContainer>
           </TextInputBG>
         )}
@@ -362,7 +373,8 @@ const MessageText = styled.Text`
 const TextInputBG = styled.View` 
   justify-content: center;
   align-items: center;
-  padding: 9px 16px;
+  padding: 12px 16px;
+  padding-bottom: 6px;
 `
 const TextInputContainer = styled.View`
   border-radius: 50px;

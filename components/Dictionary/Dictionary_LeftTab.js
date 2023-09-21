@@ -1,13 +1,14 @@
 import React, { useState, useContext, useEffect } from 'react'
-import { ActivityIndicator } from 'react-native'
 import styled from 'styled-components/native'
-import WrappedText from 'react-native-wrapped-text'
 import { BottomSheetScrollView } from '@gorhom/bottom-sheet'
 import { colors } from '../../colors'
 import axios from 'axios'
 import { IsDarkAtom } from '../../recoil/MyPageAtom'
 import { useRecoilValue } from 'recoil'
 import AlertIcon from '../../assets/SVGs/Alert.svg'
+import { ScrollView } from 'react-native-gesture-handler';
+
+const MyScrollView = Platform.OS === 'ios' ? BottomSheetScrollView : ScrollView;
 
 export default function Dictionary_LeftTab(props) {
   const isDark = useRecoilValue(IsDarkAtom)
@@ -44,7 +45,7 @@ export default function Dictionary_LeftTab(props) {
   }, [])
 
   return (
-    <BottomSheetScrollView showsVerticalScrollIndicator={false}>
+    <MyScrollView showsVerticalScrollIndicator={false}>
       <ProcessContainer>
         {exerciseDetail?.map((exerciseinfo, i) => (
           <Process key={i} style={{ backgroundColor: isDark ? `${colors.grey_8}` : `${colors.grey_1}` }}>
@@ -88,7 +89,7 @@ export default function Dictionary_LeftTab(props) {
           </CautionContentContainer>
         </CautionContainer>
       }
-    </BottomSheetScrollView>
+    </MyScrollView>
   )
 }
 
