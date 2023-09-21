@@ -293,7 +293,7 @@ export default function Dictionary_2({ navigation, route }) {
               <JoinText
                 style={{
                   color: isDark ? `${colors.black}` : `${colors.white}`,
-                }}
+                 }}
               >
                 채팅 참여하기
               </JoinText>
@@ -428,6 +428,7 @@ const JoinText = styled.Text`
   font-family: Pretendard-SemiBold;
   font-size: 13px;
   line-height: 19.5px;
+  background-color: red;
 `
 
 const Loading = styled.ActivityIndicator`
