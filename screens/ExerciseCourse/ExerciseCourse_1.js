@@ -85,7 +85,7 @@ const Box2 = styled.View`
 `
 
 const Box3 = styled.View`
-  width: 45px;
+  width: 49px;
   flex-direction: row;
   align-items: baseline;
   justify-content: flex-end;
@@ -326,7 +326,12 @@ export default function ExerciseCourse_1({ navigation }) {
 
         <Box2>
           {item.weight !== 'null' ? (
-            <CurrentText style={{ color: textColor }}>{item.weight}</CurrentText>
+            <CurrentText style={{ color: textColor }}>
+              {dataList[listIndex].exerciseInfo.healthCategoryIdx === 24 ||
+              dataList[listIndex].exerciseInfo.healthCategoryIdx === 25
+                ? null
+                : item.weight}
+            </CurrentText>
           ) : (
             <CurrentText2
               style={{
@@ -346,13 +351,20 @@ export default function ExerciseCourse_1({ navigation }) {
                 : '빈 봉'}
             </CurrentText2>
           )}
-          {item.weight !== 'null' ? <CurrentUnit style={{ color: textColor }}>kg</CurrentUnit> : null}
+          {item.weight !== 'null' ? (
+            <CurrentUnit style={{ color: textColor }}>
+              {dataList[listIndex].exerciseInfo.healthCategoryIdx === 24 ||
+              dataList[listIndex].exerciseInfo.healthCategoryIdx === 25
+                ? null
+                : 'kg'}
+            </CurrentUnit>
+          ) : null}
         </Box2>
         <Box3>
           <CurrentText style={{ color: textColor }}>
             {dataList[listIndex].exerciseInfo.healthCategoryIdx === 24 ||
             dataList[listIndex].exerciseInfo.healthCategoryIdx === 25
-              ? item.rep * 10
+              ? item.rep * 100
               : item.rep}
           </CurrentText>
           <CurrentUnit style={{ color: textColor }}>

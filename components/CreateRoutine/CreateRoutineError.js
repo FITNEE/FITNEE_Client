@@ -3,6 +3,10 @@ import { colors } from '../../colors'
 import { color } from 'react-native-reanimated'
 
 export default function CreateRoutineError({ isDark, retryPress, navigation }) {
+  const homePress = () => {
+    navigation.navigate('MyPage')
+    navigation.navigate('HomeNav')
+  }
   return (
     <ErrorContainer>
       <Image isDark={isDark} source={require('../../assets/Imgs/routineFail.png')} />
@@ -14,7 +18,7 @@ export default function CreateRoutineError({ isDark, retryPress, navigation }) {
         <RetryText>다시 시도</RetryText>
       </Retry>
       <Home
-        onPress={() => navigation.navigate('Home')}
+        onPress={homePress}
         style={{
           borderColor: `${colors.l_main}`,
         }}

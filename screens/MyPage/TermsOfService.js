@@ -1,18 +1,11 @@
-import { SafeAreaView } from 'react-native'
-import { Text } from 'react-native'
-import { colors } from '../../colors'
-import Left from '../../assets/SVGs/Left.svg'
+import React from 'react'
+import { SafeAreaView, Text, View } from 'react-native'
 import styled from 'styled-components/native'
+import { colors } from '../../colors'
 
-export default function Terms_1({ navigation }) {
+export default function TermsOfService() {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.grey_1 }}>
-      <Header>
-        <BackButtonContainer onPress={() => navigation.goBack()}>
-          <Left width={24} height={24} color={colors.black} />
-        </BackButtonContainer>
-        <Title>이용약관</Title>
-      </Header>
       <Container contentContainerStyle={{ alignItems: 'center' }}>
         <ContentContainer>
           <Content>서비스 이용약관</Content>
@@ -153,23 +146,6 @@ Fitnee 회원은 다음 행위를 하여서는 안 됩니다.
   )
 }
 
-const Header = styled.View`
-  height: 56px;
-  justify-content: center;
-  align-items: center;
-`
-const BackButtonContainer = styled.TouchableOpacity`
-  position: absolute;
-  top: 20px;
-  left: 24px;
-  width: 48px;
-  height: 48px;
-`
-
-const Title = styled.Text`
-  font-size: 17px;
-  font-family: Pretendard-SemiBold;
-`
 const Container = styled.ScrollView`
   margin-top: 17px;
 `

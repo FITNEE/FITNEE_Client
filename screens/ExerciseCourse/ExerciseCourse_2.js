@@ -304,6 +304,12 @@ export default function ExerciseCourse_2({ navigation, dataList, listIndex, tota
 
   const isDark = useRecoilValue(IsDarkAtom)
 
+  const editMuscle = (muscle) => {
+    if (muscle.length >= 9) {
+      return muscle.substring(0, 9) + '...'
+    } else return muscle
+  }
+
   return (
     <BottomSheetModalProvider>
       <SafeAreaView
@@ -371,11 +377,11 @@ export default function ExerciseCourse_2({ navigation, dataList, listIndex, tota
               {replaceList.map((item, healthCategoryIdx) => (
                 <ReplaceView isDark={isDark}>
                   <ReplaceView2 isDark={isDark}>
-                    <ReplaceImage source={pngPath.path[healthCategoryIdx]} isDark={isDark} />
+                    <ReplaceImage source={pngPath.path[item.healthCategoryIdx - 1]} isDark={isDark} />
                     <ReplaceTextView isDark={isDark} key={healthCategoryIdx}>
                       <ReplaceText1 isDark={isDark}>{item.name}</ReplaceText1>
                       <ReplaceText2 isDark={isDark}>
-                        {item.parts} | {item.muscle} | {item.equipment}
+                        {item.parts} | {editMuscle(item.muscle)}| {item.equipment}
                       </ReplaceText2>
                     </ReplaceTextView>
                   </ReplaceView2>
