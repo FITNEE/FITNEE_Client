@@ -39,13 +39,6 @@ const ExtendedContainer = styled.View`
   width: 100%;
   padding: 8px 16px 0px 16px;
 `
-const ExerciseImg = styled.Image`
-  width: 60px;
-  margin-right: 16px;
-  height: 60px;
-  border-radius: 30px;
-`
-
 const ExerciseContainer = styled.View`
   padding: 16px;
   flex-direction: column;
