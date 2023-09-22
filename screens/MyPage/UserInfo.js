@@ -194,13 +194,9 @@ export default function UserInfo({ route, navigation }) {
               isDark={isDark}
               onPress={() => {
                 Alert.alert(
-                  '정말로 탈퇴하시겠습니까?',
-                  '현재 이용 중인 계정은 삭제되며\n 15일간 동일 계정으로 가입할 수 없습니다.',
+                  '회원 탈퇴하시겠습니까?',
+                  '서비스를 탈퇴하시면 피트니 계정을 비롯하여 모든 이용기록이 삭제되며, 삭제된 정보는 복원할 수 없습니다.',
                   [
-                    {
-                      text: '취소',
-                      style: 'default',
-                    },
                     {
                       text: '탈퇴하기',
                       style: 'destructive',
@@ -209,6 +205,10 @@ export default function UserInfo({ route, navigation }) {
                         Logout()
                         navigation.dispatch(CommonActions.reset({ index: 0, routes: [{ name: 'Setting' }] }))
                       },
+                    },
+                    {
+                      text: '취소',
+                      style: 'default',
                     },
                   ],
                 )
