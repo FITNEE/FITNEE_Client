@@ -193,8 +193,8 @@ export default MyRoutine = ({ navigation, route }) => {
           },
         ])
       }
+      console.log('후:', newArr)
     } else if (type == 'addExercise') {
-      console.log('newArr:', newArr)
       for (let i = 0; i < value.length; i++) {
         let addedData = value[i]
         let addedExercise = Object.assign(
