@@ -57,7 +57,7 @@ const ReplaceButtonText = styled.Text`
   text-align: center;
   font-size: 13px;
   line-height: 19.5px;
-  font-family: Pretendard-Regular;
+  font-family: Pretendard-SemiBold;
 `
 
 const CurrentExplain = styled.View`
