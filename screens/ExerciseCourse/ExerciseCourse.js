@@ -37,23 +37,19 @@ const SkipExercrise = styled.TouchableOpacity`
   align-items: center;
 `
 
-const ExerciseCircle = styled.View`
-  width: 307px;
-  height: 307px;
-  border-radius: 291px;
-  background: ${({ isDark }) => (isDark ? colors.black : colors.grey_1)};
+const ExerciseContainer = styled.View`
+  width: 327px;
 `
 
 const ReplaceButton = styled.TouchableOpacity`
-  padding: 8px 12px;
+  width: 95px;
+  height: 36px;
   justify-content: center;
   align-items: center;
   gap: 8px;
   border-radius: 100px;
-  background: ${({ isDark }) => (isDark ? colors.grey_7 : colors.grey_3)};
-  margin-top: 18px;
   margin-bottom: 12px;
-  margin-right: 242.5px;
+  background: ${({ isDark }) => (isDark ? colors.grey_7 : colors.grey_3)};
 `
 
 const ReplaceButtonText = styled.Text`
@@ -454,24 +450,25 @@ export default function ExerciseCourse({ navigation }) {
       >
         <ExerciseCard exerciseName={dataList[listIndex].exerciseInfo.exerciseName} isDark={isDark}>
           <ExerciseImage source={getImage[dataList[listIndex].exerciseInfo.healthCategoryIdx]} resizeMode="contain" />
+          <ExerciseContainer>
+            <ReplaceButton isDark={isDark} disabled={false} onPress={handleModal}>
+              <ReplaceButtonText isDark={isDark}>운동 대체하기</ReplaceButtonText>
+            </ReplaceButton>
 
-          <ReplaceButton isDark={isDark} disabled={false} onPress={handleModal}>
-            <ReplaceButtonText isDark={isDark}>운동 대체하기</ReplaceButtonText>
-          </ReplaceButton>
+            <CurrentSet
+              set={1}
+              kg={dataList[listIndex].sets[0].weight}
+              num={dataList[listIndex].sets[0].rep}
+              run={
+                dataList[listIndex].exerciseInfo.healthCategoryIdx === 24 ||
+                dataList[listIndex].exerciseInfo.healthCategoryIdx === 25
+                  ? true
+                  : false
+              }
+            />
 
-          <CurrentSet
-            set={1}
-            kg={dataList[listIndex].sets[0].weight}
-            num={dataList[listIndex].sets[0].rep}
-            run={
-              dataList[listIndex].exerciseInfo.healthCategoryIdx === 24 ||
-              dataList[listIndex].exerciseInfo.healthCategoryIdx === 25
-                ? true
-                : false
-            }
-          />
-
-          <CurrentExplain isDark={isDark}>{adviceList}</CurrentExplain>
+            <CurrentExplain isDark={isDark}>{adviceList}</CurrentExplain>
+          </ExerciseContainer>
 
           <ExerciseButton //운동 시작 버튼
             text="운동 시작"
@@ -482,7 +479,6 @@ export default function ExerciseCourse({ navigation }) {
           <SkipExercrise onPress={() => OpenConfirm2()}>
             <SkipExercriseText isDark={isDark}>이 운동 건너뛰기</SkipExercriseText>
           </SkipExercrise>
-
           <BottomSheetModal
             ref={bottomSheetRef}
             index={0}
