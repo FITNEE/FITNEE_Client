@@ -25,7 +25,6 @@ const ExerciseTitle = styled.Text`
   margin: 8px;
   font-family: Pretendard-Medium;
 `
-
 const BottomContainer = styled.View`
   width: 100%;
 `
