@@ -26,7 +26,7 @@ export default function CreateRoutine_2({ navigation }) {
     })
   }, [])
   useEffect(() => {
-    console.log(value)
+    console.log('RM', value)
   }, [value])
   useEffect(() => {
     console.log('atom2 : ', routine)
