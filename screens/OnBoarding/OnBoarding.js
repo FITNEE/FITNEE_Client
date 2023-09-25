@@ -88,7 +88,7 @@ const OnBoarding = ({ navigation }) => {
                     break
                 case 3007:
                     setIsLoading(false)
-                    setEmailWarning('이미 탈퇴한 아이디는 재가입할수 없어요')
+                    setEmailWarning('이미 탈퇴한 아이디는 30일 이내에 재가입할 수 없어요.')
                     break
                 default:
                     break
