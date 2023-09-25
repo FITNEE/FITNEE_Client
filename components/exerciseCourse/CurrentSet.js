@@ -73,7 +73,7 @@ export default function CurrentSet({ set, kg, num, run }) {
         {kg !== 'null' ? (
           <>
             <CurrentText isDark={isDark}>{run ? null : kg}</CurrentText>
-            <CurrentUnit isDark={isDark}>kg</CurrentUnit>
+            <CurrentUnit isDark={isDark}>{run ? null : 'kg'}</CurrentUnit>
           </>
         ) : run ? null : (
           <CurrentText2 isDark={isDark}>빈 봉</CurrentText2>

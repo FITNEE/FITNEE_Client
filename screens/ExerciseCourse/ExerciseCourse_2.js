@@ -58,16 +58,19 @@ const ExerciseCircle = styled.View`
   justify-content: center;
   align-items: center;
 `
+const ExerciseContainer = styled.View`
+  width: 327px;
+`
+
 const ReplaceButton = styled.TouchableOpacity`
-  padding: 8px 12px;
+  width: 95px;
+  height: 36px;
   justify-content: center;
   align-items: center;
   gap: 8px;
   border-radius: 100px;
-  background: ${({ isDark }) => (isDark ? colors.grey_7 : colors.grey_3)};
-  margin-top: 18px;
   margin-bottom: 12px;
-  margin-right: 243px;
+  background: ${({ isDark }) => (isDark ? colors.grey_7 : colors.grey_3)};
 `
 
 const ReplaceButtonText = styled.Text`
@@ -339,24 +342,24 @@ export default function ExerciseCourse_2({ navigation, dataList, listIndex, tota
               )}
             </CountdownCircleTimer>
           </ExerciseCircle>
+          <ExerciseContainer>
+            <ReplaceButton isDark={isDark} onPress={handleModal}>
+              <ReplaceButtonText isDark={isDark}>운동 대체하기</ReplaceButtonText>
+            </ReplaceButton>
 
-          <ReplaceButton isDark={isDark} onPress={handleModal}>
-            <ReplaceButtonText isDark={isDark}>운동 대체하기</ReplaceButtonText>
-          </ReplaceButton>
-
-          <NextSet
-            set="1"
-            kg={dataList[listIndex + 1].sets[0].weight}
-            num={dataList[listIndex + 1].sets[0].rep}
-            isDark={isDark}
-            run={
-              dataList[listIndex + 1].exerciseInfo.healthCategoryIdx === 24 ||
-              dataList[listIndex + 1].exerciseInfo.healthCategoryIdx === 25
-                ? true
-                : false
-            }
-          />
-
+            <NextSet
+              set="1"
+              kg={dataList[listIndex + 1].sets[0].weight}
+              num={dataList[listIndex + 1].sets[0].rep}
+              isDark={isDark}
+              run={
+                dataList[listIndex + 1].exerciseInfo.healthCategoryIdx === 24 ||
+                dataList[listIndex + 1].exerciseInfo.healthCategoryIdx === 25
+                  ? true
+                  : false
+              }
+            />
+          </ExerciseContainer>
           <BottomSheetModal
             ref={bottomSheetRef}
             index={0}

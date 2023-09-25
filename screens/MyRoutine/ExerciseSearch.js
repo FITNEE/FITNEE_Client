@@ -97,7 +97,7 @@ const SelectedItemText = styled.Text`
   font-size: 13px;
   margin-left: 4px;
 `
-export default function ExerciseSearch({ navigation }) {
+export default function ExerciseSearch({ navigation, route }) {
   const isDark = useRecoilValue(IsDarkAtom)
   const [search, setSearch] = useState('')
   const [isSearching, setIsSearching] = useState(false)
@@ -322,6 +322,7 @@ export default function ExerciseSearch({ navigation }) {
               parentSearchList={searchList}
               editSelectedList={editSelectedList}
               selectedItem={selectedItem}
+              // count={route.params?.count}//*** */
             />
           )}
         </Container>
