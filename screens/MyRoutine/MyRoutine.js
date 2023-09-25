@@ -193,8 +193,8 @@ export default MyRoutine = ({ navigation, route }) => {
           },
         ])
       }
+      console.log('후:', newArr)
     } else if (type == 'addExercise') {
-      console.log('newArr:', newArr)
       for (let i = 0; i < value.length; i++) {
         let addedData = value[i]
         let addedExercise = Object.assign(
@@ -218,7 +218,7 @@ export default MyRoutine = ({ navigation, route }) => {
     } else {
       console.log('무슨 타입입니까...?')
     }
-    console.log('newArr & setNewRoutine:', newArr)
+
     setNewRoutine(newArr)
   }
   const renderBackdrop = useCallback(

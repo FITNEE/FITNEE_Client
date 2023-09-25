@@ -46,7 +46,6 @@ const CheckButton = styled.View`
 export default function SearchList({ parentSearchList, editSelectedList, selectedItem, isDark }) {
   const [isSelected, setIsSelected] = useState(false)
   let tempArr = selectedItem.map((item) => item.healthCategoryIdx)
-  console.log(tempArr)
 
   return (
     <ListContainer>
