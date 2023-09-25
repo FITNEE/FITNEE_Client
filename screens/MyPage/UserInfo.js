@@ -151,7 +151,7 @@ export default function UserInfo({ route, navigation }) {
   const getGender = userInfo[0].gender
 
   return (
-    <SafeAreaView backgroundColor={isDark ? colors.grey_9 : colors.grey_1}>
+    <SafeAreaView backgroundColor={isDark ? colors.grey_9 : colors.white}>
       <Container isDark={isDark}>
         <Profile>
           {getGender == 1 ? (

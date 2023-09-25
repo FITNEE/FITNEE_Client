@@ -130,7 +130,7 @@ export default function EditPW({ navigation }) {
     }
 
     return (
-        <SafeAreaView backgroundColor={isDark ? colors.grey_9 : colors.grey_1}>
+        <SafeAreaView backgroundColor={isDark ? colors.grey_9 : colors.white}>
             <TouchableWithoutFeedback
                 onPress={() => {
                     Keyboard.dismiss()
