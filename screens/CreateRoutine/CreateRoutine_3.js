@@ -163,6 +163,7 @@ const Container = styled.View`
   flex: 1;
   width: 100%;
   align-items: center;
+  margin-top: 68px;
 
   background-color: ${(props) => (props.isDark ? colors.black : colors.grey_1)};
 `

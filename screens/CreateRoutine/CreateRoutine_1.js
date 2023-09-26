@@ -56,56 +56,56 @@ export default function CreateRoutine_1({ navigation }) {
   }, [home, fitness])
   return (
     // <ScreenLayout isDark={isDark} darkBack={colors.black} lightBack={colors.grey_1}>
-    <SafeAreaView style={{ flex: 1, backgroundColor: isDark ? colors.black : colors.grey_1 }}>
-      <StatusBar
-        backgroundColor={isDark ? colors.black : colors.grey_1}
-        barStyle={isDark ? 'light-content' : 'dark-content'}
-      />
-      <Container isDark={isDark}>
-        <TitleContainer>
-          <Title isDark={isDark}>운동하는 곳을 선택해주세요.</Title>
-          <SubTitle isDark={isDark}>장소에 맞게 운동을 추천해 드릴게요.</SubTitle>
-        </TitleContainer>
-        <SpaceContainer>
-          <SpaceItem
-            isDark={isDark}
-            isActive={home}
-            onPress={homePress}
-            style={{
-              borderColor: home ? `${colors.d_main}` : 'transparent',
-            }}
-          >
-            <SpaceImage>
-              <Home width={117} height={117} />
-            </SpaceImage>
-            <SpaceName isDark={isDark} isActive={home}>
-              집
-            </SpaceName>
-          </SpaceItem>
-          <SpaceItem
-            isDark={isDark}
-            isActive={fitness}
-            onPress={fitnessPress}
-            style={{
-              borderColor: fitness ? `${colors.d_main}` : 'transparent',
-            }}
-          >
-            <SpaceImage>
-              <Gym width={117} height={117} />
-            </SpaceImage>
-            <SpaceName isDark={isDark} isActive={fitness}>
-              헬스장
-            </SpaceName>
-          </SpaceItem>
-        </SpaceContainer>
-        <NextButton isDark={isDark} isActive={select} onPress={nextButton} disabled={!select}>
-          <ButtonText isDark={isDark} isActive={select}>
-            다음
-          </ButtonText>
-        </NextButton>
-      </Container>
-    </SafeAreaView>
-    // </ScreenLayout>
+    //   <SafeAreaView style={{ flex: 1, backgroundColor: isDark ? colors.black : colors.grey_1 }}>
+    //   <StatusBar
+    //     backgroundColor={isDark ? colors.black : colors.grey_1}
+    //     barStyle={isDark ? 'light-content' : 'dark-content'}
+    //   />
+    <Container isDark={isDark}>
+      <TitleContainer>
+        <Title isDark={isDark}>운동하는 곳을 선택해주세요.</Title>
+        <SubTitle isDark={isDark}>장소에 맞게 운동을 추천해 드릴게요.</SubTitle>
+      </TitleContainer>
+      <SpaceContainer>
+        <SpaceItem
+          isDark={isDark}
+          isActive={home}
+          onPress={homePress}
+          style={{
+            borderColor: home ? `${colors.d_main}` : 'transparent',
+          }}
+        >
+          <SpaceImage>
+            <Home width={117} height={117} />
+          </SpaceImage>
+          <SpaceName isDark={isDark} isActive={home}>
+            집
+          </SpaceName>
+        </SpaceItem>
+        <SpaceItem
+          isDark={isDark}
+          isActive={fitness}
+          onPress={fitnessPress}
+          style={{
+            borderColor: fitness ? `${colors.d_main}` : 'transparent',
+          }}
+        >
+          <SpaceImage>
+            <Gym width={117} height={117} />
+          </SpaceImage>
+          <SpaceName isDark={isDark} isActive={fitness}>
+            헬스장
+          </SpaceName>
+        </SpaceItem>
+      </SpaceContainer>
+      <NextButton isDark={isDark} isActive={select} onPress={nextButton} disabled={!select}>
+        <ButtonText isDark={isDark} isActive={select}>
+          다음
+        </ButtonText>
+      </NextButton>
+    </Container>
+    //   {/* </SafeAreaView>
+    // </ScreenLayout> */}
   )
 }
 
@@ -113,6 +113,7 @@ const Container = styled.View`
   flex: 1;
   width: 100%;
   align-items: center;
+  margin-top: 68px;
 
   background-color: ${(props) => (props.isDark ? colors.black : colors.grey_1)};
 `
