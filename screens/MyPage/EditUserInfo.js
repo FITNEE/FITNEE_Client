@@ -203,7 +203,7 @@ export default function EditUserInfo({ navigation }) {
   }, [error, newNickname, enabled])
 
   return (
-    <SafeAreaView backgroundColor={isDark ? colors.grey_9 : colors.grey_1}>
+    <SafeAreaView backgroundColor={isDark ? colors.grey_9 : colors.white}>
       <TouchableWithoutFeedback
         onPress={() => {
           Keyboard.dismiss()
