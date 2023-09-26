@@ -7,7 +7,7 @@ import { colors } from '../../colors'
 import { IsDarkAtom } from '../../recoil/MyPageAtom'
 import { useRecoilValue } from 'recoil'
 import Left from '../../assets/SVGs/Left.svg'
-import { ScreenWidth } from '../../Shared'
+import { ScreenLayout, ScreenWidth } from '../../Shared'
 
 export default function CreateRoutineHeader({ title, index, children }) {
   const [width, setWidth] = useState(0)
@@ -25,8 +25,10 @@ export default function CreateRoutineHeader({ title, index, children }) {
   }, [index, width])
   return (
     <>
-      <SafeAreaView>
-        {index == 4 ? null : ( //
+      <ScreenLayout isDark={isDark} darkBack={colors.black} lightBack={colors.grey_1}>
+        {index == 4 ? (
+          <HeaderContainer isDark={isDark} /> //
+        ) : (
           <HeaderContainer isDark={isDark}>
             <Header isDark={isDark}>
               <BackButton onPress={() => navigation.goBack()}>
@@ -58,7 +60,7 @@ export default function CreateRoutineHeader({ title, index, children }) {
             </StackBar>
           </HeaderContainer>
         )}
-      </SafeAreaView>
+      </ScreenLayout>
     </>
   )
 }
@@ -71,7 +73,7 @@ const NoHeader = styled.View`
   opacity: 1;
 `
 const HeaderContainer = styled.View`
-  height: 56px;
+  height: 68px;
   background-color: ${(props) => (props.isDark ? colors.black : colors.grey_1)};
   align-items: center;
   /* justify-content: flex-end; */
