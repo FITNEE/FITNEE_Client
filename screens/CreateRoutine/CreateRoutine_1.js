@@ -6,9 +6,10 @@ import { useRecoilState, useRecoilValue } from 'recoil'
 import { CreateRoutineAtom } from '../../recoil/CreateRoutineAtom'
 import { colors } from '../../colors'
 import { IsDarkAtom, TabBarAtom } from '../../recoil/MyPageAtom'
-import { StatusBar } from 'react-native'
+import { SafeAreaView, StatusBar } from 'react-native'
 import Home from '../../assets/SVGs/CreateRoutine/Home.svg'
 import Gym from '../../assets/SVGs/CreateRoutine/Gym.svg'
+import { ScreenLayout } from '../../Shared'
 
 export default function CreateRoutine_1({ navigation }) {
   const [home, SetHome] = useState(false)
@@ -54,50 +55,57 @@ export default function CreateRoutine_1({ navigation }) {
     SetSelect(home || fitness)
   }, [home, fitness])
   return (
-    <Container isDark={isDark}>
-      <StatusBar barStyle={isDark ? 'light-content' : 'dark-content'} />
-      <TitleContainer>
-        <Title isDark={isDark}>운동하는 곳을 선택해주세요.</Title>
-        <SubTitle isDark={isDark}>장소에 맞게 운동을 추천해 드릴게요.</SubTitle>
-      </TitleContainer>
-      <SpaceContainer>
-        <SpaceItem
-          isDark={isDark}
-          isActive={home}
-          onPress={homePress}
-          style={{
-            borderColor: home ? `${colors.d_main}` : 'transparent',
-          }}
-        >
-          <SpaceImage>
-            <Home width={117} height={117} />
-          </SpaceImage>
-          <SpaceName isDark={isDark} isActive={home}>
-            집
-          </SpaceName>
-        </SpaceItem>
-        <SpaceItem
-          isDark={isDark}
-          isActive={fitness}
-          onPress={fitnessPress}
-          style={{
-            borderColor: fitness ? `${colors.d_main}` : 'transparent',
-          }}
-        >
-          <SpaceImage>
-            <Gym width={117} height={117} />
-          </SpaceImage>
-          <SpaceName isDark={isDark} isActive={fitness}>
-            헬스장
-          </SpaceName>
-        </SpaceItem>
-      </SpaceContainer>
-      <NextButton isDark={isDark} isActive={select} onPress={nextButton} disabled={!select}>
-        <ButtonText isDark={isDark} isActive={select}>
-          다음
-        </ButtonText>
-      </NextButton>
-    </Container>
+    // <ScreenLayout isDark={isDark} darkBack={colors.black} lightBack={colors.grey_1}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: isDark ? colors.black : colors.grey_1 }}>
+      <StatusBar
+        backgroundColor={isDark ? colors.black : colors.grey_1}
+        barStyle={isDark ? 'light-content' : 'dark-content'}
+      />
+      <Container isDark={isDark}>
+        <TitleContainer>
+          <Title isDark={isDark}>운동하는 곳을 선택해주세요.</Title>
+          <SubTitle isDark={isDark}>장소에 맞게 운동을 추천해 드릴게요.</SubTitle>
+        </TitleContainer>
+        <SpaceContainer>
+          <SpaceItem
+            isDark={isDark}
+            isActive={home}
+            onPress={homePress}
+            style={{
+              borderColor: home ? `${colors.d_main}` : 'transparent',
+            }}
+          >
+            <SpaceImage>
+              <Home width={117} height={117} />
+            </SpaceImage>
+            <SpaceName isDark={isDark} isActive={home}>
+              집
+            </SpaceName>
+          </SpaceItem>
+          <SpaceItem
+            isDark={isDark}
+            isActive={fitness}
+            onPress={fitnessPress}
+            style={{
+              borderColor: fitness ? `${colors.d_main}` : 'transparent',
+            }}
+          >
+            <SpaceImage>
+              <Gym width={117} height={117} />
+            </SpaceImage>
+            <SpaceName isDark={isDark} isActive={fitness}>
+              헬스장
+            </SpaceName>
+          </SpaceItem>
+        </SpaceContainer>
+        <NextButton isDark={isDark} isActive={select} onPress={nextButton} disabled={!select}>
+          <ButtonText isDark={isDark} isActive={select}>
+            다음
+          </ButtonText>
+        </NextButton>
+      </Container>
+    </SafeAreaView>
+    // </ScreenLayout>
   )
 }
 

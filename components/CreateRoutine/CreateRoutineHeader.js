@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { Ionicons } from '@expo/vector-icons'
 import styled from 'styled-components/native'
 import { useNavigation } from '@react-navigation/native'
-import { Animated } from 'react-native'
+import { Animated, SafeAreaView } from 'react-native'
 import { colors } from '../../colors'
 import { IsDarkAtom } from '../../recoil/MyPageAtom'
 import { useRecoilValue } from 'recoil'
@@ -25,38 +25,40 @@ export default function CreateRoutineHeader({ title, index, children }) {
   }, [index, width])
   return (
     <>
-      {index == 4 ? null : ( //
-        <HeaderContainer isDark={isDark}>
-          <Header isDark={isDark}>
-            <BackButton onPress={() => navigation.goBack()}>
-              <Left width={24} height={24} color={isDark ? colors.white : colors.black} />
-            </BackButton>
-            <Title isDark={isDark}>{title}</Title>
-          </Header>
-          <StackBar
-            isDark={isDark}
-            onLayout={(e) => {
-              const newWidth = e.nativeEvent.layout.width
+      <SafeAreaView>
+        {index == 4 ? null : ( //
+          <HeaderContainer isDark={isDark}>
+            <Header isDark={isDark}>
+              <BackButton onPress={() => navigation.goBack()}>
+                <Left width={24} height={24} color={isDark ? colors.white : colors.black} />
+              </BackButton>
+              <Title isDark={isDark}>{title}</Title>
+            </Header>
+            <StackBar
+              isDark={isDark}
+              onLayout={(e) => {
+                const newWidth = e.nativeEvent.layout.width
 
-              setWidth(newWidth)
-            }}
-          >
-            <Animated.View
-              style={{
-                height: '100%',
-                width: '100%',
-                borderRadius: 10,
-                backgroundColor: isDark ? colors.grey_8 : colors.grey_4,
-                transform: [
-                  {
-                    translateX: animatedValue,
-                  },
-                ],
+                setWidth(newWidth)
               }}
-            />
-          </StackBar>
-        </HeaderContainer>
-      )}
+            >
+              <Animated.View
+                style={{
+                  height: '100%',
+                  width: '100%',
+                  borderRadius: 10,
+                  backgroundColor: isDark ? colors.grey_8 : colors.grey_4,
+                  transform: [
+                    {
+                      translateX: animatedValue,
+                    },
+                  ],
+                }}
+              />
+            </StackBar>
+          </HeaderContainer>
+        )}
+      </SafeAreaView>
     </>
   )
 }
@@ -69,7 +71,7 @@ const NoHeader = styled.View`
   opacity: 1;
 `
 const HeaderContainer = styled.View`
-  height: 112px;
+  height: 56px;
   background-color: ${(props) => (props.isDark ? colors.black : colors.grey_1)};
   align-items: center;
   /* justify-content: flex-end; */
@@ -83,7 +85,7 @@ const Header = styled.View`
   align-items: center;
   justify-content: center;
   padding: 10px;
-  margin-top: 44px;
+  /* margin-top: 44px; */
 `
 const BackButton = styled.TouchableOpacity`
   position: absolute;
