@@ -14,67 +14,6 @@ import CustomSwitch from '../../components/myPage/CustomSwitch'
 import Profile_man from '../../assets/SVGs/Profile_man.svg'
 import Profile_woman from '../../assets/SVGs/Profile_woman.svg'
 
-const Profile = styled.TouchableOpacity`
-  width: 100%;
-  flex-direction: row;
-  align-items: center;
-  margin-top: 35px;
-  padding-left: 24px;
-  margin-bottom: 22px;
-  padding-right: 30px;
-  justify-content: space-between;
-`
-const ProfileInfo = styled.View`
-  flex-direction: row;
-`
-const ProfileImage = styled.View`
-  width: 40px;
-  height: 40px;
-  border-radius: 20px;
-  background-color: #ddd;
-  margin-right: 8px;
-`
-const ProfileContents = styled.View`
-  justify-content: center;
-`
-const ModeView = styled.View`
-  padding: 15px 24px;
-  flex-direction: row;
-  align-items: center;
-`
-const BlockContent = styled.View`
-  margin-left: auto;
-  margin-right: 0;
-`
-const Container = styled.View`
-  background-color: ${({ isDark }) => (isDark ? colors.d_background : colors.l_background)};
-  height: 100%;
-`
-const Bar = styled.View`
-  height: 16px;
-  background-color: ${({ isDark }) => (isDark ? colors.black : colors.grey_1)};
-`
-const Name = styled.Text`
-  font-size: 17px;
-  font-style: normal;
-  font-family: Pretendard-SemiBold;
-  line-height: 25.5px;
-  color: ${({ isDark }) => (isDark ? colors.white : colors.black)};
-`
-const Block = styled.TouchableOpacity`
-  padding: 19px 24px;
-  flex-direction: row;
-  align-items: center;
-  background-color: ${({ isDark }) => (isDark ? colors.d_background : colors.l_background)};
-`
-const BlockText = styled.Text`
-  font-size: 17px;
-  font-style: normal;
-  font-family: Pretendard-Regular;
-  line-height: 25.5px;
-  color: ${({ isDark }) => (isDark ? colors.white : colors.black)};
-`
-
 export default function Setting({ navigation }) {
   const isFocused = useIsFocused()
   const isDark = useRecoilValue(IsDarkAtom)
@@ -162,6 +101,14 @@ export default function Setting({ navigation }) {
           </BlockContent>
         </ModeView>
         <Bar isDark={isDark} />
+        <PremiumBlock>
+          <PremiumBack source={require('../../assets/Imgs/MyPageBanner.png')}>
+            <ComingBox>
+              <ComingText>Coming Soon</ComingText>
+            </ComingBox>
+            <PremiumText>프리미엄 플랜으로 건강한 몸을 더 쉽게 만들어보세요</PremiumText>
+          </PremiumBack>
+        </PremiumBlock>
         <Block
           isDark={isDark}
           onPress={() => {
@@ -200,3 +147,107 @@ export default function Setting({ navigation }) {
     </SafeAreaView>
   )
 }
+
+const Profile = styled.TouchableOpacity`
+  width: 100%;
+  flex-direction: row;
+  align-items: center;
+  margin-top: 35px;
+  padding-left: 24px;
+  margin-bottom: 22px;
+  padding-right: 30px;
+  justify-content: space-between;
+`
+const ProfileInfo = styled.View`
+  flex-direction: row;
+`
+const ProfileImage = styled.View`
+  width: 40px;
+  height: 40px;
+  border-radius: 20px;
+  background-color: #ddd;
+  margin-right: 8px;
+`
+const ProfileContents = styled.View`
+  justify-content: center;
+`
+const ModeView = styled.View`
+  padding: 15px 24px;
+  flex-direction: row;
+  align-items: center;
+`
+const BlockContent = styled.View`
+  margin-left: auto;
+  margin-right: 0;
+`
+const Container = styled.View`
+  background-color: ${({ isDark }) => (isDark ? colors.d_background : colors.l_background)};
+  height: 100%;
+`
+const Bar = styled.View`
+  height: 16px;
+  background-color: ${({ isDark }) => (isDark ? colors.black : colors.grey_1)};
+`
+const Name = styled.Text`
+  font-size: 17px;
+  font-style: normal;
+  font-family: Pretendard-SemiBold;
+  line-height: 25.5px;
+  color: ${({ isDark }) => (isDark ? colors.white : colors.black)};
+`
+const Block = styled.TouchableOpacity`
+  padding: 19px 24px;
+  flex-direction: row;
+  align-items: center;
+  background-color: ${({ isDark }) => (isDark ? colors.d_background : colors.l_background)};
+`
+const BlockText = styled.Text`
+  font-size: 17px;
+  font-style: normal;
+  font-family: Pretendard-Regular;
+  line-height: 25.5px;
+  color: ${({ isDark }) => (isDark ? colors.white : colors.black)};
+`
+
+const PremiumBlock = styled.View`
+  //height: 128px;
+  padding: 16px 24px;
+  padding-top: 20px;
+  justify-content: center;
+  align-items: center;
+`
+const PremiumBack = styled.ImageBackground`
+  width: 100%;
+  //height: 92px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 12px;
+  overflow: hidden;
+  //gap: 8px;
+  padding: 16px 0px 16px 0px;
+`
+const ComingBox = styled.View`
+  width: 105px;
+  height: 32px;
+  padding: 6px 12px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 100px;
+  border: 1px solid #8457f1;
+  margin-bottom: 8px;
+`
+const ComingText = styled.Text`
+  text-align: center;
+  font-family: Pretendard-SemiBold;
+  font-size: 13px;
+  font-style: normal;
+  //line-height: 19.5px;
+  color: ${colors.l_main};
+`
+const PremiumText = styled.Text`
+  font-family: Pretendard-SemiBold;
+  font-size: 13px;
+  font-style: normal;
+  //line-height: 19.5px;
+  color: ${colors.white};
+`
