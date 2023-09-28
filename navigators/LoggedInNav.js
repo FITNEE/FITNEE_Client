@@ -37,7 +37,7 @@ export default function LoggedInNav() {
         tabBarShowLabel: false,
         tabBarStyle: {
           display: isTabVisible ? 'flex' : 'none',
-          paddingTop: ScreenWidth < 400 ? 10 : 0,
+          paddingTop: 10,
           height: ScreenWidth < 400 ? 88 : 68,
           backgroundColor: isDark ? colors.grey_9 : colors.white,
           borderTopColor: 'rgba(255,255,255,0.3)',
