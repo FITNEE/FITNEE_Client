@@ -85,12 +85,12 @@ const NextView = styled.View`
   position: absolute;
   bottom: 0;
   width: 100%;
-  height: 100px;
+  height: 290px;
   background-color: ${({ isDark }) => (isDark ? colors.white : colors.black)};
   border-radius: 20px;
   justify-content: space-between;
   align-items: center;
-  padding: 22px 24px 0px 16px;
+  padding: 16px 24px 0px 16px;
   z-index: 0;
 `
 
@@ -247,7 +247,7 @@ export default function ExerciseCourse_2({ navigation, dataList, listIndex, tota
   }
 
   const [isPlaying, setIsPlaying] = React.useState(true)
-  const [duration, setDuration] = React.useState(30)
+  const [duration, setDuration] = React.useState(300000)
 
   const [restTime, setRestTime] = useState(0)
 
@@ -411,8 +411,18 @@ export default function ExerciseCourse_2({ navigation, dataList, listIndex, tota
               <StartButtonText>바로 시작하기</StartButtonText>
             </StartButton>
           </NextTextView>
+          <AdBox />
         </NextView>
       </SafeAreaView>
     </BottomSheetModalProvider>
   )
 }
+
+const AdBox = styled.View`
+  width: 325px;
+  height: 183px;
+  flex-shrink: 0;
+  margin-bottom: 39px;
+  border-radius: 12px;
+  background: #ff8484;
+`
