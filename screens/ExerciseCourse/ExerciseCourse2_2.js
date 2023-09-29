@@ -15,6 +15,12 @@ import ArrowCircle from '../../assets/SVGs/ArrowCircle.svg'
 import Close from '../../assets/SVGs/Close.svg'
 import ExerciseButton from '../../components/exerciseCourse/ExerciseButton'
 import { useFocusEffect } from '@react-navigation/native'
+import { BannerAd, BannerAdSize, TestIds } from 'react-native-google-mobile-ads';
+import 'expo-dev-client'
+
+const adUnitId = __DEV__ ? TestIds.BANNER : 'ca-app-pub-1137387637064734/4792733117';
+
+
 
 const ExerciseCircle = styled.View`
   width: 307px;
@@ -128,7 +134,15 @@ export default function ExerciseCourse_2_2({
           }
         />
         {/* <BlankBox /> */}
-        <AdBox />
+        {/* <AdBox> */}
+        <BannerAd
+        unitId={adUnitId}
+        size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
+        requestOptions={{
+          requestNonPersonalizedAdsOnly: true,
+        }}
+      />
+          {/* </AdBox> */}
         {/* <ExerciseButton //운동 시작 버튼
           text="바로 시작하기"
           disabled={false}

@@ -10,6 +10,10 @@ import { useFocusEffect, useIsFocused } from '@react-navigation/native'
 import axios from 'axios'
 import Logo from '../../assets/SVGs/Logo.svg'
 import { GenderAtom } from '../../recoil/MyPageAtom'
+import { BannerAd, BannerAdSize, TestIds } from 'react-native-google-mobile-ads';
+import 'expo-dev-client'
+
+const adUnitId = __DEV__ ? TestIds.BANNER : 'ca-app-pub-1137387637064734/4792733117';
 
 const Top = styled.View`
   width: 100%;
@@ -56,6 +60,7 @@ const Home = ({ navigation }) => {
   useFocusEffect(
     useCallback(() => {
       fetchData()
+      console.log(BannerAdSize.ANCHORED_ADAPTIVE_BANNER)
     }, []),
   )
   return (
@@ -64,6 +69,13 @@ const Home = ({ navigation }) => {
         <Logo width={88} color={isDark ? colors.white : colors.black} />
         {/* <Premium /> */}
       </Top>
+      <BannerAd
+        unitId={adUnitId}
+        size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
+        requestOptions={{
+          requestNonPersonalizedAdsOnly: true,
+        }}
+      />
       {data.isSuccess ? <HomeRoutines isDark={isDark} data={data.result} /> : <NotHomeRoutine isDark={isDark} />}
     </ScreenLayout>
   )

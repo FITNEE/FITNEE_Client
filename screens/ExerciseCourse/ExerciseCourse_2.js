@@ -15,6 +15,10 @@ import { IsDarkAtom } from '../../recoil/MyPageAtom'
 import ArrowCircle from '../../assets/SVGs/ArrowCircle.svg'
 import Close from '../../assets/SVGs/Close.svg'
 import { pngPath } from '../../imagePath'
+import { BannerAd, BannerAdSize, TestIds } from 'react-native-google-mobile-ads';
+import 'expo-dev-client'
+
+const adUnitId = __DEV__ ? TestIds.BANNER : 'ca-app-pub-1137387637064734/4792733117';
 
 const StartButton = styled.TouchableOpacity`
   padding: 8px 12px;
@@ -411,7 +415,15 @@ export default function ExerciseCourse_2({ navigation, dataList, listIndex, tota
               <StartButtonText>바로 시작하기</StartButtonText>
             </StartButton>
           </NextTextView>
-          <AdBox />
+          {/* <AdBox> */}
+          <BannerAd
+            unitId={adUnitId}
+            size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
+            requestOptions={{
+              requestNonPersonalizedAdsOnly: true,
+            }}
+          />
+          {/* </AdBox> */}
         </NextView>
       </SafeAreaView>
     </BottomSheetModalProvider>
