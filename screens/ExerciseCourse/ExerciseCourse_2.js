@@ -15,6 +15,8 @@ import { IsDarkAtom } from '../../recoil/MyPageAtom'
 import ArrowCircle from '../../assets/SVGs/ArrowCircle.svg'
 import Close from '../../assets/SVGs/Close.svg'
 import { pngPath } from '../../imagePath'
+import { AdView } from '../../components/AdView'
+import 'expo-dev-client'
 
 const StartButton = styled.TouchableOpacity`
   padding: 8px 12px;
@@ -411,7 +413,9 @@ export default function ExerciseCourse_2({ navigation, dataList, listIndex, tota
               <StartButtonText>바로 시작하기</StartButtonText>
             </StartButton>
           </NextTextView>
-          <AdBox />
+          <AdBox>
+            <AdView type="video" media={true} />
+          </AdBox>
         </NextView>
       </SafeAreaView>
     </BottomSheetModalProvider>
@@ -424,5 +428,4 @@ const AdBox = styled.View`
   flex-shrink: 0;
   margin-bottom: 39px;
   border-radius: 12px;
-  background: #ff8484;
 `
