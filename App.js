@@ -7,7 +7,8 @@ import Toast from 'react-native-toast-message'
 import styled from 'styled-components/native'
 import { colors } from './colors'
 import CheckIcon from './assets/SVGs/Check.svg'
-LogBox.ignoreAllLogs()
+
+// LogBox.ignoreAllLogs()
 export default function App() {
   return (
     <RecoilRoot>
