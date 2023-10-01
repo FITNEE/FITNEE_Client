@@ -34,6 +34,7 @@
         "react-native-admob-native-ads",
         {
           "androidAppId": "ca-app-pub-3940256099942544~3347511713 ",
+          "iosAppId": "ca-app-pub-1137387637064734~7645400814",
           "facebookMediation": false
         }
       ]

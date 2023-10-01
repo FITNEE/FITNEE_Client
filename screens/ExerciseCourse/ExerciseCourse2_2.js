@@ -71,7 +71,7 @@ export default function ExerciseCourse_2_2({
   }
 
   const [isPlaying, setIsPlaying] = React.useState(true)
-  const [duration, setDuration] = React.useState(30)
+  const [duration, setDuration] = React.useState(30000)
 
   const [restTime, setRestTime] = useState(0)
 
