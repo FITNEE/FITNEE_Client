@@ -5,17 +5,25 @@
   "build": {
     "development": {
       "distribution": "internal",
+      "developmentClient": true,
       "android": {
         "gradleCommand": ":app:assembleDebug"
       },
       "ios": {
-        "buildConfiguration": "Debug"
+        "buildConfiguration": "Debug",
       }
     },
     "preview": {
       "distribution": "internal"
     },
-    "production": {}
+    "production": {},
+    "development-simulator": {
+      "developmentClient": true,
+      "distribution": "internal",
+      "ios": {
+        "simulator": true
+      }
+    }
   },
   "submit": {
     "production": {}
