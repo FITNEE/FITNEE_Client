@@ -29,7 +29,7 @@ export const MediaView = ({aspectRatio = 1.5}) => {
       <NativeMediaView
         style={{
           width: 325,
-          height: 183,
+          height: 325/aspectRatio,
           backgroundColor: 'transparent',
         }}
         onVideoPause={onVideoPause}
