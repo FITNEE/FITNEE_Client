@@ -2,6 +2,7 @@ import { registerRootComponent } from 'expo';
 
 import App from './App';
 import { AdManager, TestIds } from "react-native-admob-native-ads";
+import { Platform } from 'react-native';
 
 AdManager.setRequestConfiguration({
   tagForChildDirectedTreatment: false,
@@ -11,7 +12,8 @@ AdManager.setRequestConfiguration({
 // image test ad
 AdManager.registerRepository({
   name: "imageAd",
-  adUnitId: TestIds.Image,
+  // adUnitId: TestIds.Image,
+  adUnitId: Platform.OS === 'ios'? 'ca-app-pub-1137387637064734/1518142011':'ca-app-pub-1137387637064734/4310874629',
   numOfAds: 3,
   nonPersonalizedAdsOnly: false,
   videoOptions: {
@@ -26,7 +28,7 @@ AdManager.registerRepository({
 // unmute video test ad
 AdManager.registerRepository({
   name: "videoAd",
-  adUnitId: TestIds.Video,
+  adUnitId: Platform.OS === 'ios'? 'ca-app-pub-1137387637064734/1518142011':'ca-app-pub-1137387637064734/4310874629',
   numOfAds: 3,
   nonPersonalizedAdsOnly: false,
   videoOptions: {
@@ -41,7 +43,7 @@ AdManager.registerRepository({
 // mute video test ad
 AdManager.registerRepository({
   name: "muteVideoAd",
-  adUnitId: TestIds.Video,
+  adUnitId: Platform.OS === 'ios'? 'ca-app-pub-1137387637064734/1518142011':'ca-app-pub-1137387637064734/4310874629',
   numOfAds: 3,
   nonPersonalizedAdsOnly: false,
   videoOptions: {
