@@ -158,6 +158,7 @@ export const AdView = React.memo(({index, media, type, loadOnMount = true}) => {
       onAdImpression={onAdImpression}
       onNativeAdLoaded={onNativeAdLoaded}
       refreshInterval={60000 * 2}
+      adChoicesPlacement='topRight'
       style={{
         width: 325,
         alignSelf: 'center',
@@ -171,7 +172,6 @@ export const AdView = React.memo(({index, media, type, loadOnMount = true}) => {
       mediationOptions={{
         nativeBanner: true,
       }}
-      adUnitID={type === 'image' ? 'ca-app-pub-3940256099942544/2247696110' : 'ca-app-pub-3940256099942544/1044960115'} // REPLACE WITH NATIVE_AD_VIDEO_ID for video ads.
       repository={type === 'image' ? 'imageAd' : 'videoAd'}>
       <View
         style={{
