@@ -89,7 +89,7 @@ const NextView = styled.View`
   width: 100%;
   height: 330px;
   background-color: ${({ isDark }) => (isDark ? colors.white : colors.black)};
-  border-radius: 20px;
+  border-radius: 20px 20px 0px 0px;
   justify-content: flex-start;
   align-items: center;
   padding: 16px 24px 0px 16px;
