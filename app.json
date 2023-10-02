@@ -4,7 +4,7 @@
     "slug": "fitnee",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/Splash.png",
+    "icon": "./assets/AppIcon.png",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/Splash.png",
