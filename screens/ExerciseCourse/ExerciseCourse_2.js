@@ -87,10 +87,10 @@ const NextView = styled.View`
   position: absolute;
   bottom: 0;
   width: 100%;
-  height: 290px;
+  height: 330px;
   background-color: ${({ isDark }) => (isDark ? colors.white : colors.black)};
   border-radius: 20px;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: center;
   padding: 16px 24px 0px 16px;
   z-index: 0;
@@ -101,6 +101,7 @@ const NextTextView = styled.View`
   justify-content: space-between;
   align-items: center;
   width: 100%;
+  margin-bottom: 14px;
 `
 
 const NextText = styled.Text`
@@ -414,7 +415,7 @@ export default function ExerciseCourse_2({ navigation, dataList, listIndex, tota
             </StartButton>
           </NextTextView>
           <AdBox>
-            <AdView type="video" media={true} />
+            <AdView isSetGap={false} type="video" media={true} />
           </AdBox>
         </NextView>
       </SafeAreaView>

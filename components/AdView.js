@@ -21,7 +21,7 @@ import {Events, Logger} from './utils';
 import styled from 'styled-components/native'
 import { colors } from '../colors';
 
-export const AdView = React.memo(({index, media, type, loadOnMount = true}) => {
+export const AdView = React.memo(({isSetGap, index, media, type, loadOnMount = true}) => {
   const [aspectRatio, setAspectRatio] = useState(1.5);
   const [loading, setLoading] = useState(false);
   const [loaded, setLoaded] = useState(false);
@@ -217,7 +217,7 @@ export const AdView = React.memo(({index, media, type, loadOnMount = true}) => {
                     style={{
                         fontFamily: 'Pretendard-Regular',
                         fontSize: 12,
-                        color: `${colors.black}`,
+                        color: isSetGap? `${colors.black}`: `${colors.white}`,
                         lineHeight: 19
                     }}
                 />
@@ -233,7 +233,7 @@ export const AdView = React.memo(({index, media, type, loadOnMount = true}) => {
                 },
                 Platform.OS === 'ios'
                     ? {
-                    backgroundColor: `${colors.black}`,
+                    backgroundColor: isSetGap? `${colors.black}`: `${colors.white}`,
                     borderRadius: 100,
                     }
                     : {
@@ -242,14 +242,14 @@ export const AdView = React.memo(({index, media, type, loadOnMount = true}) => {
                     },
                 ]}
                 buttonAndroidStyle={{
-                    backgroundColor: `${colors.black}`,
+                    backgroundColor: isSetGap? `${colors.black}`: `${colors.white}`,
                     borderRadius: 100,
                 }}
                 allCaps
                 textStyle={{
                     fontSize: 13,
                     textAlign: 'center',
-                    color: 'white',
+                    color: isSetGap? `${colors.white}`: `${colors.black}`,
                     fontFamily: 'Pretendard-SemiBold'
                 }}
             />
