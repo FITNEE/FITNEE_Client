@@ -147,7 +147,5 @@ export default function ExerciseCourse_2_2({
 const AdBox = styled.View`
   width: 325px;
   height: 183px;
-  flex-shrink: 0;
-  margin-top: 28px;
   border-radius: 12px;
 `

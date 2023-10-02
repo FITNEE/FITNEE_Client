@@ -7,6 +7,7 @@ import {
   View,
 } from 'react-native';
 import NativeAdView, {
+  AdBadge,
   AdvertiserView,
   CallToActionView,
   HeadlineView,
@@ -17,6 +18,8 @@ import NativeAdView, {
 } from 'react-native-admob-native-ads';
 import {MediaView} from './MediaView';
 import {Events, Logger} from './utils';
+import styled from 'styled-components/native'
+import { colors } from '../colors';
 
 export const AdView = React.memo(({index, media, type, loadOnMount = true}) => {
   const [aspectRatio, setAspectRatio] = useState(1.5);
@@ -156,7 +159,7 @@ export const AdView = React.memo(({index, media, type, loadOnMount = true}) => {
       onNativeAdLoaded={onNativeAdLoaded}
       refreshInterval={60000 * 2}
       style={{
-        width: '98%',
+        width: 325,
         alignSelf: 'center',
         backgroundColor: 'transparent',
       }}
@@ -189,107 +192,85 @@ export const AdView = React.memo(({index, media, type, loadOnMount = true}) => {
           {loading && <ActivityIndicator size={28} color="#a9a9a9" />}
           {error && <Text style={{color: '#a9a9a9'}}>load failed</Text>}
         </View>
-
-        {/* <View
-          style={{
-            height: 100,
-            width: '100%',
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'flex-start',
-            paddingHorizontal: 10,
-            opacity: loading || error || !loaded ? 0 : 1,
-          }}>
-          <IconView
-            style={{
-              width: 60,
-              height: 60,
-            }}
-          />
-          <View
-            style={{
-              flexGrow: 1,
-              flexShrink: 1,
-              paddingHorizontal: 6,
-            }}>
-            <HeadlineView
-              hello="abc"
-              style={{
-                fontWeight: 'bold',
-                fontSize: 13,
-                color: 'black',
-              }}
-            />
-            <TaglineView
-              numberOfLines={2}
-              style={{
-                fontSize: 11,
-                color: 'black',
-              }}
-            />
-            <AdvertiserView
-              style={{
-                fontSize: 10,
-                color: 'gray',
-              }}
-            />
-
-            <View
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-              }}>
-              <StoreView
-                style={{
-                  fontSize: 12,
-                  color: 'black',
-                }}
-              />
-              <StarRatingView
-                starSize={12}
-                fullStarColor="orange"
-                emptyStarColor="gray"
-                style={{
-                  width: 65,
-                  marginLeft: 10,
-                }}
-              />
-            </View>
-          </View>
-
-          <CallToActionView
-            style={[
-              {
-                minHeight: 45,
-                paddingHorizontal: 12,
-                justifyContent: 'center',
-                alignItems: 'center',
-                elevation: 10,
-                maxWidth: 100,
-                width: 80,
-              },
-              Platform.OS === 'ios'
-                ? {
-                    backgroundColor: '#FFA500',
-                    borderRadius: 10,
-                  }
-                : {},
-            ]}
-            buttonAndroidStyle={{
-              backgroundColor: '#FFA500',
-              borderRadius: 10,
-            }}
-            allCaps
-            textStyle={{
-              fontSize: 13,
-              flexWrap: 'wrap',
-              textAlign: 'center',
-              color: 'white',
-            }}
-          />
-        </View> */}
         {media ? <MediaView aspectRatio={aspectRatio} /> : null}
+        <Description>
+            <LeftContainer>
+                <AdBadge
+                    style={{
+                        width: 25,
+                        height: 19,
+                        borderRadius: 4,
+                        backgroundColor: `${colors.l_main}`,
+                        borderColor: `${colors.l_main}`,
+                        display: 'flex',
+                        alignContent: 'center'
+                    }}
+                    textStyle={{
+                        fontSize: 12,
+                        color: 'white',
+                        fontFamily: 'Pretendard-Regular',
+                        textAlign: 'center',
+                    }}
+                    allCaps
+                />
+                <HeadlineView
+                    style={{
+                        fontFamily: 'Pretendard-Regular',
+                        fontSize: 12,
+                        color: `${colors.black}`,
+                        lineHeight: 19
+                    }}
+                />
+            </LeftContainer>
+
+            <CallToActionView
+                style={[
+                {
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    paddingHorizontal: 10,
+                    paddingVertical: 8,
+                },
+                Platform.OS === 'ios'
+                    ? {
+                    backgroundColor: `${colors.black}`,
+                    borderRadius: 100,
+                    }
+                    : {
+                      width: 45,
+                      height: 33
+                    },
+                ]}
+                buttonAndroidStyle={{
+                    backgroundColor: `${colors.black}`,
+                    borderRadius: 100,
+                }}
+                allCaps
+                textStyle={{
+                    fontSize: 13,
+                    textAlign: 'center',
+                    color: 'white',
+                    fontFamily: 'Pretendard-SemiBold'
+                }}
+            />
+        </Description>
       </View>
     </NativeAdView>
   );
 });
+
+const Description = styled.View`
+  display: flex;
+  width: 100%;
+  height: 33px;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: row;
+  margin-top: 8px;
+`
+const LeftContainer = styled.View`
+    display: flex;
+    align-items: flex-end;
+    padding-left: 29px;
+    justify-content: flex-start;
+`
