@@ -130,7 +130,7 @@ export default function ExerciseCourse_2_2({
           }
         />
         <AdBox>
-          <AdView type="video" media={true} />
+          <AdView isSetGap={true} type="video" media={true} />
         </AdBox>
         {/* <ExerciseButton //운동 시작 버튼
           text="바로 시작하기"
