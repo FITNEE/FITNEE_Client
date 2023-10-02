@@ -5,6 +5,7 @@ import { AdManager, TestIds } from "react-native-admob-native-ads";
 
 AdManager.setRequestConfiguration({
   tagForChildDirectedTreatment: false,
+  maxAdContentRating: "G"
 });
 
 // image test ad
