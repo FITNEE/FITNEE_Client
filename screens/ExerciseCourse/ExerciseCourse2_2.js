@@ -71,7 +71,7 @@ export default function ExerciseCourse_2_2({
   }
 
   const [isPlaying, setIsPlaying] = React.useState(true)
-  const [duration, setDuration] = React.useState(3)
+  const [duration, setDuration] = React.useState(30)
 
   const [restTime, setRestTime] = useState(0)
 
@@ -146,6 +146,5 @@ export default function ExerciseCourse_2_2({
 
 const AdBox = styled.View`
   width: 325px;
-  height: 183px;
   border-radius: 12px;
 `
