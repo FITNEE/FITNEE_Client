@@ -87,7 +87,7 @@ const NextView = styled.View`
   width: 100%;
   height: 290px;
   background-color: ${({ isDark }) => (isDark ? colors.white : colors.black)};
-  border-radius: 20px;
+  border-radius: 20px 20px 0px 0px;
   justify-content: space-between;
   align-items: center;
   padding: 16px 24px 0px 16px;
@@ -413,6 +413,18 @@ export default function ExerciseCourse_2({ navigation, dataList, listIndex, tota
           </NextTextView>
           <AdBox />
         </NextView>
+        <BottomSheetModal
+          ref={bottomSheetRef}
+          index={0}
+          snapPoints={snapPoints}
+          backgroundStyle={{
+            borderRadius: 20,
+            backgroundColor: isDark ? colors.grey_8 : colors.white,
+          }}
+          backdropComponent={renderBackdrop}
+        >
+          <BottomSheetBack></BottomSheetBack>
+        </BottomSheetModal>
       </SafeAreaView>
     </BottomSheetModalProvider>
   )
