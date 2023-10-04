@@ -247,7 +247,7 @@ export default function ExerciseCourse_2({ navigation, dataList, listIndex, tota
   }
 
   const [isPlaying, setIsPlaying] = React.useState(true)
-  const [duration, setDuration] = React.useState(300000)
+  const [duration, setDuration] = React.useState(30)
 
   const [restTime, setRestTime] = useState(0)
 
