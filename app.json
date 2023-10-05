@@ -11,16 +11,16 @@
       "resizeMode": "contain",
       "backgroundColor": "#F6F8FA"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
+
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "co.gpthealth.fitnee"
+      "bundleIdentifier": "co.gpthealth.fitnee",
+      "buildNumber": "1.1.0"
     },
     "android": {
       "package": "co.gpthealth.fitnee",
-      "versionCode": 2,
+      "versionCode": 3,
       "adaptiveIcon": {
         "foregroundImage": "./assets/Splash.png",
         "backgroundColor": "#F6F8FA"
@@ -41,7 +41,7 @@
     ],
     "extra": {
       "eas": {
-        "projectId": "187a0f77-207d-46f8-946d-7a8d3a7f8c58"
+        "projectId": "a9c237c7-a7f7-4d65-bf88-de7f15664409"
       }
     }
   }
