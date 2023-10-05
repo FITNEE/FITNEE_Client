@@ -19,17 +19,20 @@ export default function UpdateExercise({ item }) {
           <Count>
             <CountName>세트</CountName>
             <Line width={70} height={1} />
-            <CountNum count={item.plusSet}>+{item.plusSet}회</CountNum>
+            <CountNum count={item.plusSet}>{item.plusSet < 0 ? item.plusSet : '+' + item.plusSet}회</CountNum>
           </Count>
           <Count>
             <CountName>횟수</CountName>
             <Line width={70} height={1} />
-            <CountNum count={item.plusRep}>+{item.plusRep}회</CountNum>
+            <CountNum count={item.plusRep}>{item.plusRep < 0 ? item.plusRep : '+' + item.plusRep}회</CountNum>
           </Count>
           <Count>
             <CountName>무게</CountName>
             <Line width={70} height={1} />
-            <CountNum count={item.plusWeight}>+{item.plusWeight}kg</CountNum>
+            <CountNum count={item.plusWeight}>
+              {item.plusWeight < 0 ? null : '+'}
+              {item.plusWeight}kg
+            </CountNum>
           </Count>
         </CountBox>
       </Content>
