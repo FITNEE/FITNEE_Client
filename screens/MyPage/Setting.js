@@ -13,12 +13,41 @@ import { Alert } from 'react-native'
 import CustomSwitch from '../../components/myPage/CustomSwitch'
 import Profile_man from '../../assets/SVGs/Profile_man.svg'
 import Profile_woman from '../../assets/SVGs/Profile_woman.svg'
+import messaging from '@react-native-firebase/messaging'
 
 export default function Setting({ navigation }) {
   const isFocused = useIsFocused()
   const isDark = useRecoilValue(IsDarkAtom)
   const [loggedIn, setLoggedIn] = useRecoilState(loggedInState)
   const [isTabVisible, setIsTabVisible] = useRecoilState(TabBarAtom)
+
+  /// push notification ///
+  const [FCMToken, setFCMToken] = useState("hello")
+
+    useEffect(() => {
+        requestUserPermission();
+        getToken();
+      }, []);
+
+      const requestUserPermission = async () => {
+        const authStatus = await messaging().requestPermission();
+        const enabled = authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+        authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+
+        if (enabled) {
+          return getToken();
+        }
+      };
+
+      const getToken = async () => {
+        const fcmToken = await messaging().getToken();
+        console.log('디바이스 토큰값');
+        console.log(fcmToken);
+        setFCMToken(fcmToken);
+        dispatch(set_deviceToken(fcmToken));
+      };
+
+  ///////
 
   useEffect(() => {
     isFocused && setIsTabVisible(false)
@@ -28,6 +57,7 @@ export default function Setting({ navigation }) {
     AsyncStorage.clear()
     setLoggedIn(false)
   }
+
   const [userInfo, setUserInfo] = useState([
     {
       birthYear: '',
@@ -143,6 +173,11 @@ export default function Setting({ navigation }) {
         >
           <BlockText isDark={isDark}>로그아웃</BlockText>
         </Block>
+
+        <Block>
+            <BlockText> 디바이스 토큰 테스트    {FCMToken}</BlockText>
+        </Block>
+
       </Container>
     </SafeAreaView>
   )

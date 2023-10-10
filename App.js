@@ -1,7 +1,9 @@
 import { NavigationContainer } from '@react-navigation/native'
 import { RecoilRoot } from 'recoil'
+import { useEffect } from 'react'
 import AppBase from './AppBase'
 import { LogBox } from 'react-native'
+import messaging from '@react-native-firebase/messaging'
 // 운동사전 Toast Message에 사용
 import Toast from 'react-native-toast-message'
 import styled from 'styled-components/native'
@@ -9,6 +11,15 @@ import { colors } from './colors'
 import CheckIcon from './assets/SVGs/Check.svg'
 LogBox.ignoreAllLogs()
 export default function App() {
+
+  useEffect(() => {
+    const unsubscribe = messaging().onMessage(async remoteMessage => {
+       console.log(remoteMessage)
+    });
+
+    return unsubscribe;
+  }, []);
+
   return (
     <RecoilRoot>
       <NavigationContainer>
