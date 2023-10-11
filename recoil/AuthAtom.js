@@ -1,6 +1,6 @@
-import { atom } from "recoil";
+import { atom } from 'recoil'
 
 export const loggedInState = atom({
-  key: "loggedInState",
+  key: 'loggedInState',
   default: false,
-});
+})
