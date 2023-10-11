@@ -9,52 +9,8 @@ import { useRecoilValue } from 'recoil'
 import { IsDarkAtom } from '../../recoil/MyPageAtom'
 import { EMAIL_API_KEY } from '@env'
 
-const TextContainer = styled.View`
-  margin-top: 124px;
-  flex-direction: column;
-  width: 100%;
-  justify-content: center;
-`
-const BottomContainer = styled.View`
-  align-items: center;
-  width: 100%;
-  flex: 1;
-  padding-top: 76px;
-`
-const ORContainer = styled.View`
-  margin-top: 158px;
-  width: 120px;
-  height: 13px;
-`
-const Line = styled.View`
-  width: 100%;
-  border: ${StyleSheet.hairlineWidth}px solid ${colors.grey_5};
-  margin-top: 6px;
-`
-const ORText = styled.Text`
-  color: ${colors.grey_6};
-  font-size: 13px;
-  position: absolute;
-  background-color: ${colors.grey_1};
-  width: 40px;
-  text-align: center;
-  left: 40px;
-`
-const SNSContainer = styled.View`
-  justify-content: space-between;
-  flex-direction: row;
-  width: 70%;
-  margin-top: 28px;
-`
-const SNSButton = styled.TouchableOpacity`
-  width: 64px;
-  background-color: white;
-  height: 64px;
-`
-
 const OnBoarding = ({ navigation }) => {
   const isDark = useRecoilValue(IsDarkAtom)
-
   const [email, setEmail] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [isValid, setIsValid] = useState()
@@ -73,29 +29,29 @@ const OnBoarding = ({ navigation }) => {
     }
   }
 
-    const isUserId = email.indexOf('@') != -1 && email.length <= 40 && email.indexOf('.') != -1
-    const handleSubmit = () => {
-        console.log('submitted')
-        setIsLoading(true)
-        fetchResult(email).then((data) => {
-            switch(data.code){
-                case 3003:
-                    verifyEmail(email)
-                    break
-                case 1000:
-                    setIsLoading(false)
-                    navigation.navigate('Login', {email})
-                    break
-                case 3007:
-                    setIsLoading(false)
-                    setEmailWarning('이미 탈퇴한 아이디는 30일 이내에 재가입할 수 없어요.')
-                    break
-                default:
-                    break
-            }
-        })
-    }
-
+  const handleOnboardedUser = async () => {}
+  const isUserId = email.indexOf('@') != -1 && email.length <= 40 && email.indexOf('.') != -1
+  const handleSubmit = () => {
+    setIsLoading(true)
+    fetchResult(email).then((data) => {
+      switch (data.code) {
+        case 3003: //존재하지 않는 이메일
+          verifyEmail(email)
+          break
+        case 1000: //이미 존재하는 이메일
+          setIsLoading(false)
+          console.log('이미 존재하는 이메일')
+          navigation.navigate('Login', { email })
+          break
+        case 3007:
+          setIsLoading(false)
+          setEmailWarning('이미 탈퇴한 아이디는 30일 이내에 재가입할 수 없어요.')
+          break
+        default:
+          break
+      }
+    })
+  }
 
   // 이메일 유효성 검증
   const checkEmailVerification = async (email) => {
@@ -168,7 +124,9 @@ const OnBoarding = ({ navigation }) => {
           autoCapitalize="none"
           keyboardType="url"
           placeholderTextColor={colors.grey_5}
-          onSubmitEditing={() => handleSubmit()}
+          onSubmitEditing={() => {
+            isUserId && !isLoading ? handleSubmit() : Keyboard.dismiss()
+          }}
           placeholder="이메일 입력"
           returnKeyType="next"
           blurOnSubmit={false}
@@ -189,10 +147,53 @@ const OnBoarding = ({ navigation }) => {
                 <Text>Naver</Text>
             </SNSButton>
             </SNSContainer> */}
-        </BottomContainer>
-        <Button loading={isLoading} isDark={isDark} enabled={isUserId && !isLoading} onPress={() => handleSubmit()} />
+      </BottomContainer>
+      <Button loading={isLoading} isDark={isDark} enabled={isUserId && !isLoading} onPress={() => handleSubmit()} />
     </ScreenKeyboardLayout>
   )
 }
 
 export default OnBoarding
+
+const TextContainer = styled.View`
+  margin-top: 124px;
+  flex-direction: column;
+  width: 100%;
+  justify-content: center;
+`
+const BottomContainer = styled.View`
+  align-items: center;
+  width: 100%;
+  flex: 1;
+  padding-top: 76px;
+`
+const ORContainer = styled.View`
+  margin-top: 158px;
+  width: 120px;
+  height: 13px;
+`
+const Line = styled.View`
+  width: 100%;
+  border: ${StyleSheet.hairlineWidth}px solid ${colors.grey_5};
+  margin-top: 6px;
+`
+const ORText = styled.Text`
+  color: ${colors.grey_6};
+  font-size: 13px;
+  position: absolute;
+  background-color: ${colors.grey_1};
+  width: 40px;
+  text-align: center;
+  left: 40px;
+`
+const SNSContainer = styled.View`
+  justify-content: space-between;
+  flex-direction: row;
+  width: 70%;
+  margin-top: 28px;
+`
+const SNSButton = styled.TouchableOpacity`
+  width: 64px;
+  background-color: white;
+  height: 64px;
+`

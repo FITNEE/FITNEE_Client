@@ -9,6 +9,7 @@ import { loggedInState } from './recoil/AuthAtom'
 import * as SplashScreen from 'expo-splash-screen'
 import { View } from 'react-native'
 import { IsDarkAtom } from './recoil/MyPageAtom'
+import axios from 'axios'
 
 SplashScreen.preventAutoHideAsync()
 
@@ -17,18 +18,32 @@ export default function AppBase() {
   const [loggedIn, setLoggedIn] = useRecoilState(loggedInState)
   const setIsDark = useSetRecoilState(IsDarkAtom)
 
+  const checkTokenValid = async () => {
+    let url = 'https://gpthealth.shop/'
+    let detailAPI = 'app/user/check'
+    const response = await axios.post(url + detailAPI)
+    return response.data
+  }
   useEffect(() => {
     async function prepare() {
       try {
-        await AsyncStorage.getItem('accessToken').then((accessToken) => {
+        //recoil쪽으로 accessToken 저장 -> 추후 로그인 절차에서 분기하는 데에 사용
+        AsyncStorage.getItem('accessToken').then((accessToken) => {
+          console.log(accessToken)
           if (accessToken) {
-            setLoggedIn(true)
-            console.log('자동으로 로그인됨')
+            console.log('accessToken있음')
+            checkTokenValid().then((result) => {
+              if (result.code == 1000) {
+                //현재 기기에 저장되어있는 토큰값이 유효한 토큰이다
+                setLoggedIn(true) // 자동으로 로그인
+              }
+            })
           }
+          console.log('accesstoken없음')
         })
+
         await AsyncStorage.getItem('darkMode').then((darkMode) => {
           setIsDark(JSON.parse(darkMode))
-
         })
         await Font.loadAsync({
           'Pretendard-Light': require('./assets/fonts/Pretendard-Light.otf'),
