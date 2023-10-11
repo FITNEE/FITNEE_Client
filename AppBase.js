@@ -29,17 +29,25 @@ export default function AppBase() {
       try {
         //recoil쪽으로 accessToken 저장 -> 추후 로그인 절차에서 분기하는 데에 사용
         AsyncStorage.getItem('accessToken').then((accessToken) => {
-          console.log(accessToken)
           if (accessToken) {
             console.log('accessToken있음')
             checkTokenValid().then((result) => {
+              console.log(result)
+              setLoggedIn(true) // 자동으로 로그인
               if (result.code == 1000) {
                 //현재 기기에 저장되어있는 토큰값이 유효한 토큰이다
-                setLoggedIn(true) // 자동으로 로그인
+                const updatedToken = result.result.accessToken
+                if (updatedToken) {
+                  //새로운 토큰값으로의 교체가 필요하다고 서버가 판단한 경우
+                  console.log('액서스토큰 유효기간 지나서 새로운 토큰 AsyncStorage에 저장')
+                  AsyncStorage.setItem('accessToken', updatedToken)
+                }
+              } else {
+                //현재 기기에 저장되어있는 토큰값의 유효기간이 지났을 경우, 바로 다시 로그인으로 팅기게끔
+                setLoggedIn(false)
               }
             })
           }
-          console.log('accesstoken없음')
         })
 
         await AsyncStorage.getItem('darkMode').then((darkMode) => {
