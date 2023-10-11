@@ -70,7 +70,17 @@ const ClickText = styled.Text`
   font-family: Pretendard-Regular;
   line-height: 19.5px;
   text-decoration-line: underline;
-  color: ${({ isDark }) => (isDark ? colors.white : colors.black)};
+  color: ${({ isDark }) => (isDark ? colors.white : colors.grey_7)};
+`
+const ClickText2 = styled.Text`
+  width: 90px;
+  text-align: right;
+  font-size: 13px;
+  font-style: normal;
+  font-family: Pretendard-SemiBold;
+  line-height: 19.5px;
+  text-decoration-line: underline;
+  color: ${({ isDark }) => (isDark ? colors.white : colors.d_main)};
 `
 const NickText = styled.Text`
   text-align: right;
@@ -216,6 +226,11 @@ export default function UserInfo({ route, navigation }) {
             >
               회원 탈퇴하기
             </ClickText>
+          </Click>
+        </MiniBlock>
+        <MiniBlock>
+          <Click>
+            <ClickText2>피트니 응원하기</ClickText2>
           </Click>
         </MiniBlock>
       </Container>
