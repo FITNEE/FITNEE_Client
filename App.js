@@ -2,6 +2,7 @@ import { NavigationContainer } from '@react-navigation/native'
 import { RecoilRoot } from 'recoil'
 import { useEffect } from 'react'
 import AppBase from './AppBase'
+import { Alert } from 'react-native'
 import { LogBox } from 'react-native'
 import messaging from '@react-native-firebase/messaging'
 // 운동사전 Toast Message에 사용
@@ -14,7 +15,7 @@ export default function App() {
 
   useEffect(() => {
     const unsubscribe = messaging().onMessage(async remoteMessage => {
-       console.log(remoteMessage)
+       Alert.alert('NEW MESSAGE!', JSON.stringify(remoteMessage));
     });
 
     return unsubscribe;
