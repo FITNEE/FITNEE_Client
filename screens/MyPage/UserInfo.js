@@ -13,6 +13,18 @@ import Toast from 'react-native-toast-message'
 import Profile_man from '../../assets/SVGs/Profile_man.svg'
 import Profile_woman from '../../assets/SVGs/Profile_woman.svg'
 import { loggedInState } from '../../recoil/AuthAtom'
+import {
+  initConnection,
+  purchaseErrorListener,
+  purchaseUpdatedListener,
+  ProductPurchase,
+  PurchaseError,
+  flushFailedPurchasesCachedAsPendingAndroid,
+  requestInAppPurchase,
+  finishTransactionIOS,
+  consumePurchaseAndroid,
+  acknowledgePurchaseAndroid,
+} from 'react-native-iap'
 
 const Profile = styled.View`
   align-items: center;
@@ -160,6 +172,57 @@ export default function UserInfo({ route, navigation }) {
   const getUserId = userInfo[0].userId
   const getGender = userInfo[0].gender
 
+  let purchaseUpdateSubscription = null
+  let purchaseErrorSubscription = null
+
+  useEffect(() => {
+    // 인앱 결제 연결 초기화
+    initConnection().then(() => {
+      // 구매 업데이트 리스너
+      purchaseUpdateSubscription = purchaseUpdatedListener(async (purchase) => {
+        // 여기에 구매 업데이트 처리 로직을 작성합니다.
+        console.log('purchaseUpdatedListener', purchase)
+
+        // 영수증 검증 및 서버에 결제 정보 전송 등의 코드 추가...
+
+        // 마지막으로 아래와 같이 해당 구매를 완료합니다.
+        if (Platform.OS === 'ios') {
+          await finishTransactionIOS(purchase.transactionId)
+        } else if (Platform.OS === 'android') {
+          // consumable인 경우
+          await consumePurchaseAndroid(purchase.purchaseToken)
+          // non-consumable인 경우
+          await acknowledgePurchaseAndroid(purchase.purchaseToken)
+        }
+      })
+
+      // 구매 에러 리스너
+      purchaseErrorSubscription = purchaseErrorListener((error) => {
+        console.warn('purchaseErrorListener', error)
+      })
+    })
+
+    return () => {
+      if (purchaseUpdateSubscription) {
+        purchaseUpdateSubscription.remove()
+        purchaseUpdateSubscription = null
+      }
+
+      if (purchaseErrorSubscription) {
+        purchaseErrorSubscription.remove()
+        purchaseErrorSubscription = null
+      }
+    }
+  }, [])
+
+  const requestInAppPurchase = async () => {
+    try {
+      await requestPurchase('fitnee.premium')
+    } catch (err) {
+      console.warn(err) // 에러 처리
+    }
+  }
+
   return (
     <SafeAreaView backgroundColor={isDark ? colors.grey_9 : colors.white}>
       <Container isDark={isDark}>
@@ -230,7 +293,7 @@ export default function UserInfo({ route, navigation }) {
         </MiniBlock>
         <MiniBlock>
           <Click>
-            <ClickText2>피트니 응원하기</ClickText2>
+            <ClickText2 onPress={requestInAppPurchase}>피트니 응원하기</ClickText2>
           </Click>
         </MiniBlock>
       </Container>
