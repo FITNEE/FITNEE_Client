@@ -262,7 +262,6 @@ const PremiumBack = styled.ImageBackground`
   padding: 16px 0px 16px 0px;
 `
 const ComingBox = styled.View`
-  width: 105px;
   height: 32px;
   padding: 6px 12px;
   justify-content: center;
