@@ -272,9 +272,21 @@ export default function ExerciseResult({ navigation }) {
             <JustCircle DarkMode={isDark}>
               <Image
                 source={
-                  totalWeight > 500 && totalWeight <= 1000
+                  totalWeight <= 100
+                    ? require('../../assets/Imgs/dumbBell.png')
+                    : totalWeight <= 500
+                    ? require('../../assets/Imgs/airballoon.png')
+                    : totalWeight <= 1000
                     ? require('../../assets/Imgs/car.png')
-                    : require('../../assets/Imgs/dumbBell.png')
+                    : totalWeight <= 1200
+                    ? require('../../assets/Imgs/bus.png')
+                    : totalWeight <= 1600
+                    ? require('../../assets/Imgs/bus.png')
+                    : totalWeight <= 2000
+                    ? require('../../assets/Imgs/rocket.png')
+                    : totalWeight <= 10000
+                    ? require('../../assets/Imgs/rocket.png')
+                    : require('../../assets/Imgs/ufo.png')
                 }
               />
             </JustCircle>
