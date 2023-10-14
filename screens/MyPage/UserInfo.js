@@ -15,12 +15,13 @@ import Profile_woman from '../../assets/SVGs/Profile_woman.svg'
 import { loggedInState } from '../../recoil/AuthAtom'
 import {
   initConnection,
+  endConnection,
   purchaseErrorListener,
   purchaseUpdatedListener,
   ProductPurchase,
   PurchaseError,
   flushFailedPurchasesCachedAsPendingAndroid,
-  requestInAppPurchase,
+  requestPurchase,
   finishTransactionIOS,
   consumePurchaseAndroid,
   acknowledgePurchaseAndroid,
@@ -212,14 +213,24 @@ export default function UserInfo({ route, navigation }) {
         purchaseErrorSubscription.remove()
         purchaseErrorSubscription = null
       }
+
+      endConnection()
     }
   }, [])
 
-  const requestInAppPurchase = async () => {
+  const requestPurchase = async () => {
     try {
       await requestPurchase('fitnee.premium')
     } catch (err) {
       console.warn(err) // 에러 처리
+    }
+  }
+
+  const requestSubscription = async (sku) => {
+    try {
+      await requestSubscription(sku)
+    } catch (err) {
+      console.warn(err.code, err.message)
     }
   }
 
@@ -293,7 +304,7 @@ export default function UserInfo({ route, navigation }) {
         </MiniBlock>
         <MiniBlock>
           <Click>
-            <ClickText2 onPress={requestInAppPurchase}>피트니 응원하기</ClickText2>
+            <ClickText2 onPress={() => requestSubscription('fitnee.premium')}>피트니 응원하기</ClickText2>
           </Click>
         </MiniBlock>
       </Container>
