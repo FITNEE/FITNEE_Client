@@ -20,12 +20,14 @@ import {
   purchaseUpdatedListener,
   ProductPurchase,
   PurchaseError,
+  requestSubscription,
   flushFailedPurchasesCachedAsPendingAndroid,
   requestPurchase,
   finishTransactionIOS,
   consumePurchaseAndroid,
   acknowledgePurchaseAndroid,
 } from 'react-native-iap'
+import * as RNIap from 'react-native-iap'
 
 const Profile = styled.View`
   align-items: center;
@@ -220,7 +222,7 @@ export default function UserInfo({ route, navigation }) {
 
   const requestPurchase = async () => {
     try {
-      await requestPurchase('fitnee.premium')
+      await requestSubscription('fitnee.premium')
     } catch (err) {
       console.warn(err) // 에러 처리
     }
@@ -228,7 +230,7 @@ export default function UserInfo({ route, navigation }) {
 
   const requestSubscription = async (sku) => {
     try {
-      await requestSubscription(sku)
+      await RNIap.requestSubscription({ sku })
     } catch (err) {
       console.warn(err.code, err.message)
     }
