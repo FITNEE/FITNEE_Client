@@ -283,7 +283,7 @@ export default function ExerciseResult({ navigation }) {
                     : totalWeight <= 1600
                     ? require('../../assets/Imgs/bus.png')
                     : totalWeight <= 2000
-                    ? require('../../assets/Imgs/rocket.png')
+                    ? require('../../assets/Imgs/train.png')
                     : totalWeight <= 10000
                     ? require('../../assets/Imgs/rocket.png')
                     : require('../../assets/Imgs/ufo.png')
