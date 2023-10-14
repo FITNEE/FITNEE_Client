@@ -15,10 +15,12 @@
       "**/*"
     ],
     "ios": {
+      "googleServicesFile": "./GoogleService-Info.plist",
       "supportsTablet": true,
       "bundleIdentifier": "co.gpthealth.fitnee"
     },
     "android": {
+      "googleServicesFile": "./google-services.json",
       "package": "co.gpthealth.fitnee",
       "versionCode": 2,
       "adaptiveIcon": {

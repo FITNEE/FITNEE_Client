@@ -8,4 +8,5 @@ import App from './App';
 messaging().setBackgroundMessageHandler(async msg => {
    console.log(msg)
 });
+
 registerRootComponent(App);

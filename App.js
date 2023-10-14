@@ -4,22 +4,45 @@ import { useEffect } from 'react'
 import AppBase from './AppBase'
 import { Alert } from 'react-native'
 import { LogBox } from 'react-native'
-import messaging from '@react-native-firebase/messaging'
+import messaging, { firebase } from '@react-native-firebase/messaging'
+import auth from '@react-native-firebase/auth'
 // 운동사전 Toast Message에 사용
 import Toast from 'react-native-toast-message'
 import styled from 'styled-components/native'
 import { colors } from './colors'
 import CheckIcon from './assets/SVGs/Check.svg'
+import pushNoti from './utils/pushNoti'
+
 LogBox.ignoreAllLogs()
 export default function App() {
-
   useEffect(() => {
-    const unsubscribe = messaging().onMessage(async remoteMessage => {
-       Alert.alert('NEW MESSAGE!', JSON.stringify(remoteMessage));
-    });
+    requestUserPermission()
+  }, [])
 
-    return unsubscribe;
-  }, []);
+  const requestUserPermission = async () => {
+    const authStatus = await messaging().requestPermission()
+    const enabled =
+      authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+      authStatus === messaging.AuthorizationStatus.PROVISIONAL
+
+    if (enabled) {
+      const token = await messaging().getToken()
+      handleFcmMessage()
+      console.log(token)
+    } else {
+      console.log('fcm auth fail')
+    }
+  }
+
+  const handleFcmMessage = () => {
+    const unsubscribe = messaging().onMessage(async (remoteMessage) => {
+      console.log(JSON.stringify(remoteMessage))
+      pushNoti.displayNoti(remoteMessage)
+    })
+    messaging().onNotificationOpenedApp((remoteMessage) => {
+      console.log('Notification caused app to open from background state:', remoteMessage.notification)
+    })
+  }
 
   return (
     <RecoilRoot>

@@ -1,5 +1,5 @@
-import React, { useEffect, useLayoutEffect, useState } from 'react'
-import { Text, SafeAreaView } from 'react-native'
+import React, { useCallback, useEffect, useLayoutEffect, useState } from 'react'
+import { Text, SafeAreaView, Button } from 'react-native'
 import { styled } from 'styled-components/native'
 import { colors } from '../../colors'
 import axios from 'axios'
@@ -21,33 +21,31 @@ export default function Setting({ navigation }) {
   const [loggedIn, setLoggedIn] = useRecoilState(loggedInState)
   const [isTabVisible, setIsTabVisible] = useRecoilState(TabBarAtom)
 
-  /// push notification ///
-  const [FCMToken, setFCMToken] = useState("hello")
+  // /// push notification ///
+  // const [FCMToken, setFCMToken] = useState('')
 
-    useEffect(() => {
-        requestUserPermission();
-        getToken();
-      }, []);
+  //   useEffect(() => {
+  //       requestUserPermission();
+  //       //getToken();
+  //     }, []);
 
-      const requestUserPermission = async () => {
-        const authStatus = await messaging().requestPermission();
-        const enabled = authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
-        authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+  //     const requestUserPermission = async () => {
+  //       const authStatus = await messaging().requestPermission();
+  //       const enabled = authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+  //       authStatus === messaging.AuthorizationStatus.PROVISIONAL;
 
-        if (enabled) {
-          return getToken();
-        }
-      };
+  //       if (enabled) {
+  //         return getToken();
+  //       }
+  //     };
 
-      const getToken = async () => {
-        const fcmToken = await messaging().getToken();
-        console.log('디바이스 토큰값');
-        console.log(fcmToken);
-        setFCMToken(fcmToken);
-        dispatch(set_deviceToken(fcmToken));
-      };
-
-  ///////
+  //     const getToken = async () => {
+  //       const fcmToken = await messaging().getToken();
+  //       console.log('디바이스 토큰값');
+  //       console.log(fcmToken);
+  //       setFCMToken(fcmToken);
+  //       dispatch(set_deviceToken(fcmToken));
+  //     };
 
   useEffect(() => {
     isFocused && setIsTabVisible(false)
@@ -173,11 +171,6 @@ export default function Setting({ navigation }) {
         >
           <BlockText isDark={isDark}>로그아웃</BlockText>
         </Block>
-
-        <Block>
-            <BlockText> 디바이스 토큰 테스트    {FCMToken}</BlockText>
-        </Block>
-
       </Container>
     </SafeAreaView>
   )

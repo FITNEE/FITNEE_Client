@@ -15,9 +15,8 @@ import com.facebook.soloader.SoLoader;
 import expo.modules.ApplicationLifecycleDispatcher;
 import expo.modules.ReactNativeHostWrapper;
 
- import io.invertase.firebase.app.ReactNativeFirebaseAppPackage;
- import io.invertase.firebase.messaging.ReactNativeFirebaseMessagingPackage;
-
+//import io.invertase.firebase.RNFirebasePackage;
+//import io.invertase.firebase.messaging.RNFirebaseMessagingPackage;
 
 import java.util.List;
 
@@ -38,6 +37,8 @@ public class MainApplication extends Application implements ReactApplication {
         // packages.add(new MyReactNativePackage());
          // packages.add(new ReactNativeFirebaseAppPackage());
          // packages.add(new ReactNativeFirebaseMessagingPackage());
+          //packages.add(new RNFirebasePackage());
+          //packages.add(new RNFirebaseMessagingPackage());
         return packages;
       }
 
