@@ -30,6 +30,14 @@
     },
     "web": {
       "favicon": "./assets/Splash.png"
+<<<<<<< HEAD
+=======
+    },
+    "extra": {
+      "eas": {
+        "projectId": "48595597-0b8b-433d-ada0-f2e37ae5576f"
+      }
+>>>>>>> 6225ab1139283118d45dc7d7a4306b2f1c83cdba
     }
   }
 }
