@@ -19,7 +19,6 @@ module.exports = function (api) {
           verbose: false,
         },
       ],
-      ['@react-native-firebase/app'],
     ],
   }
 }
