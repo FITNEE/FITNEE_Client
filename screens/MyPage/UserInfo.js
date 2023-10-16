@@ -14,37 +14,7 @@ import Profile_man from '../../assets/SVGs/Profile_man.svg'
 import Profile_woman from '../../assets/SVGs/Profile_woman.svg'
 import { loggedInState } from '../../recoil/AuthAtom'
 import { APP_STORE_SECRET } from '@env' 
-
-// import {
-//   initConnection,
-//   endConnection,
-//   purchaseErrorListener,
-//   purchaseUpdatedListener,
-//   ProductPurchase,
-//   PurchaseError,
-//   requestSubscription,
-//   flushFailedPurchasesCachedAsPendingAndroid,
-//   requestPurchase,
-//   finishTransactionIOS,
-//   consumePurchaseAndroid,
-//   acknowledgePurchaseAndroid,
-// } from 'react-native-iap'
-// import * as RNIap from 'react-native-iap'
-import {
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-  Platform,
-  TouchableOpacity,
-  ActivityIndicator,
-} from "react-native";
-import {
-  PurchaseError,
-  requestSubscription,
-  useIAP,
-  validateReceiptIos,
-} from "react-native-iap";
+import { PurchaseError, requestSubscription, useIAP, validateReceiptIos } from "react-native-iap";
 
 const Profile = styled.View`
   align-items: center;
@@ -138,7 +108,6 @@ const subscriptionSkus = Platform.select({
   ios: ["fitnee.premium"],
 });
 
-
 export default function UserInfo({ route, navigation }) {
   const isFocused = useIsFocused()
   const isDark = useRecoilValue(IsDarkAtom)
@@ -203,70 +172,6 @@ export default function UserInfo({ route, navigation }) {
   const getBirthYear = userInfo[0].birthYear.toString()
   const getUserId = userInfo[0].userId
   const getGender = userInfo[0].gender
-
-  // let purchaseUpdateSubscription = null
-  // let purchaseErrorSubscription = null
-
-  // useEffect(() => {
-  //   // 인앱 결제 연결 초기화
-  //   initConnection().then(() => {
-  //     // 구매 업데이트 리스너
-  //     purchaseUpdateSubscription = purchaseUpdatedListener(async (purchase) => {
-  //       // 여기에 구매 업데이트 처리 로직을 작성합니다.
-  //       console.log('purchaseUpdatedListener', purchase)
-
-  //       // 영수증 검증 및 서버에 결제 정보 전송 등의 코드 추가...
-
-  //       // 마지막으로 아래와 같이 해당 구매를 완료합니다.
-  //       if (Platform.OS === 'ios') {
-  //         await finishTransactionIOS(purchase.transactionId)
-  //       } else if (Platform.OS === 'android') {
-  //         // consumable인 경우
-  //         await consumePurchaseAndroid(purchase.purchaseToken)
-  //         // non-consumable인 경우
-  //         await acknowledgePurchaseAndroid(purchase.purchaseToken)
-  //       }
-  //     })
-
-  //     // 구매 에러 리스너
-  //     purchaseErrorSubscription = purchaseErrorListener((error) => {
-  //       console.warn('purchaseErrorListener', error)
-  //     })
-  //   })
-
-  //   return () => {
-  //     if (purchaseUpdateSubscription) {
-  //       purchaseUpdateSubscription.remove()
-  //       purchaseUpdateSubscription = null
-  //     }
-
-  //     if (purchaseErrorSubscription) {
-  //       purchaseErrorSubscription.remove()
-  //       purchaseErrorSubscription = null
-  //     }
-
-  //     endConnection()
-  //   }
-  // }, [])
-
-  // const requestPurchase = async () => {
-  //   try {
-  //     await requestSubscription('fitnee.premium')
-  //   } catch (err) {
-  //     console.warn(err) // 에러 처리
-  //   }
-  // }
-
-  // const requestSubscription = async (sku) => {
-  //   try {
-  //     await RNIap.requestSubscription({ sku })
-  //   } catch (err) {
-  //     console.warn(err.code, err.message)
-  //   }
-  // }
-
-
-
 
   //useIAP - easy way to access react-native-iap methods to
   //get your products, purchases, subscriptions, callback
@@ -375,239 +280,79 @@ export default function UserInfo({ route, navigation }) {
     checkCurrentPurchase(currentPurchase);
   }, [currentPurchase, finishTransaction]);
   return (
-    // <SafeAreaView backgroundColor={isDark ? colors.grey_9 : colors.white}>
-    //   <Container isDark={isDark}>
-    //     <Profile>
-    //       {getGender == 1 ? (
-    //         <Profile_man width={88} height={88} color={isDark ? colors.grey_7 : colors.grey_2} />
-    //       ) : (
-    //         <Profile_woman width={88} height={88} color={isDark ? colors.grey_7 : colors.grey_2} />
-    //       )}
-    //     </Profile>
-    //     <NickBlock onPress={() => navigation.navigate('EditUserInfo')}>
-    //       <BlockTitle isDark={isDark}>닉네임</BlockTitle>
-    //       <NickContent>
-    //         <NickText isDark={isDark}>{getUserName}</NickText>
-    //         <Right style={{ marginLeft: 8 }} width={20} height={20} color={colors.grey_7} />
-    //       </NickContent>
-    //     </NickBlock>
-    //     <Block>
-    //       <BlockTitle isDark={isDark}>출생년도</BlockTitle>
-    //       <BlockContent isDark={isDark}>{getBirthYear}</BlockContent>
-    //     </Block>
-    //     <Block>
-    //       <BlockTitle isDark={isDark}>이메일 주소</BlockTitle>
-    //       <BlockContent isDark={isDark}>{getUserId}</BlockContent>
-    //     </Block>
-    //     <Bar isDark={isDark} />
-    //     <MiniBlock>
-    //       <Click>
-    //         <ClickText
-    //           isDark={isDark}
-    //           onPress={() => {
-    //             navigation.navigate('EditPW')
-    //           }}
-    //         >
-    //           비밀번호 수정
-    //         </ClickText>
-    //       </Click>
-    //     </MiniBlock>
-    //     <MiniBlock>
-    //       <Click>
-    //         <ClickText
-    //           isDark={isDark}
-    //           onPress={() => {
-    //             Alert.alert(
-    //               '회원 탈퇴하시겠습니까?',
-    //               '서비스를 탈퇴하시면 피트니 계정을 비롯하여 모든 이용기록이 삭제되며, 삭제된 정보는 복원할 수 없습니다.',
-    //               [
-    //                 {
-    //                   text: '탈퇴하기',
-    //                   style: 'destructive',
-    //                   onPress: () => {
-    //                     deleteUserInfo()
-    //                     Logout()
-    //                     navigation.dispatch(CommonActions.reset({ index: 0, routes: [{ name: 'Setting' }] }))
-    //                   },
-    //                 },
-    //                 {
-    //                   text: '취소',
-    //                   style: 'default',
-    //                 },
-    //               ],
-    //             )
-    //           }}
-    //         >
-    //           회원 탈퇴하기
-    //         </ClickText>
-    //       </Click>
-    //     </MiniBlock>
-    //     <MiniBlock>
-    //       <Click>
-    //         <ClickText2 onPress={() => requestSubscription('fitnee.premium')}>피트니 응원하기</ClickText2>
-    //       </Click>
-    //     </MiniBlock>
-    //   </Container>
-    // </SafeAreaView>
-  <SafeAreaView>
-  <ScrollView>
-    <View style={{ padding: 10 }}>
-      <Text
-        style={{
-          fontSize: 28,
-          textAlign: "center",
-          paddingBottom: 15,
-          color: "black",
-          fontWeight: "bold",
-        }}
-      >
-        Subscribe
-      </Text>
-      <Text style={styles.listItem}>
-        Subscribe to some cool stuff today.
-      </Text>
-      <Text
-        style={
-          (styles.listItem,
-          {
-            fontWeight: "500",
-            textAlign: "center",
-            marginTop: 10,
-            fontSize: 18,
-          })
-        }
-      >
-        Choose your membership plan.
-      </Text>
-      <View style={{ marginTop: 10 }}>
-        {subscriptions.map((subscription, index) => {
-          const owned = purchaseHistory.find(
-            (s) => s?.productId === subscription.productId,
-          );
-          console.log("subscriptions", subscription?.productId);
-          return (
-            <View style={styles.box} key={index}>
-              {subscription?.introductoryPriceSubscriptionPeriodIOS && (
-                <>
-                  <Text style={styles.specialTag}>SPECIAL OFFER</Text>
-                </>
-              )}
-              <View
-                style={{
-                  flex: 1,
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                  marginTop: 10,
-                }}
-              >
-                <Text
-                  style={{
-                    paddingBottom: 10,
-                    fontWeight: "bold",
-                    fontSize: 18,
-                    textTransform: "uppercase",
-                  }}
-                >
-                  {subscription?.title}
-                </Text>
-                <Text
-                  style={{
-                    paddingBottom: 20,
-                    fontWeight: "bold",
-                    fontSize: 18,
-                  }}
-                >
-                  {subscription?.localizedPrice}
-                </Text>
-              </View>
-              {subscription?.introductoryPriceSubscriptionPeriodIOS && (
-                <Text>
-                  Free for 1{" "}
-                  {subscription?.introductoryPriceSubscriptionPeriodIOS}
-                </Text>
-              )}
-              <Text style={{ paddingBottom: 20 }}>
-                {subscription?.description}
-              </Text>
-              {owned && (
-                <Text style={{ textAlign: "center", marginBottom: 10 }}>
-                  You are Subscribed to this plan!
-                </Text>
-              )}
-              {owned && (
-                <TouchableOpacity
-                  style={[styles.button, { backgroundColor: "#0071bc" }]}
-                  onPress={() => {
-                    navigation.navigate("Home");
-                  }}
-                >
-                  <Text style={styles.buttonText}>Continue to App</Text>
-                </TouchableOpacity>
-              )}
-              {loading && <ActivityIndicator size="large" />}
-              {!loading && !owned && isIos && (
-                <TouchableOpacity
-                  style={styles.button}
-                  onPress={() => {
-                    setLoading(true);
-                    handleBuySubscription(subscription.productId);
-                  }}
-                >
-                  <Text style={styles.buttonText}>Subscribe</Text>
-                </TouchableOpacity>
-              )}
-            </View>
-          );
-        })}
-      </View>
-    </View>
-  </ScrollView>
-  </SafeAreaView>
+    <SafeAreaView backgroundColor={isDark ? colors.grey_9 : colors.white}>
+      <Container isDark={isDark}>
+        <Profile>
+          {getGender == 1 ? (
+            <Profile_man width={88} height={88} color={isDark ? colors.grey_7 : colors.grey_2} />
+          ) : (
+            <Profile_woman width={88} height={88} color={isDark ? colors.grey_7 : colors.grey_2} />
+          )}
+        </Profile>
+        <NickBlock onPress={() => navigation.navigate('EditUserInfo')}>
+          <BlockTitle isDark={isDark}>닉네임</BlockTitle>
+          <NickContent>
+            <NickText isDark={isDark}>{getUserName}</NickText>
+            <Right style={{ marginLeft: 8 }} width={20} height={20} color={colors.grey_7} />
+          </NickContent>
+        </NickBlock>
+        <Block>
+          <BlockTitle isDark={isDark}>출생년도</BlockTitle>
+          <BlockContent isDark={isDark}>{getBirthYear}</BlockContent>
+        </Block>
+        <Block>
+          <BlockTitle isDark={isDark}>이메일 주소</BlockTitle>
+          <BlockContent isDark={isDark}>{getUserId}</BlockContent>
+        </Block>
+        <Bar isDark={isDark} />
+        <MiniBlock>
+          <Click>
+            <ClickText
+              isDark={isDark}
+              onPress={() => {
+                navigation.navigate('EditPW')
+              }}
+            >
+              비밀번호 수정
+            </ClickText>
+          </Click>
+        </MiniBlock>
+        <MiniBlock>
+          <Click>
+            <ClickText
+              isDark={isDark}
+              onPress={() => {
+                Alert.alert(
+                  '회원 탈퇴하시겠습니까?',
+                  '서비스를 탈퇴하시면 피트니 계정을 비롯하여 모든 이용기록이 삭제되며, 삭제된 정보는 복원할 수 없습니다.',
+                  [
+                    {
+                      text: '탈퇴하기',
+                      style: 'destructive',
+                      onPress: () => {
+                        deleteUserInfo()
+                        Logout()
+                        navigation.dispatch(CommonActions.reset({ index: 0, routes: [{ name: 'Setting' }] }))
+                      },
+                    },
+                    {
+                      text: '취소',
+                      style: 'default',
+                    },
+                  ],
+                )
+              }}
+            >
+              회원 탈퇴하기
+            </ClickText>
+          </Click>
+        </MiniBlock>
+        <MiniBlock>
+          <Click>
+            <ClickText2 onPress={() => handleBuySubscription('fitnee.premium')}>피트니 응원하기</ClickText2>
+          </Click>
+        </MiniBlock>
+      </Container>
+    </SafeAreaView>
   )
 }
-
-const styles = StyleSheet.create({
-  container: {
-    marginBottom: 20,
-  },
-  listItem: {
-    fontSize: 16,
-    paddingLeft: 8,
-    paddingBottom: 3,
-    textAlign: "center",
-    color: "black",
-  },
-  box: {
-    margin: 10,
-    marginBottom: 5,
-    padding: 10,
-    backgroundColor: "white",
-    borderRadius: 7,
-    shadowColor: "rgba(0, 0, 0, 0.45)",
-    shadowOffset: { height: 16, width: 0 },
-    shadowOpacity: 0.1,
-    shadowRadius: 12,
-  },
-  button: {
-    alignItems: "center",
-    backgroundColor: "mediumseagreen",
-    borderRadius: 8,
-    padding: 10,
-  },
-  buttonText: {
-    fontSize: 16,
-    fontWeight: "bold",
-    color: "white",
-    textTransform: "uppercase",
-  },
-  specialTag: {
-    color: "white",
-    backgroundColor: "crimson",
-    width: 125,
-    padding: 4,
-    fontWeight: "bold",
-    fontSize: 12,
-    borderRadius: 7,
-    marginBottom: 2,
-  },
-});
