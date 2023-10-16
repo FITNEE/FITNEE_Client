@@ -85,7 +85,7 @@ const Login = ({ route, navigation }) => {
           autoCapitalize="none"
           placeholderTextColor={colors.grey_5}
           autoFocus
-          onSubmitEditing={() => handlePress()}
+          onSubmitEditing={() => PW.length>=4 && handlePress()}
           placeholder="password"
           secureTextEntry={true}
           returnKeyType="done"
