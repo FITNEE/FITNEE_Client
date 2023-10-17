@@ -37,6 +37,7 @@ export default function App() {
   const handleFcmMessage = () => {
     const unsubscribe = messaging().onMessage(async (remoteMessage) => {
       console.log(JSON.stringify(remoteMessage))
+      //Alert.alert(JSON.stringify(remoteMessage))
       pushNoti.displayNoti(remoteMessage)
     })
     messaging().onNotificationOpenedApp((remoteMessage) => {

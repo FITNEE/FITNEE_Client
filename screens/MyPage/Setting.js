@@ -51,9 +51,13 @@ export default function Setting({ navigation }) {
     isFocused && setIsTabVisible(false)
   }, [isFocused, isTabVisible])
 
-  const Logout = () => {
-    AsyncStorage.clear()
-    setLoggedIn(false)
+  const Logout = async () => {
+    try {
+      AsyncStorage.clear()
+      setLoggedIn(false)
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   const [userInfo, setUserInfo] = useState([
