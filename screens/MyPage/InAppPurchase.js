@@ -139,8 +139,14 @@ export default function InAppPurchase({ isOpen, setIsOpen }) {
                 <InfoText style={{color: colors.black}}>정기 후원 결제 시</InfoText>
                 <InfoText style={{color: colors.l_main}}>₩ 1,100/월</InfoText>
             </InfoBox>
-            <PurchaseBtn>
-                <PurchaseText onPress={() => handleBuySubscription('fitnee.premium')}>결제하기</PurchaseText>
+            <PurchaseBtn
+                onPress={() => {
+                setLoading(true)
+                handleBuySubscription('fitnee.premium')
+                }}
+            >
+                {loading && <ActivityIndicator size="small"/>}
+                {!loading && <PurchaseText>결제하기</PurchaseText>}
             </PurchaseBtn>
             <RecoverText>구매 복원</RecoverText>
         </Container>
