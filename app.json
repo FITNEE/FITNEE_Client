@@ -20,7 +20,7 @@
     },
     "android": {
       "package": "co.gpthealth.fitnee",
-      "versionCode": 2,
+      "versionCode": 3,
       "adaptiveIcon": {
         "foregroundImage": "./assets/Splash.png",
         "backgroundColor": "#F6F8FA"
@@ -31,7 +31,7 @@
     },
     "extra": {
       "eas": {
-        "projectId": "93ec47ab-3b3e-42ba-a13b-6ae8bf733407"
+        "projectId": "a9c237c7-a7f7-4d65-bf88-de7f15664409"
       }
     }
   }
