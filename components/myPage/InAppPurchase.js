@@ -107,7 +107,7 @@ export default function InAppPurchase({ isOpen, setIsOpen }) {
               if (appleReceiptResponse) {
                 const { status } = appleReceiptResponse
                 if (status) {
-                  navigation.navigate('Home')
+                //   navigation.navigate('Home')
                 }
               }
 
@@ -122,6 +122,10 @@ export default function InAppPurchase({ isOpen, setIsOpen }) {
     checkCurrentPurchase(currentPurchase)
   }, [currentPurchase, finishTransaction])
 
+  useEffect(()=>{
+    console.log(loading)
+  }, [loading])
+
   return (
     <Container>
       <TopContainer>
@@ -134,7 +138,7 @@ export default function InAppPurchase({ isOpen, setIsOpen }) {
           handleBuySubscription('fitnee.premium')
         }}
       >
-        {loading && <ActivityIndicator size="20" />}
+        {loading && <ActivityIndicator size="small"/>}
         {!loading && <PurchaseText>결제하기</PurchaseText>}
       </PurchaseBtn>
     </Container>
@@ -162,6 +166,8 @@ const PurchaseBtn = styled.TouchableOpacity`
   height: 52px;
   background-color: ${colors.l_main};
   border-radius: 12px;
+  justify-content: center;
+  align-items: center;
 `
 const PurchaseText = styled.Text`
   line-height: 52px;
