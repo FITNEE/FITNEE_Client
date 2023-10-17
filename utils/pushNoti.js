@@ -17,6 +17,14 @@ const displayNotification = async (message) => {
       importance: AndroidImportance.HIGH,
       asForegroundService: true,
     },
+    ios: {
+      foregroundPresentationOptions: {
+        banner: true,
+        list: true,
+        sound: true,
+      },
+      summaryArgumentCount: 3,
+    },
   })
 }
 
