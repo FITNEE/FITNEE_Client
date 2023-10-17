@@ -144,7 +144,6 @@ export default function StartExercise({ navigation }) {
         },
       })
       const result = response.data
-      console.log(result)
       return result
     } catch (error) {
       console.error('Error', error)
@@ -182,7 +181,7 @@ export default function StartExercise({ navigation }) {
       } else {
         const dayRoutineArr = processDayData(routineData.result)
         const dayRoutineIdx = dayRoutineArr[day2].routineId
-        console.log(dayRoutineIdx)
+        console.log(`routineIDX : ${dayRoutineIdx}`)
         if (dayRoutineIdx === 0) {
           setIsNoRoutine(true)
           setIsLoading(false)

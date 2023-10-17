@@ -34,7 +34,6 @@ const CurrentExplainText = styled.Text`
   font-family: Pretendard-Regular;
   line-height: 19.5px;
   width: 261px;
-  word-break: keep-all;
 `
 export default function CurrentExplainLine({ expl, num }) {
   const isDark = useRecoilValue(IsDarkAtom)
