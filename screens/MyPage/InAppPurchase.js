@@ -4,6 +4,7 @@ import { colors } from '../../colors'
 import { styled } from 'styled-components/native'
 import { APP_STORE_SECRET } from '@env'
 import { PurchaseError, requestSubscription, useIAP, validateReceiptIos } from 'react-native-iap'
+import CloseIcon from '../../assets/SVGs/Close.svg'
 
 const errorLog = ({ message, error }) => {
   console.error('An error happened', message, error)
@@ -122,32 +123,33 @@ export default function InAppPurchase({ isOpen, setIsOpen }) {
     checkCurrentPurchase(currentPurchase)
   }, [currentPurchase, finishTransaction])
 
-  useEffect(()=>{
-    console.log(loading)
-  }, [loading])
-
-  return (
-    <Container>
-      <TopContainer>
-        <CloseBtn onPress={() => setIsOpen(false)} />
-      </TopContainer>
-
-      <PurchaseBtn
-        onPress={() => {
-          setLoading(true)
-          handleBuySubscription('fitnee.premium')
-        }}
-      >
-        {loading && <ActivityIndicator size="small"/>}
-        {!loading && <PurchaseText>결제하기</PurchaseText>}
-      </PurchaseBtn>
-    </Container>
-  )
+    return(
+        <Container>
+            <Label>
+                <LabelText>
+                    Donation for 
+                    <LabelText style={{fontFamily: 'Pretendard-SemiBold'}}> fitnee</LabelText>
+                </LabelText>
+            </Label>
+            <Title>피트니 후원하기</Title>
+            <SubTitle>
+                {`더 나은 헬스 문화를 만들어갈 수 있도록\n팀 피트니를 후원해주세요`}
+            </SubTitle>
+            <InfoBox>
+                <InfoText style={{color: colors.black}}>정기 후원 결제 시</InfoText>
+                <InfoText style={{color: colors.l_main}}>₩ 1,100/월</InfoText>
+            </InfoBox>
+            <PurchaseBtn>
+                <PurchaseText onPress={() => handleBuySubscription('fitnee.premium')}>결제하기</PurchaseText>
+            </PurchaseBtn>
+            <RecoverText>구매 복원</RecoverText>
+        </Container>
+    )
 }
 
 const Container = styled.View`
-  flex: 1;
-  background-color: pink;
+    background-color: ${colors.grey_1};
+    height: 100%;
 `
 const TopContainer = styled.View`
   width: 100%;
@@ -157,22 +159,86 @@ const TopContainer = styled.View`
   align-items: flex-end;
 `
 const CloseBtn = styled.TouchableOpacity`
-  background-color: red;
   width: 24px;
   height: 24px;
 `
+const Label = styled.View`
+    margin-top: 27px;
+    width: 136px;
+    height: 32px;
+    align-self: center;
+    border: 1px solid ${colors.l_main};
+    border-radius: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+`
+const LabelText = styled.Text`
+    font-size: 13px;
+    color: ${colors.l_main};
+    font-family: Pretendard-Regular;
+`
+const Title = styled.Text`
+    font-family: Pretendard-SemiBold;
+    font-size: 20px;
+    color: ${colors.black};
+    align-self: center;
+    margin-top: 16px;
+`
+const SubTitle = styled.Text`
+    font-size: 17px;
+    font-family: Pretendard-Regular;
+    color: ${colors.grey_7};
+    align-self: center;
+    text-align: center;
+    margin-top: 8px;
+    line-height: 25.5px;
+`
+const InfoBox = styled.View`
+    margin-top: 157px;
+    background-color: ${colors.white};
+    border-radius: 12px;
+    align-self: center;
+    border: 1px solid ${colors.grey_2};
+    width: 327px;
+    height: 89px;
+    padding: 16px 24px;
+    gap: 8px;
+    justify-content: center;
+`
+const InfoText = styled.Text`
+    font-size: 17px;
+    font-family: Pretendard-SemiBold;
+    line-height: 25.5px;
+`
 const PurchaseBtn = styled.TouchableOpacity`
-  width: 343px;
-  height: 52px;
-  background-color: ${colors.l_main};
-  border-radius: 12px;
-  justify-content: center;
-  align-items: center;
+    width: 343px;
+    height: 52px;
+    margin-top: 105px;
+    background-color: ${colors.l_main};
+    border-radius: 12px;
+    align-self: center;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 4px;
 `
 const PurchaseText = styled.Text`
-  line-height: 52px;
-  color: ${colors.white};
-  font-size: 17px;
-  font-family: Pretendard-SemiBold;
-  text-align: center;
+    color: ${colors.white};
+    font-size: 17px;
+    font-family: Pretendard-SemiBold;
+`
+const Recover = styled.View`
+    width: 343px;
+    height: 52px;
+    align-self: center;
+    align-items: center;
+    justify-content: center;
+    background-color: ${colors.grey_1};
+`
+const RecoverText = styled.Text`
+    color: ${colors.grey_7};
+    font-size: 17px;
+    font-family: Pretendard-SemiBold;
+    line-height: 52px;
+    align-self: center;
 `

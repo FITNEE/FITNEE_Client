@@ -13,7 +13,6 @@ import Toast from 'react-native-toast-message'
 import Profile_man from '../../assets/SVGs/Profile_man.svg'
 import Profile_woman from '../../assets/SVGs/Profile_woman.svg'
 import { loggedInState } from '../../recoil/AuthAtom'
-import InAppPurchase from '../../components/myPage/InAppPurchase'
 
 const Profile = styled.View`
   align-items: center;
@@ -162,88 +161,80 @@ export default function UserInfo({ route, navigation }) {
   const getUserId = userInfo[0].userId
   const getGender = userInfo[0].gender
 
-  // 인앱결제 설명창 켜져있는지 여부 저장
-  const [isOpen, setIsOpen] = useState(false)
-
   return (
     <SafeAreaView backgroundColor={isDark ? colors.grey_9 : colors.white}>
-      {
-        isOpen?
-        <InAppPurchase setIsOpen={setIsOpen}/>
-        :
-        <Container isDark={isDark}>
-        <Profile>
-          {getGender == 1 ? (
-            <Profile_man width={88} height={88} color={isDark ? colors.grey_7 : colors.grey_2} />
-          ) : (
-            <Profile_woman width={88} height={88} color={isDark ? colors.grey_7 : colors.grey_2} />
-          )}
-        </Profile>
-        <NickBlock onPress={() => navigation.navigate('EditUserInfo')}>
-          <BlockTitle isDark={isDark}>닉네임</BlockTitle>
-          <NickContent>
-            <NickText isDark={isDark}>{getUserName}</NickText>
-            <Right style={{ marginLeft: 8 }} width={20} height={20} color={colors.grey_7} />
-          </NickContent>
-        </NickBlock>
-        <Block>
-          <BlockTitle isDark={isDark}>출생년도</BlockTitle>
-          <BlockContent isDark={isDark}>{getBirthYear}</BlockContent>
-        </Block>
-        <Block>
-          <BlockTitle isDark={isDark}>이메일 주소</BlockTitle>
-          <BlockContent isDark={isDark}>{getUserId}</BlockContent>
-        </Block>
-        <Bar isDark={isDark} />
-        <MiniBlock>
-          <Click>
-            <ClickText
-              isDark={isDark}
-              onPress={() => {
-                navigation.navigate('EditPW')
-              }}
-            >
-              비밀번호 수정
-            </ClickText>
-          </Click>
-        </MiniBlock>
-        <MiniBlock>
-          <Click>
-            <ClickText
-              isDark={isDark}
-              onPress={() => {
-                Alert.alert(
-                  '회원 탈퇴하시겠습니까?',
-                  '서비스를 탈퇴하시면 피트니 계정을 비롯하여 모든 이용기록이 삭제되며, 삭제된 정보는 복원할 수 없습니다.',
-                  [
-                    {
-                      text: '탈퇴하기',
-                      style: 'destructive',
-                      onPress: () => {
-                        deleteUserInfo()
-                        Logout()
-                        navigation.dispatch(CommonActions.reset({ index: 0, routes: [{ name: 'Setting' }] }))
+              <Container isDark={isDark}>
+          <Profile>
+            {getGender == 1 ? (
+              <Profile_man width={88} height={88} color={isDark ? colors.grey_7 : colors.grey_2} />
+            ) : (
+              <Profile_woman width={88} height={88} color={isDark ? colors.grey_7 : colors.grey_2} />
+            )}
+          </Profile>
+          <NickBlock onPress={() => navigation.navigate('EditUserInfo')}>
+            <BlockTitle isDark={isDark}>닉네임</BlockTitle>
+            <NickContent>
+              <NickText isDark={isDark}>{getUserName}</NickText>
+              <Right style={{ marginLeft: 8 }} width={20} height={20} color={colors.grey_7} />
+            </NickContent>
+          </NickBlock>
+          <Block>
+            <BlockTitle isDark={isDark}>출생년도</BlockTitle>
+            <BlockContent isDark={isDark}>{getBirthYear}</BlockContent>
+          </Block>
+          <Block>
+            <BlockTitle isDark={isDark}>이메일 주소</BlockTitle>
+            <BlockContent isDark={isDark}>{getUserId}</BlockContent>
+          </Block>
+          <Bar isDark={isDark} />
+          <MiniBlock>
+            <Click>
+              <ClickText
+                isDark={isDark}
+                onPress={() => {
+                  navigation.navigate('EditPW')
+                }}
+              >
+                비밀번호 수정
+              </ClickText>
+            </Click>
+          </MiniBlock>
+          <MiniBlock>
+            <Click>
+              <ClickText
+                isDark={isDark}
+                onPress={() => {
+                  Alert.alert(
+                    '회원 탈퇴하시겠습니까?',
+                    '서비스를 탈퇴하시면 피트니 계정을 비롯하여 모든 이용기록이 삭제되며, 삭제된 정보는 복원할 수 없습니다.',
+                    [
+                      {
+                        text: '탈퇴하기',
+                        style: 'destructive',
+                        onPress: () => {
+                          deleteUserInfo()
+                          Logout()
+                          navigation.dispatch(CommonActions.reset({ index: 0, routes: [{ name: 'Setting' }] }))
+                        },
                       },
-                    },
-                    {
-                      text: '취소',
-                      style: 'default',
-                    },
-                  ],
-                )
-              }}
-            >
-              회원 탈퇴하기
-            </ClickText>
-          </Click>
-        </MiniBlock>
-        <MiniBlock>
-          <Click>
-           <ClickText2 onPress={() => setIsOpen(true)}>피트니 응원하기</ClickText2>
-          </Click>
-        </MiniBlock>
+                      {
+                        text: '취소',
+                        style: 'default',
+                      },
+                    ],
+                  )
+                }}
+              >
+                회원 탈퇴하기
+              </ClickText>
+            </Click>
+          </MiniBlock>
+          <MiniBlock>
+            <Click>
+              <ClickText2 onPress={()=>navigation.navigate('InAppPurchase')}>피트니 응원하기</ClickText2>
+            </Click>
+          </MiniBlock>
         </Container>
-      }
     </SafeAreaView>
   )
 }
