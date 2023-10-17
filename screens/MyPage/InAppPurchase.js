@@ -184,6 +184,7 @@ const Title = styled.Text`
     color: ${colors.black};
     align-self: center;
     margin-top: 16px;
+    line-height: 32px;
 `
 const SubTitle = styled.Text`
     font-size: 17px;
@@ -195,7 +196,7 @@ const SubTitle = styled.Text`
     line-height: 25.5px;
 `
 const InfoBox = styled.View`
-    margin-top: 157px;
+    margin-top: 147px;
     background-color: ${colors.white};
     border-radius: 12px;
     align-self: center;
@@ -214,7 +215,7 @@ const InfoText = styled.Text`
 const PurchaseBtn = styled.TouchableOpacity`
     width: 343px;
     height: 52px;
-    margin-top: 105px;
+    margin-top: 157px;
     background-color: ${colors.l_main};
     border-radius: 12px;
     align-self: center;
