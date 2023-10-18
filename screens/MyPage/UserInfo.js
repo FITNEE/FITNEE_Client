@@ -228,10 +228,18 @@ export default function UserInfo({ route, navigation }) {
 
   const handleBuySubscription = async (productId, offerToken) => {
     try {
-      await requestSubscription({
-        sku: productId,
-        subscriptionOffers: [{ sku: productId, offerToken }],
-      })
+      // await requestSubscription({
+      //   sku: productId,
+      //   subscriptionOffers: [{ sku: productId, offerToken }],
+      // })
+      if (offerToken) {
+        await requestSubscription({
+          sku: productId,
+          subscriptionOffers: [{ sku: productId, offerToken }],
+        })
+      } else {
+        await requestSubscription({ sku: productId })
+      }
       setLoading(false)
     } catch (error) {
       setLoading(false)
