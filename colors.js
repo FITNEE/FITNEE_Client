@@ -21,7 +21,6 @@ export const colors = {
   grey_4: "#C4C5D4",
   grey_5: "#A5A9BD",
   grey_6: "#8D91A5",
-  grey_7: "#595F72",
   grey_8: "#353C49",
   grey_9: "#1A1E27",
 

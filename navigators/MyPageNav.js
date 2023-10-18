@@ -84,7 +84,7 @@ export default function MyPageNav() {
         name="InAppPurchase"
         component={withIAPContext(InAppPurchase)}
         options={({ navigation }) => ({
-          headerStyle: {backgroundColor: colors.grey_1},
+          headerStyle: {backgroundColor: isDark? colors.grey_9 : colors.grey_1},
           headerTitle: '',
           headerLeft: false,
           headerRight: () => (

@@ -5,6 +5,8 @@ import { styled } from 'styled-components/native'
 import { APP_STORE_SECRET } from '@env'
 import { PurchaseError, requestSubscription, useIAP, validateReceiptIos } from 'react-native-iap'
 import CloseIcon from '../../assets/SVGs/Close.svg'
+import { IsDarkAtom } from '../../recoil/MyPageAtom'
+import { useRecoilValue } from 'recoil'
 
 const errorLog = ({ message, error }) => {
   console.error('An error happened', message, error)
@@ -123,20 +125,21 @@ export default function InAppPurchase({ isOpen, setIsOpen }) {
     checkCurrentPurchase(currentPurchase)
   }, [currentPurchase, finishTransaction])
 
+    const isDark = useRecoilValue(IsDarkAtom)
     return(
-        <Container>
+        <Container isDark={isDark}>
             <Label>
                 <LabelText>
                     Donation for 
-                    <LabelText style={{fontFamily: 'Pretendard-SemiBold'}}> fitnee</LabelText>
+                    <LabelText style={{fontFamily: 'Pretendard-Black'}}> fitnee</LabelText>
                 </LabelText>
             </Label>
-            <Title>피트니 후원하기</Title>
-            <SubTitle>
+            <Title isDark={isDark}>피트니 후원하기</Title>
+            <SubTitle isDark={isDark}>
                 {`더 나은 헬스 문화를 만들어갈 수 있도록\n팀 피트니를 후원해주세요`}
             </SubTitle>
-            <InfoBox>
-                <InfoText style={{color: colors.black}}>정기 후원 결제 시</InfoText>
+            <InfoBox isDark={isDark}>
+                <InfoText style={{color: isDark? colors.white: colors.black}}>정기 후원 결제 시</InfoText>
                 <InfoText style={{color: colors.l_main}}>₩ 1,100/월</InfoText>
             </InfoBox>
             <PurchaseBtn
@@ -146,27 +149,16 @@ export default function InAppPurchase({ isOpen, setIsOpen }) {
                 }}
             >
                 {loading && <ActivityIndicator size="small"/>}
-                {!loading && <PurchaseText>결제하기</PurchaseText>}
+                {!loading && <PurchaseText isDark={isDark}>결제하기</PurchaseText>}
             </PurchaseBtn>
-            <RecoverText>구매 복원</RecoverText>
+            <RecoverText isDark={isDark}>구매 복원</RecoverText>
         </Container>
     )
 }
 
 const Container = styled.View`
-    background-color: ${colors.grey_1};
+    background-color: ${({ isDark }) => (isDark ? colors.grey_9 : colors.grey_1)};
     height: 100%;
-`
-const TopContainer = styled.View`
-  width: 100%;
-  height: 48px;
-  padding: 12px 24px;
-  display: flex;
-  align-items: flex-end;
-`
-const CloseBtn = styled.TouchableOpacity`
-  width: 24px;
-  height: 24px;
 `
 const Label = styled.View`
     margin-top: 27px;
@@ -191,19 +183,21 @@ const Title = styled.Text`
     align-self: center;
     margin-top: 16px;
     line-height: 32px;
+    color: ${({ isDark }) => (isDark ? colors.white : colors.black )};
 `
 const SubTitle = styled.Text`
     font-size: 17px;
     font-family: Pretendard-Regular;
-    color: ${colors.grey_7};
     align-self: center;
     text-align: center;
     margin-top: 8px;
     line-height: 25.5px;
+    color: ${({ isDark }) => (isDark ? colors.grey_3 : colors.grey_7 )};
 `
 const InfoBox = styled.View`
-    margin-top: 147px;
-    background-color: ${colors.white};
+    margin-top: 136px;
+    background-color: ${({ isDark }) => (isDark ? colors.black : colors.white )};
+    border-color: ${({ isDark }) => (isDark ? colors.grey_8 : colors.grey_2 )};
     border-radius: 12px;
     align-self: center;
     border: 1px solid ${colors.grey_2};
@@ -221,7 +215,7 @@ const InfoText = styled.Text`
 const PurchaseBtn = styled.TouchableOpacity`
     width: 343px;
     height: 52px;
-    margin-top: 157px;
+    margin-top: 168px;
     background-color: ${colors.l_main};
     border-radius: 12px;
     align-self: center;
@@ -230,9 +224,9 @@ const PurchaseBtn = styled.TouchableOpacity`
     margin-bottom: 4px;
 `
 const PurchaseText = styled.Text`
-    color: ${colors.white};
     font-size: 17px;
     font-family: Pretendard-SemiBold;
+    color: ${({ isDark }) => (isDark ? colors.grey_9 : colors.white )};
 `
 const Recover = styled.View`
     width: 343px;
@@ -243,9 +237,10 @@ const Recover = styled.View`
     background-color: ${colors.grey_1};
 `
 const RecoverText = styled.Text`
-    color: ${colors.grey_7};
+
     font-size: 17px;
     font-family: Pretendard-SemiBold;
     line-height: 52px;
     align-self: center;
+    color: ${({ isDark }) => (isDark ? colors.grey_3 : colors.grey_7 )};
 `
