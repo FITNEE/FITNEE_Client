@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Alert, SafeAreaView } from 'react-native'
+import { Alert, Platform, SafeAreaView } from 'react-native'
 import { styled } from 'styled-components/native'
 import { colors } from '../../colors'
 import axios from 'axios'
@@ -106,6 +106,7 @@ const isIos = Platform.OS === 'ios'
 //product id from appstoreconnect app->subscriptions
 const subscriptionSkus = Platform.select({
   ios: ['fitnee.premium'],
+  android: ['fitnee.premium'],
 })
 
 export default function UserInfo({ route, navigation }) {
@@ -225,10 +226,11 @@ export default function UserInfo({ route, navigation }) {
     }
   }, [connected, purchaseHistory, subscriptions])
 
-  const handleBuySubscription = async (productId) => {
+  const handleBuySubscription = async (productId, offerToken) => {
     try {
       await requestSubscription({
         sku: productId,
+        subscriptionOffers: [{ sku: productId, offerToken }],
       })
       setLoading(false)
     } catch (error) {
@@ -347,7 +349,24 @@ export default function UserInfo({ route, navigation }) {
         </MiniBlock>
         <MiniBlock>
           <Click>
-            <ClickText2 onPress={() => handleBuySubscription('fitnee.premium')}>피트니 응원하기</ClickText2>
+            {Platform.OS == 'android' ? (
+              // subscriptions?.map((subscription) => {
+              //   subscription?.subscriptionOfferDetails?.map((offer) => (
+              //     <ClickText2 onPress={() => handleBuySubscription('fitnee.premium', offer.offerToken)}>
+              //       피트니 응원하기
+              //     </ClickText2>
+              //   ))
+              // })
+              <ClickText2
+                onPress={() =>
+                  handleBuySubscription('fitnee.premium', subscriptions[0]?.subscriptionOfferDetails[0]?.offerToken)
+                }
+              >
+                피트니 응원하기
+              </ClickText2>
+            ) : (
+              <ClickText2 onPress={() => handleBuySubscription('fitnee.premium')}>피트니 응원하기</ClickText2>
+            )}
           </Click>
         </MiniBlock>
       </Container>
