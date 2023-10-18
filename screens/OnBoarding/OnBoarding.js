@@ -23,6 +23,7 @@ const OnBoarding = ({ navigation }) => {
       const queryStr = `?userId=${email}`
       const response = await axios.get(url + detailAPI + queryStr)
       const data = response.data
+      console.log(data)
       return data
     } catch (error) {
       console.error('Failed to fetch data:', error)
@@ -70,7 +71,7 @@ const OnBoarding = ({ navigation }) => {
   const verifyEmail = () => {
     checkEmailVerification(email).then((result) => {
       setIsLoading(false)
-      console.log(result)
+      console.log('EmailVerification:', result)
       switch (result) {
         case 'deliverable':
           console.log('유효한 이메일')

@@ -56,12 +56,6 @@ const CreateAccount_4 = ({ route, navigation }) => {
   const [isLoading, setIsLoading] = useState(true)
   // const routesParams = useRoute()
 
-  const checkTokenValid = async () => {
-    let url = 'https://gpthealth.shop/'
-    let detailAPI = 'app/user/check'
-    const response = await axios.post(url + detailAPI)
-    return response.data
-  }
   const postUser = async (data) => {
     try {
       let url = 'https://gpthealth.shop/'
@@ -89,15 +83,13 @@ const CreateAccount_4 = ({ route, navigation }) => {
       birthYear: route.params.birthYear,
     }
     postUser(data).then((response) => {
-      console.log(response)
+      console.log('postUser Response:', response)
       if (response.isSuccess) {
         setIsLoading(false)
-        checkTokenValid().then((response) => {
-          console.log(response)
-          AsyncStorage.setItem('accessToken', response.result.accessToken).then(
-            console.log('checkTokenValid로 토큰 발급받고, 해당토큰 캐시에 저장하였음.'),
-          )
-        })
+
+        AsyncStorage.setItem('accessToken', response.result.accessToken).then(
+          console.log('checkTokenValid로 토큰 발급받고, 해당토큰 캐시에 저장하였음.'),
+        )
       } else {
         Alert.alert('회원가입 오류', response.message, [
           {

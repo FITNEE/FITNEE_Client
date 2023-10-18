@@ -36,8 +36,7 @@ export default function AppBase() {
               setLoggedIn(true) // 자동으로 로그인
               if (result.code == 1000) {
                 //현재 기기에 저장되어있는 토큰값이 유효한 토큰이다
-                const updatedToken = result.result.accessToken
-                if (updatedToken) {
+                if (result.result?.accessToken) {
                   //새로운 토큰값으로의 교체가 필요하다고 서버가 판단한 경우
                   console.log('액서스토큰 유효기간 지나서 새로운 토큰 AsyncStorage에 저장')
                   AsyncStorage.setItem('accessToken', updatedToken)
