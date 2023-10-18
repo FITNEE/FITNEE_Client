@@ -18,7 +18,7 @@
     },
     "android": {
       "package": "co.gpthealth.fitnee",
-      "versionCode": 4,
+      "versionCode": 5,
       "adaptiveIcon": {
         "foregroundImage": "./assets/Splash.png",
         "backgroundColor": "#F6F8FA"
