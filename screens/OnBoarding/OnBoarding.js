@@ -28,14 +28,12 @@ const OnBoarding = ({ navigation }) => {
       console.error('Failed to fetch data:', error)
     }
   }
-
-  const handleOnboardedUser = async () => {}
   const isUserId = email.indexOf('@') != -1 && email.length <= 40 && email.indexOf('.') != -1
   const handleSubmit = () => {
     setIsLoading(true)
     fetchResult(email).then((data) => {
       switch (data.code) {
-        case 3003: //존재하지 않는 이메일
+        case 3003: //존재하지 않는 이메일 ->회원가입으로 넘어가기
           verifyEmail(email)
           break
         case 1000: //이미 존재하는 이메일
