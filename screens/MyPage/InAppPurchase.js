@@ -129,24 +129,21 @@ export default function InAppPurchase({ isOpen, setIsOpen }) {
 
   const restorePurchase = async () => {
     setRestoreLoading(true)
-    // getAvailablePurchases()
-    //   .then((purchases) => {
-    //     console.debug('restorePurchases')
-    //     // let receipt = purchases[0].transactionReceipt
-    //     // if (Platform.OS === 'android' && purchases[0].purchaseToken) {
-    //     //   receipt = purchases[0].purchaseToken
-    //     // }
-    //     // AsyncStorage.setItem('receipt', receipt)
-    //     setRestoreLoading(false)
-    //   })
-    //   .catch((err) => {
-    //     //console.debug('restorePurchases')
-    //     console.error(err) })
     try {
       const purchases = await getAvailablePurchases()
+      //transactionReceipt -> iOS: The receipt. Android: Stringified JSON of the original purchase object.
+      let receipt = purchases[0].transactionReceipt
+      //purchaseToken -> A token that uniquely identifies a purchase for a given item and user pair.
+      if (Platform.OS === 'android' && purchases[0].purchaseToken) {
+        receipt = purchases[0].purchaseToken
+        //purchaseToken은 android에만 있음.
+      }
+      AsyncStorage.setItem('receipt', receipt)
+      //server에 receipt를 전달해서 저장하면 될듯...?! 일단 AsyncStorage에 저장...!!
       setRestoreLoading(false)
       console.log(purchases)
     } catch (err) {
+      console.debug('restorePurchases')
       console.warn(err)
     }
   }
