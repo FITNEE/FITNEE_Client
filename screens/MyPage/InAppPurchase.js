@@ -118,6 +118,7 @@ export default function InAppPurchase({ isOpen, setIsOpen }) {
   const handleBuyProduct = async (sku) => {
     try {
       await requestPurchase({ skus: [sku] })
+      setLoading(false)
     } catch (error) {
       if (error instanceof PurchaseError) {
         errorLog({ message: `[${error.code}]: ${error.message}`, error })
