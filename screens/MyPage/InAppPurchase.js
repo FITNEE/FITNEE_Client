@@ -17,8 +17,8 @@ const isIos = Platform.OS === 'ios'
 
 //product id from appstoreconnect app->subscriptions
 const subscriptionSkus = Platform.select({
-  ios: ['fitnee.premium'],
-
+  ios: ['testpurchase'],
+  android: ['testpurchase']
 })
 
 export default function InAppPurchase({ isOpen, setIsOpen }) {
