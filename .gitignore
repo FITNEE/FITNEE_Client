@@ -18,3 +18,4 @@ web-build/
 
 .env
 eas.json
+GoogleService-Info.plist
