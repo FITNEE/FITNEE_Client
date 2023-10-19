@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { ActivityIndicator } from 'react-native'
+import { ActivityIndicator, Platform } from 'react-native'
 import { colors } from '../../colors'
 import { styled } from 'styled-components/native'
 import { CommonActions, useIsFocused } from '@react-navigation/native'
@@ -18,6 +18,7 @@ const isIos = Platform.OS === 'ios'
 //product id from appstoreconnect app->subscriptions
 const subscriptionSkus = Platform.select({
   ios: ['fitnee.premium'],
+
 })
 
 export default function InAppPurchase({ isOpen, setIsOpen }) {
@@ -74,11 +75,20 @@ export default function InAppPurchase({ isOpen, setIsOpen }) {
     }
   }, [connected, purchaseHistory, subscriptions])
 
-  const handleBuySubscription = async (productId) => {
+  const handleBuySubscription = async (productId, offerToken) => {
     try {
-      await requestSubscription({
-        sku: productId,
-      })
+      // await requestSubscription({
+      //   sku: productId,
+      //   subscriptionOffers: [{ sku: productId, offerToken }],
+      // })
+      if (offerToken) {
+        await requestSubscription({
+          sku: productId,
+          subscriptionOffers: [{ sku: productId, offerToken }],
+        })
+      } else {
+        await requestSubscription({ sku: productId })
+      }
       setLoading(false)
     } catch (error) {
       setLoading(false)
@@ -90,6 +100,7 @@ export default function InAppPurchase({ isOpen, setIsOpen }) {
     }
   }
 
+
   useEffect(() => {
     const checkCurrentPurchase = async (purchase) => {
       if (purchase) {
@@ -97,26 +108,24 @@ export default function InAppPurchase({ isOpen, setIsOpen }) {
           const receipt = purchase.transactionReceipt
           if (receipt) {
             if (Platform.OS === 'ios') {
-              const isTestEnvironment = __DEV__
-
-              //send receipt body to apple server to validete
-              const appleReceiptResponse = await validateReceiptIos(
+            const isTestEnvironment = __DEV__
+            //send receipt body to apple server to validete
+            const appleReceiptResponse = await validateReceiptIos(
                 {
-                  'receipt-data': receipt,
-                  password: APP_STORE_SECRET,
+                'receipt-data': receipt,
+                password: APP_STORE_SECRET,
                 },
                 isTestEnvironment,
-              )
-
-              //if receipt is valid
-              if (appleReceiptResponse) {
+            )
+            //if receipt is valid
+            if (appleReceiptResponse) {
                 const { status } = appleReceiptResponse
                 if (status) {
-                  //   navigation.navigate('Home')
+                //   navigation.navigate('Home')
+                
                 }
-              }
-
-              return
+            }
+            return
             }
           }
         } catch (error) {
@@ -141,7 +150,6 @@ export default function InAppPurchase({ isOpen, setIsOpen }) {
       // AsyncStorage.setItem('receipt', receipt)
       //server에 receipt를 전달해서 저장하면 될듯...?! 일단 AsyncStorage에 저장...!!
       setRestoreLoading(false)
-      // console.log(purchases)
     } catch (err) {
       console.debug('restorePurchases')
       console.warn(err)
@@ -171,7 +179,12 @@ export default function InAppPurchase({ isOpen, setIsOpen }) {
         isPurchaseButton={true}
         onPress={() => {
           setLoading(true)
-          handleBuySubscription('fitnee.premium')
+          if(Platform.OS === 'ios'){
+            handleBuySubscription('testpurchase')
+          }
+          else{
+            handleBuySubscription('testpurchase', subscriptions[0]?.subscriptionOfferDetails[0]?.offerToken)
+          }
         }}
       >
         {loading && <ActivityIndicator size="small" />}
