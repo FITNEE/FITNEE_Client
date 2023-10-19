@@ -15,6 +15,8 @@ import { IsDarkAtom } from '../../recoil/MyPageAtom'
 import ArrowCircle from '../../assets/SVGs/ArrowCircle.svg'
 import Close from '../../assets/SVGs/Close.svg'
 import { pngPath } from '../../imagePath'
+import { AdView } from '../../components/AdView'
+import 'expo-dev-client'
 
 const StartButton = styled.TouchableOpacity`
   padding: 8px 12px;
@@ -85,7 +87,7 @@ const NextView = styled.View`
   position: absolute;
   bottom: 0;
   width: 100%;
-  height: 290px;
+  height: 330px;
   background-color: ${({ isDark }) => (isDark ? colors.white : colors.black)};
   border-radius: 20px 20px 0px 0px;
   justify-content: space-between;
@@ -99,6 +101,7 @@ const NextTextView = styled.View`
   justify-content: space-between;
   align-items: center;
   width: 100%;
+  margin-bottom: 14px;
 `
 
 const NextText = styled.Text`
@@ -411,7 +414,9 @@ export default function ExerciseCourse_2({ navigation, dataList, listIndex, tota
               <StartButtonText>바로 시작하기</StartButtonText>
             </StartButton>
           </NextTextView>
-          <AdBox />
+          <AdBox>
+            <AdView isSetGap={false} type="video" media={true} />
+          </AdBox>
         </NextView>
         <BottomSheetModal
           ref={bottomSheetRef}
@@ -432,9 +437,4 @@ export default function ExerciseCourse_2({ navigation, dataList, listIndex, tota
 
 const AdBox = styled.View`
   width: 325px;
-  height: 183px;
-  flex-shrink: 0;
-  margin-bottom: 39px;
-  border-radius: 12px;
-  background: #ff8484;
 `

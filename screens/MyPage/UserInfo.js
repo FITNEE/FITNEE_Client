@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Alert, SafeAreaView } from 'react-native'
+import { Alert, Platform, SafeAreaView } from 'react-native'
 import { styled } from 'styled-components/native'
 import { colors } from '../../colors'
 import axios from 'axios'
@@ -13,6 +13,8 @@ import Toast from 'react-native-toast-message'
 import Profile_man from '../../assets/SVGs/Profile_man.svg'
 import Profile_woman from '../../assets/SVGs/Profile_woman.svg'
 import { loggedInState } from '../../recoil/AuthAtom'
+import { APP_STORE_SECRET } from '@env'
+import { PurchaseError, requestSubscription, useIAP, validateReceiptIos } from 'react-native-iap'
 
 const Profile = styled.View`
   align-items: center;
@@ -95,6 +97,18 @@ const Bar = styled.View`
   background-color: ${({ isDark }) => (isDark ? colors.black : colors.grey_1)};
 `
 
+const errorLog = ({ message, error }) => {
+  console.error('An error happened', message, error)
+}
+
+const isIos = Platform.OS === 'ios'
+
+//product id from appstoreconnect app->subscriptions
+const subscriptionSkus = Platform.select({
+  ios: ['fitnee.premium'],
+  android: ['fitnee.premium'],
+})
+
 export default function UserInfo({ route, navigation }) {
   const isFocused = useIsFocused()
   const isDark = useRecoilValue(IsDarkAtom)
@@ -160,6 +174,119 @@ export default function UserInfo({ route, navigation }) {
   const getUserId = userInfo[0].userId
   const getGender = userInfo[0].gender
 
+  //useIAP - easy way to access react-native-iap methods to
+  //get your products, purchases, subscriptions, callback
+  //and error handlers.
+  const {
+    connected,
+    subscriptions, //returns subscriptions for this app.
+    getSubscriptions, //Gets available subsctiptions for this app.
+    currentPurchase, //current purchase for the tranasction
+    finishTransaction,
+    purchaseHistory, //return the purchase history of the user on the device (sandbox user in dev)
+    getPurchaseHistory, //gets users purchase history
+  } = useIAP()
+
+  const [loading, setLoading] = useState(false)
+
+  const handleGetPurchaseHistory = async () => {
+    try {
+      await getPurchaseHistory()
+    } catch (error) {
+      errorLog({ message: 'handleGetPurchaseHistory', error })
+      // warning could occur with simulator. it should be with real device.
+    }
+  }
+
+  useEffect(() => {
+    // app store connect 연결 성공시 유저의 구매 히스토리 알아오기
+    handleGetPurchaseHistory()
+  }, [connected])
+
+  const handleGetSubscriptions = async () => {
+    try {
+      await getSubscriptions({ skus: subscriptionSkus })
+    } catch (error) {
+      errorLog({ message: 'handleGetSubscriptions', error })
+    }
+  }
+
+  useEffect(() => {
+    handleGetSubscriptions()
+  }, [connected])
+
+  useEffect(() => {
+    // ... listen if connected, purchaseHistory and subscriptions exist
+    if (
+      // 유저가 해당 구독을 이미 진행 중인지 확인
+      purchaseHistory.find((x) => x.productId === (subscriptionSkus[0] || subscriptionSkus[1]))
+    ) {
+      // 이미 구독 되어 있다면 여기 코드 실행
+      // navigation.navigate("Home");
+    }
+  }, [connected, purchaseHistory, subscriptions])
+
+  const handleBuySubscription = async (productId, offerToken) => {
+    try {
+      // await requestSubscription({
+      //   sku: productId,
+      //   subscriptionOffers: [{ sku: productId, offerToken }],
+      // })
+      if (offerToken) {
+        await requestSubscription({
+          sku: productId,
+          subscriptionOffers: [{ sku: productId, offerToken }],
+        })
+      } else {
+        await requestSubscription({ sku: productId })
+      }
+      setLoading(false)
+    } catch (error) {
+      setLoading(false)
+      if (error instanceof PurchaseError) {
+        errorLog({ message: `[${error.code}]: ${error.message}`, error })
+      } else {
+        errorLog({ message: 'handleBuySubscription', error })
+      }
+    }
+  }
+
+  useEffect(() => {
+    const checkCurrentPurchase = async (purchase) => {
+      if (purchase) {
+        try {
+          const receipt = purchase.transactionReceipt
+          if (receipt) {
+            if (Platform.OS === 'ios') {
+              const isTestEnvironment = __DEV__
+
+              //send receipt body to apple server to validete
+              const appleReceiptResponse = await validateReceiptIos(
+                {
+                  'receipt-data': receipt,
+                  password: APP_STORE_SECRET,
+                },
+                isTestEnvironment,
+              )
+
+              //if receipt is valid
+              if (appleReceiptResponse) {
+                const { status } = appleReceiptResponse
+                if (status) {
+                  navigation.navigate('Home')
+                }
+              }
+
+              return
+            }
+          }
+        } catch (error) {
+          console.log('error', error)
+        }
+      }
+    }
+    checkCurrentPurchase(currentPurchase)
+  }, [currentPurchase, finishTransaction])
   return (
     <SafeAreaView backgroundColor={isDark ? colors.grey_9 : colors.white}>
       <Container isDark={isDark}>
@@ -230,7 +357,24 @@ export default function UserInfo({ route, navigation }) {
         </MiniBlock>
         <MiniBlock>
           <Click>
-            <ClickText2>피트니 응원하기</ClickText2>
+            {Platform.OS == 'android' ? (
+              // subscriptions?.map((subscription) => {
+              //   subscription?.subscriptionOfferDetails?.map((offer) => (
+              //     <ClickText2 onPress={() => handleBuySubscription('fitnee.premium', offer.offerToken)}>
+              //       피트니 응원하기
+              //     </ClickText2>
+              //   ))
+              // })
+              <ClickText2
+                onPress={() =>
+                  handleBuySubscription('fitnee.premium', subscriptions[0]?.subscriptionOfferDetails[0]?.offerToken)
+                }
+              >
+                피트니 응원하기
+              </ClickText2>
+            ) : (
+              <ClickText2 onPress={() => handleBuySubscription('fitnee.premium')}>피트니 응원하기</ClickText2>
+            )}
           </Click>
         </MiniBlock>
       </Container>

@@ -16,6 +16,7 @@ import { IsDarkAtom } from '../recoil/MyPageAtom'
 import CreateRoutineNav from './CreateRoutineNav'
 import TermsOfService from '../screens/MyPage/TermsOfService'
 import PrivacyPolicy from '../screens/MyPage/PrivacyPolicy'
+import { withIAPContext } from "react-native-iap";
 
 const Stack = createStackNavigator()
 
@@ -66,7 +67,7 @@ export default function MyPageNav() {
       />
       <Stack.Screen
         name="UserInfo"
-        component={UserInfo}
+        component={withIAPContext(UserInfo)}
         options={({ navigation }) => ({
           headerTitle: '계정 정보',
           headerLeft: () => (

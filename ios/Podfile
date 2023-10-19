@@ -39,6 +39,8 @@ elsif podfile_properties.key?('ios.flipper') then
 end
 
 target 'fitnee' do
+  pod 'Google-Mobile-Ads-SDK'
+
   use_expo_modules!
   config = use_native_modules!
 
