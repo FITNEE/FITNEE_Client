@@ -2,9 +2,12 @@ import React, { useState, useEffect } from 'react'
 import { ActivityIndicator } from 'react-native'
 import { colors } from '../../colors'
 import { styled } from 'styled-components/native'
+import { CommonActions, useIsFocused } from '@react-navigation/native'
 import { APP_STORE_SECRET } from '@env'
 import { PurchaseError, requestSubscription, useIAP, validateReceiptIos, getAvailablePurchases } from 'react-native-iap'
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 import CloseIcon from '../../assets/SVGs/Close.svg'
+import { IsDarkAtom } from '../../recoil/MyPageAtom'
 
 const errorLog = ({ message, error }) => {
   console.error('An error happened', message, error)
@@ -148,21 +151,26 @@ export default function InAppPurchase({ isOpen, setIsOpen }) {
     }
   }
 
+  const isDark = useRecoilValue(IsDarkAtom)
+
   return (
-    <Container>
+    <Container isDark={isDark}>
       <Label>
         <LabelText>
           Donation for
-          <LabelText style={{ fontFamily: 'Pretendard-SemiBold' }}> fitnee</LabelText>
+          <LabelText style={{ fontFamily: 'Pretendard-SemiBold' }}>fitnee</LabelText>
         </LabelText>
       </Label>
-      <Title>피트니 후원하기</Title>
-      <SubTitle>{`더 나은 헬스 문화를 만들어갈 수 있도록\n팀 피트니를 후원해주세요`}</SubTitle>
-      <InfoBox>
-        <InfoText style={{ color: colors.black }}>정기 후원 결제 시</InfoText>
-        <InfoText style={{ color: colors.l_main }}>₩ 1,100/월</InfoText>
+      <Title isDark={isDark}>피트니 후원하기</Title>
+      <SubTitle isDark={isDark}>{`더 나은 헬스 문화를 만들어갈 수 있도록\n팀 피트니를 후원해주세요`}</SubTitle>
+      <InfoBox isDark={isDark}>
+        <InfoText isDark={isDark}>정기 후원 결제 시</InfoText>
+        <InfoText isDark={isDark} style={{ color: colors.l_main }}>
+          ₩ 1,100/월
+        </InfoText>
       </InfoBox>
       <PurchaseBtn
+        isDark={isDark}
         isPurchaseButton={true}
         onPress={() => {
           setLoading(true)
@@ -170,18 +178,26 @@ export default function InAppPurchase({ isOpen, setIsOpen }) {
         }}
       >
         {loading && <ActivityIndicator size="small" />}
-        {!loading && <PurchaseText>결제하기</PurchaseText>}
+        {!loading && (
+          <PurchaseText isDark={isDark} isPurchaseText={true}>
+            결제하기
+          </PurchaseText>
+        )}
       </PurchaseBtn>
-      <PurchaseBtn isPurchaseButton={false} onPress={() => restorePurchase()}>
+      <PurchaseBtn isDark={isDark} isPurchaseButton={false} onPress={() => restorePurchase()}>
         {restoreLoading && <ActivityIndicator size="small" />}
-        {!restoreLoading && <RecoverText>구매 복원</RecoverText>}
+        {!restoreLoading && (
+          <PurchaseText isDark={isDark} isPurchaseText={false}>
+            구매 복원
+          </PurchaseText>
+        )}
       </PurchaseBtn>
     </Container>
   )
 }
 
 const Container = styled.View`
-  background-color: ${colors.grey_1};
+  background-color: ${({ isDark }) => (isDark ? colors.grey_9 : colors.grey_1)};
   height: 100%;
 `
 const TopContainer = styled.View`
@@ -214,7 +230,7 @@ const LabelText = styled.Text`
 const Title = styled.Text`
   font-family: Pretendard-SemiBold;
   font-size: 20px;
-  color: ${colors.black};
+  color: ${({ isDark }) => (isDark ? colors.white : colors.black)};
   align-self: center;
   margin-top: 16px;
   line-height: 32px;
@@ -222,7 +238,7 @@ const Title = styled.Text`
 const SubTitle = styled.Text`
   font-size: 17px;
   font-family: Pretendard-Regular;
-  color: ${colors.grey_7};
+  color: ${({ isDark }) => (isDark ? colors.grey_3 : colors.grey_7)};
   align-self: center;
   text-align: center;
   margin-top: 8px;
@@ -230,10 +246,10 @@ const SubTitle = styled.Text`
 `
 const InfoBox = styled.View`
   margin: 147px 0px 168px 0px;
-  background-color: ${colors.white};
+  background-color: ${({ isDark }) => (isDark ? colors.black : colors.white)};
   border-radius: 12px;
   align-self: center;
-  border: 1px solid ${colors.grey_2};
+  border: 1px solid ${({ isDark }) => (isDark ? colors.grey_8 : colors.grey_2)};
   width: 327px;
   height: 89px;
   padding: 16px 24px;
@@ -244,11 +260,13 @@ const InfoText = styled.Text`
   font-size: 17px;
   font-family: Pretendard-SemiBold;
   line-height: 25.5px;
+  color: ${({ isDark }) => (isDark ? colors.white : colors.black)};
 `
 const PurchaseBtn = styled.TouchableOpacity`
   width: 343px;
   height: 52px;
-  background-color: ${(props) => (props.isPurchaseButton ? colors.l_main : colors.grey_1)};
+  background-color: ${(props) =>
+    props.isPurchaseButton ? colors.l_main : ({ isDark }) => (isDark ? colors.grey_9 : colors.grey_1)};
   border-radius: 12px;
   align-self: center;
   align-items: center;
@@ -256,22 +274,10 @@ const PurchaseBtn = styled.TouchableOpacity`
   margin-bottom: 4px;
 `
 const PurchaseText = styled.Text`
-  color: ${colors.white};
+  color: ${(props) =>
+    props.isPurchaseText
+      ? ({ isDark }) => (isDark ? colors.grey_9 : colors.white)
+      : ({ isDark }) => (isDark ? colors.grey_3 : colors.grey_7)};
   font-size: 17px;
   font-family: Pretendard-SemiBold;
-`
-const Recover = styled.View`
-  width: 343px;
-  height: 52px;
-  align-self: center;
-  align-items: center;
-  justify-content: center;
-  background-color: ${colors.grey_1};
-`
-const RecoverText = styled.Text`
-  color: ${colors.grey_7};
-  font-size: 17px;
-  font-family: Pretendard-SemiBold;
-  line-height: 52px;
-  align-self: center;
 `
