@@ -138,10 +138,10 @@ export default function InAppPurchase({ isOpen, setIsOpen }) {
         receipt = purchases[0].purchaseToken
         //purchaseToken은 android에만 있음.
       }
-      AsyncStorage.setItem('receipt', receipt)
+      // AsyncStorage.setItem('receipt', receipt)
       //server에 receipt를 전달해서 저장하면 될듯...?! 일단 AsyncStorage에 저장...!!
       setRestoreLoading(false)
-      console.log(purchases)
+      // console.log(purchases)
     } catch (err) {
       console.debug('restorePurchases')
       console.warn(err)
@@ -155,7 +155,7 @@ export default function InAppPurchase({ isOpen, setIsOpen }) {
       <Label>
         <LabelText>
           Donation for
-          <LabelText style={{ fontFamily: 'Pretendard-SemiBold' }}>fitnee</LabelText>
+          <LabelText style={{ fontFamily: 'Pretendard-Black' }}> fitnee</LabelText>
         </LabelText>
       </Label>
       <Title isDark={isDark}>피트니 후원하기</Title>
