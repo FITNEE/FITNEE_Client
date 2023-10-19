@@ -169,9 +169,9 @@ export default function InAppPurchase({ isOpen, setIsOpen }) {
       <Title isDark={isDark}>피트니 후원하기</Title>
       <SubTitle isDark={isDark}>{`더 나은 헬스 문화를 만들어갈 수 있도록\n팀 피트니를 후원해주세요`}</SubTitle>
       <InfoBox isDark={isDark}>
-        <InfoText isDark={isDark}>정기 후원 결제 시</InfoText>
+        <InfoText isDark={isDark}>1회 후원 결제 시</InfoText>
         <InfoText isDark={isDark} style={{ color: colors.l_main }}>
-          ₩ 1,100/월
+          ₩ 1,100
         </InfoText>
       </InfoBox>
       <PurchaseBtn
