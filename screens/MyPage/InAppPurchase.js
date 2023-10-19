@@ -120,6 +120,7 @@ export default function InAppPurchase({ isOpen, setIsOpen }) {
       await requestPurchase({ skus: [sku] })
       setLoading(false)
     } catch (error) {
+      setLoading(false)
       if (error instanceof PurchaseError) {
         errorLog({ message: `[${error.code}]: ${error.message}`, error })
       } else {
