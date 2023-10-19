@@ -4,7 +4,14 @@ import { colors } from '../../colors'
 import { styled } from 'styled-components/native'
 import { CommonActions, useIsFocused } from '@react-navigation/native'
 import { APP_STORE_SECRET } from '@env'
-import { PurchaseError, requestSubscription, useIAP, validateReceiptIos, getAvailablePurchases } from 'react-native-iap'
+import {
+  PurchaseError,
+  requestSubscription,
+  useIAP,
+  validateReceiptIos,
+  getAvailablePurchases,
+  requestPurchase,
+} from 'react-native-iap'
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 import CloseIcon from '../../assets/SVGs/Close.svg'
 import { IsDarkAtom } from '../../recoil/MyPageAtom'
@@ -18,7 +25,7 @@ const isIos = Platform.OS === 'ios'
 //product id from appstoreconnect app->subscriptions
 const subscriptionSkus = Platform.select({
   ios: ['testpurchase'],
-  android: ['testpurchase']
+  android: ['testpurchase'],
 })
 
 export default function InAppPurchase({ isOpen, setIsOpen }) {
@@ -33,6 +40,7 @@ export default function InAppPurchase({ isOpen, setIsOpen }) {
     finishTransaction,
     purchaseHistory, //return the purchase history of the user on the device (sandbox user in dev)
     getPurchaseHistory, //gets users purchase history
+    getProducts,
   } = useIAP()
 
   const [loading, setLoading] = useState(false)
@@ -59,9 +67,17 @@ export default function InAppPurchase({ isOpen, setIsOpen }) {
       errorLog({ message: 'handleGetSubscriptions', error })
     }
   }
+  const handleGetProducts = async () => {
+    try {
+      await getProducts({ skus: subscriptionSkus })
+    } catch (error) {
+      errorLog({ message: 'handleGetProducts', error })
+    }
+  }
 
   useEffect(() => {
     handleGetSubscriptions()
+    handleGetProducts()
   }, [connected])
 
   useEffect(() => {
@@ -99,7 +115,17 @@ export default function InAppPurchase({ isOpen, setIsOpen }) {
       }
     }
   }
-
+  const handleBuyProduct = async (sku) => {
+    try {
+      await requestPurchase({ skus: [sku] })
+    } catch (error) {
+      if (error instanceof PurchaseError) {
+        errorLog({ message: `[${error.code}]: ${error.message}`, error })
+      } else {
+        errorLog({ message: 'handleBuyProduct', error })
+      }
+    }
+  }
 
   useEffect(() => {
     const checkCurrentPurchase = async (purchase) => {
@@ -108,24 +134,23 @@ export default function InAppPurchase({ isOpen, setIsOpen }) {
           const receipt = purchase.transactionReceipt
           if (receipt) {
             if (Platform.OS === 'ios') {
-            const isTestEnvironment = __DEV__
-            //send receipt body to apple server to validete
-            const appleReceiptResponse = await validateReceiptIos(
+              const isTestEnvironment = __DEV__
+              //send receipt body to apple server to validete
+              const appleReceiptResponse = await validateReceiptIos(
                 {
-                'receipt-data': receipt,
-                password: APP_STORE_SECRET,
+                  'receipt-data': receipt,
+                  password: APP_STORE_SECRET,
                 },
                 isTestEnvironment,
-            )
-            //if receipt is valid
-            if (appleReceiptResponse) {
+              )
+              //if receipt is valid
+              if (appleReceiptResponse) {
                 const { status } = appleReceiptResponse
                 if (status) {
-                //   navigation.navigate('Home')
-                
+                  //   navigation.navigate('Home')
                 }
-            }
-            return
+              }
+              return
             }
           }
         } catch (error) {
@@ -179,11 +204,16 @@ export default function InAppPurchase({ isOpen, setIsOpen }) {
         isPurchaseButton={true}
         onPress={() => {
           setLoading(true)
-          if(Platform.OS === 'ios'){
+          if (Platform.OS === 'ios') {
             handleBuySubscription('testpurchase')
-          }
-          else{
-            handleBuySubscription('testpurchase', subscriptions[0]?.subscriptionOfferDetails[0]?.offerToken)
+          } else {
+            // handleBuySubscription('testpurchase', subscriptions[0]?.subscriptionOfferDetails[0]?.offerToken)
+            handleBuyProduct('testpurchase')
+            // if(Platform.OS === 'ios'){
+            //   handleBuySubscription('testpurchase')
+            // }
+            // else{
+            //   handleBuySubscription('testpurchase', subscriptions[0]?.subscriptionOfferDetails[0]?.offerToken)
           }
         }}
       >
