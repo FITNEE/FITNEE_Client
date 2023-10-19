@@ -4,11 +4,13 @@ import MyPage from '../screens/MyPage/MyPage'
 import Setting from '../screens/MyPage/Setting'
 import UserInfo from '../screens/MyPage/UserInfo'
 import EditUserInfo from '../screens/MyPage/EditUserInfo'
+import InAppPurchase from '../screens/MyPage/InAppPurchase'
 import { Image, Text, TouchableOpacity } from 'react-native'
 import LoggedInNav from './LoggedInNav'
 import Login from '../screens/OnBoarding/Login'
 import EditPW from '../screens/MyPage/EditPW'
 import SettingIcon from '../assets/SVGs/Setting.svg'
+import CloseIcon from '../assets/SVGs/Close.svg'
 import Left from '../assets/SVGs/Left.svg'
 import { colors } from '../colors'
 import { useRecoilValue } from 'recoil'
@@ -67,7 +69,7 @@ export default function MyPageNav() {
       />
       <Stack.Screen
         name="UserInfo"
-        component={withIAPContext(UserInfo)}
+        component={UserInfo}
         options={({ navigation }) => ({
           headerTitle: '계정 정보',
           headerLeft: () => (
@@ -76,6 +78,25 @@ export default function MyPageNav() {
             </TouchableOpacity>
           ),
           headerRight: false,
+        })}
+      />
+      <Stack.Screen
+        name="InAppPurchase"
+        component={withIAPContext(InAppPurchase)}
+        options={({ navigation }) => ({
+          headerStyle: {backgroundColor: isDark? colors.grey_9 : colors.grey_1},
+          headerTitle: '',
+          headerLeft: false,
+          headerRight: () => (
+            <TouchableOpacity onPress={() => navigation.navigate('UserInfo')}>
+              <CloseIcon
+                style={{ marginRight: 24 }}
+                width={24}
+                height={24}
+                color={isDark ? colors.white : colors.black}
+              />
+            </TouchableOpacity>
+          ),
         })}
       />
       <Stack.Screen
