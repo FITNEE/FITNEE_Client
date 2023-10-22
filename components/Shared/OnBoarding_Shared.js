@@ -13,6 +13,14 @@ const TitleText = styled.Text`
 export const Title = ({ isDark, text }) => {
   return <TitleText style={{ color: isDark ? colors.white : colors.black }}>{text}</TitleText>
 }
+export const SubText2 = ({ isDark, text }) => {
+  return <_SubText2 style={{ color: isDark ? colors.white : colors.l_main }}>{text}</_SubText2>
+}
+const _SubText2 = styled.Text`
+  font-size: 12px;
+  margin-top: 4px;
+  font-family: Pretendard-SemiBold;
+`
 
 export const _SubText = styled.Text`
   font-size: 13px;
