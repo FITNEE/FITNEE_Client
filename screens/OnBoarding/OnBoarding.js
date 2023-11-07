@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components/native'
 import { colors } from '../../colors'
 import { Button } from '../../Shared'
@@ -52,6 +52,10 @@ const OnBoarding = ({ navigation }) => {
     })
   }
 
+  useEffect(()=>{
+    email.length === 0 && setEmailWarning('')
+  }, [email])
+
   // 이메일 유효성 검증
   const checkEmailVerification = async (email) => {
     try {
@@ -65,6 +69,7 @@ const OnBoarding = ({ navigation }) => {
       const result = response.data.data
       return result.result
     } catch (error) {
+      setEmailWarning('사용 불가능한 이메일입니다. 다시 시도해주세요.')
       console.error('Failed to fetch email api:', error)
     }
   }
