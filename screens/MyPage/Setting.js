@@ -106,7 +106,7 @@ export default function Setting({ navigation }) {
             <ComingBox>
               <ComingText>Coming Soon</ComingText>
             </ComingBox>
-            <PremiumText>프리미엄 플랜으로 건강한 몸을 더 쉽게 만들어보세요</PremiumText>
+            <PremiumText isDark={isDark}>프리미엄 플랜으로 건강한 몸을 더 쉽게 만들어보세요</PremiumText>
           </PremiumBack>
         </PremiumBlock>
         <Block
@@ -248,6 +248,5 @@ const PremiumText = styled.Text`
   font-family: Pretendard-SemiBold;
   font-size: 13px;
   font-style: normal;
-  //line-height: 19.5px;
-  color: ${colors.white};
+  color: ${({ isDark }) => (isDark ? colors.white : colors.black)};
 `
