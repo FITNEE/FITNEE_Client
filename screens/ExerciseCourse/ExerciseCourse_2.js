@@ -414,9 +414,9 @@ export default function ExerciseCourse_2({ navigation, dataList, listIndex, tota
               <StartButtonText>바로 시작하기</StartButtonText>
             </StartButton>
           </NextTextView>
-          <AdBox>
+          {/* <AdBox>
             <AdView isSetGap={false} type="video" media={true} />
-          </AdBox>
+          </AdBox> */}
         </NextView>
         <BottomSheetModal
           ref={bottomSheetRef}
