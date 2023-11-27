@@ -248,5 +248,5 @@ const PremiumText = styled.Text`
   font-family: Pretendard-SemiBold;
   font-size: 13px;
   font-style: normal;
-  color: ${({ isDark }) => (isDark ? colors.white : colors.black)};
+  color: ${colors.white};
 `
