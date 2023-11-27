@@ -51,7 +51,7 @@ const Login = ({ route, navigation }) => {
   const handlePress = () => {
     setIsLoading(true)
     postLogin(email, PW).then((response) => {
-      console.log(response)
+      // console.log(response)
       //로그인 성공 시,
       if (response.code == 1000) {
         AsyncStorage.setItem('accessToken', response.result.accessToken).then(
@@ -85,7 +85,7 @@ const Login = ({ route, navigation }) => {
           autoCapitalize="none"
           placeholderTextColor={colors.grey_5}
           autoFocus
-          onSubmitEditing={() => PW.length>=4 && handlePress()}
+          onSubmitEditing={() => PW.length >= 4 && handlePress()}
           placeholder="password"
           secureTextEntry={true}
           returnKeyType="done"
