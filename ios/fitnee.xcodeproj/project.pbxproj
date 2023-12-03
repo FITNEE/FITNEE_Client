@@ -152,7 +152,6 @@
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
-				A2DE9EB62F56AF7F91DF76C1 /* [CP] Embed Pods Frameworks */,
 				7B4D8E4579F4B902CB1CBDCA /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
@@ -287,24 +286,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-fitnee/Pods-fitnee-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		A2DE9EB62F56AF7F91DF76C1 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-fitnee/Pods-fitnee-frameworks.sh",
-				"${PODS_XCFRAMEWORKS_BUILD_DIR}/hermes-engine/Pre-built/hermes.framework/hermes",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/hermes.framework",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-fitnee/Pods-fitnee-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		F69370ABF02A5E656B11501A /* [CP] Check Pods Manifest.lock */ = {
