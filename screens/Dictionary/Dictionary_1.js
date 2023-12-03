@@ -98,7 +98,7 @@ export default function Dictionary_1({ navigation }) {
     }
   }
   useEffect(() => {
-    isFocus && setIsTabVisible(false)
+    isFocus && setIsTabVisible(true)
   }, [isFocus])
 
   // 검색어에 따라 일치하는 운동리스트 불러오는 API
