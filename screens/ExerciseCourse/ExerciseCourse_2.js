@@ -15,9 +15,6 @@ import { IsDarkAtom } from '../../recoil/MyPageAtom'
 import ArrowCircle from '../../assets/SVGs/ArrowCircle.svg'
 import Close from '../../assets/SVGs/Close.svg'
 import { pngPath } from '../../imagePath'
-import { AdView } from '../../components/AdView'
-import 'expo-dev-client'
-
 const StartButton = styled.TouchableOpacity`
   padding: 8px 12px;
   height: 36px;
