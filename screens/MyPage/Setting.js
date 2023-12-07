@@ -241,7 +241,6 @@ const ComingText = styled.Text`
   font-family: Pretendard-SemiBold;
   font-size: 13px;
   font-style: normal;
-  //line-height: 19.5px;
   color: ${colors.l_main};
 `
 const PremiumText = styled.Text`
