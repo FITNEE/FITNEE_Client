@@ -112,7 +112,7 @@ export default Scroll = ({ isDark, data, currentRoutine }) => {
         //   // setSelectedID("");
         // }}
       />
-      <PageIndicator isDark={isDark} totalPages={data.length} currentPage={currentPage} />
+      {data.length == 1 ? null : <PageIndicator isDark={isDark} totalPages={data.length} currentPage={currentPage} />}
     </Container>
   )
 }

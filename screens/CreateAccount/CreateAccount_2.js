@@ -3,7 +3,7 @@ import styled from 'styled-components/native'
 import { colors } from '../../colors'
 import { Button, BackButton } from '../../Shared'
 //prettier-ignore
-import {Input,Title,ScreenKeyboardLayout, StatusText,SubText,NumberInput,MyBottomSheet, InputTitle} from "../../components/Shared/OnBoarding_Shared";
+import {Input,Title,ScreenKeyboardLayout, StatusText,SubText,NumberInput,MyBottomSheet, InputTitle, SubText2} from "../../components/Shared/OnBoarding_Shared";
 import BottomSheet, { BottomSheetBackdrop } from '@gorhom/bottom-sheet'
 import { Keyboard, View } from 'react-native'
 import Check from '../../assets/SVGs/Check.svg'
@@ -140,6 +140,7 @@ const CreateAccount_2 = ({ route, navigation }) => {
 회원님께 딱 맞는 루틴을 만나보실 수 있어요.`}
           isDark={isDark}
         />
+        <SubText2 text={`*성별과 출생년도는 맞춤형 AI루틴 제공을 위해 사용됩니다.`} isDark={isDark} />
       </TextContainer>
       <BottomContainer>
         <SubTextContainer>

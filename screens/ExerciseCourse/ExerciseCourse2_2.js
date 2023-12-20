@@ -15,8 +15,6 @@ import ArrowCircle from '../../assets/SVGs/ArrowCircle.svg'
 import Close from '../../assets/SVGs/Close.svg'
 import ExerciseButton from '../../components/exerciseCourse/ExerciseButton'
 import { useFocusEffect } from '@react-navigation/native'
-import { AdView } from '../../components/AdView'
-import 'expo-dev-client'
 
 const ExerciseCircle = styled.View`
   width: 307px;
@@ -129,16 +127,14 @@ export default function ExerciseCourse_2_2({
               : false
           }
         />
-        <AdBox>
-          <AdView isSetGap={true} type="video" media={true} />
-        </AdBox>
-        {/* <ExerciseButton //운동 시작 버튼
+        <BlankBox />
+        <ExerciseButton //운동 시작 버튼
           text="바로 시작하기"
           disabled={false}
           onPress={toggleShowExerciseCourse2_2}
           //onPress={goToCompleteExercise}
           isDark={isDark}
-        /> */}
+        />
       </ExerciseCard>
     </SafeAreaView>
   )

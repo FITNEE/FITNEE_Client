@@ -168,13 +168,13 @@ export default function CompleteExercise({ navigation }) {
       <Container isDark={isDark}>
         <ExerciseText isDark={isDark}>운동을 완료했어요!</ExerciseText>
 
-        {shouldRender ? (
+        {/* {shouldRender ? (
           <ExerciseExplainText isDark={isDark}>중량 정보를 업데이트 했어요</ExerciseExplainText>
-        ) : (
-          <ExerciseExplainText isDark={isDark}>
-            한달동안 루틴을 {resultData.monthCountHealth}회 완료했어요
-          </ExerciseExplainText>
-        )}
+        ) : ( */}
+        <ExerciseExplainText isDark={isDark}>
+          한달동안 루틴을 {resultData.monthCountHealth}회 완료했어요
+        </ExerciseExplainText>
+        {/* )} */}
 
         <CirclesLine>
           <ProgressCircle num={Math.ceil(totalTime / 60)} unit="분" title="소요시간" isDark={isDark} />

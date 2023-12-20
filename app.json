@@ -4,16 +4,14 @@
     "slug": "fitnee",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/AppIcon.png",
     "userInterfaceStyle": "light",
+    "icon": "./assets/AppIcon.png",
     "splash": {
       "image": "./assets/Splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#F6F8FA"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "co.gpthealth.fitnee",
@@ -21,14 +19,14 @@
     },
     "android": {
       "package": "co.gpthealth.fitnee",
-      "versionCode": 6,
+      "versionCode": 9,
       "adaptiveIcon": {
-        "foregroundImage": "./assets/Splash.png",
+        "foregroundImage": "./assets/AppIcon.png",
         "backgroundColor": "#F6F8FA"
       }
     },
     "web": {
-      "favicon": "./assets/Splash.png"
+      "favicon": "./assets/AppIcon.png"
     },
     "plugins": [
       [
@@ -46,7 +44,7 @@
     },
     "extra": {
       "eas": {
-        "projectId": "316f92f4-b1cf-4d97-91a1-b479349f4372"
+        "projectId": "a9c237c7-a7f7-4d65-bf88-de7f15664409"
       }
     }
   }
