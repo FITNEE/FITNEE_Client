@@ -163,6 +163,10 @@ export default function InAppPurchase({ isOpen, setIsOpen }) {
     checkCurrentPurchase(currentPurchase)
   }, [currentPurchase, finishTransaction])
 
+  useEffect(() => {
+    console.log('subscriptions :', subscriptions)
+  }, [])
+
   const restorePurchase = async () => {
     setRestoreLoading(true)
     try {
@@ -210,12 +214,12 @@ export default function InAppPurchase({ isOpen, setIsOpen }) {
             handleBuySubscription('testpurchase')
           } else {
             // handleBuySubscription('testpurchase', subscriptions[0]?.subscriptionOfferDetails[0]?.offerToken)
-            handleBuyProduct('testpurchase')
-            // if(Platform.OS === 'ios'){
-            //   handleBuySubscription('testpurchase')
-            // }
-            // else{
-            //   handleBuySubscription('testpurchase', subscriptions[0]?.subscriptionOfferDetails[0]?.offerToken)
+            //handleBuyProduct('testpurchase') // 단일상품 적용 코드
+            if (Platform.OS === 'ios') {
+              handleBuySubscription('testpurchase')
+            } else {
+              handleBuySubscription('testpurchase', subscriptions[0]?.subscriptionOfferDetails[0]?.offerToken)
+            }
           }
         }}
       >

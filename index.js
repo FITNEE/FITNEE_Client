@@ -1,19 +1,19 @@
-import { registerRootComponent } from 'expo';
+import { registerRootComponent } from 'expo'
 
-import App from './App';
-import { AdManager, TestIds } from "react-native-admob-native-ads";
-import { Platform } from 'react-native';
+import App from './App'
+import { AdManager, TestIds } from 'react-native-admob-native-ads'
+import { Platform } from 'react-native'
 
 AdManager.setRequestConfiguration({
   tagForChildDirectedTreatment: false,
-  maxAdContentRating: "G"
-});
+  maxAdContentRating: 'G',
+})
 
 // image test ad
 AdManager.registerRepository({
-  name: "imageAd",
-  // adUnitId: TestIds.Image,
-  adUnitId: Platform.OS === 'ios'? 'ca-app-pub-1137387637064734/1518142011':'ca-app-pub-1137387637064734/4310874629',
+  name: 'imageAd',
+  adUnitId: TestIds.Image,
+  // adUnitId: Platform.OS === 'ios'? 'ca-app-pub-1137387637064734/1518142011':'ca-app-pub-1137387637064734/4310874629',
   numOfAds: 3,
   nonPersonalizedAdsOnly: false,
   videoOptions: {
@@ -22,13 +22,14 @@ AdManager.registerRepository({
   expirationPeriod: 3600000, // in milliseconds (optional)
   mediationEnabled: false,
 }).then((result) => {
-  console.log("registered: ", result);
-});
+  console.log('registered: ', result)
+})
 
 // unmute video test ad
 AdManager.registerRepository({
-  name: "videoAd",
-  adUnitId: Platform.OS === 'ios'? 'ca-app-pub-1137387637064734/1518142011':'ca-app-pub-1137387637064734/4310874629',
+  name: 'videoAd',
+  adUnitId: TestIds.Video,
+  // adUnitId: Platform.OS === 'ios'? 'ca-app-pub-1137387637064734/1518142011':'ca-app-pub-1137387637064734/4310874629',
   numOfAds: 3,
   nonPersonalizedAdsOnly: false,
   videoOptions: {
@@ -37,13 +38,14 @@ AdManager.registerRepository({
   expirationPeriod: 3600000, // in milliseconds (optional)
   mediationEnabled: false,
 }).then((result) => {
-  console.log("registered: ", result);
-});
+  console.log('registered: ', result)
+})
 
 // mute video test ad
 AdManager.registerRepository({
-  name: "muteVideoAd",
-  adUnitId: Platform.OS === 'ios'? 'ca-app-pub-1137387637064734/1518142011':'ca-app-pub-1137387637064734/4310874629',
+  name: 'muteVideoAd',
+  adUnitId: TestIds.Video,
+  // adUnitId: Platform.OS === 'ios'? 'ca-app-pub-1137387637064734/1518142011':'ca-app-pub-1137387637064734/4310874629',
   numOfAds: 3,
   nonPersonalizedAdsOnly: false,
   videoOptions: {
@@ -52,9 +54,9 @@ AdManager.registerRepository({
   expirationPeriod: 3600000, // in milliseconds (optional)
   mediationEnabled: false,
 }).then((result) => {
-  console.log("registered: ", result);
-});
+  console.log('registered: ', result)
+})
 // registerRootComponent calls AppRegistry.registerComponent('main', () => App);
 // It also ensures that whether you load the app in Expo Go or in a native build,
 // the environment is set up appropriately
-registerRootComponent(App);
+registerRootComponent(App)
