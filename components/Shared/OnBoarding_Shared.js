@@ -77,7 +77,7 @@ export const ScreenKeyboardLayout = ({ children, isDark, isRelative = false, onP
             paddingRight: 24,
             justifyContent: isRelative ? 'flex-start' : 'space-between',
           }}
-          behavior={Platform.select({ ios: 'padding' })}
+          // behavior={Platform.select({ ios: 'padding' })}
         >
           {children}
         </KeyBoardAwareContainer>
