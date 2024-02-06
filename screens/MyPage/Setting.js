@@ -14,6 +14,7 @@ import CustomSwitch from '../../components/myPage/CustomSwitch'
 import Profile_man from '../../assets/SVGs/Profile_man.svg'
 import Profile_woman from '../../assets/SVGs/Profile_woman.svg'
 import messaging from '@react-native-firebase/messaging'
+import pushNoti from '../../utils/pushNoti'
 
 export default function Setting({ navigation }) {
   const isFocused = useIsFocused()
@@ -174,6 +175,14 @@ export default function Setting({ navigation }) {
           }}
         >
           <BlockText isDark={isDark}>로그아웃</BlockText>
+        </Block>
+        <Block
+          isDark={isDark}
+          onPress={() => {
+            pushNoti.displayNoti('.')
+          }}
+        >
+          <BlockText isDark={isDark}>알림테스트</BlockText>
         </Block>
       </Container>
     </SafeAreaView>

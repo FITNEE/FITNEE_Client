@@ -1,3 +1,4 @@
+import './ignoreWarnings'
 import { NavigationContainer } from '@react-navigation/native'
 import { RecoilRoot } from 'recoil'
 import { useEffect } from 'react'

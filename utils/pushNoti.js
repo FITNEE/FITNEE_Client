@@ -9,8 +9,10 @@ const displayNotification = async (message) => {
   })
 
   await notifee.displayNotification({
-    title: message.data.title,
-    body: message.data.body,
+    // title: message.data.title,
+    // body: message.data.body,
+    title: '테스트',
+    body: '테스트 알림',
     android: {
       channelId: channelAnoucement,
       //   smallIcon: require('../assets/AppIcon.png'), //
@@ -23,7 +25,6 @@ const displayNotification = async (message) => {
         list: true,
         sound: true,
       },
-      summaryArgumentCount: 3,
     },
   })
 }
